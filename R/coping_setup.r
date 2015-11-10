@@ -43,10 +43,10 @@ diet <- unlist(llply(diet, names))
 info <- info[as.character(info$sp) %in% names(diet), ]
 info$mass <- scale(info$mass)
 ndiet <- length(unique(diet))
-diet <- model.matrix( ~ diet - 1)[, -1]
+diet <- as.numeric(as.factor(diet))
 
 data <- list(N = nrow(info), T = length(unique(info$fad)), 
              trait = as.vector(info$mass), year = info$fad,
-             D = ndiet, cat = diet)
-with(data, {stan_rdump(list = c('N', 'T', 'trait', 'year', 'D', 'cat'),
+             D = ndiet, diet = diet)
+with(data, {stan_rdump(list = c('N', 'T', 'trait', 'year', 'D', 'diet'),
                        file = '../data/data_dump/coping_info.data.R')})

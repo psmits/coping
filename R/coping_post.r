@@ -30,7 +30,7 @@ dat.ss <- laply(split(data$trait, data$year), sd)
 
 # mcmc results
 post <- list.files('../data/mcmc_out', 
-                   pattern = 'coping', 
+                   pattern = 'time_coping', 
                    full.names = TRUE)
 fit <- read_stan_csv(post)
 ext <- extract(fit, permuted = TRUE)
