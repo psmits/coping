@@ -23,6 +23,7 @@ first.occ <- mapvalues(first.occ, unique(first.occ), rank(unique(first.occ)))
 first.occ <- mapvalues(first.occ, sort(unique(first.occ)), 
                        rev(sort(unique(first.occ))))
 
+# make on the order of 1
 sp.mass <- log(na.mass[order(na.mass[, 1]), 2])
 
 info <- data.frame(sp = names(sp.oc), fad = first.occ, mass = sp.mass)
@@ -33,7 +34,19 @@ spt.hot <- vcv(spt.hot) / max(diag(vcv(spt.hot)))
 ff <- match(hot.fix, rownames(spt.hot))
 spt.hot <- spt.hot[ff, ff]
 
+diet <- llply(sp.oc, function(x) table(x$comdiet))
+diet[laply(diet, length) > 1] <- llply(diet[laply(diet, length) > 1], 
+                                       function(x) names(which.max(x)))
+diet <- unlist(llply(diet, names))
+
+# make a slightly smaller list
+info <- info[as.character(info$sp) %in% names(diet), ]
+info$mass <- scale(info$mass)
+ndiet <- length(unique(diet))
+diet <- model.matrix( ~ diet - 1)[, -1]
+
 data <- list(N = nrow(info), T = length(unique(info$fad)), 
-             trait = info$mass, year = info$fad, vcv = spt.hot)
-with(data, {stan_rdump(list = c('N', 'T', 'trait', 'year', 'vcv'),
+             trait = as.vector(info$mass), year = info$fad,
+             D = ndiet, cat = diet)
+with(data, {stan_rdump(list = c('N', 'T', 'trait', 'year', 'D', 'cat'),
                        file = '../data/data_dump/coping_info.data.R')})

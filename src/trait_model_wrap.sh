@@ -4,7 +4,7 @@ for f in $FILES;
 do
   for i in `seq 1 4`;
   do
-    ../stan/coping sample num_samples=2000 num_warmup=2000 \
+    ../stan/coping sample num_samples=6000 num_warmup=6000 thin=6 \
       init=0 \
       id=$i \
       data file=$f \

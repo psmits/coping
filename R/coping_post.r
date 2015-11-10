@@ -7,6 +7,7 @@ library(reshape2)
 library(ggplot2)
 library(rstan)
 library(grid)
+source('../R/coping_foo_post.r')
 #
 theme_set(theme_bw())
 cbp <- c('#E69F00', '#56B4E9', '#009E73', '#F0E442', 
@@ -20,41 +21,14 @@ theme_update(axis.text = element_text(size = 10),
 
 nsim <- 1000
 
+# bring in the data
 source('../R/coping_setup.r')
-
 dat.sum <- laply(split(data$trait, data$year), 
                  function(x) quantile(x, c(0.25, 0.5, 0.75)))
 dat.mm <- laply(split(data$trait, data$year), mean)
 dat.ss <- laply(split(data$trait, data$year), sd)
 
-
-# look at the posteriors
-sim.series <- function(data, ext) {
-  out <- list()
-  ny <- table(data$year)
-  for(ii in seq(data$T)) {
-    nn <- ny[ii]
-
-    mm <- sample(ext$mu[ii], 1) 
-    ll <- sample(ext$loc[, ii], 1) 
-    # ext$phy
-    #   grab those that originated at that time
-    ss <- sample(ext$scale[, ii], 1)
-    aa <- sample(ext$skew[, ii], 1)
-
-    out[[ii]] <- rsn(nn, xi = mm + ll, omega = ss, alpha = aa)
-  }
-  out
-}
-
-skew.exp <- function(mu, sd, alpha) {  # expectation
-  delt <- alpha / sqrt(1 + (alpha ^ 2))
-  mu + (sd * delt * sqrt(2 / pi))
-}
-skew.wrap <- function(attr) {
-  skew.exp(mu = attr[1], sd = attr[2], alpha = attr[3])
-}
-
+# mcmc results
 post <- list.files('../data/mcmc_out', 
                    pattern = 'coping', 
                    full.names = TRUE)
@@ -62,10 +36,10 @@ fit <- read_stan_csv(post)
 ext <- extract(fit, permuted = TRUE)
 
 # posterior predictive replications
-pp <- replicate(nsim, sim.series(data, ext), simplify = FALSE)
+pp <- replicate(nsim, sim.series(data = data, ext), simplify = FALSE)
 
-expect <- llply(pp, function(x) 
-                laply(x, function(y) skew.wrap(attr(y, 'parameters'))))
+
+expect <- llply(pp, function(x) laply(x, mean))
 expect <- Reduce(cbind, expect)
 
 # basic posterior predictive checks
@@ -98,10 +72,11 @@ df2 <- data.frame(year = seq(nrow(expect)),
                   expect.o = dat.mm)
 
 # data plus observed mean and 1000 estimates of expectation
-data.view <- ggplot(df, aes(x = year, y = trait)) + geom_point(alpha = 0.5)
+data.view <- ggplot(df, aes(x = year, y = trait))
+data.view <- data.view + geom_point(alpha = (nsim / 10 ^ (nchar(nsim) + 1)) * 5)
 data.view <- data.view + geom_line(data = expp, 
                                    mapping = aes(y = val, group = sim), 
-                                   alpha = 0.05,
+                                   alpha = (nsim / 10 ^ (nchar(nsim) + 1)) * 5,
                                    colour = 'blue')
 data.view <- data.view + geom_line(data = df2, mapping = aes(y = expect.o), 
                                    colour = 'black', size = 1.5)
@@ -120,7 +95,8 @@ skpp <- Reduce(rbind, skpp)
 skmm <- data.frame(year = seq(ncol(ext$skew)), val = colMeans(ext$skew))
 
 skew.plot <- ggplot(skpp, aes(x = year, y = val, group = sim))
-skew.plot <- skew.plot + geom_line(alpha = 0.05, colour = 'blue')
+skew.plot <- skew.plot + geom_line(alpha = (nsim / 10 ^ (nchar(nsim) + 1)) * 5, 
+                                   colour = 'blue')
 skew.plot <- skew.plot + geom_line(data = skmm, 
                                    mapping = aes(x = year, 
                                                  y = val, 
@@ -132,24 +108,24 @@ ggsave(filename = '../doc/figure/skew_series.png', plot = skew.plot,
 
 
 
-# plot what that type of skewness looks like
-xi = mean(ext$mu)
-omega = mean(exp(ext$scale_mu))
-alpha = mean(ext$skew_mu)
-
-eep <- data.frame(sim = seq(ncol(expect)), val = colMeans(expect))
-
-x <- data.frame(x = seq(from = -2.3, to = 15, by = 0.01))
-theo.skew <- ggplot(x, aes(x = x))
-theo.skew <- theo.skew + stat_function(fun = dsn, 
-                                       args = list(xi = xi, 
-                                                   omega = omega, 
-                                                   alpha = alpha))
-theo.skew <- theo.skew + geom_vline(data = eep, 
-                                    aes(xintercept = val), 
-                                    colour = 'blue', alpha = 0.05)
-theo.skew <- theo.skew + geom_vline(xintercept = mean(data$trait), 
-                                    colour = 'black')
-theo.skew <- theo.skew + labs(y = 'Density', x = 'log body mass')
-ggsave(filename = '../doc/figure/skew_theo.png', plot = theo.skew,
-       width = 7, height = 5)
+## plot what that type of skewness looks like
+#xi = mean(ext$loc)
+#omega = mean(exp(ext$scale_mu))
+#alpha = mean(ext$skew_mu)
+#
+#eep <- data.frame(sim = seq(ncol(expect)), val = colMeans(expect))
+#
+#x <- data.frame(x = seq(from = -2.3, to = 15, by = 0.01))
+#theo.skew <- ggplot(x, aes(x = x))
+#theo.skew <- theo.skew + stat_function(fun = dsn, 
+#                                       args = list(xi = xi, 
+#                                                   omega = omega, 
+#                                                   alpha = alpha))
+#theo.skew <- theo.skew + geom_vline(data = eep, 
+#                                    aes(xintercept = val), 
+#                                    colour = 'blue', alpha = 0.05)
+#theo.skew <- theo.skew + geom_vline(xintercept = mean(data$trait), 
+#                                    colour = 'black')
+#theo.skew <- theo.skew + labs(y = 'Density', x = 'log body mass')
+#ggsave(filename = '../doc/figure/skew_theo.png', plot = theo.skew,
+#       width = 7, height = 5)
