@@ -21,17 +21,20 @@ parameters {
   matrix[K, D] beta[C];  // matrix of regression coefficients
   matrix[K, D] beta_mu;
   matrix<lower=0>[K, D] sigma;
-  vector[U] phy;
-  real<lower=0> sigma_phy;
+  vector[U] phy[K];  // need for each of K categories
+  real<lower=0> sigma_phy[K];  // needed for each of K categories 
 }
 transformed parameters {
-  real<lower=0> sig_phy_sq;
+  real<lower=0> sig_phy_sq[K];  // needed for each of K categories 
 
-  sig_phy_sq <- sigma_phy^2;
+  for(k in 1:K) {
+    sig_phy_sq[k] <- sigma_phy[k]^2;  // needed for each of K categories 
+  }
 }
 model {
-  vector[U] v;
-  real sum_of_squares;
+  vector[U] v[K];  // needed for each of K categories 
+  real sum_of_squares[K];  // needed for each of K categories 
+  vector[K] hold[N];
 
   for(k in 1:K) {
     beta_mu[k] ~ normal(0, 1);
@@ -41,23 +44,38 @@ model {
     }
   }
 
+  // needed for each of K categories 
   sigma_phy ~ cauchy(0,1);
-  v <- vcv_inv_la * phy;
-  sum_of_squares <- dot_product(v, v);
+  for(k in 1:K) {
+    v[k] <- vcv_inv_la * phy[k];
+    sum_of_squares[k] <- dot_product(v[k], v[k]);
 
-  // non-constant part of log(det(sigma_phy * vcv) ^ -0.5
-  increment_log_prob(-0.5 * N * log(sig_phy_sq));
-  // log of kernal of mulinorm
-  increment_log_prob(sum_of_squares / (2 * sig_phy_sq));
+    // non-constant part of log(det(sigma_phy * vcv) ^ -0.5
+    increment_log_prob(-0.5 * N * log(sig_phy_sq[k]));
+    // log of kernal of mulinorm
+    increment_log_prob(sum_of_squares[k] / (2 * sig_phy_sq[k]));
+  }
+  for(n in 1:N) {
+    for(k in 1:K) {
+      hold[n][k] <- beta[cohort[n]][k] * x[n] + phy[k][id[n]];
+    }
+  }
 
   for(n in 1:N) {
-    y[n] ~ categorical_logit(beta[cohort[n]] * x[n] + phy[id[n]]);
+    y[n] ~ categorical_logit(hold[n]);
   }
 }
 generated quantities {
   int y_tilde[N];
+  vector[K] hold[N];
+  
+  for(n in 1:N) {
+    for(k in 1:K) {
+      hold[n][k] <- beta[cohort[n]][k] * x[n] + phy[k][id[n]];
+    }
+  }
 
   for(n in 1:N) {
-    y_tilde[n] <- categorical_rng(softmax(beta[cohort[n]] * x[n] + phy[id[n]]));
+    y_tilde[n] <- categorical_rng(softmax(hold[n]));
   }
 }
