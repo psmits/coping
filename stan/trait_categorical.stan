@@ -31,7 +31,7 @@ transformed parameters {
   matrix[K, D] beta[C];
   real<lower=0> sig_phy_sq[K - 1];
 
-  for(c in 1:C) {
+  for(c in 1:C) { // mixing constants and params
     beta[c] <- append_row(beta_raw[c], zeroes);
   }
   for(k in 1:(K - 1)) {

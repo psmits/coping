@@ -15,14 +15,26 @@
 
 \subsection{Taxon occurrence information}
 
+% same basic occurrence information from \citep{Smits2015}
+
 \subsection{Model specification}
 
-The mean (i.e. expected) body mass of any origination cohort is inherently known with error. I chose to model this error, or the distribution of log body mass of a given origination cohort, as a skew-normal distribution. This makes sense given that the observed distribution of mammal log body masses is highly skewed CITATION.
+% categorical distribution
 
-The probability density function of the skew-normal distribution is defined
+% softmax function
+\begin{equation}
+  \mathrm{softmax}(y_k) = \frac{\exp(y_k)}{\sum_{k = 1}^{K} exp(y_{k})}
+  \label{eq:softmax}
+\end{equation}
+% invariance under addition of a constant
+% K - 1 formulation
+%   Agresti
 
-The expectation of the skew-normal distribution 
+% phylogenetic effect
 
-\(y_{i}\) is the log body mass of species \(i\) which originates at some time \(t\), where \(i = 1, 2, \dots, N\) and \(t = 1, 2, \dots, T\) and \(N\) is total sample size and \(T\) is total number of origination cohorts.
+% hierarchical formulation by time slice
+
+\subsection{Posterior inference}
+
 
 \end{document}
