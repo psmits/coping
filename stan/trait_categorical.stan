@@ -13,40 +13,46 @@ data {
 transformed data {
   matrix[U, U] vcv_inv;
   matrix[U, U] vcv_inv_la;
+  row_vector[D] zeroes;  // for mixing params and constants
 
   vcv_inv <- inverse(vcv);
   vcv_inv_la <- transpose(cholesky_decompose(vcv_inv));
+  
+  zeroes <- rep_row_vector(0, D);
 }
 parameters {
-  matrix[K, D] beta[C];  // matrix of regression coefficients
-  matrix[K, D] beta_mu;
-  matrix<lower=0>[K, D] sigma;
-  vector[U] phy[K];  // need for each of K categories
-  real<lower=0> sigma_phy[K];  // needed for each of K categories 
+  matrix[K - 1, D] beta_raw[C];  // identifiable? sum to one constraint...
+  matrix[K - 1, D] beta_mu;
+  matrix<lower=0>[K - 1, D] sigma;
+  vector[U] phy[K - 1];
+  real<lower=0> sigma_phy[K - 1];
 }
 transformed parameters {
-  real<lower=0> sig_phy_sq[K];  // needed for each of K categories 
+  matrix[K, D] beta[C];
+  real<lower=0> sig_phy_sq[K - 1];
 
-  for(k in 1:K) {
-    sig_phy_sq[k] <- sigma_phy[k]^2;  // needed for each of K categories 
+  for(c in 1:C) {
+    beta[c] <- append_row(beta_raw[c], zeroes);
+  }
+  for(k in 1:(K - 1)) {
+    sig_phy_sq[k] <- sigma_phy[k]^2;
   }
 }
 model {
-  vector[U] v[K];  // needed for each of K categories 
-  real sum_of_squares[K];  // needed for each of K categories 
+  vector[U] v[K - 1]; 
+  real sum_of_squares[K - 1];
   vector[K] hold[N];
 
-  for(k in 1:K) {
+  for(k in 1:(K - 1)) {
     beta_mu[k] ~ normal(0, 1);
     sigma[k] ~ cauchy(0, 1);
     for(c in 1:C) {
-      beta[c][k] ~ normal(beta_mu[k], sigma[k]);
+      beta_raw[c][k] ~ normal(beta_mu[k], sigma[k]);
     }
   }
 
-  // needed for each of K categories 
   sigma_phy ~ cauchy(0,1);
-  for(k in 1:K) {
+  for(k in 1:(K - 1)) {
     v[k] <- vcv_inv_la * phy[k];
     sum_of_squares[k] <- dot_product(v[k], v[k]);
 
@@ -55,12 +61,23 @@ model {
     // log of kernal of mulinorm
     increment_log_prob(sum_of_squares[k] / (2 * sig_phy_sq[k]));
   }
+
+  // assemble the length K vector of predictors for each n
   for(n in 1:N) {
     for(k in 1:K) {
-      hold[n][k] <- beta[cohort[n]][k] * x[n] + phy[k][id[n]];
+      if(k != K) { 
+        hold[n][k] <- beta[cohort[n]][k] * x[n] + phy[k][id[n]];
+      } else if(k == K) {
+        hold[n][k] <- beta[cohort[n]][k] * x[n];
+      }
+      // this is ad-hoc as fuck but produces the "right" result(?)
+      // because, for K, should be 0 (reminder: exp(0) = 1)
+      // instead of having phy have a vector of 0s at K
+      // which somehow causes crazy amounts of nan problems
     }
   }
 
+  // final sampleing statement
   for(n in 1:N) {
     y[n] ~ categorical_logit(hold[n]);
   }
@@ -71,10 +88,16 @@ generated quantities {
   
   for(n in 1:N) {
     for(k in 1:K) {
-      hold[n][k] <- beta[cohort[n]][k] * x[n] + phy[k][id[n]];
+      if(k != K) {
+        hold[n][k] <- beta[cohort[n]][k] * x[n] + phy[k][id[n]];
+      } else if(k == K) {
+        hold[n][k] <- beta[cohort[n]][k] * x[n];
+      }
     }
   }
 
+  // generate posterior predictive datasets
+  // softmax function because categorical rng has no logit form
   for(n in 1:N) {
     y_tilde[n] <- categorical_rng(softmax(hold[n]));
   }
