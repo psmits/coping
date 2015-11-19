@@ -17,6 +17,8 @@
 
 % same basic occurrence information from \citep{Smits2015}
 
+% \uppercase{do i include body size as a covariate}
+
 \subsection{Model specification}
 
 % categorical distribution
@@ -33,8 +35,25 @@
 % phylogenetic effect
 
 % hierarchical formulation by time slice
+%   partial pooling
+%     attempt to smooth over small samples size bins
+%   time structure?
+%     not currently implemented
+
 
 \subsection{Posterior inference}
+% HMC using STAN
+%   4 chains for 20000 steps
+% split evenly between warm-up and sampling
+% thining every 10th
+
+
+% posterior predictive checks
+
+
+
+
+
 
 
 \end{document}

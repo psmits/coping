@@ -25,3 +25,5 @@ post <- list.files('../data/mcmc_out',
                    full.names = TRUE)
 fit <- read_stan_csv(post)
 ext <- extract(fit, permuted = TRUE)
+
+
