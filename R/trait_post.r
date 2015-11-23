@@ -27,13 +27,13 @@ post <- list.files('../data/mcmc_out',
 fit <- read_stan_csv(post[1:4])
 ext <- extract(fit, permuted = TRUE)
 # sample, time, response class, covariate
-# TO DO i have already simulated from the posterior predictive
+# i have already simulated from the posterior predictive
+
 
 # got to do some plots
 
+
 # change in ratio over time
-
-
 # to deal with making run over all samples, split by cohort
 softmax <- function(beta) {
   tot <- sum(exp(beta))
@@ -45,7 +45,7 @@ for(ii in seq(C)) {
 }
 hold.prob <- llply(oo, function(x) t(apply(x, 1, softmax)))
 hold.prob <- laply(hold.prob, colMeans)
-colnames(hold.prob) <- c('arb', 'grnd', 'scn')
+#colnames(hold.prob) <- c('arb', 'grnd', 'scn')
 hold.prob <- melt(hold.prob)
 prob.seq <- ggplot(hold.prob, aes(x = Var1, y = value, fill = Var2)) 
 prob.seq <- prob.seq + geom_bar(stat = 'identity', position = 'stack')

@@ -29,7 +29,7 @@ occur <- occur[!(occur$name.bi %in%
 spt <- ape::drop.tip(spt, hot.fix$tree_not_data)
 
 # for testing purposes
-keep <- createDataPartition(occur$bins, p = 0.2)
+keep <- createDataPartition(occur$bins, p = 0.5)
 keepname <- str_replace(unique(occur$name.bi[keep[[1]]]), ' ', '_')
 hot.fix <- name.check(spt, data.names = keepname)
 spt <- ape::drop.tip(spt, hot.fix$tree_not_data)
@@ -38,7 +38,7 @@ occur <- occur[keep[[1]], ]
 occur$mass <- scale(log(occur$mass))
 
 # final step is name the variables
-y <- as.numeric(as.factor(occur$comlife))
+y <- as.numeric(interaction(occur$comdiet, occur$comlife))
 K <- length(unique(y))
 N <- length(y)
 D <- 2
