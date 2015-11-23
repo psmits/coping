@@ -3,7 +3,6 @@ data {
   int<lower=0> N;  // sample size
   int<lower=1> D;  // number of predictors
   int<lower=1> C;
-  int U;  // number of unique species
   int<lower=1,upper=K> y[N];  // state
   vector[D] x[N];  // matrix of predictors
   int cohort[N];
