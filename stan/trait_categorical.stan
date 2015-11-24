@@ -19,7 +19,7 @@ parameters {
   matrix[K - 1, D] beta_raw[C];  // identifiable? sum to one constraint...
   matrix[K - 1, D] beta_mu;
   matrix<lower=0>[K - 1, D] sigma;
-  vector[K - 1] alpha;
+  real alpha;
   vector[C] iso_mean;
   vector<lower=0>[C] iso_scale;
 }
@@ -33,12 +33,21 @@ transformed parameters {
 model {
   vector[K] hold[N];
 
+  alpha ~ normal(0, 1);
   for(k in 1:(K - 1)) {
     beta_mu[k] ~ normal(0, 1);
-    alpha[k] ~ normal(0, 1);
     sigma[k] ~ cauchy(0, 1);
-    for(c in 1:C) {
-      beta_raw[c][k] ~ normal(beta_mu[k] + alpha[k] * iso_mean[c], sigma[k]);
+    for(d in 1:D) {
+      for(c in 1:C) {
+        if(d == 1) {
+          beta_raw[c][k][d] ~ normal(beta_mu[k] + alpha * iso_mean[c], sigma[k]);
+          // only group level predictor for intercept parameter
+          // because it effects the baseline occurrence
+          // assumes trait effects aren't affected by "climate"
+        } else {
+          beta_raw[c][k][d] ~ normal(beta_mu[k], sigma[k]);
+        }
+      }
     }
   }
 
