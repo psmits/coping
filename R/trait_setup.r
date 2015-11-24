@@ -13,6 +13,7 @@ load('../data/scaled_super.rdata')
 load('../data/body_mass.rdata')
 
 dat <- read.csv('../data/mam-occs.csv', stringsAsFactors = FALSE)
+zac <- read.csv('../data/2008_zachos_data.csv', stringsAsFactors = FALSE)
 
 occur <- clean.occurrence(dat)
 ss <- split(occur, occur$bins)
@@ -34,9 +35,27 @@ spt <- ape::drop.tip(spt, hot.fix$tree_not_data)
 #hot.fix <- name.check(spt, data.names = keepname)
 #spt <- ape::drop.tip(spt, hot.fix$tree_not_data)
 #occur <- occur[keep[[1]], ]
-
-occur$mass <- scale(log(occur$mass))
+occur$mass <- arm::rescale(log(occur$mass))
 diet <- model.matrix( ~ occur$comdiet - 1)[, -1]
+
+
+
+# process the "climate" information
+names(zac) <- c('loc', 'age', 'genus', 'o18', 'c13', 
+                'o18.5pt', 'c13.5pt', 'comment')
+zac <- zac[zac$age <= (max(occur$bins)), ]
+zac <- zac[!is.na(zac$o18), ]
+zac$o18 <- arm::rescale(zac$o18)
+b <- unique(occur$bins)
+b <- cbind(b - 2, b)
+isotope <- list()
+zac.cohort <- array(dim = nrow(b))
+for(ii in seq(max(occur$bins) / 2)) {
+  isotope[[ii]] <- zac$o18[zac$age > b[ii, 1] & zac$age <= b[ii, 2]]
+  zac.cohort[zac$age > b[ii, 1] & zac$age <= b[ii, 2]] <- ii
+}
+
+
 
 # final step is name the variables
 y <- as.numeric(as.factor(occur$comlife))
@@ -52,6 +71,8 @@ cohort <- mapvalues(cohort, from = unique(cohort), to = seq(C))
 #vcv <- vcv / max(diag(vcv))
 #U <- nrow(vcv)
 #id <- as.numeric(as.factor(occur$name.bi))
+I <- length(zac.cohort)
+isotope <- zac.cohort
 
-stan_rdump(list = c('K', 'N', 'D', 'C', 'y', 'x', 'cohort'),
+stan_rdump(list = c('K', 'N', 'D', 'C', 'I', 'y', 'x', 'cohort', 'isotope'),
            file = '../data/data_dump/trait_info.data.R')
