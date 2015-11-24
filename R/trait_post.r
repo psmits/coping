@@ -43,11 +43,12 @@ oo <- list()
 for(ii in seq(C)) {
   oo[[ii]] <- ext$hold[1, cohort == ii, ]
 }
+oo <- oo[!(laply(llply(oo, dim), is.null))]
 hold.prob <- llply(oo, function(x) t(apply(x, 1, softmax)))
 hold.prob <- laply(hold.prob, colMeans)
 #colnames(hold.prob) <- c('arb', 'grnd', 'scn')
 hold.prob <- melt(hold.prob)
-prob.seq <- ggplot(hold.prob, aes(x = Var1, y = value, fill = Var2)) 
+prob.seq <- ggplot(hold.prob, aes(x = Var1, y = value, fill = factor(Var2)))
 prob.seq <- prob.seq + geom_bar(stat = 'identity', position = 'stack')
 prob.seq <- prob.seq + labs(x = 'Time', y = 'Probability of occurrence')
 ggsave(plot = prob.seq, filename = '../doc/figure/occurrence_prob.png')
@@ -89,3 +90,11 @@ trait.eff <- trait.eff + geom_ribbon(data = mean.eff,
                                      alpha = 0.3)
 trait.eff <- trait.eff + scale_colour_discrete(name = 'Locomotor\ncategory')
 ggsave(plot = trait.eff, filename = '../doc/figure/trait_eff.png')
+
+
+# how about the diet
+#   order: arb, grnd, scan
+colMeans(ext$beta[, 1, , 1])  # carn (base)
+colMeans(ext$beta[, 1, , 1]) + colMeans(ext$beta[, 1, , 3])  # herb
+colMeans(ext$beta[, 1, , 1]) + colMeans(ext$beta[, 1, , 4])  # insect
+colMeans(ext$beta[, 1, , 1]) + colMeans(ext$beta[, 1, , 5])  # omni

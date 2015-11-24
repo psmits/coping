@@ -29,21 +29,22 @@ occur <- occur[!(occur$name.bi %in%
 spt <- ape::drop.tip(spt, hot.fix$tree_not_data)
 
 # for testing purposes
-keep <- createDataPartition(occur$bins, p = 0.5)
-keepname <- str_replace(unique(occur$name.bi[keep[[1]]]), ' ', '_')
-hot.fix <- name.check(spt, data.names = keepname)
-spt <- ape::drop.tip(spt, hot.fix$tree_not_data)
-occur <- occur[keep[[1]], ]
+#keep <- createDataPartition(occur$bins, p = 0.4)
+#keepname <- str_replace(unique(occur$name.bi[keep[[1]]]), ' ', '_')
+#hot.fix <- name.check(spt, data.names = keepname)
+#spt <- ape::drop.tip(spt, hot.fix$tree_not_data)
+#occur <- occur[keep[[1]], ]
 
 occur$mass <- scale(log(occur$mass))
+diet <- model.matrix( ~ occur$comdiet - 1)[, -1]
 
 # final step is name the variables
-y <- as.numeric(interaction(occur$comdiet, occur$comlife))
+y <- as.numeric(as.factor(occur$comlife))
 K <- length(unique(y))
 N <- length(y)
-D <- 2
 x <- matrix(1, ncol = 1, nrow = N)
-x <- cbind(x, occur$mass)
+x <- cbind(x, occur$mass, diet)
+D <- ncol(x)
 cohort <- occur$bins / 2
 C <- length(unique(cohort))
 cohort <- mapvalues(cohort, from = unique(cohort), to = seq(C))
