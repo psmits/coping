@@ -73,6 +73,7 @@ cohort <- mapvalues(cohort, from = unique(cohort), to = seq(C))
 #id <- as.numeric(as.factor(occur$name.bi))
 I <- length(zac.cohort)
 isotope <- zac.cohort
+isoval <- zac$o18
 
-stan_rdump(list = c('K', 'N', 'D', 'C', 'I', 'y', 'x', 'cohort', 'isotope'),
+stan_rdump(list = c('K', 'N', 'D', 'C', 'I', 'y', 'x', 'cohort', 'isotope', 'isoval'),
            file = '../data/data_dump/trait_info.data.R')
