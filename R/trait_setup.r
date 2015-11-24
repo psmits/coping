@@ -35,9 +35,10 @@ spt <- ape::drop.tip(spt, hot.fix$tree_not_data)
 #hot.fix <- name.check(spt, data.names = keepname)
 #spt <- ape::drop.tip(spt, hot.fix$tree_not_data)
 #occur <- occur[keep[[1]], ]
+
+# make covariates the right shape
 occur$mass <- arm::rescale(log(occur$mass))
 diet <- model.matrix( ~ occur$comdiet - 1)[, -1]
-
 
 
 # process the "climate" information
@@ -47,14 +48,15 @@ zac <- zac[zac$age <= (max(occur$bins)), ]
 zac <- zac[!is.na(zac$o18), ]
 zac$o18 <- arm::rescale(zac$o18)
 b <- unique(occur$bins)
-b <- cbind(b - 2, b)
+b <- as.matrix(cbind(b - 2, b))
 isotope <- list()
-zac.cohort <- array(dim = nrow(b))
+zac.cohort <- array(NA, dim = nrow(zac))
 for(ii in seq(max(occur$bins) / 2)) {
   isotope[[ii]] <- zac$o18[zac$age > b[ii, 1] & zac$age <= b[ii, 2]]
-  zac.cohort[zac$age > b[ii, 1] & zac$age <= b[ii, 2]] <- ii
+  zac.cohort[(zac$age > b[ii, 1] & zac$age <= b[ii, 2])] <- ii
 }
-
+zac <- zac[!is.na(zac.cohort), ]
+zac.cohort <- zac.cohort[!is.na(zac.cohort)]
 
 
 # final step is name the variables
@@ -71,9 +73,10 @@ cohort <- mapvalues(cohort, from = unique(cohort), to = seq(C))
 #vcv <- vcv / max(diag(vcv))
 #U <- nrow(vcv)
 #id <- as.numeric(as.factor(occur$name.bi))
-I <- length(zac.cohort)
+S <- length(zac.cohort)
 isotope <- zac.cohort
 isoval <- zac$o18
 
-stan_rdump(list = c('K', 'N', 'D', 'C', 'I', 'y', 'x', 'cohort', 'isotope', 'isoval'),
+stan_rdump(list = c('K', 'N', 'D', 'C', 'S', 'y', 'x', 
+                    'cohort', 'isotope', 'isoval'),
            file = '../data/data_dump/trait_info.data.R')

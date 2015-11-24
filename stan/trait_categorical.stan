@@ -1,14 +1,14 @@
 data {
   int<lower=2> K;  // possible categories
   int<lower=0> N;  // sample size
-  int<lower=1> D;  // number of predictors
+  int<lower=1> D;  // number of indiv-level predictors
   int<lower=1> C;
-  int<lower=1> I;
+  int<lower=1> S;
   int<lower=1,upper=K> y[N];  // state
-  vector[D] x[N];  // matrix of predictors
+  vector[D] x[N];  // matrix of indiv-level predictors
   int cohort[N];
-  int isotope[D];
-  vector[D] isoval;
+  int<lower=1> isotope[S];
+  real isoval[S];
 }
 transformed data {
   row_vector[D] zeroes;  // for mixing params and constants
@@ -16,15 +16,15 @@ transformed data {
   zeroes <- rep_row_vector(0, D);
 }
 parameters {
-  matrix[K - 1, D] beta_raw[C];  // identifiable? sum to one constraint...
+  matrix[K - 1, D] beta_raw[C];  // makes identifiable
   matrix[K - 1, D] beta_mu;
   matrix<lower=0>[K - 1, D] sigma;
-  real alpha;
+  vector[K - 1] alpha;  // coef for group-level predictor
   vector[C] iso_mean;
   vector<lower=0>[C] iso_scale;
 }
 transformed parameters {
-  matrix[K, D] beta[C];
+  matrix[K, D] beta[C];  // makes identifiable
 
   for(c in 1:C) { // mixing constants and params
     beta[c] <- append_row(beta_raw[c], zeroes);
@@ -33,17 +33,29 @@ transformed parameters {
 model {
   vector[K] hold[N];
 
-  alpha ~ normal(0, 1);
+  // measurement error of mean isotope value per geo-unit
+  for(s in 1:S) {
+    isoval[s] ~ normal(iso_mean[isotope[s]], iso_scale[isotope[s]]);
+  }
+  iso_mean ~ normal(0, 1);
+  iso_scale ~ cauchy(0, 1);
+
+  // priors for reg coefs 
+  // for each response, vary by geo-unit
+  //  also group level predictor
   for(k in 1:(K - 1)) {
-    beta_mu[k] ~ normal(0, 1);
+    alpha[k] ~ normal(0, 1); 
+    beta_mu[k] ~ normal(0, 1);  
+    // can make this MVN, but would need for all response types
     sigma[k] ~ cauchy(0, 1);
     for(d in 1:D) {
       for(c in 1:C) {
         if(d == 1) {
-          beta_raw[c][k][d] ~ normal(beta_mu[k] + alpha * iso_mean[c], sigma[k]);
+          beta_raw[c][k][d] ~ normal(beta_mu[k] + alpha[k] * iso_mean[c], 
+              sigma[k]);
           // only group level predictor for intercept parameter
-          // because it effects the baseline occurrence
-          // assumes trait effects aren't affected by "climate"
+          // because it effects the baseline occurrence of response
+          // assumes covariate effects aren't affected by "climate"
         } else {
           beta_raw[c][k][d] ~ normal(beta_mu[k], sigma[k]);
         }
@@ -51,11 +63,7 @@ model {
     }
   }
 
-  for(d in 1:D) {
-    isoval[d] ~ normal(iso_mean[isotope[D]], iso_scale[isotope[D]]);
-  }
-
-  // assemble the length K vector of predictors for each n
+  // assemble the length K vector of individual-level predictors for each n
   for(n in 1:N) {
     for(k in 1:K) {
       hold[n][k] <- beta[cohort[n]][k] * x[n];
@@ -70,7 +78,7 @@ model {
 generated quantities {
   int y_tilde[N];
   vector[K] hold[N];
-  
+
   for(n in 1:N) {
     for(k in 1:K) {
       hold[n][k] <- beta[cohort[n]][k] * x[n];
