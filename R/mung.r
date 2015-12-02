@@ -48,10 +48,12 @@ clean.occurrence <- function(dat) {
 
   # locomotor assignments
   tree <- c('arboreal')
-  ground <- c('ground dwelling', 'semifossorial', 'fossorial', 'saltatorial')
+  ground <- c('ground dwelling', 'saltatorial')
+  dig <- c('semifossorial', 'fossorial')
   dat$comlife <- dat$life_habit
   dat$comlife[dat$life_habit %in% tree] <- 'arboreal'
   dat$comlife[dat$life_habit %in% ground] <- 'ground dwelling'
+  dat$comlife[dat$life_habit %in% dig] <- 'fossorial'
 
   # assign every occurence to a 2 My bin
   bins <- seq(from = 0, to = 66, by = 2)

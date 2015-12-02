@@ -6,8 +6,6 @@ data {
   int<lower=1,upper=K> y[N];  // state
   vector[D] x[N];  // matrix of indiv-level predictors
   int cohort[N];
-  real isoval[C];
-  real isorang[C];
 }
 transformed data {
   row_vector[D] zeroes;  // for mixing params and constants
@@ -18,8 +16,6 @@ parameters {
   matrix[K - 1, D] beta_raw[C];  // makes identifiable
   matrix[K - 1, D] beta_mu;
   matrix<lower=0>[K - 1, D] sigma;
-  vector[K - 1] alpha;  // coef for group-level predictor
-  vector[K - 1] gamma;  // coef for group-level predictor
 }
 transformed parameters {
   matrix[K, D] beta[C];  // makes identifiable
@@ -35,24 +31,11 @@ model {
   // for each response, vary by geo-unit
   //  also group level predictor
   for(k in 1:(K - 1)) {
-    alpha[k] ~ normal(0, 1); 
-    gamma[k] ~ normal(0, 1); 
     beta_mu[k] ~ normal(0, 1);  
     // can make this MVN, but would need for all response types
     sigma[k] ~ cauchy(0, 1);
-    for(d in 1:D) {
-      for(c in 1:C) {
-        if(d == 1) {
-          beta_raw[c][k][d] ~ normal(beta_mu[k] + alpha[k] * isoval[c] + 
-              gamma[k] * isorang[c], 
-              sigma[k]);
-          // only group level predictor for intercept parameter
-          // because it effects the baseline occurrence of response
-          // assumes covariate effects aren't affected by "climate"
-        } else {
-          beta_raw[c][k][d] ~ normal(beta_mu[k], sigma[k]);
-        }
-      }
+    for(c in 1:C) {
+      beta_raw[c][k] ~ normal(beta_mu[k], sigma[k]);
     }
   }
 

@@ -36,3 +36,19 @@ skew.wrap <- function(attr) {
   skew.exp(mu = attr[1], sd = attr[2], alpha = attr[3])
 }
 
+# pairwise differences function for vectors
+pairwise.diffs <- function(x) {
+  # create column combination pairs
+  prs <- cbind(rep(1:ncol(x), each = ncol(x)), 1:ncol(x))
+  col.diffs <- prs[prs[, 1] < prs[, 2], , drop = FALSE]
+  # do pairwise differences 
+  result <- x[, col.diffs[, 1]] - x[, col.diffs[, 2], drop = FALSE]
+  # set colnames
+  if(is.null(colnames(x)))
+    colnames(x) <- 1:ncol(x)
+
+  colnames(result) <- paste('beta[', colnames(x)[col.diffs[, 1]], "] - beta[", 
+                            colnames(x)[col.diffs[, 2]], ']', sep = "")
+  result
+}
+

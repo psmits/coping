@@ -36,17 +36,11 @@ spt <- ape::drop.tip(spt, hot.fix$tree_not_data)
 #spt <- ape::drop.tip(spt, hot.fix$tree_not_data)
 #occur <- occur[keep[[1]], ]
 
-# make covariates the right shape
-occur$mass <- arm::rescale(log(occur$mass))
-diet <- model.matrix( ~ occur$comdiet - 1)[, -1]
-
-
 # process the "climate" information
 names(zac) <- c('loc', 'age', 'genus', 'o18', 'c13', 
                 'o18.5pt', 'c13.5pt', 'comment')
 zac <- zac[zac$age <= (max(occur$bins)), ]
 zac <- zac[!is.na(zac$o18), ]
-zac$o18 <- arm::rescale(zac$o18)
 b <- unique(occur$bins)
 b <- as.matrix(cbind(b - 2, b))
 isotope <- list()
@@ -57,6 +51,29 @@ for(ii in seq(max(occur$bins) / 2)) {
 }
 zac <- zac[!is.na(zac.cohort), ]
 zac.cohort <- zac.cohort[!is.na(zac.cohort)]
+mean.o18 <- laply(split(zac$o18, zac.cohort), mean)
+mean.o18 <- arm::rescale(mean.o18)
+range.o18 <- laply(split(zac$o18, zac.cohort), function(x) 
+                   abs(quantile(x, 0.25) - quantile(x, 0.75)))
+range.o18 <- arm::rescale(range.o18)
+
+# split by genus to make summaries just in case
+bygen <- split(occur, occur$occurrence.genus_name)
+gen.trait <- data.frame(life = laply(bygen, function(x) 
+                                     names(which.max(table(x$comlife)))),
+                        diet = laply(bygen, function(x) 
+                                     names(which.max(table(x$comdiet)))),
+                        mass = laply(bygen, function(x) 
+                                     mean(x$mass)))
+for(ii in seq(length(bygen))) {
+  bygen[[ii]][, c('comlife', 'comdiet', 'mass')] <- gen.trait[ii, ]
+}
+bygen <- llply(bygen, function(x) x[!(duplicated(x$bins)), ])
+#occur <- Reduce(rbind, bygen)
+
+# make covariates the right shape
+occur$mass <- arm::rescale(log(occur$mass))
+diet <- model.matrix( ~ occur$comdiet - 1)[, -1]
 
 
 # final step is name the variables
@@ -73,10 +90,9 @@ cohort <- mapvalues(cohort, from = unique(cohort), to = seq(C))
 #vcv <- vcv / max(diag(vcv))
 #U <- nrow(vcv)
 #id <- as.numeric(as.factor(occur$name.bi))
-S <- length(zac.cohort)
-isotope <- zac.cohort
-isoval <- zac$o18
+isoval <- mean.o18
+isorang <- range.o18
 
-stan_rdump(list = c('K', 'N', 'D', 'C', 'S', 'y', 'x', 
-                    'cohort', 'isotope', 'isoval'),
+stan_rdump(list = c('K', 'N', 'D', 'C', 'y', 'x', 
+                    'cohort', 'isoval', 'isorang'),
            file = '../data/data_dump/trait_info.data.R')
