@@ -7,7 +7,7 @@
 #PBS -S /bin/sh
 
 ### Inform the scheduler of the expected runtime, where walltime=HH:MM:SS
-#PBS -l walltime=200:00:00
+#PBS -l walltime=500:00:00
 
 ### Inform the scheduler of the number of CPU cores for your job.
 ### This example will allocate four cores on a single node.

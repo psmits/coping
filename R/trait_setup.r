@@ -13,11 +13,35 @@ load('../data/scaled_super.rdata')
 load('../data/body_mass.rdata')
 
 dat <- read.csv('../data/mam-occs.csv', stringsAsFactors = FALSE)
+posture <- read.csv('../data/posture.csv', stringsAsFactors = FALSE)
 
 occur <- clean.occurrence(dat)
 ss <- split(occur, occur$bins)
 occur <- Reduce(rbind, llply(ss, function(x) x[duplicated(x$name.bi), ]))
 
+load('../data/update_taxonomy.rdata')
+na.tax <- na.tax[!(duplicated(na.tax$name.bi)), ]
+fx <- na.tax$name.bi %in% occur$name.bi[occur$comlife == 'ground dwelling']
+na.fx <- na.tax[fx, ]
+occur[match(na.fx$name.bi, occur$name.bi), 
+      c('order_name', 'family_name')] <- na.fx[, 1:2]
+
+stance.group <- split(posture$taxon, posture$stance)
+for(ii in seq(length(stance.group))) {
+  mm <- occur$family_name %in% stance.group[[ii]]
+  gd <- occur$comlife == 'ground dwelling'
+  occur$comlife[mm & gd] <- names(stance.group)[ii]
+
+  mm <- occur$order_name %in% stance.group[[ii]]
+  gd <- occur$comlife == 'ground dwelling'
+  occur$comlife[mm & gd] <- names(stance.group)[ii] 
+}
+
+occur <- occur[occur$comlife != 'ground dwelling', ]
+
+
+
+# shrink data to match all inputs
 occur <- occur[occur$name.bi %in% na.mass$name, ]
 occur$mass <- na.mass[match(occur$name.bi, na.mass$name), 2]
 
@@ -58,9 +82,12 @@ bygen <- llply(bygen, function(x) x[!(duplicated(x$bins)), ])
 occur$mass <- arm::rescale(log(occur$mass))
 diet <- model.matrix( ~ occur$comdiet - 1)[, -1]
 
-
+occur$comlife <- as.factor(occur$comlife)
+occur$comlife <- factor(occur$comlife, 
+                        levels = c(levels(occur$comlife)[-4], 
+                                   levels(occur$comlife)[4]))
 # final step is name the variables
-y <- as.numeric(as.factor(occur$comlife))
+y <- as.numeric(occur$comlife)
 K <- length(unique(y))
 N <- length(y)
 x <- matrix(1, ncol = 1, nrow = N)

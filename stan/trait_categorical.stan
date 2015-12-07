@@ -68,19 +68,19 @@ model {
     y[n] ~ categorical_logit(hold[n]);
   }
 }
-generated quantities {
-  int y_tilde[N];
-  vector[K] hold[N];
-
-  for(n in 1:N) {
-    for(k in 1:K) {
-      hold[n][k] <- beta[cohort[n]][k] * x[n];
-    }
-  }
-
-  // generate posterior predictive datasets
-  // softmax function because categorical rng has no logit form
-  for(n in 1:N) {
-    y_tilde[n] <- categorical_rng(softmax(hold[n]));
-  }
-}
+//generated quantities {
+//  int y_tilde[N];
+//  vector[K] hold[N];
+//
+//  for(n in 1:N) {
+//    for(k in 1:K) {
+//      hold[n][k] <- beta[cohort[n]][k] * x[n];
+//    }
+//  }
+//
+//  // generate posterior predictive datasets
+//  // softmax function because categorical rng has no logit form
+//  for(n in 1:N) {
+//    y_tilde[n] <- categorical_rng(softmax(hold[n]));
+//  }
+//}
