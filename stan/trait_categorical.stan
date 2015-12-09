@@ -31,9 +31,18 @@ transformed parameters {
 model {
   vector[K] hold[N];
 
+  // ideas on how to rewrite model
+  // intercept is own term
+  // vector[K - 1] intercept[C];
+  //   varies with time
+  // covariate effects constant with time
+  // matrix[K - 1, D] beta_raw;
+  // matrix[K, D] beta;
+  //  x no longer includes column of 1s
+  //  D no longer counts intercept
+
   // priors for reg coefs 
-  // for each response, vary by geo-unit
-  //  also group level predictor
+  // for each response k, vary by time c
   for(k in 1:(K - 1)) {
     alpha[k] ~ normal(0, 1); 
     gamma[k] ~ normal(0, 1); 
@@ -46,15 +55,17 @@ model {
           beta_raw[c][k][d] ~ normal(beta_mu[k] + alpha[k] * isoval[c] + 
               gamma[k] * isorang[c], 
               sigma[k]);
-          // only group level predictor for intercept parameter
+          // only include group level predictor for intercept parameter
           // because it effects the baseline occurrence of response
           // assumes covariate effects aren't affected by "climate"
         } else {
           beta_raw[c][k][d] ~ normal(beta_mu[k], sigma[k]);
+          // effect at time c is drawn from shared mean beta_mu
         }
       }
     }
   }
+
 
   // assemble the length K vector of individual-level predictors for each n
   for(n in 1:N) {

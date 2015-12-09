@@ -14,24 +14,57 @@
 
 % what influences changes in probabilty of any species being of a given ecotype?
 %   given both other aspects of niche and contemporary environment
+%   in many ways, this study builds on the ideas of the bambach cube concept
+%     key is to actually develop a statistical, not just verbal, model
+%   demographic shift along one (compound) aspect of niche
+%     what underlies changes in demography between time units?
+
+
+% hierarchical structure of analysis
+%   unit of analysis: species occurrence i
+%     with ecotype \in K
+%     in time bin t
+%   covariates
+%     individual-level (properties of species occurrence i)
+%     group-level (properties of time bin t)
+
 
 % response
-% ecotype
-%   locomotor type/category
-%     arboreal, digitigrade, plantigrade, unguligrade, fossorial, scansorial
-%   idea is to capture an aspect of terrestrial guilds
-%     need to look at Janis and Van Valkenburg writings
-%     alternative approach than, say, bambach cube
+%   ecotype (demographic descriptor)
+%     locomotor type/category
+%       arboreal, digitigrade, plantigrade, unguligrade, fossorial, scansorial
+%     idea is to capture an aspect of terrestrial guilds
+%       need to look at Janis and Van Valkenburg writings
+%       alternative approach than, say, bambach cube
+%     compound trait as digiti, planti, and unguli are ``ground dwelling'' forms
 
-% covariates
-% dietary category
-%   carnivore, herbivore, insectivore, omnivore
-% body size
-%   rescale log body mass
-% regional environment
-%   need terrestrial biomes/biogeographic units
-% global temperature
-%   rescale delta in degrees 
+
+% individual-level covariates
+%   intercept term if doing varying intercepts model
+%   dietary category
+%     carnivore, herbivore, insectivore, omnivore
+%     varying intercepts?
+%       drawn from normal mean 0, estimated sd given seperate intercept term
+%   body size
+%     rescale of log body mass
+%   regional environment
+%     need terrestrial biomes/biogeographic units
+%     varying intercepts by biome (people have an easier time interpreting them)
+%       drawn from normal mean 0, estimated sd given seperate intercept term
+%       assign based on majority of taxon's occurrences
+%   eventually: \uppercase{\textbf{vary with time?}}
+
+% group-level covariates
+%   global temperature
+%     rescale of delta in degrees 
+%   currently/forever: \uppercase{\textbf{don't vary with time?}}
+
+
+% too many variables? when have i reached too many?
+%   approximate number of regression parameters is the above \uppercase{times K}
+%     not counting all the additional hierarchical parameters
+%   horseshoe priors on everything except intercept?
+
 
 
 
@@ -51,6 +84,7 @@
 % How does the ratio of ecotypes change over the Cenozoic?
 %   decreases (loss) in ecotypes indicate selective pressure AGAINST
 %   increases in ecotypes indicate selective pressure FOR
+%   accounting for general stochasticity, of course
 
 % Hierarchical Bayesian modeling approach in order to help control for
 %   sample size
