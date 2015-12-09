@@ -7,6 +7,7 @@ library(ggplot2)
 library(rstan)
 library(grid)
 source('../R/coping_foo_post.r')
+source('../R/multiclass_roc.r')
 source('../data/data_dump/trait_info.data.R')
 #
 theme_set(theme_bw())
@@ -26,6 +27,15 @@ post <- list.files('../data/mcmc_out',
                    full.names = TRUE)
 fit <- read_stan_csv(post[1:4])
 ext <- extract(fit, permuted = TRUE)
+
+# given ext$y_tilde, calculate multiclass ROC values
+#   need softmax of ext$hold
+#   adapt my earlier code to this new purpose (allvone function)
+#     pred.res is a matrix
+#     first column is guess
+#     other columns are column labeled class probability
+#   output is a single number
+# do this for each of the posterior predictive data sets
 
 #rh <- ncol(summary(fit)[[1]])
 #(summary(fit)[[1]][, rh] < 1.1)

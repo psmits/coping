@@ -90,16 +90,25 @@ occur$comlife <- factor(occur$comlife,
 y <- as.numeric(occur$comlife)
 K <- length(unique(y))
 N <- length(y)
-x <- matrix(1, ncol = 1, nrow = N)
-x <- cbind(x, occur$mass, diet)
+
+# covariates
+#x <- matrix(1, ncol = 1, nrow = N)
+#x <- cbind(x, occur$mass, diet)
+x <- cbind(occur$mass, diet)  # for sep intercept set up
 D <- ncol(x)
+
+# temporal data
 cohort <- occur$bins / 2
 C <- length(unique(cohort))
 cohort <- mapvalues(cohort, from = unique(cohort), to = seq(C))
+
+# phylogenetic data
 #vcv <- vcv(spt)
 #vcv <- vcv / max(diag(vcv))
 #U <- nrow(vcv)
 #id <- as.numeric(as.factor(occur$name.bi))
+
+# climate data
 isoval <- mean.o18
 isorang <- range.o18
 ### WARNING to include need to remove oldest bin!!!!
