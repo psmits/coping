@@ -22,153 +22,78 @@ theme_update(axis.text = element_text(size = 15),
 
 nsim <- 1000
 
+
+# bring in the mcmc results
 post <- list.files('../data/mcmc_out', 
                    pattern = 'trait_cat_',
                    full.names = TRUE)
 fit <- read_stan_csv(post[1:4])
 ext <- extract(fit, permuted = TRUE)
+# matrices are structured: sample, time, response class, covariate
 
-# given ext$y_tilde, calculate multiclass ROC values
-#   need softmax of ext$hold
-#   adapt my earlier code to this new purpose (allvone function)
-#     pred.res is a matrix
-#     first column is guess
-#     other columns are column labeled class probability
-#   output is a single number
-# do this for each of the posterior predictive data sets
-
-#rh <- ncol(summary(fit)[[1]])
-#(summary(fit)[[1]][, rh] < 1.1)
-
-# sample, time, response class, covariate
-# i have already simulated from the posterior predictive
-
-
-# got to do some plots
-
-
-# change in ratio over time
-# to deal with making run over all samples, split by cohort
-softmax <- function(beta) {
-  tot <- sum(exp(beta))
-  exp(beta) / tot
-}
-oo <- list()
-for(ii in seq(C)) {
-  oo[[ii]] <- ext$hold[1, cohort == ii, ]
-}
-oo <- oo[!(laply(llply(oo, dim), is.null))]
-hold.prob <- llply(oo, function(x) t(apply(x, 1, softmax)))
-hold.prob <- laply(hold.prob, colMeans)
-colnames(hold.prob) <- c('arb', 'fos', 'grnd', 'scn')
-hold.prob <- melt(hold.prob)
-prob.seq <- ggplot(hold.prob, aes(x = Var1, y = value, fill = factor(Var2)))
-prob.seq <- prob.seq + geom_bar(stat = 'identity', position = 'stack')
-prob.seq <- prob.seq + scale_x_reverse()
-prob.seq <- prob.seq + labs(x = 'Time', y = 'Probability of occurrence')
-prob.seq <- prob.seq + scale_fill_manual(values = cbp, 
-                                         name = 'Locomotor\ncategory')
-ggsave(plot = prob.seq, filename = '../doc/figure/occurrence_prob.png',
+roc.posterior <- replicate(nsim, roc.dist(ext, y, cohort), simplify = FALSE)
+roc.posterior <- data.frame(Reduce(rbind, roc.posterior))
+roc.melt <- melt(roc.posterior)
+roc.melt$variable <- factor(roc.melt$variable, 
+                            levels = rev(paste0('X', seq(C - 1))))
+roc.plot <- ggplot(roc.melt, aes(x = variable, y = value))
+roc.plot <- roc.plot + geom_violin() + geom_boxplot(width = 0.1)
+roc.plot <- roc.plot + labs(x = 'Cohort', y = 'AUC')
+ggsave(plot = roc.plot, filename = '../doc/figure/roc_dist.png',
        width = 8, height = 6, dpi = 600)
+
 
 
 # effect of trait size on probability of occurrence over time
 eff.mean.cohort <- eff.q1.cohort <- eff.q9.cohort <- list()
-for(ii in seq(C)) {
-  eff.mean.cohort[[ii]] <- colMeans(ext$beta[, ii, , 2])
-  eff.q1.cohort[[ii]] <- apply(ext$beta[, ii, , 2], 2, 
-                               function(x) quantile(x, 0.1))
-  eff.q9.cohort[[ii]] <- apply(ext$beta[, ii, , 2], 2, 
-                               function(x) quantile(x, 0.9))
+for(ii in seq(K)) {
+  eff.mean.cohort[[ii]] <- mean(ext$beta[, ii, 2])
+  eff.q1.cohort[[ii]] <- quantile(ext$beta[, ii, 2], 0.1)
+  eff.q9.cohort[[ii]] <- quantile(ext$beta[, ii, 2], 0.9)
 }
 eff.mean.cohort <- Reduce(rbind, eff.mean.cohort)
 eff.q1.cohort <- Reduce(rbind, eff.q1.cohort)
 eff.q9.cohort <- Reduce(rbind, eff.q9.cohort)
-colnames(eff.mean.cohort) <- c('arb', 'fos', 'grnd', 'scn')
 
 eff.cohort <- cbind(melt(eff.mean.cohort), 
                     low = melt(eff.q1.cohort)[, 3], 
                     high = melt(eff.q9.cohort)[, 3])
 names(eff.cohort)[1:3] <- c('time', 'response', 'mean')
-eff.cohort$time <- rep(seq(1:C), K)
 eff.cohort <- data.frame(eff.cohort)
-eff.cohort$response <- as.factor(eff.cohort$response)
-trait.eff <- ggplot(eff.cohort, aes(x = time, y = mean, 
-                                    colour = response))
+eff.cohort$response <- as.factor(seq(K))
+trait.eff <- ggplot(eff.cohort, aes(x = response, y = mean))
 trait.eff <- trait.eff + geom_pointrange(aes(ymax = high, ymin = low))
-trait.eff <- trait.eff + labs(x = 'Time', y = 'Effect of body size')
+trait.eff <- trait.eff + labs(x = 'Ecotype', y = 'Effect of body size')
 trait.eff <- trait.eff + scale_colour_manual(values = cbp,
                                              name = 'Locomotor\ncategory')
-
-mean.eff <- cbind(mean = colMeans(cbind(ext$beta_mu[, , 2], 0)))
-mean.eff <- data.frame(mean.eff)
-mean.eff <- cbind(mean.eff, response = c('arb', 'fos', 'grnd', 'scn'))
-mean.eff$ymin <- c(apply(ext$beta_mu[, , 2], 2, 
-                         function(x) quantile(x, 0.1)), 0)
-mean.eff$ymax <- c(apply(ext$beta_mu[, , 2], 2, 
-                         function(x) quantile(x, 0.9)), 0)
-mean.eff <- cbind(rbind(mean.eff, mean.eff), 
-                  time = c(rep(1, K), rep(C, K)))
-trait.eff <- trait.eff + geom_ribbon(data = mean.eff,
-                                     mapping = aes(x = time, y = mean, 
-                                                   ymax = ymax,
-                                                   ymin = ymin,
-                                                   fill = response,
-                                                   colour = NULL), 
-                                     alpha = 0.2)
-trait.eff <- trait.eff + geom_line(data = mean.eff,
-                                   mapping = aes(x = time, y = mean, 
-                                                 colour = response))
-trait.eff <- trait.eff + scale_fill_manual(values = cbp,
-                                           name = 'Locomotor\ncategory')
-trait.eff <- trait.eff + scale_x_reverse()
 ggsave(plot = trait.eff, filename = '../doc/figure/trait_eff.png',
        width = 8, height = 6, dpi = 600)
 
 
-# effect of diet on occurrence of trait
-#   order: arb, foss, grnd, scn
-cb <- cbind(ext$beta_mu[, , 1], 0)
-hb <- cbind(ext$beta_mu[, , 3], 0)
-ib <- cbind(ext$beta_mu[, , 4], 0)
-ob <- cbind(ext$beta_mu[, , 5], 0)
-diet.eff <- list(data.frame(cb, cov = 'carn'), 
-                 data.frame(cb + hb, cov = 'herb'),
-                 data.frame(cb + ib, cov = 'insect'),
-                 data.frame(cb + ob, cov = 'omni'))
-diet.eff <- llply(diet.eff, function(x) {
-                  names(x) <- c('arb', 'foss', 'grnd', 'scn')
-                  x})
-diet.diff <- llply(diet.eff, function(x) pairwise.diffs(x[, 1:4]))
-diet.diff <- Map(function(x, y) cbind(x, y),
-                 x = diet.diff, 
-                 y = c('carn', 'herb', 'insect', 'omni'))
-diet.diff <- Reduce(rbind, diet.diff)
-diet.diff <- melt(diet.diff)
 
-relab.x <- scale_x_discrete(labels = 
-                            c('beta[arb] - beta[foss]' = 
-                              expression(beta[arb]-beta[foss]), 
-                              'beta[arb] - beta[grnd]' = 
-                              expression(beta[arb]-beta[grnd]), 
-                              'beta[arb] - beta[scn]' = 
-                              expression(beta[arb]-beta[scn]), 
-                              'beta[foss] - beta[grnd]' = 
-                              expression(beta[foss]-beta[grnd]),
-                              'beta[foss] - beta[scn]' = 
-                              expression(beta[foss]-beta[scn]),
-                              'beta[grnd] - beta[scn]' = 
-                              expression(beta[grd]-beta[scn])))
+## change in probability as cohort
+#colMeans(ext$intercept[, , 1])
+#colMeans(ext$intercept[, , 2])
+#colMeans(ext$intercept[, , 3])
+#colMeans(ext$intercept[, , 4])
+#colMeans(ext$intercept[, , 5])
+#colMeans(ext$intercept[, , 6])
 
-dietgg <- ggplot(diet.diff, aes(x = variable, y = value))
-dietgg <- dietgg + geom_hline(yintercept = 0, colour = 'grey', size = 1.5)
-dietgg <- dietgg + geom_violin() + geom_boxplot(width = 0.1)
-dietgg <- dietgg + facet_grid(y ~ .) + relab.x
-dietgg <- dietgg + labs(x = 'Pairwise comparison', y = 'Estimate')
-ggsave(plot = dietgg, filename = '../doc/figure/diet_eff.png',
-       width = 8, height = 8, dpi = 600)
-
-
-# effect of climate on (base) occurrence of trait
-#   there are 4 different estimates (k = 1,2,3,4)
-#   group-level trait
+# effect of climate
+clim.eff <- data.frame(res = rep(seq(K - 1), 2),
+                       typ = rep(c('mean', 'range'), each = K - 1),
+                       mid = c(apply(ext$alpha[, , 1], 2, mean), 
+                               apply(ext$alpha[, , 2], 2, mean)),
+                       low = c(apply(ext$alpha[, , 1], 2, 
+                                     function(x) quantile(x, 0.1)), 
+                               apply(ext$alpha[, , 2], 2, 
+                                     function(x) quantile(x, 0.1))),
+                       hgh = c(apply(ext$alpha[, , 1], 2, 
+                                     function(x) quantile(x, 0.9)), 
+                               apply(ext$alpha[, , 2], 2, 
+                                     function(x) quantile(x, 0.9))))
+clim.plot <- ggplot(clim.eff, aes(x = res, y = mid))
+clim.plot <- clim.plot + geom_pointrange(mapping = aes(ymax = hgh, ymin = low))
+clim.plot <- clim.plot + facet_grid(. ~ typ, switch = 'x')
+ggsave(plot = clim.plot, filename = '../doc/figure/clim_eff.png',
+       width = 8, height = 6, dpi = 600)

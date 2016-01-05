@@ -17,11 +17,11 @@
 
 % same basic occurrence information from \citep{Smits2015}
 
-% \uppercase{do i include body size as a covariate}
-
 \subsection{Model specification}
 
 % categorical distribution
+A taxon's ecotype \(k\) is modeled as a realization from a categorical distribution with \(K\) possible outcomes, where each outcome has its own probability.
+
 
 % softmax function
 \begin{equation}
@@ -32,14 +32,26 @@
 % K - 1 formulation
 %   Agresti
 
-% phylogenetic effect
+N samples. K categories. C cohorts. D is number of individual-level covariates. E is number of cohort-level covariates.  \(\pi\) is a length K vector such that \(\sum_{k = 1}^{K} \pi_{k} = 1\). \(X\) is a \(D \times N\) matrix of individual-level covariates. \(U\) is a \(E \times C\) matrix of cohort-level covariates. \(\beta\) is a \(K \times D\) matrix of regression coefficients for the individual-level predictors. \(\gamma\) is a \(K \times E\) number of regression coefficients for the group-level predictors.
+\begin{equation}
+  \begin{aligned}
+    y_{i} &\sim \mathrm{Categorical}(K, \pi_{ik}) \\
+    \pi_{ik} &= \frac{\eta_{ik}}{\sum_{k = 1}^{K} \eta_{ik}} \\
+    \eta_{ik} &= \alpha_{kc[i]} + \beta_{k}X_{i} \\
+    \alpha_{kc} &\sim \mathcal{N}(\alpha_{k}^{\prime} + \gamma U_{c}, \sigma_{k}) \\
+    \alpha_{k}^{\prime} &\sim \mathcal{N}(0, 5) \\
+    \beta &\sim \mathcal{N}(0, 1) \\
+    \gamma &\sim \mathcal{N}(0, 1) \\
+    \sigma_{k} &\sim \mathrm{C}^{+}(1) \\
+  \end{aligned}
+  \label{eq:main}
+\end{equation}
 
-% hierarchical formulation by time slice
-%   partial pooling
-%     attempt to smooth over small samples size bins
-%   time structure?
-%     not currently implemented
+Where \(\pi_{iK} = 0\) for \(i = 1, 2, \dots, N\). This last statement is necessary because the softmax function is invariable to the addition of a constant (Eq. \ref{eq:softmax}), thus this insures identifiability.
 
+% illustrate as a binary comparison?
+%   y_i ~ binomial(inv_logit(intercept_c[i] + beta * x_i))
+%   intercept_c ~ normal(intercept_mu + alpha * isoval + gamma * isorange, sigma)
 
 \subsection{Posterior inference}
 % HMC using STAN
@@ -49,11 +61,10 @@
 
 
 % posterior predictive checks
-
-
-
-
-
+% ROC
+%   multiclass ROC
+%   AUC as summary
+% gives approximate performance
 
 
 \end{document}

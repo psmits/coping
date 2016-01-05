@@ -1,3 +1,10 @@
+# softmax function
+softmax <- function(beta) {
+  tot <- sum(exp(beta))
+  exp(beta) / tot
+}
+
+
 # simulate from the posterior predictive distribution
 sim.series <- function(data, ext) {
   out <- list()
@@ -27,7 +34,7 @@ sim.series <- function(data, ext) {
 }
 
 
-# expectation
+# expectation of skew
 skew.exp <- function(mu, sd, alpha) {  # expectation
   delt <- alpha / sqrt(1 + (alpha ^ 2))
   mu + (sd * delt * sqrt(2 / pi))

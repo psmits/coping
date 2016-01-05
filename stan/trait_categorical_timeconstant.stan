@@ -2,12 +2,12 @@ data {
   int<lower=2> K;  // possible categories
   int<lower=0> N;  // sample size
   int<lower=1> D;  // number of indiv-level predictors
+  int<lower=1> U;  // number of group-level predictors
   int<lower=1> C;
   int<lower=1,upper=K> y[N];  // state
   vector[D] x[N];  // matrix of indiv-level predictors
   int cohort[N];
-  real isoval[C];
-  real isorang[C];
+  vector[U] u[C];  // matrix of group-level predictors
 }
 transformed data {
   row_vector[D] zeroes;  // for mixing params and constants
@@ -18,13 +18,12 @@ transformed data {
 }
 parameters {
   vector[K - 1] intercept_raw[C];
-  vector[K - 1] intercept_mu;
-  matrix<lower=0>[K - 1, D] sigma;
+  vector[K - 1] intercept_mu;  // group-level intercept
+  vector<lower=0>[K - 1] sigma;  // "shrinkage"
   
   matrix[K - 1, D] beta_raw;  // makes identifiable
   
-  vector[K - 1] alpha;  // coef for group-level predictor
-  vector[K - 1] gamma;  // coef for group-level predictor
+  matrix[K - 1, U] alpha;  // effects of group-level covariates
 }
 transformed parameters {
   matrix[K, D] beta;  // makes identifiable
@@ -38,24 +37,20 @@ transformed parameters {
 model {
   vector[K] hold[N];
 
-  // priors for reg coefs 
-  // for each response k, vary by time c
+  # complexity of intercept term
+  intercept_mu ~ normal(0, 5);  
+  sigma ~ cauchy(0, 1); 
   for(k in 1:(K - 1)) {
-    alpha[k] ~ normal(0, 1); 
-    gamma[k] ~ normal(0, 1); 
-    intercept_mu[k] ~ normal(0, 5);  
-    sigma[k] ~ cauchy(0, 1);
     for(c in 1:C) {
-      intercept_raw[c][k] ~ normal(intercept_mu[k] + alpha[k] * isoval[c] + 
-          gamma[k] * isorang[c], sigma[k]);
+      intercept_raw[c][k] ~ normal(intercept_mu[k] + alpha[k] * u[c], sigma[k]);
       // only include group level predictor for intercept parameter
       // because it effects the baseline occurrence of response
       // assumes covariate effects aren't affected by "climate"
-      // effect at time c is drawn from shared mean beta_mu
     }
   }
 
   to_vector(beta_raw) ~ normal(0, 1);
+  to_vector(alpha) ~ normal(0, 1);
 
   // assemble the length K vector of effects
   for(n in 1:N) {

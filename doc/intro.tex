@@ -20,54 +20,6 @@
 %     what underlies changes in demography between time units?
 
 
-% hierarchical structure of analysis
-%   unit of analysis: species occurrence i
-%     with ecotype \in K
-%     in time bin t
-%   covariates
-%     individual-level (properties of species occurrence i)
-%     group-level (properties of time bin t)
-
-
-% response
-%   ecotype (demographic descriptor)
-%     locomotor type/category
-%       arboreal, digitigrade, plantigrade, unguligrade, fossorial, scansorial
-%     idea is to capture an aspect of terrestrial guilds
-%       need to look at Janis and Van Valkenburg writings
-%       alternative approach than, say, bambach cube
-%     compound trait as digiti, planti, and unguli are ``ground dwelling'' forms
-
-
-% individual-level covariates
-%   intercept term if doing varying intercepts model
-%   dietary category
-%     carnivore, herbivore, insectivore, omnivore
-%     varying intercepts?
-%       drawn from normal mean 0, estimated sd given seperate intercept term
-%   body size
-%     rescale of log body mass
-%   regional environment
-%     need terrestrial biomes/biogeographic units
-%     varying intercepts by biome (people have an easier time interpreting them)
-%       drawn from normal mean 0, estimated sd given seperate intercept term
-%       assign based on majority of taxon's occurrences
-%   eventually: \uppercase{\textbf{vary with time?}}
-
-% group-level covariates
-%   global temperature
-%     rescale of delta in degrees 
-%   currently/forever: \uppercase{\textbf{don't vary with time?}}
-
-
-% too many variables? when have i reached too many?
-%   approximate number of regression parameters is the above \uppercase{times K}
-%     not counting all the additional hierarchical parameters
-%   horseshoe priors on everything except intercept?
-
-
-
-
 % after \citep{Smits2015}
 %   decrease in extinction risk over time
 %     notice the pattern at the paleogene-neogene boundary
@@ -86,8 +38,58 @@
 %   increases in ecotypes indicate selective pressure FOR
 %   accounting for general stochasticity, of course
 
-% Hierarchical Bayesian modeling approach in order to help control for
-%   sample size
-%   weak effects
+% fourth corner problem
+%   presense/absence as product of traits, environment, and traitsXenvironment
+% instead, ecotype as product of traits and environment
+%   ecotype is the combination of presence and traitXenvironment
+%   only ecotype of taxon analyzed, presence assumed (no data from absence)
+%   this is hinted at in Brown et al 2014 MEE and Cornell and Harrison 2014 AREES
+
+
+% hierarchical structure of analysis
+%   unit of analysis: species occurrence i
+%     with ecotype \in K
+%     in time bin t
+%   covariates
+%     individual-level (properties of species occurrence i)
+%     group-level (properties of time bin t)
+
+
+% response
+%   ecotype (demographic descriptor)
+%     locomotor type/category
+%       arboreal, digitigrade, plantigrade, unguligrade, fossorial, scansorial
+%     idea is to capture an aspect of terrestrial guilds
+%       need to look at Janis and Van Valkenburg writings
+%       alternative approach than, say, bambach cube
+%     compound trait as digiti, planti, and unguli are ``ground dwelling'' forms
+
+% individual-level covariates
+%   intercept term if doing varying intercepts model
+%   dietary category
+%     carnivore, herbivore, insectivore, omnivore
+%     varying intercepts?
+%       drawn from normal mean 0, estimated sd given seperate intercept term
+%   body size
+%     rescale of log body mass
+%   regional environment
+%     need terrestrial biomes/biogeographic units
+%     varying intercepts by biome (people have an easier time interpreting them)
+%       drawn from normal mean 0, estimated sd given seperate intercept term
+%       assign based on majority of taxon's occurrences
+
+% group-level covariates
+%   mean global temperature
+%     rescale of delta in degrees 
+%   interquartile range of global tempreature
+%     rescale of delta in degrees 
+%   dominate plant type(s)
+
+
+% too many variables? when have i reached too many?
+%   approximate number of regression parameters is the above \uppercase{times K}
+%     not counting all the additional hierarchical parameters
+%   horseshoe priors on everything except intercept?
+
 
 \end{document}

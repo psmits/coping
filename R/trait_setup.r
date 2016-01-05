@@ -53,7 +53,7 @@ occur <- occur[!(occur$name.bi %in%
 spt <- ape::drop.tip(spt, hot.fix$tree_not_data)
 
 # for testing purposes
-keep <- createDataPartition(occur$bins, p = 0.4)
+keep <- createDataPartition(occur$bins, p = 0.2)
 keepname <- str_replace(unique(occur$name.bi[keep[[1]]]), ' ', '_')
 hot.fix <- name.check(spt, data.names = keepname)
 spt <- ape::drop.tip(spt, hot.fix$tree_not_data)
@@ -92,8 +92,6 @@ K <- length(unique(y))
 N <- length(y)
 
 # covariates
-#x <- matrix(1, ncol = 1, nrow = N)
-#x <- cbind(x, occur$mass, diet)
 x <- cbind(occur$mass, diet)  # for sep intercept set up
 D <- ncol(x)
 
@@ -109,12 +107,12 @@ cohort <- mapvalues(cohort, from = unique(cohort), to = seq(C))
 #id <- as.numeric(as.factor(occur$name.bi))
 
 # climate data
-isoval <- mean.o18
-isorang <- range.o18
+u <- cbind(mean.o18, range.o18)
+U <- ncol(u)
 ### WARNING to include need to remove oldest bin!!!!
-# tempval <- temp.time.mean
-# isorang <- temp.time.range
+# u <- cbind(temp.time.mean, temp.time.range)
+# U <- ncol(u)
 
-stan_rdump(list = c('K', 'N', 'D', 'C', 'y', 'x', 
-                    'cohort', 'isoval', 'isorang'),
+# dump it out
+stan_rdump(list = c('K', 'N', 'D', 'C', 'U', 'y', 'x', 'u', 'cohort'),
            file = '../data/data_dump/trait_info.data.R')
