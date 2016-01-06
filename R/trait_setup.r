@@ -52,12 +52,12 @@ occur <- occur[!(occur$name.bi %in%
                  str_replace(hot.fix$data_not_tree, '_', ' ')), ]
 spt <- ape::drop.tip(spt, hot.fix$tree_not_data)
 
-# for testing purposes
-keep <- createDataPartition(occur$bins, p = 0.2)
-keepname <- str_replace(unique(occur$name.bi[keep[[1]]]), ' ', '_')
-hot.fix <- name.check(spt, data.names = keepname)
-spt <- ape::drop.tip(spt, hot.fix$tree_not_data)
-occur <- occur[keep[[1]], ]
+## for testing purposes
+#keep <- createDataPartition(occur$bins, p = 0.2)
+#keepname <- str_replace(unique(occur$name.bi[keep[[1]]]), ' ', '_')
+#hot.fix <- name.check(spt, data.names = keepname)
+#spt <- ape::drop.tip(spt, hot.fix$tree_not_data)
+#occur <- occur[keep[[1]], ]
 
 
 # process climate information
