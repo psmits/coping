@@ -27,7 +27,7 @@ nsim <- 1000
 post <- list.files('../data/mcmc_out', 
                    pattern = 'trait_cat_',
                    full.names = TRUE)
-fit <- read_stan_csv(post[1:4])
+fit <- read_stan_csv(post)
 ext <- extract(fit, permuted = TRUE)
 # matrices are structured: sample, time, response class, covariate
 
