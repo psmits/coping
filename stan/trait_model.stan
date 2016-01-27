@@ -19,7 +19,7 @@ transformed data {
 parameters {
   vector[K - 1] intercept_raw[C];
   vector[K - 1] intercept_mu;  // group-level intercept
-  vector<lower=0>[K - 1] sigma;  // "shrinkage"
+  vector<lower=0>[K - 1] sigma;
   
   matrix[K - 1, D] beta_raw;  // makes identifiable
   
@@ -37,15 +37,11 @@ transformed parameters {
 model {
   vector[K] hold[N];
 
-  # complexity of intercept term
   intercept_mu ~ normal(0, 5);  
   sigma ~ cauchy(0, 1); 
   for(k in 1:(K - 1)) {
     for(c in 1:C) {
       intercept_raw[c][k] ~ normal(intercept_mu[k] + alpha[k] * u[c], sigma[k]);
-      // only include group level predictor for intercept parameter
-      // because it effects the baseline occurrence of response
-      // assumes covariate effects aren't affected by "climate"
     }
   }
 

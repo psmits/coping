@@ -23,4 +23,4 @@
 
 
 # Execute the program
-bash ../src/trait_model_wrap_alt.sh
+bash ../src/trait_model_wrap.sh
