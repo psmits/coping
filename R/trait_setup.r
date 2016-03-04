@@ -13,7 +13,8 @@ load('../data/scaled_super.rdata')
 load('../data/body_mass.rdata')
 
 dat <- read.csv('../data/mam-occs.csv', stringsAsFactors = FALSE)
-posture <- read.csv('../data/posture.csv', stringsAsFactors = FALSE)
+posture <- read.csv('../data/posture.csv', stringsAsFactors = FALSE) 
+# these specific assignments are based on Carano's papers on posture
 
 occur <- clean.occurrence(dat)
 ss <- split(occur, occur$bins)
@@ -42,6 +43,7 @@ occur <- occur[occur$comlife != 'ground dwelling', ]
 
 
 # shrink data to match all inputs
+#   this would be the opportunity for setting up an imputation step
 occur <- occur[occur$name.bi %in% na.mass$name, ]
 occur$mass <- na.mass[match(occur$name.bi, na.mass$name), 2]
 
@@ -113,6 +115,25 @@ U <- ncol(u)
 # u <- cbind(temp.time.mean, temp.time.range)
 # U <- ncol(u)
 
+# make the plant phase indicator
+pa.eo <- c(66, 50)
+eo.mi <- c(50, 16)
+mi.pl <- c(16, 2)
+mod <- c(2, 0)
+plants <- rbind(mod, mi.pl, eo.mi, pa.eo)
+
+phase <- array(dim = nrow(occur))
+for(ii in seq(length(phase))) {
+  mm <- c()
+  for(jj in seq(nrow(plants))) {
+    mm[jj] <- plants[jj, 1] >= occur$bins[ii] & plants[jj, 2] < occur$bins[ii]
+  }
+  phase[ii] <- which(mm)
+}
+P <- 4
+
+
 # dump it out
-stan_rdump(list = c('K', 'N', 'D', 'C', 'U', 'y', 'x', 'u', 'cohort'),
+stan_rdump(list = c('K', 'N', 'D', 'C', 'U', 'P',
+                    'y', 'x', 'u', 'cohort', 'phase'),
            file = '../data/data_dump/trait_info.data.R')

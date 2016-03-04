@@ -25,7 +25,7 @@ nsim <- 1000
 
 # bring in the mcmc results
 post <- list.files('../data/mcmc_out', 
-                   pattern = 'trait_cat_',
+                   pattern = 'trait_',
                    full.names = TRUE)
 fit <- read_stan_csv(post)
 ext <- extract(fit, permuted = TRUE)
