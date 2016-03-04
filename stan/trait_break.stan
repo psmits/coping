@@ -28,11 +28,14 @@ parameters {
   matrix[K - 1, D] beta_raw;  // makes identifiable
   
   matrix[K - 1, U] alpha;  // effects of group-level covariates
+  
 }
 transformed parameters {
   matrix[K, D] beta;  // makes identifiable
   vector[K] intercept[C];
+  vector[K] hold[N];  // intermediate that i want 
   vector[C] lp;
+  
   lp <- rep_vector(log_unif, C);
 
   beta <- append_row(beta_raw, zeroes);
@@ -53,10 +56,15 @@ transformed parameters {
       }
     }
   }
+  
+  // assemble the length K vector of effects
+  for(n in 1:N) {
+    for(k in 1:K) {
+      hold[n][k] <- intercept[cohort[n]][k] + beta[k] * x[n];
+    }
+  }
 }
 model {
-  vector[K] hold[N];
-
   intercept_mu_first ~ normal(0, 5);  
   intercept_mu_second ~ normal(0, 5);  
   sigma ~ cauchy(0, 1); 
@@ -65,13 +73,6 @@ model {
   to_vector(beta_raw) ~ normal(0, 1);
   to_vector(alpha) ~ normal(0, 1);
 
-  // assemble the length K vector of effects
-  for(n in 1:N) {
-    for(k in 1:K) {
-      hold[n][k] <- intercept[cohort[n]][k] + beta[k] * x[n];
-    }
-  }
-
   // final sampling statement
   for(n in 1:N) {
     y[n] ~ categorical_logit(hold[n]);
@@ -79,16 +80,9 @@ model {
 }
 generated quantities {
   int y_tilde[N];
-  vector[K] hold[N];
   int<lower=1,upper=C> s;
 
   s <- categorical_rng(softmax(lp));
-
-  for(n in 1:N) {
-    for(k in 1:K) {
-      hold[n][k] <- intercept[cohort[n]][k] + beta[k] * x[n];
-    }
-  }
 
   // generate posterior predictive datasets
   // softmax function because categorical rng has no logit form

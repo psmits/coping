@@ -32,15 +32,21 @@ parameters {
 transformed parameters {
   matrix[K, D] beta;  // makes identifiable
   vector[K] intercept[C];
+  vector[K] hold[N];
 
   beta <- append_row(beta_raw, zeroes);
   for(c in 1:C) {
     intercept[c] <- append_row(intercept_raw[c], z);
   }
+  
+  // assemble the length K vector of effects
+  for(n in 1:N) {
+    for(k in 1:K) {
+      hold[n][k] <- intercept[cohort[n]][k] + beta[k] * x[n];
+    }
+  }
 }
 model {
-  vector[K] hold[N];
-
   intercept_mu ~ normal(0, 5);  
   sigma ~ cauchy(0, 1); 
   eff_phase ~ normal(0, scale_phase);
@@ -55,13 +61,6 @@ model {
   to_vector(beta_raw) ~ normal(0, 1);
   to_vector(alpha) ~ normal(0, 1);
 
-  // assemble the length K vector of effects
-  for(n in 1:N) {
-    for(k in 1:K) {
-      hold[n][k] <- intercept[cohort[n]][k] + beta[k] * x[n];
-    }
-  }
-
   // final sampling statement
   for(n in 1:N) {
     y[n] ~ categorical_logit(hold[n]);
@@ -69,13 +68,6 @@ model {
 }
 generated quantities {
   int y_tilde[N];
-  vector[K] hold[N];
-
-  for(n in 1:N) {
-    for(k in 1:K) {
-      hold[n][k] <- intercept[cohort[n]][k] + beta[k] * x[n];
-    }
-  }
 
   // generate posterior predictive datasets
   // softmax function because categorical rng has no logit form
