@@ -14,7 +14,7 @@ functions {
     }
     return 0;
   }
-  real state_space_log(int[] y, vector intercept, real h, vector p) {
+  real state_space_log(int[] y, row_vector pred, vector p) {
     int ft;
     int lt;
     int S;
@@ -38,8 +38,10 @@ functions {
           z[a] <- 1;
         }
 
-        for(j in 1:S) {
-          sl <- sl + bernoulli_log(z[j], intercept[j] + h);
+        sl <- bernoulli_log(z[1], pred[1]);
+        for(j in 2:S) {
+          sl <- sl + bernoulli_log(z[j], (z[j - 1] * pred[j]) + 
+              ((1 - z[j - 1]) * (1 - pred[j])));
         }
         for(k in 1:S) {
           sl <- sl + bernoulli_log(y[k], z[k] * p[k]);
@@ -58,7 +60,7 @@ data {
   int D;  // number of indiv-level predictors
   int U;  // number of group-level predictors
   int P;  // number of floral phases
-  
+
   int sight[N, T];  // observed presence
   row_vector[D] x[N];  // matrix of indiv-level covariates
   row_vector[U] u[T];  // matrix of group-level covariates
@@ -69,7 +71,7 @@ parameters {
   vector[T] intercept;  // intercept varies by what point in time
   real intercept_mu;  // mean intercept
   real<lower=0> sigma;  // variance of varying-intercept
-  
+
   vector[P] eff_phase;  // effect of plant-phase (mean 0)
   real<lower=0> scale_phase;  // variance in plant-phase effect
 
@@ -83,6 +85,7 @@ parameters {
 transformed parameters {
   vector[N] h;
   vector<lower=0,upper=1>[T] p;  // presence
+  matrix[N, T] pred;
 
   // compose the indidual effects
   //   will want to extend to break point
@@ -94,6 +97,12 @@ transformed parameters {
 
   for(t in 1:T) {
     p[t] <- inv_logit(p_norm[t]);
+  }
+  
+  for(t in 1:T) {
+    for(n in 1:N) {
+      pred[n, t] <- inv_logit(intercept[t] + h[n]);
+    }
   }
 }
 model {
@@ -107,25 +116,18 @@ model {
     intercept[t] ~ normal(intercept_mu + eff_phase[phase[t]] + 
         u[t] * alpha, sigma);
   }
-  
+
   intercept_mu ~ normal(0, 5);
   sigma ~ cauchy(0, 1);
   eff_phase ~ normal(0, scale_phase);
   scale_phase ~ cauchy(0, 1);
-  
+
   beta ~ normal(0, 1);
   alpha ~ normal(0, 1);
-  
-  for(n in 1:N) {
-    sight[n] ~ state_space(intercept, h[n], p);
-  }
-}
-generated quantities {
-  matrix[N, T] y_tilde;  // generate a "true" record
 
   for(n in 1:N) {
-    for(t in 1:T) {
-      y_tilde[n, t] <- bernoulli_rng(intercept[t] + h[n]);
-    }
+    // intercept is a vector of the intercept for each temporal unit
+    // h is a vector of the sum of predictors
+    sight[n] ~ state_space(pred[n, ], p);
   }
 }

@@ -6,6 +6,7 @@ do
   do
     ../stan/turnover_simple sample num_samples=2000 num_warmup=2000 \
       id=$i \
+      random seed=420 \
       data file=$f \
       output file=../data/mcmc_out/turnover_${i}.csv &
   done

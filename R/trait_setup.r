@@ -113,16 +113,12 @@ mi.pl <- c(16, 2)
 mod <- c(2, 0)
 plants <- rbind(mod, mi.pl, eo.mi, pa.eo)
 
-phase <- array(dim = nrow(occur))
-for(ii in seq(length(phase))) {
-  mm <- c()
-  for(jj in seq(nrow(plants))) {
-    mm[jj] <- plants[jj, 1] >= occur$bins[ii] & plants[jj, 2] < occur$bins[ii]
-  }
-  phase[ii] <- which(mm)
+co.h <- unique(cohort * 2)
+phase <- array(dim = T)
+for(ii in seq(T)){
+  phase[ii] <- which(plants[, 1] >= co.h[ii] & plants[, 2] < co.h[ii])
 }
 P <- 4
-
 
 # dump it out
 stan_rdump(list = c('N', 'T', 'D', 'U', 'P',
