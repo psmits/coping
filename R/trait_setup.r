@@ -66,41 +66,32 @@ spt <- ape::drop.tip(spt, hot.fix$tree_not_data)
 source('../R/mung_clim.r')
 
 
-# split by genus to make summaries just in case
-bygen <- split(occur, occur$occurrence.genus_name)
-gen.trait <- data.frame(life = laply(bygen, function(x) 
-                                     names(which.max(table(x$comlife)))),
-                        diet = laply(bygen, function(x) 
-                                     names(which.max(table(x$comdiet)))),
-                        mass = laply(bygen, function(x) 
-                                     mean(x$mass)))
-for(ii in seq(length(bygen))) {
-  bygen[[ii]][, c('comlife', 'comdiet', 'mass')] <- gen.trait[ii, ]
+# need to make the things work
+by.tax <- split(occur, occur$occurrence.genus_name)
+
+sight <- matrix(0, nrow = length(by.tax), ncol = length(unique(occur$bins)))
+for(ii in seq(length(by.tax))) {
+  sight[ii, (by.tax[[ii]]$bins / 2)] <- 1
 }
-bygen <- llply(bygen, function(x) x[!(duplicated(x$bins)), ])
-#occur <- Reduce(rbind, bygen)
+
+N <- length(by.tax)
+diet <- laply(by.tax, function(x) names(which.max(table(x$comdiet))))
+life <- laply(by.tax, function(x) names(which.max(table(x$comlife))))
+mass <- arm::rescale(log(laply(by.tax, function(x) mean(x$mass))))
 
 # make covariates the right shape
-occur$mass <- arm::rescale(log(occur$mass))
-diet <- model.matrix( ~ occur$comdiet - 1)[, -1]
-
-occur$comlife <- as.factor(occur$comlife)
-occur$comlife <- factor(occur$comlife, 
-                        levels = c(levels(occur$comlife)[-4], 
-                                   levels(occur$comlife)[4]))
-# final step is name the variables
-y <- as.numeric(occur$comlife)
-K <- length(unique(y))
-N <- length(y)
+diet <- model.matrix( ~ diet - 1)[, -1]
+life <- model.matrix( ~ life - 1)[, -1]
 
 # covariates
-x <- cbind(occur$mass, diet)  # for sep intercept set up
+x <- cbind(mass, diet, life)  # for sep intercept set up
 D <- ncol(x)
+
 
 # temporal data
 cohort <- occur$bins / 2
-C <- length(unique(cohort))
-cohort <- mapvalues(cohort, from = unique(cohort), to = seq(C))
+T <- length(unique(cohort))
+cohort <- mapvalues(cohort, from = unique(cohort), to = seq(T))
 
 # phylogenetic data
 #vcv <- vcv(spt)
@@ -134,6 +125,6 @@ P <- 4
 
 
 # dump it out
-stan_rdump(list = c('K', 'N', 'D', 'C', 'U', 'P',
-                    'y', 'x', 'u', 'cohort', 'phase'),
+stan_rdump(list = c('N', 'T', 'D', 'U', 'P',
+                    'sight', 'x', 'u', 'phase'),
            file = '../data/data_dump/trait_info.data.R')
