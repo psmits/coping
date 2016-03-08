@@ -16,6 +16,25 @@
 \subsection{Taxon occurrence information}
 
 % same basic occurrence information from \citep{Smits2015}
+% diet and locomotion based on PBDB
+% mass information is an amalgam of
+%   PBDB mass value
+%   PBDB measurement + regression
+%   NOW
+%   other papers (Tomiya, Raia, Smith, etc. -- see \citet{Smits2015})
+
+\subsection{Supertree inference}
+
+% genus level phylogeny
+%   Halliday tree
+%   Tomiya tree
+%   Raia et al tree
+%   Binida-Edmonds supertree
+%   taxonomy 
+%     PBDB
+%     Janis books
+%     Encylopedia of Life via taxize
+
 
 \subsection{Model specification}
 
@@ -30,8 +49,7 @@ Define \(y\) as a \(N \times T\) matrix of the observed 0/1 occurrence of specie
 where \(\rho\) is a length \(T\) vector of the probability that a species is observed at time \(t\) given that it is present at time \(t\) (\(\rho_{t} = \text{Pr}(y_{\_t} = 1 | x_{\_t} = 1)\)).
 
 
-Observation probability \(\rho_{t}\) is modeled as Bernoulli distributed variable with probability equal to the inverse logit transformed length \(T\) vector \(\rho^{\prime}\) (Eq. \ref{eq:sample}). The elements of \(\rho^{\prime}\) are modeled as exchangeable draws from a Normal distribution with location \(\rho^{''}\) and scale \(\sigma_{\rho^{\prime}}\); these are given weakly informative priors. % citation?
-
+Observation probability \(\rho_{t}\) is modeled as Bernoulli distributed variable with probability equal to the inverse logit transformed length \(T\) vector \(\rho^{\prime}\) (Eq. \ref{eq:sample}). The elements of \(\rho^{\prime}\) are modeled as exchangeable draws from a Normal distribution with location \(\rho^{''}\) and scale \(\sigma_{\rho^{\prime}}\); these are given weakly informative Normal and half-Cauchy priors, respectively. % citation?
 \begin{equation}
   \begin{aligned}
     \rho_{t} &\sim \text{Bernoulli}\left(\text{logit}^{-1}(\rho^{\prime}_{t})\right) \\
@@ -43,8 +61,7 @@ Observation probability \(\rho_{t}\) is modeled as Bernoulli distributed variabl
 \end{equation}
 
 
-The ``true'' presence/absence states of taxa \(z\) are modeled as a logistic regression (Eq. \ref{eq:presence}) where the probability of being present (\(z = 1\)) is a function of individual-level and group-level effects. The intercept of this regression \(\alpha\) is a length \(T\) vector which varies by time \(t\) (Eq. \ref{eq:time_effect}). Individual-level covariates are a \(N \times D\) matrix \(x\) whose regression coefficients are the length \(D\) column vector \(\beta\). These regression coefficients are given independent weakly informative prior distributions.
-
+The ``true'' presence/absence states of taxa \(z\) are modeled as a logistic regression (Eq. \ref{eq:presence}) where the probability of being present (\(z = 1\)) is a function of individual-level and group-level effects. The intercept of this regression \(\alpha\) is a length \(T\) vector which varies by time \(t\) (Eq. \ref{eq:time_effect}). Individual-level covariates are a \(N \times D\) matrix \(x\) whose regression coefficients are the length \(D\) column vector \(\beta\). These regression coefficients are given independent weakly informative Normally distributed priors.
 \begin{equation}
   \begin{aligned}
     z_{i,t} &\sim \text{Bernoulli}\left(\text{logit}^{-1}(\alpha_{t} + x_{i} \beta)\right) \\
@@ -54,8 +71,7 @@ The ``true'' presence/absence states of taxa \(z\) are modeled as a logistic reg
 \end{equation}
 
 
-The value of \(\alpha_{t}\) is itself defined as a regression (Eq. \ref{eq:time_effect}). The intercept of the this group-level regression is defined as \(\mu\). The effect of plant regime \(p\) is modeled as the length \(P\) vector \(\phi\) whose elemnts are draws from a Normal distribution with a location of 0 and scale of \(\sigma_{\phi}\). The group-level covariates corresponding to global climate values of interest is defined as the \(T \times U\) matrix \(u\) where \(\gamma\) is a length \(U\) column vector of regression coefficients. Finally \(\sigma_{\mu}\) is positive real value. \(\mu\), the elements of \(\gamma\), \(\sigma_{\mu}\), and \(\sigma_{\phi}\) are all given weakly informative independent priors.
-
+The value of \(\alpha_{t}\) is itself defined as a regression (Eq. \ref{eq:time_effect}). The intercept of the this group-level regression is defined as \(\mu\). The effect of plant regime \(p\) is modeled as the length \(P\) vector \(\phi\) whose elemnts are draws from a Normal distribution with a location of 0 and scale of \(\sigma_{\phi}\). The group-level covariates corresponding to global climate values of interest is defined as the \(T \times U\) matrix \(u\) where \(\gamma\) is a length \(U\) column vector of regression coefficients. Finally \(\sigma_{\mu}\) is positive real value. \(\mu\), the elements of \(\gamma\), \(\sigma_{\mu}\), and \(\sigma_{\phi}\) are all given weakly informative independent priors (Eq. \ref{eq:time_effect}).
 \begin{equation}
   \begin{aligned}
     \alpha_{t} &\sim \mathcal{N}(\mu + \phi_{p[t]} + u_{t} \gamma, \sigma_{\mu}) \\

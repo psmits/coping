@@ -12,13 +12,14 @@
 
 \begin{document}
 
-% what influences changes in probabilty of any species being of a given ecotype?
-%   given both other aspects of niche and contemporary environment
-%   in many ways, this study builds on the ideas of the bambach cube concept
-%     key is to actually develop a statistical, not just verbal, model
-%   demographic shift along one (compound) aspect of niche
-%     what underlies changes in demography between time units?
+\section{Introduction}
 
+% How is taxon occurrence affected by both species traits and descriptors of the environment?
+
+% analysis of mammal genus fossil record for north america
+% time is discrete as 2-My bins
+%   starting post-K/Pg boundary
+%   (ignores quarternary)
 
 % after \citep{Smits2015}
 %   decrease in extinction risk over time
@@ -29,67 +30,37 @@
 %       is the transition/neogene effect so strong to appear constant?
 %     driven by the environmental change?
 
-% see Vallesian crisis in Europe
+% Vallesian crisis in Europe
 %   faunal shift at Paleogene-Neogene boundary
 %   do we see this in NA in terms of ecotypes?
+% break-point model is the eventual goal
 
-% How does the ratio of ecotypes change over the Cenozoic?
-%   decreases (loss) in ecotypes indicate selective pressure AGAINST
-%   increases in ecotypes indicate selective pressure FOR
-%   accounting for general stochasticity, of course
+% fourth-corner type problem
+%   presence_{i,t} | individual-level_{i,t}, group-level_{t}
+%   assumes effect of covariates constant for all t
+% no individual X group covariates
+%   instead of group-level covariates included as part of multi-level model
+%   keeping in mind group-level covariates depend on t
 
-% fourth corner problem
-%   presense/absence as product of traits, environment, and traitsXenvironment
-% instead, ecotype as product of traits and environment
-%   ecotype is the combination of presence and traitXenvironment
-%   only ecotype of taxon analyzed, presence assumed (no data from absence)
-%   this is hinted at in Brown et al 2014 MEE and Cornell and Harrison 2014 AREES
-
-
-% hierarchical structure of analysis
-%   unit of analysis: species occurrence i
-%     with ecotype \in K
-%     in time bin t
-%   covariates
-%     individual-level (properties of species occurrence i)
-%     group-level (properties of time bin t)
-
-
-% response
-%   ecotype (demographic descriptor)
-%     locomotor type/category
-%       arboreal, digitigrade, plantigrade, unguligrade, fossorial, scansorial
-%     idea is to capture an aspect of terrestrial guilds
-%       need to look at Janis and Van Valkenburg writings
-%       alternative approach than, say, bambach cube
-%     compound trait as digiti, planti, and unguli are ``ground dwelling'' forms
 
 % individual-level covariates
-%   intercept term if doing varying intercepts model
+%   intercept term, varying by time
+%   locomotor type/category
+%       arboreal, digitigrade, plantigrade, unguligrade, fossorial, scansorial
 %   dietary category
 %     carnivore, herbivore, insectivore, omnivore
-%     varying intercepts?
-%       drawn from normal mean 0, estimated sd given seperate intercept term
 %   body size
 %     rescale of log body mass
-%   regional environment
-%     need terrestrial biomes/biogeographic units
-%     varying intercepts by biome (people have an easier time interpreting them)
-%       drawn from normal mean 0, estimated sd given seperate intercept term
-%       assign based on majority of taxon's occurrences
 
 % group-level covariates
-%   mean global temperature
-%     rescale of delta in degrees 
-%   interquartile range of global tempreature
-%     rescale of delta in degrees 
-%   dominate plant type(s)
-
-
-% too many variables? when have i reached too many?
-%   approximate number of regression parameters is the above \uppercase{times K}
-%     not counting all the additional hierarchical parameters
-%   horseshoe priors on everything except intercept?
+%   intercept
+%   mean of isotope at time t
+%     from rescale of isotope
+%   interquartile range of isotope at time t
+%     from rescale of isotope
+%   mean of temperatue estimate at time t
+%   interquartile range of temperatue estimate at time t
+%   plant community phase following Graham
 
 
 \end{document}
