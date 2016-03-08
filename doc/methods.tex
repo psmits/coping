@@ -19,52 +19,53 @@
 
 \subsection{Model specification}
 
-% categorical distribution
-A taxon's ecotype \(k\) is modeled as a realization from a categorical distribution with \(K\) possible outcomes, where each outcome has its own probability.
+% hierarchical model following Royle and Dozario
+%   hierarchical just means giving a hyperparameter it's own prior distribution
 
-
-% softmax function
+Define \(y\) as a \(N \times T\) matrix of the observed 0/1 occurrence of species \(i\) at time \(t\), and \(z\) as a \(N \times T\) matrix of the ``true'' 0/1 occurrence of species \(i\) at time \(t\). The observation presence of a taxon \(y_{i,t}\) is modeled as following a Bernoulli distribution defined
 \begin{equation}
-  \mathrm{softmax}(y_k) = \frac{\exp(y_k)}{\sum_{k = 1}^{K} exp(y_{k})}
-  \label{eq:softmax}
+  y_{i,t} \sim \text{Bernoulli}(\rho_{t} z_{i,t})
+  \label{eq:latent}
 \end{equation}
-% invariance under addition of a constant
-% K - 1 formulation
-%   Agresti
+where \(\rho\) is a length \(T\) vector of the probability that a species is observed at time \(t\) given that it is present at time \(t\) (\(\rho_{t} = \text{Pr}(y_{\_t} = 1 | x_{\_t} = 1)\)).
 
-N samples. K categories. C cohorts. D is number of individual-level covariates. E is number of cohort-level covariates.  \(\pi\) is a length K vector such that \(\sum_{k = 1}^{K} \pi_{k} = 1\). \(X\) is a \(D \times N\) matrix of individual-level covariates. \(U\) is a \(E \times C\) matrix of cohort-level covariates. \(\beta\) is a \(K \times D\) matrix of regression coefficients for the individual-level predictors. \(\gamma\) is a \(K \times E\) number of regression coefficients for the group-level predictors.
+
+Observation probability \(\rho_{t}\) is modeled as Bernoulli distributed variable with probability equal to the inverse logit transformed length \(T\) vector \(\rho^{\prime}\) (Eq. \ref{eq:sample}). The elements of \(\rho^{\prime}\) are modeled as exchangeable draws from a Normal distribution with location \(\rho^{''}\) and scale \(\sigma_{\rho^{\prime}}\); these are given weakly informative priors. % citation?
+
 \begin{equation}
   \begin{aligned}
-    y_{i} &\sim \mathrm{Categorical}(K, \pi_{ik}) \\
-    \pi_{ik} &= \frac{\eta_{ik}}{\sum_{k = 1}^{K} \eta_{ik}} \\
-    \eta_{ik} &= \alpha_{kc[i]} + \beta_{k}X_{i} \\
-    \alpha_{kc} &\sim \mathcal{N}(\alpha_{k}^{\prime} + \gamma U_{c}, \sigma_{k}) \\
-    \alpha_{k}^{\prime} &\sim \mathcal{N}(0, 5) \\
-    \beta &\sim \mathcal{N}(0, 1) \\
-    \gamma &\sim \mathcal{N}(0, 1) \\
-    \sigma_{k} &\sim \mathrm{C}^{+}(1) \\
+    \rho_{t} &\sim \text{Bernoulli}\left(\text{logit}^{-1}(\rho^{\prime}_{t})\right) \\
+    \rho^{\prime}_{t} &\sim \mathcal{N}(\rho^{''}, \sigma_{\rho^{\prime}}) \\
+    \rho^{''} &\sim \mathcal{N}(0, 1) \\
+    \sigma_{\rho^{\prime}} &\sim \text{C}^{+}(1) \\
   \end{aligned}
-  \label{eq:main}
+  \label{eq:sample}
 \end{equation}
 
-Where \(\pi_{iK} = 0\) for \(i = 1, 2, \dots, N\). This last statement is necessary because the softmax function is invariable to the addition of a constant (Eq. \ref{eq:softmax}), thus this insures identifiability.
 
-% illustrate as a binary comparison?
-%   y_i ~ binomial(inv_logit(intercept_c[i] + beta * x_i))
-%   intercept_c ~ normal(intercept_mu + alpha * isoval + gamma * isorange, sigma)
+The ``true'' presence/absence states of taxa \(z\) are modeled as a logistic regression (Eq. \ref{eq:presence}) where the probability of being present (\(z = 1\)) is a function of individual-level and group-level effects. The intercept of this regression \(\alpha\) is a length \(T\) vector which varies by time \(t\) (Eq. \ref{eq:time_effect}). Individual-level covariates are a \(N \times D\) matrix \(x\) whose regression coefficients are the length \(D\) column vector \(\beta\). These regression coefficients are given independent weakly informative prior distributions.
 
-\subsection{Posterior inference}
-% HMC using STAN
-%   4 chains for 20000 steps
-% split evenly between warm-up and sampling
-% thining every 10th
+\begin{equation}
+  \begin{aligned}
+    z_{i,t} &\sim \text{Bernoulli}\left(\text{logit}^{-1}(\alpha_{t} + x_{i} \beta)\right) \\
+    \beta &\sim \mathcal{N}(0, 1) \\
+  \end{aligned}
+  \label{eq:presence}
+\end{equation}
 
 
-% posterior predictive checks
-% ROC
-%   multiclass ROC
-%   AUC as summary
-% gives approximate performance
+The value of \(\alpha_{t}\) is itself defined as a regression (Eq. \ref{eq:time_effect}). The intercept of the this group-level regression is defined as \(\mu\). The effect of plant regime \(p\) is modeled as the length \(P\) vector \(\phi\) whose elemnts are draws from a Normal distribution with a location of 0 and scale of \(\sigma_{\phi}\). The group-level covariates corresponding to global climate values of interest is defined as the \(T \times U\) matrix \(u\) where \(\gamma\) is a length \(U\) column vector of regression coefficients. Finally \(\sigma_{\mu}\) is positive real value. \(\mu\), the elements of \(\gamma\), \(\sigma_{\mu}\), and \(\sigma_{\phi}\) are all given weakly informative independent priors.
 
+\begin{equation}
+  \begin{aligned}
+    \alpha_{t} &\sim \mathcal{N}(\mu + \phi_{p[t]} + u_{t} \gamma, \sigma_{\mu}) \\
+    \phi_{p} &\sim \mathcal{N}(0, \sigma_{\phi}) \\
+    \mu &\sim \mathcal{N}(0, 5) \\
+    \gamma &\sim \mathcal{N}(0, 1) \\
+    \sigma_{\mu} &\sim \text{C}^{+}(1) \\
+    \sigma_{\phi} &\sim \text{C}^{+}(1) \\
+  \end{aligned}
+  \label{eq:time_effect}
+\end{equation}
 
 \end{document}

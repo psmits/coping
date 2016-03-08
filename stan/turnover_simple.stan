@@ -41,7 +41,7 @@ functions {
         sl <- bernoulli_log(z[1], pred[1]);
         for(j in 2:S) {
           sl <- sl + bernoulli_log(z[j], (z[j - 1] * pred[j]) + 
-              ((1 - z[j - 1]) * (1 - pred[j])));
+              ((1 - z[j - 1]) * (pred[j])));
         }
         for(k in 1:S) {
           sl <- sl + bernoulli_log(y[k], z[k] * p[k]);
@@ -83,25 +83,20 @@ parameters {
   real<lower=0> p_sigma;
 }
 transformed parameters {
-  vector[N] h;
-  vector<lower=0,upper=1>[T] p;  // presence
-  matrix[N, T] pred;
-
-  // compose the indidual effects
-  //   will want to extend to break point
-  //   beta in two parts
-  //   this is on the complicated side of things because of marginalization
-  for(n in 1:N) {
-    h[n] <- x[n] * beta;
-  }
+  vector<lower=0,upper=1>[T] p;  // sampling probability
+  matrix[N, T] pred; 
 
   for(t in 1:T) {
     p[t] <- inv_logit(p_norm[t]);
   }
   
+  // compose the indidual effects
+  //   will want to extend to break point
+  //   beta in two parts
+  //   this is on the complicated side of things because of marginalization
   for(t in 1:T) {
     for(n in 1:N) {
-      pred[n, t] <- inv_logit(intercept[t] + h[n]);
+      pred[n, t] <- inv_logit(intercept[t] + (x[n] * beta));
     }
   }
 }
