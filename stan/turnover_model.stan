@@ -14,7 +14,7 @@ functions {
     }
     return 0;
   }
-  real state_space_log(int[] y, vector phi, vector p, vector gamma) {
+  real state_space_log(int[] y, row_vector pred, vector p) {
     int ft;
     int lt;
     int S;
@@ -38,10 +38,11 @@ functions {
           z[a] <- 1;
         }
 
-        sl <- bernoulli_log(z[1], gamma[1]);
+        # TODO make break point model w/ latent discrete
+        sl <- bernoulli_log(z[1], pred[1]);
         for(j in 2:S) {
-          sl <- sl + bernoulli_log(z[j], (z[j - 1] * phi[j - 1]) + 
-              (gamma[j] * (1 - z[j - 1])));
+          sl <- sl + bernoulli_log(z[j], (z[j - 1] * pred[j]) + 
+              ((1 - z[j - 1]) * pred[j]));
         }
         for(k in 1:S) {
           sl <- sl + bernoulli_log(y[k], z[k] * p[k]);
@@ -55,92 +56,99 @@ functions {
   }
 }
 data {
-  int R;  // rows, occurrences records
-  int C;  // columns, temporal bins
-  int T;  // number of unique taxa
-  int P;  // number of provinces
-  int sight[R, C];  // total sight record matrix
-  int taxon[R];  // which taxon for record
-  int prov[P];  // size of each province
+  int N;  // sample size of taxa
+  int T;  // sample size of temporal units
+  int D;  // number of indiv-level predictors
+  int U;  // number of group-level predictors
+  int P;  // number of floral phases
+
+  int sight[N, T];  // observed presence
+  vector[D] x[N];  // matrix of indiv-level covariates
+  vector[U] u[T];  // matrix of group-level covariates
+
+  int phase[T];  // plant phase
 }
 parameters {
-  vector[C - 1] phi_norm[P];
-  vector[C] p_norm[P];
-  vector[C] gamma_norm[P];
-  vector[3] loc[P];
-  vector<lower=0>[3] scale[P];
-  vector[P] mu[3];
-  vector<lower=0>[3] sigma;
-  vector[3] mu_prior;
-  corr_matrix[3] Omega;
-  vector<lower=0>[3] tau;
+  vector[T] intercept;  // intercept varies by what point in time
+  real intercept_mu;  // mean intercept
+  real<lower=0> sigma;  // variance of varying-intercept
 
-  vector[T] indiv;
-  real<lower=0> sigma_indiv;
+  vector[P] eff_phase;  // effect of plant-phase (mean 0)
+  real<lower=0> scale_phase;  // variance in plant-phase effect
+
+  matrix[T, D] beta;  // effect of indiv-level covariates
+  real beta_mu[D];
+  real<lower=0> beta_sigma[D];
+  
+  matrix[T, U] alpha;  // effect of group-level covariates
+  real alpha_mu[U];
+  real<lower=0> alpha_sigma[U];
+
+  vector[T] p_norm; 
+  real p_mu;
+  real<lower=0> p_sigma;
 }
 transformed parameters {
-  vector<lower=0,upper=1>[C - 1] phi[P];
-  vector<lower=0,upper=1>[C] p[P];
-  vector<lower=0,upper=1>[C] gamma[P];
+  vector<lower=0,upper=1>[T] p;  // sampling probability
+  matrix[N, T] pred; 
 
-  cov_matrix[5] Sigma;
-
-  // logit stuff
-  for(k in 1:P) {
-    for(c in 1:C) {
-      if(c < C) {
-        phi[k][c] <- inv_logit(phi_norm[k][c]);
-      }
-      p[k][c] <- inv_logit(p_norm[k][c]);
-      gamma[k][c] <- inv_logit(gamma_norm[k][c]);
-    }
+  for(t in 1:T) {
+    p[t] <- inv_logit(p_norm[t]);
   }
   
-  // multivariate normal
-  Sigma <- quad_form_diag(Omega, tau);
+  // assemble predictor w/ intercept + effects of indiv-level covariates
+  for(t in 1:T) {
+    for(n in 1:N) {
+      pred[n, t] <- inv_logit(intercept[t] + (beta[t, ] * x[n]));
+    }
+  }
 }
 model {
-  // priors
-  // missing spatial relationships between provinces
-  for(r in 1:R) {
-    for(k in 1:P) {
-      for(c in 1:C) {
-        if(c < C) {
-          phi_norm[k][c] ~ normal(loc[k][1], scale[k][1]);
-        }
-        p_norm[k][c] ~ normal(loc[k][2], scale[k][2]);
-        gamma_norm[k][c] ~ normal(loc[k][3], scale[k][3]);
-      }
-      loc[k][1] ~ normal(mu[1][k] + indiv[r], sigma[1]);
-      loc[k][2] ~ normal(mu[2][k] + indiv[r], sigma[2]);
-      loc[k][3] ~ normal(mu[3][k] + indiv[r], sigma[2]);
-      scale[k] ~ cauchy(0, 1);
+  for(t in 1:T) {
+    p_norm[t] ~ normal(p_mu, p_sigma);
+    for(d in 1:D) {
+      beta[t, d] ~ normal(beta_mu[d], beta_sigma[d]);
+    }
+    for(d in 1:U) {
+      alpha[t, d] ~ normal(alpha_mu[d], alpha_sigma[d]);
     }
   }
-  sigma ~ cauchy(0, 1);
+  p_mu ~ normal(0, 1);
+  p_sigma ~ cauchy(0, 1);
   
-  # individual effects are all drawn from the same normal
-  indiv ~ normal(0, sigma_indiv);
-  sigma_indiv ~ cauchy(0, 1);
+  beta_mu ~ normal(0, 1);
+  beta_sigma ~ cauchy(0, 1);
+  
+  alpha_mu ~ normal(0, 1);
+  alpha_sigma ~ cauchy(0, 1);
 
-  // correlation between parameters
-  for(i in 1:3) {
-    mu[i] ~ multi_normal(mu_prior, Sigma);
+  for(t in 1:T) {  // intercept is unique for each time unit
+    intercept[t] ~ normal(intercept_mu + eff_phase[phase[t]] + 
+        alpha[t, ] * u[t], sigma);
   }
-  mu_prior ~ normal(0, 1);
-  tau ~ cauchy(0, 1);
+
+  intercept_mu ~ normal(0, 5);
+  sigma ~ cauchy(0, 1);
+  eff_phase ~ normal(0, scale_phase);
+  scale_phase ~ cauchy(0, 1);
 
 
-  // sampling statement
-  for(k in 1:P) {
-    if(k == 1) {
-      for(y in 1:(prov[k])) {
-        sight[y] ~ state_space(phi[k], p[k], gamma[k]);
-      }
-    } else {
-      for(y in (prov[k - 1] + 1):prov[k]) {
-        sight[y] ~ state_space(phi[k], p[k], gamma[k]);
-      }
-    }
+  for(n in 1:N) {
+    sight[n] ~ state_space(pred[n, ], p);
   }
+}
+generated quantities {
+ matrix[T, N] z_tilde;
+ matrix[T, N] y_tilde;
+ real log_lik[N];
+
+ for(n in 1:N) {
+   z_tilde[1, n] <- bernoulli_rng(pred[n, 1]);
+   for(t in 1:T) {
+     z_tilde[t, n] <- bernoulli_rng(z_tilde[t - 1, n] * pred[n, t] +
+         ((1 - z_tilde[t - 1, n]) * pred[n, t]));
+     y_tilde[t, n] <- bernoulli_rng(z_tilde[t, n] * p[t]);
+   }
+   log_lik[n] <- state_space_log(sight[n], pred[n, ], p);
+ }
 }

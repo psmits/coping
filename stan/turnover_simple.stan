@@ -122,3 +122,18 @@ model {
     sight[n] ~ state_space(pred[n, ], p);
   }
 }
+generated quantities {
+ matrix[T, N] z_tilde;
+ matrix[T, N] y_tilde;
+ real log_lik[N];
+
+ for(n in 1:N) {
+   z_tilde[1, n] <- bernoulli_rng(pred[n, 1]);
+   for(t in 1:T) {
+     z_tilde[t, n] <- bernoulli_rng(z_tilde[t - 1, n] * pred[n, t] +
+         ((1 - z_tilde[t - 1, n]) * pred[n, t]));
+     y_tilde[t, n] <- bernoulli_rng(z_tilde[t, n] * p[t]);
+   }
+   log_lik[n] <- state_space_log(sight[n], pred[n, ], p);
+ }
+}

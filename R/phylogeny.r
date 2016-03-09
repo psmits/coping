@@ -4,26 +4,27 @@ library(phytools)
 library(stringr)
 library(paleotree)
 library(phangorn)
+library(geiger)
 
-load('../data/update_taxonomy.rdata')
-source('../R/phylo_gen.r')
-source('../R/taxon_names.r')
-source('../R/mung.r')
+load('/home/psmits/coping/data/update_taxonomy.rdata')
+source('/home/psmits/coping/R/phylo_gen.r')
+source('/home/psmits/coping/R/taxon_names.r')
+source('/home/psmits/coping/R/mung.r')
 
-dat <- read.csv('../data/mam-occs.csv', stringsAsFactors = FALSE)
+dat <- read.csv('/home/psmits/coping/data/mam-occs.csv', stringsAsFactors = FALSE)
 occur <- clean.occurrence(dat)
 
-raia.tree <- read.tree('../data/raia_tree.txt')
-tom.tree <- read.nexus('../data/tomiya_tree.nex')
+raia.tree <- read.tree('/home/psmits/coping/data/raia_tree.txt')
+tom.tree <- read.nexus('/home/psmits/coping/data/tomiya_tree.nex')
 
-hal.list <- list.files('../data/halliday', full.names = TRUE)
+hal.list <- list.files('/home/psmits/coping/data/halliday', full.names = TRUE)
 # which of these is recommended by halliday?
 halliday.tree <- read.nexus(hal.list[length(hal.list)])
 # this is a genus tree...fuck
 #   assign each genus a random species
 
-fam.tree <- read.nexus('../data/meredith.nex')
-super.tree <- read.nexus('../data/bininda_emonds.nex')
+fam.tree <- read.nexus('/home/psmits/coping/data/meredith.nex')
+super.tree <- read.nexus('/home/psmits/coping/data/bininda_emonds.nex')
 
 
 make.genus <- function(phy) {
@@ -137,4 +138,4 @@ scale.tree <- function(phy, dat) {
 spt <- scale.tree(spt)
 
 # how do i really want to scale this?
-save(spt, file = '../data/scaled_super.rdata')
+save(spt, file = '/home/psmits/coping/data/scaled_super.rdata')
