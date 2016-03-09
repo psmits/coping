@@ -146,7 +146,7 @@ generated quantities {
    z_tilde[1, n] <- bernoulli_rng(pred[n, 1]);
    for(t in 1:T) {
      z_tilde[t, n] <- bernoulli_rng(z_tilde[t - 1, n] * pred[n, t] +
-         ((1 - z_tilde[t - 1, n]) * pred[n, t]));
+         ((prod(1 - z_tilde[1:(t - 1), n])) * pred[n, t]));
      y_tilde[t, n] <- bernoulli_rng(z_tilde[t, n] * p[t]);
    }
    log_lik[n] <- state_space_log(sight[n], pred[n, ], p);

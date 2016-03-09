@@ -106,6 +106,7 @@ U <- ncol(u)
 # u <- cbind(temp.time.mean, temp.time.range)
 # U <- ncol(u)
 
+
 # make the plant phase indicator
 pa.eo <- c(66, 50)
 eo.mi <- c(50, 16)

@@ -65,7 +65,8 @@ Observation probability \(\rho_{t}\) is modeled as Bernoulli distributed variabl
 The ``true'' presence/absence states of taxa \(z\) are modeled as a logistic regression (Eq. \ref{eq:presence}) where the probability of being present (\(z = 1\)) is a function of individual-level and group-level effects. The intercept of this regression \(\alpha\) is a length \(T\) vector which varies by time \(t\) (Eq. \ref{eq:time_effect}). Individual-level covariates are a \(N \times D\) matrix \(x\) whose regression coefficients are the length \(D\) column vector \(\beta\). These regression coefficients are given independent weakly informative Normally distributed priors.
 \begin{equation}
   \begin{aligned}
-    z_{i,t} &\sim \text{Bernoulli}\left(\text{logit}^{-1}(\alpha_{t} + x_{i} \beta)\right) \\
+    z_{i,1} &\sim \text{Bernoulli}(\alpha_{1} + x_{i}) \\
+    z_{i,t} &\sim \text{Bernoulli}\left(\text{logit}^{-1}(z_{i,t-1} (\alpha_{t} + x_{i} \beta) + \left(\prod_{k = 1}^{t-1} 1 - z_{i,k}\right) (\alpha_{t} + x_{i})\right) \\
     \beta &\sim \mathcal{N}(0, 1) \\
   \end{aligned}
   \label{eq:presence}
@@ -76,13 +77,22 @@ The value of \(\alpha_{t}\) is itself defined as a regression (Eq. \ref{eq:time_
 \begin{equation}
   \begin{aligned}
     \alpha_{t} &\sim \mathcal{N}(\mu + \phi_{p[t]} + u_{t} \gamma, \sigma_{\mu}) \\
-    \phi_{p} &\sim \mathcal{N}(0, \sigma_{\phi}) \\
+    %\alpha_{t} &\sim \mathcal{N}(\mu + \phi_{p[t]} + u_{t} \gamma_{t}, \sigma_{\mu}) \\
     \mu &\sim \mathcal{N}(0, 5) \\
-    \gamma &\sim \mathcal{N}(0, 1) \\
     \sigma_{\mu} &\sim \text{C}^{+}(1) \\
+    \phi_{p} &\sim \mathcal{N}(0, \sigma_{\phi}) \\
     \sigma_{\phi} &\sim \text{C}^{+}(1) \\
+    \gamma &\sim \mathcal{N}(0, 1) \\
+    %\gamma_{t} &\sim \mathcal{N}(\gamma^{\prime}, \sigma_{\gamma}) \\
+    %\gamma^{\prime} &\sim \mathcal{N}(0, 1) \\
+    %\sigma_{\gamma} &\sim \text{C}^{+}(1) \\
   \end{aligned}
   \label{eq:time_effect}
 \end{equation}
+
+
+\subsection*{Posterior inference and model adequacy}
+
+
 
 \end{document}
