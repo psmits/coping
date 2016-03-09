@@ -38,6 +38,7 @@ functions {
           z[a] <- 1;
         }
 
+        # TODO make break point model w/ latent discrete
         sl <- bernoulli_log(z[1], pred[1]);
         for(j in 2:S) {
           sl <- sl + bernoulli_log(z[j], (z[j - 1] * pred[j]) + 
@@ -90,10 +91,7 @@ transformed parameters {
     p[t] <- inv_logit(p_norm[t]);
   }
   
-  // compose the indidual effects
-  //   will want to extend to break point
-  //   beta in two parts
-  //   this is on the complicated side of things because of marginalization
+  // assemble predictor w/ intercept + effects of indiv-level covariates
   for(t in 1:T) {
     for(n in 1:N) {
       pred[n, t] <- inv_logit(intercept[t] + (x[n] * beta));
@@ -121,8 +119,6 @@ model {
   alpha ~ normal(0, 1);
 
   for(n in 1:N) {
-    // intercept is a vector of the intercept for each temporal unit
-    // h is a vector of the sum of predictors
     sight[n] ~ state_space(pred[n, ], p);
   }
 }

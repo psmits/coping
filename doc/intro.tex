@@ -12,14 +12,16 @@
 
 \begin{document}
 
-\section{Introduction}
+\section*{Introduction}
 
-% How is taxon occurrence affected by both species traits and descriptors of the environment?
+% Taxon occurrence as a function of both emergent biological traits and its environmental context?
 
-% analysis of mammal genus fossil record for north america
-% time is discrete as 2-My bins
-%   starting post-K/Pg boundary
-%   (ignores quarternary)
+% fourth-corner type problem
+%   presence_{i,t} | individual-level_{i,t}, group-level_{t}
+%   assumes effect of covariates constant for all t
+% no individual X group covariates
+%   instead of group-level covariates included as part of multi-level model
+%   keeping in mind group-level covariates depend on t
 
 % after \citep{Smits2015}
 %   decrease in extinction risk over time
@@ -35,13 +37,10 @@
 %   do we see this in NA in terms of ecotypes?
 % break-point model is the eventual goal
 
-% fourth-corner type problem
-%   presence_{i,t} | individual-level_{i,t}, group-level_{t}
-%   assumes effect of covariates constant for all t
-% no individual X group covariates
-%   instead of group-level covariates included as part of multi-level model
-%   keeping in mind group-level covariates depend on t
-
+% analysis of mammal genus fossil record for north america
+% time is discrete as 2-My bins
+%   starting post-K/Pg boundary
+%   (ignores quarternary)
 
 % individual-level covariates
 %   intercept term, varying by time
