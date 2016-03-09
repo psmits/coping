@@ -144,7 +144,8 @@ generated quantities {
 
  for(n in 1:N) {
    z_tilde[1, n] <- bernoulli_rng(pred[n, 1]);
-   for(t in 1:T) {
+   y_tilde[1, n] <- bernoulli_rng(z_tilde[1, n] * p[1]);
+   for(t in 2:T) {
      z_tilde[t, n] <- bernoulli_rng(z_tilde[t - 1, n] * pred[n, t] +
          ((prod(1 - z_tilde[1:(t - 1), n])) * pred[n, t]));
      y_tilde[t, n] <- bernoulli_rng(z_tilde[t, n] * p[t]);
