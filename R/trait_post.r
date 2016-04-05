@@ -8,11 +8,10 @@ library(rstan)
 library(grid)
 library(pROC)
 library(Metrics)
-source('../R/coping_foo_post.r')
 source('../R/multiclass_roc.r')
 source('../data/data_dump/trait_info.data.R')
 #
-theme_set(theme_bw())
+#theme_set(theme_bw())
 cbp <- c('#E69F00', '#56B4E9', '#009E73', '#F0E442', 
          '#0072B2', '#D55E00', '#CC79A7')
 theme_update(axis.text = element_text(size = 15),
@@ -27,9 +26,9 @@ nsim <- 1000
 
 # bring in the mcmc results
 post <- list.files('../data/mcmc_out', 
-                   pattern = 'trait_',
                    full.names = TRUE)
 fit <- read_stan_csv(post)
+
 ext <- extract(fit, permuted = TRUE)
 # matrices are structured: sample, time, response class, covariate
 

@@ -73,12 +73,6 @@ parameters {
   real intercept_mu;  // mean intercept
   real<lower=0> sigma;  // variance of varying-intercept
 
-  vector[P] eff_phase;  // effect of plant-phase (mean 0)
-  real<lower=0> scale_phase;  // variance in plant-phase effect
-
-  vector[D] beta;  // effect of indiv-level covariates
-  vector[U] alpha;  // effect of group-level covariates
-
   vector[T] p_norm; 
   real p_mu;
   real<lower=0> p_sigma;
@@ -94,7 +88,7 @@ transformed parameters {
   // assemble predictor w/ intercept + effects of indiv-level covariates
   for(t in 1:T) {
     for(n in 1:N) {
-      pred[n, t] <- inv_logit(intercept[t] + (x[n] * beta));
+      pred[n, t] <- inv_logit(intercept[t]);
     }
   }
 }
@@ -106,17 +100,11 @@ model {
   p_sigma ~ cauchy(0, 1);
 
   for(t in 1:T) {  // intercept is unique for each time unit
-    intercept[t] ~ normal(intercept_mu + eff_phase[phase[t]] + 
-        u[t] * alpha, sigma);
+    intercept[t] ~ normal(intercept_mu, sigma);
   }
 
   intercept_mu ~ normal(0, 5);
   sigma ~ cauchy(0, 1);
-  eff_phase ~ normal(0, scale_phase);
-  scale_phase ~ cauchy(0, 1);
-
-  beta ~ normal(0, 1);
-  alpha ~ normal(0, 1);
 
   for(n in 1:N) {
     sight[n] ~ state_space(pred[n, ], p);
@@ -131,8 +119,9 @@ generated quantities {
    z_tilde[1, n] <- bernoulli_rng(pred[n, 1]);
    y_tilde[1, n] <- bernoulli_rng(z_tilde[1, n] * p[1]);
    for(t in 2:T) {
-     z_tilde[t, n] <- bernoulli_rng(z_tilde[t - 1, n] * pred[n, t] +
-         ((prod(1 - z_tilde[1:(t - 1), n])) * pred[n, t]));
+     z_tilde[t, n] <- bernoulli_rng(z_tilde[t - 1, n] * pred[n, t] +  // stay
+         ((prod(1 - z_tilde[1:(t - 1), n])) * pred[n, t])); // enter
+     // enter + stay is just occurrence
      y_tilde[t, n] <- bernoulli_rng(z_tilde[t, n] * p[t]);
    }
    log_lik[n] <- state_space_log(sight[n], pred[n, ], p);

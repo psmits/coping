@@ -6,25 +6,25 @@ library(paleotree)
 library(phangorn)
 library(geiger)
 
-load('/home/psmits/coping/data/update_taxonomy.rdata')
-source('/home/psmits/coping/R/phylo_gen.r')
-source('/home/psmits/coping/R/taxon_names.r')
-source('/home/psmits/coping/R/mung.r')
+load('../data/update_taxonomy.rdata')
+source('../R/phylo_gen.r')
+source('../R/taxon_names.r')
+source('../R/mung.r')
 
-dat <- read.csv('/home/psmits/coping/data/mam-occs.csv', stringsAsFactors = FALSE)
+dat <- read.csv('../data/mam-occs.csv', stringsAsFactors = FALSE)
 occur <- clean.occurrence(dat)
 
-raia.tree <- read.tree('/home/psmits/coping/data/raia_tree.txt')
-tom.tree <- read.nexus('/home/psmits/coping/data/tomiya_tree.nex')
+raia.tree <- read.tree('../data/raia_tree.txt')
+tom.tree <- read.nexus('../data/tomiya_tree.nex')
 
-hal.list <- list.files('/home/psmits/coping/data/halliday', full.names = TRUE)
+hal.list <- list.files('../data/halliday', full.names = TRUE)
 # which of these is recommended by halliday?
 halliday.tree <- read.nexus(hal.list[length(hal.list)])
 # this is a genus tree...fuck
 #   assign each genus a random species
 
-fam.tree <- read.nexus('/home/psmits/coping/data/meredith.nex')
-super.tree <- read.nexus('/home/psmits/coping/data/bininda_emonds.nex')
+fam.tree <- read.nexus('../data/meredith.nex')
+super.tree <- read.nexus('../data/bininda_emonds.nex')
 
 
 make.genus <- function(phy) {
@@ -36,6 +36,7 @@ make.genus <- function(phy) {
 }
 
 raia.tree <- make.genus(raia.tree)
+tom.tree <- make.genus(tom.tree)
 super.tree <- llply(super.tree, make.genus)
 
 
@@ -97,6 +98,8 @@ order.tree <- order.tree[ntip != 1]
 taxon.tree <- Reduce(bind.tree, order.tree)
 taxon.tree <- make.genus(taxon.tree)
 
+tom.tree$tip.label
+
 
 genus.trees <- list(raia.tree,
                     tom.tree,
@@ -107,7 +110,6 @@ class(genus.trees) <- 'multiPhylo'
 
 big.tree <- mrp.supertree(genus.trees)
 
-
 # get rid of the stupid tips
 if(class(big.tree) == 'multiPhylo') {
   spt <- big.tree[[1]] 
@@ -115,13 +117,14 @@ if(class(big.tree) == 'multiPhylo') {
   spt <- big.tree
 }
 
-fad <- ddply(occur, .(name.bi), summarize, max(bins))
-lad <- ddply(occur, .(name.bi), summarize, min(bins))
+fad <- ddply(occur, .(occurrence.genus_name), summarize, max(bins))
+lad <- ddply(occur, .(occurrence.genus_name), summarize, min(bins))
 fad[, 1] <- str_replace(fad[, 1], ' ', '_')
 lad[, 1] <- str_replace(lad[, 1], ' ', '_')
 datmat <- cbind(fad[, 2], lad[, 2])
 rownames(datmat) <- fad[, 1]
 
+check <- name.check(spt, datmat)
 
 scale.tree <- function(phy, dat) {
   check <- name.check(phy, dat)
@@ -135,7 +138,7 @@ scale.tree <- function(phy, dat) {
                            randres = TRUE,
                            ntrees = 100)
 }
-spt <- scale.tree(spt)
+spt <- scale.tree(spt, datmat)
 
 # how do i really want to scale this?
 save(spt, file = '/home/psmits/coping/data/scaled_super.rdata')

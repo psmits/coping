@@ -67,12 +67,14 @@ source('../R/mung_clim.r')
 
 
 # need to make the things work
+occur <- occur[occur$bins != min(occur$bins), ]
 by.tax <- split(occur, occur$occurrence.genus_name)
 
 sight <- matrix(0, nrow = length(by.tax), ncol = length(unique(occur$bins)))
 for(ii in seq(length(by.tax))) {
-  sight[ii, (by.tax[[ii]]$bins / 2)] <- 1
+  sight[ii, ((by.tax[[ii]]$bins / 2) - 1)] <- 1
 }
+
 
 N <- length(by.tax)
 diet <- laply(by.tax, function(x) names(which.max(table(x$comdiet))))
@@ -100,26 +102,27 @@ cohort <- mapvalues(cohort, from = unique(cohort), to = seq(T))
 #id <- as.numeric(as.factor(occur$name.bi))
 
 # climate data
-u <- cbind(mean.o18, range.o18)
+#u <- cbind(mean.o18, range.o18)
+#U <- ncol(u)
+# WARNING to include need to remove oldest bin!!!!
+u <- cbind(temp.time.mean, temp.time.range)
+u <- u[-(nrow(u)), ]
 U <- ncol(u)
-### WARNING to include need to remove oldest bin!!!!
-# u <- cbind(temp.time.mean, temp.time.range)
-# U <- ncol(u)
+# old to young
 
 
 # make the plant phase indicator
-pa.eo <- c(66, 50)
-eo.mi <- c(50, 16)
 mi.pl <- c(16, 2)
-mod <- c(2, 0)
-plants <- rbind(mod, mi.pl, eo.mi, pa.eo)
+eo.mi <- c(50, 16)
+pa.eo <- c(66, 50)
+plants <- rbind(mi.pl, eo.mi, pa.eo)
 
-co.h <- unique(cohort * 2)
+co.h <- unique(occur$bins)
 phase <- array(dim = T)
 for(ii in seq(T)){
   phase[ii] <- which(plants[, 1] >= co.h[ii] & plants[, 2] < co.h[ii])
 }
-P <- 4
+P <- 3
 
 # dump it out
 stan_rdump(list = c('N', 'T', 'D', 'U', 'P',

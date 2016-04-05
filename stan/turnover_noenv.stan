@@ -72,16 +72,9 @@ parameters {
   real intercept_mu;  // mean intercept
   real<lower=0> sigma;  // variance of varying-intercept
 
-  vector[P] eff_phase;  // effect of plant-phase (mean 0)
-  real<lower=0> scale_phase;  // variance in plant-phase effect
-
   matrix[T, D] beta;  // effect of indiv-level covariates
   real beta_mu[D];
   real<lower=0> beta_sigma[D];
-
-  matrix[T, U] alpha;  // effect of group-level covariates
-  real alpha_mu[U];
-  real<lower=0> alpha_sigma[U];
 
   vector[T] p_norm; 
   real p_mu;
@@ -108,9 +101,6 @@ model {
     for(d in 1:D) {
       beta[t, d] ~ normal(beta_mu[d], beta_sigma[d]);
     }
-    for(d in 1:U) {
-      alpha[t, d] ~ normal(alpha_mu[d], alpha_sigma[d]);
-    }
   }
   p_mu ~ normal(0, 1);
   p_sigma ~ cauchy(0, 1);
@@ -119,19 +109,12 @@ model {
   beta_mu ~ normal(0, 1);
   beta_sigma ~ cauchy(0, 1);
 
-  // change to multivariate normal prior?
-  alpha_mu ~ normal(0, 1);
-  alpha_sigma ~ cauchy(0, 1);
-
   for(t in 1:T) {  // intercept is unique for each time unit
-    intercept[t] ~ normal(intercept_mu + eff_phase[phase[t]] + 
-        alpha[t, ] * u[t], sigma);
+    intercept[t] ~ normal(intercept_mu, sigma);
   }
 
   intercept_mu ~ normal(0, 5);
   sigma ~ cauchy(0, 1);
-  eff_phase ~ normal(0, scale_phase);
-  scale_phase ~ cauchy(0, 1);
 
 
   for(n in 1:N) {

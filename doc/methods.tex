@@ -39,8 +39,8 @@
 
 \subsection*{Model specification}
 
-% hierarchical model following Royle and Dozario
-%   hierarchical just means giving a hyperparameter it's own prior distribution
+% hierarchical just means giving a hyperparameter it's own prior distribution
+% model follows a lot of Royle and Dozario
 
 Define \(y\) as a \(N \times T\) matrix of the observed 0/1 occurrence of species \(i\) at time \(t\), and \(z\) as a \(N \times T\) matrix of the ``true'' 0/1 occurrence of species \(i\) at time \(t\). The observation presence of a taxon \(y_{i,t}\) is modeled as following a Bernoulli distribution defined
 \begin{equation}
@@ -50,7 +50,7 @@ Define \(y\) as a \(N \times T\) matrix of the observed 0/1 occurrence of specie
 where \(\rho\) is a length \(T\) vector of the probability that a species is observed at time \(t\) given that it is present at time \(t\) (\(\rho_{t} = \text{Pr}(y_{\_t} = 1 | x_{\_t} = 1)\)).
 
 
-Observation probability \(\rho_{t}\) is modeled as Bernoulli distributed variable with probability equal to the inverse logit transformed length \(T\) vector \(\rho^{\prime}\) (Eq. \ref{eq:sample}). The elements of \(\rho^{\prime}\) are modeled as exchangeable draws from a Normal distribution with location \(\rho^{''}\) and scale \(\sigma_{\rho^{\prime}}\); these are given weakly informative Normal and half-Cauchy priors, respectively. % citation?
+Observation probability \(\rho_{t}\) is modeled as Bernoulli distributed variable with probability equal to the inverse logit transformed length \(T\) vector \(\rho^{\prime}\) (Eq. \ref{eq:sample}). The elements of \(\rho^{\prime}\) are modeled as exchangeable draws from a Normal distribution with location \(\rho^{''}\) and scale \(\sigma_{\rho^{\prime}}\); these are given weakly informative Normal and half-Cauchy priors, respectively.
 \begin{equation}
   \begin{aligned}
     \rho_{t} &\sim \text{Bernoulli}\left(\text{logit}^{-1}(\rho^{\prime}_{t})\right) \\
@@ -62,15 +62,16 @@ Observation probability \(\rho_{t}\) is modeled as Bernoulli distributed variabl
 \end{equation}
 
 
-The ``true'' presence/absence states of taxa \(z\) are modeled as a logistic regression (Eq. \ref{eq:presence}) where the probability of being present (\(z = 1\)) is a function of individual-level and group-level effects. The intercept of this regression \(\alpha\) is a length \(T\) vector which varies by time \(t\) (Eq. \ref{eq:time_effect}). Individual-level covariates are a \(N \times D\) matrix \(x\) whose regression coefficients are the length \(D\) column vector \(\beta\). These regression coefficients are given independent weakly informative Normally distributed priors.
+The ``true'' presence/absence states of taxa \(z\) are modeled as a logistic regression (Eq. \ref{eq:presence}) where the probability of being present (\(z = 1\)) is a function of individual-level and group-level effects. The intercept of this regression \(\alpha\) is a length \(T\) vector which varies by time \(t\) (Eq. \ref{eq:time_effect}). Individual-level covariates are a \(N \times D\) matrix \(x\) whose regression coefficients are the length \(D\) column vector \(\beta\). These regression coefficients are given independent weakly informative Normally distributed priors. 
 \begin{equation}
   \begin{aligned}
-    z_{i,1} &\sim \text{Bernoulli}(\alpha_{1} + x_{i}) \\
-    z_{i,t} &\sim \text{Bernoulli}\left(\text{logit}^{-1}(z_{i,t-1} (\alpha_{t} + x_{i} \beta) + \left(\prod_{k = 1}^{t-1} 1 - z_{i,k}\right) (\alpha_{t} + x_{i})\right) \\
-    \beta &\sim \mathcal{N}(0, 1) \\
+    z_{i,1} &\sim \text{Bernoulli}(\alpha_{1} + x_{i} \beta) \\
+    z_{i,t} &\sim \text{Bernoulli}\left(\text{logit}^{-1}(z_{i,t-1} (\alpha_{t} + x_{i} \beta) + \left(\prod_{k = 1}^{t-1} 1 - z_{i,k}\right) (\alpha_{t} + x_{i} \beta)\right) \\
+    \beta &\sim \mathcal{N}(0, 1). \\
   \end{aligned}
   \label{eq:presence}
 \end{equation}
+Note that the product term ensures that loss is an absorbing state so that once a species has left the system it cannot return (i.e. extinction) \citep{Royle2008}.
 
 
 The value of \(\alpha_{t}\) is itself defined as a regression (Eq. \ref{eq:time_effect}). The intercept of the this group-level regression is defined as \(\mu\). The effect of plant regime \(p\) is modeled as the length \(P\) vector \(\phi\) whose elemnts are draws from a Normal distribution with a location of 0 and scale of \(\sigma_{\phi}\). The group-level covariates corresponding to global climate values of interest is defined as the \(T \times U\) matrix \(u\) where \(\gamma\) is a length \(U\) column vector of regression coefficients. Finally \(\sigma_{\mu}\) is positive real value. \(\mu\), the elements of \(\gamma\), \(\sigma_{\mu}\), and \(\sigma_{\phi}\) are all given weakly informative independent priors (Eq. \ref{eq:time_effect}).
@@ -92,6 +93,22 @@ The value of \(\alpha_{t}\) is itself defined as a regression (Eq. \ref{eq:time_
 
 
 \subsection*{Posterior inference and model adequacy}
+
+% Stan
+%   version 2.9.0
+%   marginalize over latent discrete parameters
+%     keeping in mind that species HAVE to range through
+%     sum of the log probability for all possible configutations
+%     along with the sampling probability given those combinations as well
+%     see code for implementation? 
+%       it is kind of an annoying amount of math to write up
+
+
+% for posterior simulations, just start from t = 1 and roll forward
+%   one-ahead estimate/leave-one-out cross-validation 
+%   use AUC of measure of model performance
+% estimate ROC curve for posterior estimates from entire dataset
+
 
 
 
