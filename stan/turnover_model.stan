@@ -72,16 +72,16 @@ parameters {
   real intercept_mu;  // mean intercept
   real<lower=0> sigma;  // variance of varying-intercept
 
-  vector[P] eff_phase;  // effect of plant-phase (mean 0)
-  real<lower=0> scale_phase;  // variance in plant-phase effect
-
-  matrix[T, D] beta;  // effect of indiv-level covariates
+  matrix[T, D] beta_std;  // effect of indiv-level covariates
   real beta_mu[D];
   real<lower=0> beta_sigma[D];
 
-  matrix[T, U] alpha;  // effect of group-level covariates
+  matrix[T, U] alpha_std;  // effect of group-level covariates
   real alpha_mu[U];
   real<lower=0> alpha_sigma[U];
+
+  vector[P] eff_phase;  // effect of plant-phase (mean 0)
+  real<lower=0> scale_phase;  // variance in plant-phase effect
 
   vector[T] p_norm; 
   real p_mu;
@@ -90,36 +90,44 @@ parameters {
 transformed parameters {
   vector<lower=0,upper=1>[T] p;  // sampling probability
   matrix[N, T] pred; 
+  matrix[T, D] beta; 
+  matrix[T, U] alpha; 
 
   for(t in 1:T) {
-    p[t] <- inv_logit(p_norm[t]);
+    p[t] <- inv_logit(p_mu + p_sigma * p_norm[t]);
+  }
+
+  // noncentered parameterization with each beta_mu independent
+  for(d in 1:D) {
+    for(t in 1:T) {
+      beta[t, d] <- beta_mu[d] + beta_sigma[d] * beta_std[t, d];
+    }
+  }
+  for(d in 1:U) {
+    for(t in 1:T) {
+      alpha[t, d] <- alpha_mu[d] + alpha_sigma[d] * alpha_std[t, d];
+    }
   }
 
   // assemble predictor w/ intercept + effects of indiv-level covariates
   for(t in 1:T) {
     for(n in 1:N) {
+      // non-centered parameterization following Betacourt and Girolami
       pred[n, t] <- inv_logit(intercept[t] + (beta[t, ] * x[n]));
     }
   }
 }
 model {
-  for(t in 1:T) {
-    p_norm[t] ~ normal(p_mu, p_sigma);
-    for(d in 1:D) {
-      beta[t, d] ~ normal(beta_mu[d], beta_sigma[d]);
-    }
-    for(d in 1:U) {
-      alpha[t, d] ~ normal(alpha_mu[d], alpha_sigma[d]);
-    }
-  }
   p_mu ~ normal(0, 1);
   p_sigma ~ cauchy(0, 1);
 
   // change to multivariate normal prior?
+  to_vector(beta_std) ~ normal(0, 1);
   beta_mu ~ normal(0, 1);
   beta_sigma ~ cauchy(0, 1);
 
   // change to multivariate normal prior?
+  to_vector(alpha_std) ~ normal(0, 1);
   alpha_mu ~ normal(0, 1);
   alpha_sigma ~ cauchy(0, 1);
 

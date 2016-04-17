@@ -68,11 +68,11 @@ data {
   int phase[T];  // plant phase
 }
 parameters {
-  vector[T] intercept;  // intercept varies by what point in time
+  vector[T] inter_std;  // intercept varies by what point in time
   real intercept_mu;  // mean intercept
   real<lower=0> sigma;  // variance of varying-intercept
 
-  matrix[T, D] beta;  // effect of indiv-level covariates
+  matrix[T, D] beta_std;
   real beta_mu[D];
   real<lower=0> beta_sigma[D];
 
@@ -83,39 +83,41 @@ parameters {
 transformed parameters {
   vector<lower=0,upper=1>[T] p;  // sampling probability
   matrix[N, T] pred; 
+  matrix[T, D] beta;  // effect of indiv-level covariates
 
+  // noncentered parameterization 
   for(t in 1:T) {
-    p[t] <- inv_logit(p_norm[t]);
+    p[t] <- inv_logit(p_mu + p_sigma * p_norm[t]);
+  }
+
+  // noncentered parameterization with each beta_mu independent
+  for(d in 1:D) {
+    for(t in 1:T) {
+      beta[t, d] <- beta_mu[d] + beta_sigma[d] * beta_std[t, d];
+    }
   }
 
   // assemble predictor w/ intercept + effects of indiv-level covariates
   for(t in 1:T) {
     for(n in 1:N) {
-      pred[n, t] <- inv_logit(intercept[t] + (beta[t, ] * x[n]));
+      // non-centered parameterization following Betacourt and Girolami
+      pred[n, t] <- inv_logit(intercept_mu + sigma*inter_std[t] + 
+          (beta[t, ] * x[n]));
     }
   }
 }
 model {
-  for(t in 1:T) {
-    p_norm[t] ~ normal(p_mu, p_sigma);
-    for(d in 1:D) {
-      beta[t, d] ~ normal(beta_mu[d], beta_sigma[d]);
-    }
-  }
   p_mu ~ normal(0, 1);
   p_sigma ~ cauchy(0, 1);
 
   // change to multivariate normal prior?
+  to_vector(beta_std) ~ normal(0, 1);
   beta_mu ~ normal(0, 1);
   beta_sigma ~ cauchy(0, 1);
 
-  for(t in 1:T) {  // intercept is unique for each time unit
-    intercept[t] ~ normal(intercept_mu, sigma);
-  }
-
+  inter_std ~ normal(0, 1);
   intercept_mu ~ normal(0, 5);
   sigma ~ cauchy(0, 1);
-
 
   for(n in 1:N) {
     sight[n] ~ state_space(pred[n, ], p);
