@@ -27,7 +27,7 @@ nsim <- 1000
 # bring in the mcmc results
 post <- list.files('../data/mcmc_out', 
                    full.names = TRUE)
-fit <- read_stan_csv(post)
+fit <- read_stan_csv(post[1:4])
 
 ext <- extract(fit, permuted = TRUE)
 # matrices are structured: sample, time, response class, covariate

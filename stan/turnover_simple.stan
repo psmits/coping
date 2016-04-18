@@ -82,27 +82,22 @@ transformed parameters {
   matrix[N, T] pred; 
 
   for(t in 1:T) {
-    p[t] <- inv_logit(p_norm[t]);
+    p[t] <- inv_logit(p_mu + p_sigma * p_norm[t]);
   }
   
   // assemble predictor w/ intercept + effects of indiv-level covariates
   for(t in 1:T) {
     for(n in 1:N) {
-      pred[n, t] <- inv_logit(intercept[t]);
+      pred[n, t] <- inv_logit(intercept_mu + sigma * intercept[t]);
     }
   }
 }
 model {
-  for(t in 1:T) {
-    p_norm[t] ~ normal(p_mu, p_sigma);
-  }
+  p_norm ~ normal(0, 1);
   p_mu ~ normal(0, 1);
   p_sigma ~ cauchy(0, 1);
-
-  for(t in 1:T) {  // intercept is unique for each time unit
-    intercept[t] ~ normal(intercept_mu, sigma);
-  }
-
+  
+  intercept ~ normal(0, 1);
   intercept_mu ~ normal(0, 5);
   sigma ~ cauchy(0, 1);
 
