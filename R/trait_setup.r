@@ -46,12 +46,12 @@ occur <- occur[occur$comlife != 'ground dwelling', ]
 occur <- occur[occur$name.bi %in% na.mass$name, ]
 occur$mass <- na.mass[match(occur$name.bi, na.mass$name), 2]
 
-# make data and tree match
-name <- matrix(str_replace(occur$name.bi, ' ', '_'), ncol = 1)
-hot.fix <- name.check(spt, data.names = name)
-occur <- occur[!(occur$name.bi %in% 
-                 str_replace(hot.fix$data_not_tree, '_', ' ')), ]
-spt <- ape::drop.tip(spt, hot.fix$tree_not_data)
+## make data and tree match
+#name <- matrix(str_replace(occur$name.bi, ' ', '_'), ncol = 1)
+#hot.fix <- name.check(spt, data.names = name)
+#occur <- occur[!(occur$name.bi %in% 
+#                 str_replace(hot.fix$data_not_tree, '_', ' ')), ]
+#spt <- ape::drop.tip(spt, hot.fix$tree_not_data)
 
 ## for testing purposes
 #keep <- createDataPartition(occur$bins, p = 0.2)

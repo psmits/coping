@@ -112,11 +112,36 @@ model {
 
   // change to multivariate normal prior?
   to_vector(beta_std) ~ normal(0, 1);
-  beta_mu ~ normal(0, 1);
   beta_sigma ~ cauchy(0, 1);
 
+  // diet
+  //  carn (intercept)
+  //  herb
+  beta_mu[1] ~ normal(0.5, 1);
+  //  inse
+  beta_mu[2] ~ normal(0.5, 1);
+  //  omni
+  beta_mu[3] ~ normal(0.5, 1);
+  
+  // loco
+  //  arboreal (intercept)
+  //  digi
+  beta_mu[4] ~ normal(0, 1);
+  //  foss
+  beta_mu[5] ~ normal(-0.5, 1);
+  //  plan
+  beta_mu[6] ~ normal(0, 1);
+  //  scan
+  beta_mu[7] ~ normal(0.5, 1);
+  //  ungu
+  beta_mu[8] ~ normal(0, 1);
+
+  //mass
+  beta_mu[9] ~ normal(0, 1);
+ 
+
   inter_std ~ normal(0, 1);
-  intercept_mu ~ normal(0, 5);
+  intercept_mu ~ normal(-1, 2);
   sigma ~ cauchy(0, 1);
 
   for(n in 1:N) {

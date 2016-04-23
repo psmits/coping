@@ -102,23 +102,23 @@ model {
   sigma ~ cauchy(0, 1);
 
   for(n in 1:N) {
-    sight[n] ~ state_space(pred[n, ], p);
+    sight[n, ] ~ state_space(pred[n, ], p);
   }
 }
-generated quantities {
- matrix[T, N] z_tilde;
- matrix[T, N] y_tilde;
- real log_lik[N];
-
- for(n in 1:N) {
-   z_tilde[1, n] <- bernoulli_rng(pred[n, 1]);
-   y_tilde[1, n] <- bernoulli_rng(z_tilde[1, n] * p[1]);
-   for(t in 2:T) {
-     z_tilde[t, n] <- bernoulli_rng(z_tilde[t - 1, n] * pred[n, t] +  // stay
-         ((prod(1 - z_tilde[1:(t - 1), n])) * pred[n, t])); // enter
-     // enter + stay is just occurrence
-     y_tilde[t, n] <- bernoulli_rng(z_tilde[t, n] * p[t]);
-   }
-   log_lik[n] <- state_space_log(sight[n], pred[n, ], p);
- }
-}
+//generated quantities {
+// matrix[T, N] z_tilde;
+// matrix[T, N] y_tilde;
+// real log_lik[N];
+//
+// for(n in 1:N) {
+//   z_tilde[1, n] <- bernoulli_rng(pred[n, 1]);
+//   y_tilde[1, n] <- bernoulli_rng(z_tilde[1, n] * p[1]);
+//   for(t in 2:T) {
+//     z_tilde[t, n] <- bernoulli_rng(z_tilde[t - 1, n] * pred[n, t] +  // stay
+//         ((prod(1 - z_tilde[1:(t - 1), n])) * pred[n, t])); // enter
+//     // enter + stay is just occurrence
+//     y_tilde[t, n] <- bernoulli_rng(z_tilde[t, n] * p[t]);
+//   }
+//   log_lik[n] <- state_space_log(sight[n], pred[n, ], p);
+// }
+//}
