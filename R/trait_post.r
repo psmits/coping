@@ -9,6 +9,7 @@ library(grid)
 library(pROC)
 library(Metrics)
 source('../R/multiclass_roc.r')
+source('../R/sim_from_model.r')
 source('../data/data_dump/trait_info.data.R')
 #
 #theme_set(theme_bw())
@@ -28,23 +29,57 @@ nsim <- 1000
 post <- list.files('../data/mcmc_out', 
                    full.names = TRUE)
 fit <- read_stan_csv(post)
-traceplot(fit, pars = 'p_mu')
+#traceplot(fit, pars = 'lp__')
 
 ext <- extract(fit, permuted = TRUE)
 # matrices are structured: sample, time, response class, covariate
 
 # now roc is much much easier because binary instead of multi
+d <- dim(ext$pred)
+ntax <- d[2]
+ntime <- d[3]
+tt <- sample(length(ext$lp__), 1000)
+test <- list()
+for(ii in seq(length(tt))) {
+  test[[ii]] <- model.simulation(ntax = ntax, ntime = ntime,
+                                 p.mu = ext$p_mu[tt[ii]], 
+                                 p.sigma = ext$p_sigma[tt[ii]], 
+                                 p.eff = ext$p_norm[tt[ii], ],
+                                 inter.mu = ext$intercept_mu[tt[ii]],
+                                 inter.sigma = ext$sigma[tt[ii]], 
+                                 inter.eff = ext$intercept[tt[ii], ])
+}
 
+# plot of posterior of estimated diversity plus mean line
+div.est <- laply(test, function(x) colSums(x$z))
+div.mean <- data.frame(x = seq(ntime), y = colMeans(div.est))
+div.melt <- melt(div.est)
+div.gg <- ggplot(div.melt, aes(x = Var2, y = value, group = Var1)) 
+div.gg <- div.gg + geom_line(alpha = 0.1, size = 0.1)
+div.gg <- div.gg + geom_line(data = div.mean, 
+                             mapping = aes(x = x, y = y, group = NULL), 
+                             colour = 'blue')
 
+# plot of posterior of observed diversity plus mean line and empirical line
+obs.est <- laply(test, function(x) colSums(x$z))
+obs.mean <- data.frame(x = seq(ntime), y = colMeans(obs.est))
+obs.emp <- data.frame(x = seq(ntime), y = colSums(sight))
+obs.melt <- melt(obs.est)
+obs.gg <- ggplot(obs.melt, aes(x = Var2, y = value, group = Var1)) 
+obs.gg <- obs.gg + geom_line(alpha = 0.1, size = 0.1)
+obs.gg <- obs.gg + geom_line(data = obs.mean, 
+                             mapping = aes(x = x, y = y, group = NULL), 
+                             colour = 'blue')
+obs.gg <- obs.gg + geom_line(data = obs.emp, 
+                             mapping = aes(x = x, y = y, group = NULL), 
+                             colour = 'goldenrod')
 
-
-roc.posterior <- replicate(nsim, roc.dist(ext, y, cohort), simplify = FALSE)
-roc.posterior <- data.frame(Reduce(rbind, roc.posterior))
-roc.melt <- melt(roc.posterior)
-roc.melt$variable <- factor(roc.melt$variable, 
-                            levels = rev(paste0('X', seq(C - 1))))
-roc.plot <- ggplot(roc.melt, aes(x = variable, y = value))
-roc.plot <- roc.plot + geom_violin() + geom_boxplot(width = 0.1)
-roc.plot <- roc.plot + labs(x = 'Cohort', y = 'AUC')
-ggsave(plot = roc.plot, filename = '../doc/figure/roc_dist.png',
-       width = 8, height = 6, dpi = 600)
+# plot of posterior of predictor of presence plus mean line
+pred.est <- laply(test, function(x) colMeans(x$pred))
+pred.mean <- data.frame(x = seq(ntime), y = colMeans(pred.est))
+pred.melt <- melt(pred.est)
+pred.gg <- ggplot(pred.melt, aes(x = Var2, y = value, group = Var1)) 
+pred.gg <- pred.gg + geom_line(alpha = 0.1, size = 0.1)
+pred.gg <- pred.gg + geom_line(data = pred.mean, 
+                             mapping = aes(x = x, y = y, group = NULL), 
+                             colour = 'blue')
