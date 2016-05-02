@@ -9,7 +9,7 @@ b <- unique(occur$bins)
 b <- as.matrix(cbind(b - 2, b))
 isotope <- list()
 zac.cohort <- array(NA, dim = nrow(zac))
-for(ii in seq(max(occur$bins) / 2)) {
+for(ii in seq(nrow(b))) {
   isotope[[ii]] <- zac$o18[zac$age > b[ii, 1] & zac$age <= b[ii, 2]]
   zac.cohort[(zac$age > b[ii, 1] & zac$age <= b[ii, 2])] <- ii
 }
@@ -32,7 +32,7 @@ b <- unique(occur$bins)
 b <- as.matrix(cbind(b - 2, b))
 temp.time.mean <- list()
 temp.time.range <- list()
-for(ii in seq(max(occur$bins) / 2)) {
+for(ii in seq(nrow(b))) {
   temp.time.mean[[ii]] <- temp.est[cram.temp$Age > b[ii, 1] & 
                                    cram.temp$Age <= b[ii, 2]]
   temp.time.range[[ii]] <- temp.range[cram.temp$Age > b[ii, 1] & 

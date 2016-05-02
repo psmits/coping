@@ -141,7 +141,7 @@ model {
  
 
   inter_std ~ normal(0, 1);
-  intercept_mu ~ normal(-1, 2);
+  intercept_mu ~ normal(-2, 2);
   sigma ~ cauchy(0, 1);
 
   for(n in 1:N) {

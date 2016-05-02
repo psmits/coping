@@ -12,9 +12,11 @@ source('../R/mung.r')
 load('../data/scaled_super.rdata')
 load('../data/body_mass.rdata')
 
-dat <- read.csv('../data/mam-occs.csv', stringsAsFactors = FALSE)
 posture <- read.csv('../data/posture.csv', stringsAsFactors = FALSE) 
 # these specific assignments are based on Carano's papers on posture
+
+dat <- read.csv('../data/pbdb_data.csv', 
+                stringsAsFactors = FALSE, skip = 20)
 
 occur <- clean.occurrence(dat)
 ss <- split(occur, occur$bins)
@@ -25,15 +27,15 @@ na.tax <- na.tax[!(duplicated(na.tax$name.bi)), ]
 fx <- na.tax$name.bi %in% occur$name.bi[occur$comlife == 'ground dwelling']
 na.fx <- na.tax[fx, ]
 occur[match(na.fx$name.bi, occur$name.bi), 
-      c('order_name', 'family_name')] <- na.fx[, 1:2]
+      c('order', 'family')] <- na.fx[, 1:2]
 
 stance.group <- split(posture$taxon, posture$stance)
 for(ii in seq(length(stance.group))) {
-  mm <- occur$family_name %in% stance.group[[ii]]
+  mm <- occur$family %in% stance.group[[ii]]
   gd <- occur$comlife == 'ground dwelling'
   occur$comlife[mm & gd] <- names(stance.group)[ii]
 
-  mm <- occur$order_name %in% stance.group[[ii]]
+  mm <- occur$order %in% stance.group[[ii]]
   gd <- occur$comlife == 'ground dwelling'
   occur$comlife[mm & gd] <- names(stance.group)[ii] 
 }
@@ -43,6 +45,7 @@ occur <- occur[occur$comlife != 'ground dwelling', ]
 
 # shrink data to match all inputs
 #   this would be the opportunity for setting up an imputation step
+na.mass$name <- str_replace(na.mass[, 1], ' ', '_')
 occur <- occur[occur$name.bi %in% na.mass$name, ]
 occur$mass <- na.mass[match(occur$name.bi, na.mass$name), 2]
 
@@ -64,15 +67,22 @@ occur$mass <- na.mass[match(occur$name.bi, na.mass$name), 2]
 # process climate information
 source('../R/mung_clim.r')
 
+# save true bins
+occur$true.bin <- occur$bins
+# make easy bins
+occur$bins <- mapvalues(occur$bins, 
+                        from = unique(occur$bins), 
+                        to = seq(length(unique(occur$bins))))
+
 # !!! makes everything genus level !!!
 # need to make the things work
 occur <- occur[occur$bins != min(occur$bins), ]
 #by.tax <- split(occur, occur$name.bi)
-by.tax <- split(occur, occur$occurrence.genus_name)
+by.tax <- split(occur, occur$genus)
 
 sight <- matrix(0, nrow = length(by.tax), ncol = length(unique(occur$bins)))
 for(ii in seq(length(by.tax))) {
-  sight[ii, ((by.tax[[ii]]$bins / 2) - 1)] <- 1
+  sight[ii, (by.tax[[ii]]$bins) - 1] <- 1
 }
 
 
@@ -117,12 +127,17 @@ eo.mi <- c(50, 16)
 pa.eo <- c(66, 50)
 plants <- rbind(mi.pl, eo.mi, pa.eo)
 
-co.h <- unique(occur$bins)
+co.h <- unique(occur$true.bin)
 phase <- array(dim = T)
 for(ii in seq(T)){
   phase[ii] <- which(plants[, 1] >= co.h[ii] & plants[, 2] < co.h[ii])
 }
 P <- 3
+
+# fixed the reversed order
+sight <- sight[, rev(seq(ncol(sight)))]
+u <- apply(u, 2, rev)
+phase <- rev(phase)
 
 # dump it out
 stan_rdump(list = c('N', 'T', 'D', 'U', 'P',
