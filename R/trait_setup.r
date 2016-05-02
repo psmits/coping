@@ -15,6 +15,9 @@ load('../data/body_mass.rdata')
 posture <- read.csv('../data/posture.csv', stringsAsFactors = FALSE) 
 # these specific assignments are based on Carano's papers on posture
 
+dat <- read.csv('https://paleobiodb.org/data1.2/occs/list.csv?datainfo&rowcount&base_name=Mammalia&taxon_reso=species&interval=Maastrichtian,Gelasian&cc=NOA&show=class,genus,ecospace,strat,stratext,lith,acconly', stringsAsFactors = FALSE, skip = 20)
+
+
 dat <- read.csv('../data/pbdb_data.csv', 
                 stringsAsFactors = FALSE, skip = 20)
 
