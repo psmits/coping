@@ -77,8 +77,8 @@ occur$bins <- mapvalues(occur$bins,
 # !!! makes everything genus level !!!
 # need to make the things work
 occur <- occur[occur$bins != min(occur$bins), ]
-#by.tax <- split(occur, occur$name.bi)
-by.tax <- split(occur, occur$genus)
+by.tax <- split(occur, occur$name.bi)
+#by.tax <- split(occur, occur$genus)
 
 sight <- matrix(0, nrow = length(by.tax), ncol = length(unique(occur$bins)))
 for(ii in seq(length(by.tax))) {
