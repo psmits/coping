@@ -72,9 +72,7 @@ parameters {
   real intercept_mu;  // mean intercept
   real<lower=0> sigma;  // variance of varying-intercept
 
-  matrix[T, D] beta_std;
-  real beta_mu[D];
-  real<lower=0> beta_sigma[D];
+  vector[D] beta_mu;
 
   vector[T] p_norm; 
   real p_mu;
@@ -83,7 +81,6 @@ parameters {
 transformed parameters {
   vector<lower=0,upper=1>[T] p;  // sampling probability
   matrix[N, T] pred; 
-  matrix[T, D] beta;  // effect of indiv-level covariates
 
   // noncentered parameterization 
   for(t in 1:T) {
@@ -91,28 +88,18 @@ transformed parameters {
   }
 
   // noncentered parameterization with each beta_mu independent
-  for(d in 1:D) {
-    for(t in 1:T) {
-      beta[t, d] <- beta_mu[d] + beta_sigma[d] * beta_std[t, d];
-    }
-  }
-
   // assemble predictor w/ intercept + effects of indiv-level covariates
   for(t in 1:T) {
     for(n in 1:N) {
       // non-centered parameterization following Betacourt and Girolami
       pred[n, t] <- inv_logit(intercept_mu + sigma*inter_std[t] + 
-          (beta[t, ] * x[n]));
+          (beta_mu' * x[n]));
     }
   }
 }
 model {
   p_mu ~ normal(0, 1);
   p_sigma ~ cauchy(0, 1);
-
-  // change to multivariate normal prior?
-  to_vector(beta_std) ~ normal(0, 1);
-  beta_sigma ~ cauchy(0, 1);
 
   // diet
   //  carn (intercept)
@@ -148,19 +135,3 @@ model {
     sight[n] ~ state_space(pred[n, ], p);
   }
 }
-//generated quantities {
-//  matrix[T, N] z_tilde;
-//  matrix[T, N] y_tilde;
-//  real log_lik[N];
-//
-//  for(n in 1:N) {
-//    z_tilde[1, n] <- bernoulli_rng(pred[n, 1]);
-//    y_tilde[1, n] <- bernoulli_rng(z_tilde[1, n] * p[1]);
-//    for(t in 2:T) {
-//      z_tilde[t, n] <- bernoulli_rng(z_tilde[t - 1, n] * pred[n, t] +
-//          ((prod(1 - z_tilde[1:(t - 1), n])) * pred[n, t]));
-//      y_tilde[t, n] <- bernoulli_rng(z_tilde[t, n] * p[t]);
-//    }
-//    log_lik[n] <- state_space_log(sight[n], pred[n, ], p);
-//  }
-//}
