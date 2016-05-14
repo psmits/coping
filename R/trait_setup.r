@@ -142,6 +142,12 @@ sight <- sight[, rev(seq(ncol(sight)))]
 u <- apply(u, 2, rev)
 phase <- rev(phase)
 
+# just do the range through for it
+for(ii in row(sight)) {
+  mm <- which(sight[ii, ] == 1)
+  sight[ii, seq(from = min(mm), to = max(mm))] <- 1
+}
+
 # dump it out
 stan_rdump(list = c('N', 'T', 'D', 'U', 'P',
                     'sight', 'x', 'u', 'phase'),

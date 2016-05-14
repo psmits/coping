@@ -1,60 +1,3 @@
-functions {
-  int first_capture(int[] y_i) {
-    for (k in 1:size(y_i))
-      if (y_i[k])
-        return k;
-    return 0;
-  }
-  int last_capture(int[] y_i) {
-    for (k_rev in 0:(size(y_i) - 1)) {
-      int k;
-      k <- size(y_i) - k_rev;
-      if (y_i[k])
-        return k;
-    }
-    return 0;
-  }
-  real state_space_log(int[] y, row_vector pred, vector p) {
-    int ft;
-    int lt;
-    int S;
-    vector[first_capture(y) * (size(y) - last_capture(y) + 1)] lp;
-    int i;
-
-    ft <- first_capture(y);
-    lt <- last_capture(y);
-    S <- size(y);
-    i <- 1;
-
-    for(t_first_alive in 1:ft) {
-      for (t_last_alive in lt:S) {
-        real sl;
-        int z[S];
-
-        for(l in 1:S) {
-          z[l] <- 0;
-        }
-        for(a in t_first_alive:t_last_alive) {
-          z[a] <- 1;
-        }
-
-        # TODO make break point model w/ latent discrete
-        sl <- bernoulli_log(z[1], pred[1]);
-        for(j in 2:S) {
-          sl <- sl + bernoulli_log(z[j], (z[j - 1] * pred[j]) + 
-              ((1 - z[j - 1]) * (pred[j])));
-        }
-        for(k in 1:S) {
-          sl <- sl + bernoulli_log(y[k], z[k] * p[k]);
-        }
-
-        lp[i] <- sl;
-        i <- i + 1;
-      }
-    }
-    return log_sum_exp(lp);
-  }
-}
 data {
   int N;  // sample size of taxa
   int T;  // sample size of temporal units
@@ -72,53 +15,100 @@ parameters {
   vector[T] intercept;  // intercept varies by what point in time
   real intercept_mu;  // mean intercept
   real<lower=0> sigma;  // variance of varying-intercept
+  
+  matrix[T, D] beta_std;
+  real beta_mu[D];
+  real<lower=0> beta_sigma[D];
+  
+  matrix[T, U] alpha_std;  // effect of group-level covariates
+  real alpha_mu[U];
+  real<lower=0> alpha_sigma[U];
 
-  vector[T] p_norm; 
-  real p_mu;
-  real<lower=0> p_sigma;
+  vector[P] eff_phase;  // effect of plant-phase (mean 0)
+  real<lower=0> scale_phase;  // variance in plant-phase effect
 }
 transformed parameters {
-  vector<lower=0,upper=1>[T] p;  // sampling probability
   matrix[N, T] pred; 
-
-  for(t in 1:T) {
-    p[t] <- inv_logit(p_mu + p_sigma * p_norm[t]);
+  matrix[T, D] beta;  // effect of indiv-level covariates
+  matrix[T, U] alpha; 
+  
+  // noncentered parameterization with each beta_mu independent
+  for(d in 1:D) {
+    for(t in 1:T) {
+      beta[t, d] <- beta_mu[d] + beta_sigma[d] * beta_std[t, d];
+    }
+  }
+  for(d in 1:U) {
+    for(t in 1:T) {
+      alpha[t, d] <- alpha_mu[d] + alpha_sigma[d] * alpha_std[t, d];
+    }
   }
   
   // assemble predictor w/ intercept + effects of indiv-level covariates
   for(t in 1:T) {
     for(n in 1:N) {
-      pred[n, t] <- inv_logit(intercept_mu + sigma * intercept[t]);
+      // non-centered parameterization following Betacourt and Girolami
+      pred[n, t] <- inv_logit(intercept[t] + (beta[t, ] * x[n]'));
     }
   }
 }
 model {
-  p_norm ~ normal(0, 1);
-  p_mu ~ normal(0, 1);
-  p_sigma ~ cauchy(0, 1);
-  
-  intercept ~ normal(0, 1);
-  intercept_mu ~ normal(0, 5);
+  intercept_mu ~ normal(-2, 2);
   sigma ~ cauchy(0, 1);
+  
+  for(t in 1:T) {  // intercept is unique for each time unit
+    intercept[t] ~ normal(intercept_mu + eff_phase[phase[t]] + 
+        alpha[t, ] * u[t]', sigma);
+  }
+  
+  // change to multivariate normal prior?
+  to_vector(beta_std) ~ normal(0, 1);
+  beta_sigma ~ cauchy(0, 1);
+
+  // diet
+  //  carn (intercept)
+  //  herb
+  beta_mu[1] ~ normal(0.5, 1);
+  //  inse
+  beta_mu[2] ~ normal(0.5, 1);
+  //  omni
+  beta_mu[3] ~ normal(0.5, 1);
+  
+  // loco
+  //  arboreal (intercept)
+  //  digi
+  beta_mu[4] ~ normal(0, 1);
+  //  foss
+  beta_mu[5] ~ normal(-0.5, 1);
+  //  plan
+  beta_mu[6] ~ normal(0, 1);
+  //  scan
+  beta_mu[7] ~ normal(0.5, 1);
+  //  ungu
+  beta_mu[8] ~ normal(0, 1);
+
+  //mass
+  beta_mu[9] ~ normal(0, 1);
+
+
+  // change to multivariate normal prior?
+  to_vector(alpha_std) ~ normal(0, 1);
+  alpha_mu ~ normal(0, 1);
+  alpha_sigma ~ cauchy(0, 1);
+
+  eff_phase ~ normal(0, scale_phase);
+  scale_phase ~ cauchy(0, 1);
 
   for(n in 1:N) {
-    sight[n, ] ~ state_space(pred[n, ], p);
+    sight[n, ] ~ bernoulli(pred[n, ]);
   }
 }
-//generated quantities {
-// matrix[T, N] z_tilde;
-// matrix[T, N] y_tilde;
-// real log_lik[N];
-//
-// for(n in 1:N) {
-//   z_tilde[1, n] <- bernoulli_rng(pred[n, 1]);
-//   y_tilde[1, n] <- bernoulli_rng(z_tilde[1, n] * p[1]);
-//   for(t in 2:T) {
-//     z_tilde[t, n] <- bernoulli_rng(z_tilde[t - 1, n] * pred[n, t] +  // stay
-//         ((prod(1 - z_tilde[1:(t - 1), n])) * pred[n, t])); // enter
-//     // enter + stay is just occurrence
-//     y_tilde[t, n] <- bernoulli_rng(z_tilde[t, n] * p[t]);
-//   }
-//   log_lik[n] <- state_space_log(sight[n], pred[n, ], p);
-// }
-//}
+generated quantities {
+  int sight_tilde[N, T];  // observed presence
+  
+  for(n in 1:N) {
+    for(t in 1:T) {
+      sight_tilde[n, t] <- bernoulli_rng(pred[n, t]);
+    }
+  }
+}
