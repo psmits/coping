@@ -148,6 +148,11 @@ for(ii in row(sight)) {
   sight[ii, seq(from = min(mm), to = max(mm))] <- 1
 }
 
+x <- cbind(1, x)
+D <- D + 1
+u <- cbind(1, u)
+U <- U + 1
+
 # dump it out
 stan_rdump(list = c('N', 'T', 'D', 'U', 'P',
                     'sight', 'x', 'u', 'phase'),

@@ -4,9 +4,6 @@
 #'
 #' @param ntax int number of taxa
 #' @param ntime int number of time slices
-#' @param p.mu scalar mean of sampling
-#' @param p.sigma scalar st dev of sampling
-#' @param p.eff vector time effect of sampling 
 #' @param inter.mu scalar mean of presence
 #' @param inter.sigma scalar st dev of presence
 #' @param inter.eff vector time effect of presence
