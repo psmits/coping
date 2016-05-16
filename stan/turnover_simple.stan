@@ -16,6 +16,8 @@ parameters {
   vector<lower=0>[D] tau;
   matrix[U, D] gamma;
   vector[D] beta[T];
+  // vector[P] eff_phase[D];
+  // vector<lower=0>[D] phase_sigma;
 }
 transformed parameters {
   matrix[N, T] pred;
@@ -32,7 +34,6 @@ model {
   
   {
     matrix[D, D] Sigma_beta;
-    row_vector[U] u_gamma[T];
     Sigma_beta <- quad_form_diag(Omega, tau);
     
     for(t in 1:T) {

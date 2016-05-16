@@ -17,10 +17,6 @@ posture <- read.csv('../data/posture.csv', stringsAsFactors = FALSE)
 
 dat <- read.csv('https://paleobiodb.org/data1.2/occs/list.csv?datainfo&rowcount&base_name=Mammalia&taxon_reso=species&interval=Maastrichtian,Gelasian&cc=NOA&show=class,genus,ecospace,strat,stratext,lith,acconly', stringsAsFactors = FALSE, skip = 20)
 
-
-dat <- read.csv('../data/pbdb_data.csv', 
-                stringsAsFactors = FALSE, skip = 20)
-
 occur <- clean.occurrence(dat)
 ss <- split(occur, occur$bins)
 occur <- Reduce(rbind, llply(ss, function(x) x[duplicated(x$name.bi), ]))
@@ -120,7 +116,6 @@ cohort <- mapvalues(cohort, from = unique(cohort), to = seq(T))
 # WARNING to include need to remove oldest bin!!!!
 u <- cbind(temp.time.mean, temp.time.range)
 u <- u[-(nrow(u)), ]
-U <- ncol(u)
 # old to young
 
 
@@ -140,7 +135,10 @@ P <- 3
 # fixed the reversed order
 sight <- sight[, rev(seq(ncol(sight)))]
 u <- apply(u, 2, rev)
-phase <- rev(phase)
+phase <- factor(rev(phase))
+phase <- model.matrix( ~ phase - 1)[, -1]
+u <- cbind(u, phase)
+U <- ncol(u)
 
 # just do the range through for it
 for(ii in row(sight)) {
