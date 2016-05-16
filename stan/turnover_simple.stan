@@ -3,21 +3,16 @@ data {
   int T;  // sample size of temporal units
   int D;  // number of indiv-level predictors
   int U;  // number of group-level predictors
-  int P;  // number of floral phases
 
   int sight[N, T];  // observed presence
   matrix[N, D] x;  // matrix of indiv-level covariates
   row_vector[U] u[T];  // matrix of group-level covariates
-
-  int phase[T];  // plant phase
 }
 parameters {
   corr_matrix[D] Omega;
   vector<lower=0>[D] tau;
   matrix[U, D] gamma;
   vector[D] beta[T];
-  // vector[P] eff_phase[D];
-  // vector<lower=0>[D] phase_sigma;
 }
 transformed parameters {
   matrix[N, T] pred;
@@ -44,7 +39,7 @@ model {
   to_vector(gamma) ~ normal(0, 5);
   //gamma[, 1:D] can get more coherent priors
   
-
+  
   for(n in 1:N) {
     sight[n, ] ~ bernoulli(pred[n, ]);
   }

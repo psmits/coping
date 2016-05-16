@@ -152,6 +152,6 @@ u <- cbind(1, u)
 U <- U + 1
 
 # dump it out
-stan_rdump(list = c('N', 'T', 'D', 'U', 'P',
-                    'sight', 'x', 'u', 'phase'),
+stan_rdump(list = c('N', 'T', 'D', 'U', 
+                    'sight', 'x', 'u'),
            file = '../data/data_dump/trait_info.data.R')
