@@ -15,7 +15,7 @@ parameters {
   vector[D] beta[T];
 
   real<lower=0> lambda[U];
-  vector<lower=0>[D] phi[U];
+  vector<lower=0>[U] phi[D];
 }
 transformed parameters {
   matrix[N, T] pred;
@@ -39,23 +39,42 @@ model {
     }
   }
 
-  for(j in 1:U) {
-    gamma[j, ]  ~ normal(0, lambda[j] * phi[j]);
-    phi[j] ~ cauchy(0, 1);
-    lambda[j] ~ cauchy(0, 1);
+  for(k in 1:U) {
+    for(j in 1:D) {
+      gamma[k, j]  ~ normal(0, lambda[k] * phi[j][k]);
+      phi[j][k] ~ cauchy(0, 1);
+    }
   }
+  lambda ~ cauchy(0, 1);
 
+  {
+    int prod_state;
 
-  for(n in 1:N) {
-    sight[n, ] ~ bernoulli(pred[n, ]);
-  }
-}
-generated quantities {
-  int sight_tilde[N, T];  // observed presence
-
-  for(n in 1:N) {
-    for(t in 1:T) {
-      sight_tilde[n, t] <- bernoulli_rng(pred[n, t]);
+    for(n in 1:N) {
+      prod_state <- (1 - sight[n, 1]);
+      sight[n, 1] ~ bernoulli(pred[n, 1]);
+      for(t in 2:T) {
+        prod_state <- prod_state * (1 - sight[n, t]);
+        sight[n, t] ~ bernoulli(sight[n, t - 1] * pred[n, t] + 
+            prod_state * pred[n, t]);
+      }
     }
   }
 }
+//generated quantities {
+//  int sight_tilde[N, T];  // observed presence
+//
+//  {
+//    int prod_state;
+//
+//    for(n in 1:N) {
+//      prod_state <- (1 - sight[n, 1]);
+//      sight_tilde[n, 1] <- sight[n, 1];
+//      for(t in 2:T) {
+//        prod_state <- prod_state * (1 - sight_tilde[n, t]);
+//        sight_tilde[n, t] <- bernoulli_rng(sight_tilde[n, t - 1] * pred[n, t] + 
+//            prod_state * pred[n, t]);
+//      }
+//    }
+//  }
+//}

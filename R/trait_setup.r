@@ -141,6 +141,7 @@ u <- cbind(u, phase)
 U <- ncol(u)
 
 # just do the range through for it
+old.sight <- sight
 for(ii in row(sight)) {
   mm <- which(sight[ii, ] == 1)
   sight[ii, seq(from = min(mm), to = max(mm))] <- 1
@@ -155,3 +156,7 @@ U <- U + 1
 stan_rdump(list = c('N', 'T', 'D', 'U', 
                     'sight', 'x', 'u'),
            file = '../data/data_dump/trait_info.data.R')
+sight <- old.sight
+stan_rdump(list = c('N', 'T', 'D', 'U', 
+                    'sight', 'x', 'u'),
+           file = '../data/data_dump/trait_w_gaps.data.R')

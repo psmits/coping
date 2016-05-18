@@ -59,29 +59,19 @@ data {
   int T;  // sample size of temporal units
   int D;  // number of indiv-level predictors
   int U;  // number of group-level predictors
-  int P;  // number of floral phases
 
   int sight[N, T];  // observed presence
-  vector[D] x[N];  // matrix of indiv-level covariates
-  vector[U] u[T];  // matrix of group-level covariates
-
-  int phase[T];  // plant phase
+  matrix[N, D] x;  // matrix of indiv-level covariates
+  row_vector[U] u[T];  // matrix of group-level covariates
 }
 parameters {
-  vector[T] intercept;  // intercept varies by what point in time
-  real intercept_mu;  // mean intercept
-  real<lower=0> sigma;  // variance of varying-intercept
-
-  matrix[T, D] beta_std;  // effect of indiv-level covariates
-  real beta_mu[D];
-  real<lower=0> beta_sigma[D];
-
-  matrix[T, U] alpha_std;  // effect of group-level covariates
-  real alpha_mu[U];
-  real<lower=0> alpha_sigma[U];
-
-  vector[P] eff_phase;  // effect of plant-phase (mean 0)
-  real<lower=0> scale_phase;  // variance in plant-phase effect
+  corr_matrix[D] Omega;
+  vector<lower=0>[D] tau;
+  matrix[U, D] gamma;
+  vector[D] beta[T];
+  
+  real<lower=0> lambda[U];
+  vector<lower=0>[U] phi[D];
 
   vector[T] p_norm; 
   real p_mu;
@@ -90,75 +80,64 @@ parameters {
 transformed parameters {
   vector<lower=0,upper=1>[T] p;  // sampling probability
   matrix[N, T] pred; 
-  matrix[T, D] beta; 
-  matrix[T, U] alpha; 
 
   for(t in 1:T) {
     p[t] <- inv_logit(p_mu + p_sigma * p_norm[t]);
   }
-
-  // noncentered parameterization with each beta_mu independent
-  for(d in 1:D) {
-    for(t in 1:T) {
-      beta[t, d] <- beta_mu[d] + beta_sigma[d] * beta_std[t, d];
-    }
-  }
-  for(d in 1:U) {
-    for(t in 1:T) {
-      alpha[t, d] <- alpha_mu[d] + alpha_sigma[d] * alpha_std[t, d];
-    }
-  }
-
+  
   // assemble predictor w/ intercept + effects of indiv-level covariates
   for(t in 1:T) {
     for(n in 1:N) {
       // non-centered parameterization following Betacourt and Girolami
-      pred[n, t] <- inv_logit(intercept[t] + (beta[t, ] * x[n]));
+      pred[n, t] <- inv_logit(x[n, ] * beta[t, ]);
     }
   }
 }
 model {
-  p_mu ~ normal(0, 1);
-  p_sigma ~ cauchy(0, 1);
+  tau ~ cauchy(0, 1);
+  Omega ~ lkj_corr(2);
 
-  // change to multivariate normal prior?
-  to_vector(beta_std) ~ normal(0, 1);
-  beta_mu ~ normal(0, 1);
-  beta_sigma ~ cauchy(0, 1);
+  {
+    matrix[D, D] Sigma_beta;
+    Sigma_beta <- quad_form_diag(Omega, tau);
 
-  // change to multivariate normal prior?
-  to_vector(alpha_std) ~ normal(0, 1);
-  alpha_mu ~ normal(0, 1);
-  alpha_sigma ~ cauchy(0, 1);
-
-  for(t in 1:T) {  // intercept is unique for each time unit
-    intercept[t] ~ normal(intercept_mu + eff_phase[phase[t]] + 
-        alpha[t, ] * u[t], sigma);
+    for(t in 1:T) {
+      beta[t] ~ multi_normal(u[t] * gamma, Sigma_beta);
+    }
   }
 
-  intercept_mu ~ normal(0, 5);
-  sigma ~ cauchy(0, 1);
-  eff_phase ~ normal(0, scale_phase);
-  scale_phase ~ cauchy(0, 1);
+  for(k in 1:U) {
+    for(j in 1:D) {
+      gamma[k, j]  ~ normal(0, lambda[k] * phi[j][k]);
+      phi[j][k] ~ cauchy(0, 1);
+    }
+  }
+
+  p_mu ~ normal(0, 1);
+  p_sigma ~ cauchy(0, 1);
 
 
   for(n in 1:N) {
     sight[n] ~ state_space(pred[n, ], p);
   }
 }
-generated quantities {
-  matrix[T, N] z_tilde;
-  matrix[T, N] y_tilde;
-  real log_lik[N];
-
-  for(n in 1:N) {
-    z_tilde[1, n] <- bernoulli_rng(pred[n, 1]);
-    y_tilde[1, n] <- bernoulli_rng(z_tilde[1, n] * p[1]);
-    for(t in 2:T) {
-      z_tilde[t, n] <- bernoulli_rng(z_tilde[t - 1, n] * pred[n, t] +
-          ((prod(1 - z_tilde[1:(t - 1), n])) * pred[n, t]));
-      y_tilde[t, n] <- bernoulli_rng(z_tilde[t, n] * p[t]);
-    }
-    log_lik[n] <- state_space_log(sight[n], pred[n, ], p);
-  }
-}
+//generated quantities {
+//  int true_tilde[N, T]
+//  int sight_tilde[N, T];  // observed presence
+//
+//  {
+//    int prod_state;
+//
+//    for(n in 1:N) {
+//      true_tilde[n, 1] <- bernoulli_rng(pred[n, 1]);
+//      sight_tilde[n, 1] <- bernoulli_rng(p[1] * true_tilde[n, 1]);
+//      prod_state <- (1 - true_tide[n, 1]);
+//      for(t in 2:T) {
+//        prod_state <- prod_state * (1 - true_tilde[n, t]);
+//        true_tilde[n, t] <- bernoulli_rng(true_tilde[n, t - 1] * pred[n, t] + 
+//            prod_state * pred[n, t]);
+//        sight_tilde[n, t] <- bernoulli_rng(p[t] * true_tilde[n, t - 1]);
+//      }
+//    }
+//  }
+//}

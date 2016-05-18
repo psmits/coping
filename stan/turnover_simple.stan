@@ -32,24 +32,40 @@ model {
     Sigma_beta <- quad_form_diag(Omega, tau);
     
     for(t in 1:T) {
-      beta[t] ~ multi_normal(u[t] * gamma, quad_form_diag(Omega, tau));
+      beta[t] ~ multi_normal(u[t] * gamma, Sigma_beta);
     }
   }
 
   to_vector(gamma) ~ normal(0, 5);
-  //gamma[, 1:D] can get more coherent priors
   
-  
-  for(n in 1:N) {
-    sight[n, ] ~ bernoulli(pred[n, ]);
-  }
-}
-generated quantities {
-  int sight_tilde[N, T];  // observed presence
-  
-  for(n in 1:N) {
-    for(t in 1:T) {
-      sight_tilde[n, t] <- bernoulli_rng(pred[n, t]);
+  {
+    int prod_state;
+
+    for(n in 1:N) {
+      prod_state <- (1 - sight[n, 1]);
+      sight[n, 1] ~ bernoulli(pred[n, 1]);
+      for(t in 2:T) {
+        prod_state <- prod_state * (1 - sight[n, t]);
+        sight[n, t] ~ bernoulli(sight[n, t - 1] * pred[n, t] + 
+            prod_state * pred[n, t]);
+      }
     }
   }
 }
+//generated quantities {
+//  int sight_tilde[N, T];  // observed presence
+//
+//  {
+//    int prod_state;
+//
+//    for(n in 1:N) {
+//      prod_state <- (1 - sight[n, 1]);
+//      sight_tilde[n, 1] <- sight[n, 1];
+//      for(t in 2:T) {
+//        prod_state <- prod_state * (1 - sight_tilde[n, t]);
+//        sight_tilde[n, t] <- bernoulli_rng(sight_tilde[n, t - 1] * pred[n, t] + 
+//            prod_state * pred[n, t]);
+//      }
+//    }
+//  }
+//}

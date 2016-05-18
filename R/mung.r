@@ -51,7 +51,7 @@ clean.occurrence <- function(dat) {
   dat$comlife[dat$life_habit %in% dig] <- 'fossorial'
 
   # assign every occurence to a 2 My bin
-  bins <- seq(from = 0, to = 66, by = 1)
+  bins <- seq(from = 0, to = 66, by = 2)
   bins <- cbind(top = bins[-1], bot = bins[-length(bins)])
   dat$bins <- rep(NA, nrow(dat))
   for (ii in seq(nrow(bins))) {
