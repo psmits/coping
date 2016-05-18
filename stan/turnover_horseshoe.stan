@@ -54,7 +54,7 @@ model {
       prod_state <- (1 - sight[n, 1]);
       sight[n, 1] ~ bernoulli(pred[n, 1]);
       for(t in 2:T) {
-        prod_state <- prod_state * (1 - sight[n, t]);
+        prod_state <- prod_state * (1 - sight[n, t - 1]);
         sight[n, t] ~ bernoulli(sight[n, t - 1] * pred[n, t] + 
             prod_state * pred[n, t]);
       }
@@ -71,7 +71,7 @@ model {
 //      prod_state <- (1 - sight[n, 1]);
 //      sight_tilde[n, 1] <- sight[n, 1];
 //      for(t in 2:T) {
-//        prod_state <- prod_state * (1 - sight_tilde[n, t]);
+//        prod_state <- prod_state * (1 - sight_tilde[n, t - 1]);
 //        sight_tilde[n, t] <- bernoulli_rng(sight_tilde[n, t - 1] * pred[n, t] + 
 //            prod_state * pred[n, t]);
 //      }
