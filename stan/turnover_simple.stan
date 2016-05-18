@@ -38,9 +38,6 @@ model {
 
   to_vector(gamma) ~ normal(0, 5);
   
-  //for(n in 1:N) {
-  //  sight[n, ] ~ bernoulli(pred[n, ]);
-  //}
   {
     int prod_state;
 

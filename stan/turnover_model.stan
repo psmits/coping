@@ -20,6 +20,7 @@ functions {
     int S;
     vector[first_capture(y) * (size(y) - last_capture(y) + 1)] lp;
     int i;
+    int prod_term;
 
     ft <- first_capture(y);
     lt <- last_capture(y);
@@ -39,9 +40,11 @@ functions {
         }
 
         sl <- bernoulli_log(z[1], pred[1]);
+        prod_term <- 1 - z[1];
         for(j in 2:S) {
+          prod_term <- prod_term * (1 - z[j - 1]);
           sl <- sl + bernoulli_log(z[j], (z[j - 1] * pred[j]) + 
-              ((1 - z[j - 1]) * pred[j]));
+              prod_term * pred[j]);
         }
         for(k in 1:S) {
           sl <- sl + bernoulli_log(y[k], z[k] * p[k]);
