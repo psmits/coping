@@ -19,40 +19,71 @@
 % species pool concept
 %   the set of species which can form communities in a region
 %     local diversity is subset of species pool
-%     UNTB and other theories are all about explaining this
 %   what affects regional species pool composition?
 %     species traits
 %     environmental characteristics
-%   how do the ``assembly rules'' of a regional species pool change over time
-%     effects of species traits and environmental proxies on species occurrence rates 
-%       i'll have odds-ratios! Foote (and others) will love those.
+% goal 
+%   understand how species traits and environmental factors effect species demography
+% occurrence cube -- the basis hierarchical model
+%   fundamental unit of ecology is the occurrence -- Gotelli
+%   species, site, time
+%   fourth-corner type problem
+%     species, sites
+%     differences between local species pools
+%   this analysis
+%     species, time
+%     time gives info on ``true'' vs observed occurrence
+%     differences in regional species pool through time
+%     not modelling between site differences
+% issues of defining hierarchy
+%   effect of environmental context on occurrence as mediated by traits
+%   effect of traits on occurrence as mediated by environmental context
+%   these are different questions
+%     the former gets asked more --> assembly
+%     i'm working with the later --> demography
+%   species occurrence i at time t --> is the unit of analysis
+%     species is the individual-level
+%     site is the first group-level
+%     time is the second group-level
+%     seems logical to me
+%   (the combination of 4th corner and my model does exist) 
+%     (i think it works better in my framework)
+%     (species occurrence i at sight j at time t)
+%   does this relate to the row to column ratio of the datasets?
+%     i have lots of species, few time points
+%       occurrence matrix is sparse
+%       species have durations
 
-% fourth-corner type problem
-%   combines ideas from 
-%     species-distribution models (effect of environment on presence) 
-%     community assembly via trait selection models (e.g. shipley's maxent)
-%   only three corners (no individual X group covariates)
-%   presence_{i,t} | individual-level_{i,t}, group-level_{t} observation_{t}
-%   group-level covariates included as part of multi-level model
-%   currently covariates allowed to vary by t
-%     instead my focus on individual over time and group over time
 
+% system
+%   Cenozoic mammals of NA
+%   lots of things to think about
+%     what specific hypotheses are of interest? 
+%     why those ones?
 % after \citep{Smits2015}
 %   decrease in extinction risk over time
 %     notice the pattern at the paleogene-neogene boundary
-%   higher extinction risk in arboreal taxa
-%     strong effect
-%     what is variation in effect? paleogene vs neogene
-%       is the transition/neogene effect so strong to appear constant?
-%     driven by the environmental change?
+%   higher extinction risk in arboreal taxa; 2 possible situations
+%     this effect is constant for all time
+%     Paleogene-Neogene transition
+%       neutral effect of arboreality during Paleogene
+%       strong selection against arboreality during Neogene
+%       Neogene effect is stronger than Paleogene effect
+%       means that overall mean effect is closer to Neogene
+%   former implies no appreciable demographic differences over Cenozoic
+%   latter implies a difference in demography between Paleogene and Neogene
+% events of interest
+%   faunal shift at Paleogene-Neogene boundary
+%     Oligo-Miocene boundary (Chattian--Aquitanian)
+%     no known climatic events
+%     kind of modern -- mostly modern
+%     (mulitple european events)
+%   rise of grasses
+%     janis
+%     stromberg
+%     (fortelius and europe)
+%   other climate events
 
-% faunal shift at Paleogene-Neogene boundary
-%   Oligo-Miocene boundary (Chattian--Aquitanian)
-%   no known climatic events
-%   kind of modern -- mostly modern
-% Vallesian crisis would be a European analog
-% break-point model is the eventual goal
-%   though i have all effects varying with every temporal unit
 
 % analysis of mammal genus fossil record for north america
 %   time is discrete as 2-My bins
@@ -70,13 +101,25 @@
 
 % group-level covariates
 %   intercept
-%   mean of isotope at time t
-%     from rescale of isotope
-%   interquartile range of isotope at time t
-%     from rescale of isotope
 %   mean of temperatue estimate at time t
 %   interquartile range of temperatue estimate at time t
 %   plant community phase following Graham
 
+% compare model assuming perfect sampling to model allowing for imperfect sampling
+% imperfect sampling
+%   two-state, discrete time hidden markov model with absorbing state
+%     observation model for Royle and Dorazio
+%     used a lot in paleobiology
+%       Liow
+%   a continuous-time analogue would be PyRate
+%     strong assumptions about probability of observing over species duration
+% issues surrounding model complexity
+%   including covariates adds a lot of complexity
+%   only doing approximate Bayesian inference (ADVI)
+%   see methods section for longer discussion
+
+% goals of this analysis
+%   questions being addressed
+%   how these questions are answered
 
 \end{document}

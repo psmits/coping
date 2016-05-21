@@ -12,18 +12,15 @@ source('../R/multiclass_roc.r')
 source('../R/read_one_stan.r')
 source('../R/sim_from_model.r')
 source('../data/data_dump/trait_info.data.R')
+sight.implied <- sight
+source('../data/data_dump/trait_w_gaps.data.R')
+sight.obs <- sight
 #
-#theme_set(theme_bw())
-cbp <- c('#E69F00', '#56B4E9', '#009E73', '#F0E442', 
-         '#0072B2', '#D55E00', '#CC79A7')
-theme_update(axis.text = element_text(size = 15),
-             axis.title = element_text(size = 20),
-             legend.text = element_text(size = 17),
-             legend.title = element_text(size = 20),
-             legend.key.size = unit(1, 'cm'),
-             strip.text = element_text(size = 20))
 nsim <- 1000
 
+#post <- list.files('../data/mcmc_out', pattern = '[0-9]', full.names = TRUE)
+#post <- post[2:4]
+#fit <- read_stan_csv(post)
 
 # bring in the advi results
 post <- list.files('../data/mcmc_out', pattern = 'advi',
@@ -31,6 +28,8 @@ post <- list.files('../data/mcmc_out', pattern = 'advi',
 
 # horseshoe priors
 fit <- read_one_stan_csv(post[1])
+# need to get gammas and betas
+# also want Omega
 
 preds <- fit[which(str_detect(names(fit), 'pred*'))]
 pp <- alply(preds, 1, function(x) matrix(x, nrow = N, ncol = T))

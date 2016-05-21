@@ -35,7 +35,7 @@ model {
     Sigma_beta <- quad_form_diag(Omega, tau);
     
     for(t in 1:T) {
-      beta[t] ~ multi_normal(u[t] * gamma, quad_form_diag(Omega, tau));
+      beta[t] ~ multi_normal(u[t] * gamma, Sigma_beta);
     }
   }
 

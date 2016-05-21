@@ -23,6 +23,10 @@ Taxon occurrence information was downloaded from the Paleobiology Database on Ma
 
 Life habit and dietary categories of all occurrences were adjusted following TABLE. 
 
+Life habit is greatly expanded compared to previous studies (\citep{Smits2015}).
+
+Instead of a single ``ground dwelling'' category, species initially classified as ``ground dwelling'' were then further divided by foot posture following \citet{Carrano1997}. Otherwise, ground dwelling is overwhelming and uninterestingly, demographically. The classification by footposture gives more precise information about the structure of the regional species pool wrt environmental context and time.
+
 Species mass data was sourced from the Paleobiology Database, SMITH, TOMIYA, ETC., ETC.
 % mass information is an amalgam of
 %   PBDB mass value
@@ -32,7 +36,8 @@ Species mass data was sourced from the Paleobiology Database, SMITH, TOMIYA, ETC
 
 
 %\subsection*{Supertree inference}
-% genus level phylogeny
+% species level phylogeny
+%   also folding in genus level trees by just choosing a random species in that genus
 %   Halliday tree
 %   Tomiya tree
 %   Raia et al tree
@@ -41,17 +46,136 @@ Species mass data was sourced from the Paleobiology Database, SMITH, TOMIYA, ETC
 %     PBDB
 %     Janis books
 %     Encylopedia of Life via taxize
+% just use MRP
+% this is an improvement on \citet{Smits2015}
+
+
+% move this introduction??? discussion???
+% why consider phylogeny?
+%   may or may not be an issue in community ecology/assembly/whatever the fuck
+%     that's whatever
+%   but i'm doing stuff over time
+%     so we actually progress along the tree
+%     much better change of phylogeny actually mattering
+%       clade replacement in NA (carnivores, herbivores, etc)
+%   so i'm just thinking of it as how it affects occurrence
+%     GLMM approach is super effective for this purpose
+%   note that i'm not actually modeling the diversification process
+%     that's what a true J-S model (or PyRate) do
+%     i'm just accounting for phylogenetic autocorrelation in regional species occurrence
+% how am i time scaling the tree?
 
 
 \subsection*{Model specification}
 
-% hierarchical just means giving a hyperparameter it's own prior distribution
-% model follows a lot of Royle and Dozario
+% base model
+%   core is a 2-state markov model
+%   contrain 0 --> 1 and 1 --> 1 to be equal
+%     probability only for being present
+%   absorbing condition for extinction (1 --> 0)
+%   this follows Royle and Dorazio
+% occurrence probability
+%   hierarchical logistic regression
+
+\(y^{r}\) is a \(N \times D\) matrix of implied (range-through) occurrences.
+
+\(x\) is a \(N \times D\) matrix of individual-level covariates. \(x_{i}\) is a row vector.
+
+\(\beta\) is a \(D \times T\) matrix of regression coefficients. \(\beta_{t}\) is a column vector.
+
+\(u\) is a \(J \times T\) matrix of group-level covariates. \(u_{t}\) is a row vector.
+
+\(\gamma\) is a \(J \times D\) matrix of regression coefficients.
+
+\(\Sigma\) is a \(D \times D\) covariance matrix.
+
+\begin{equation}
+  \begin{aligned}
+    y^{r}_{i,t} &\sim \text{Bernoulli}(\theta_{i,t}) \\
+    \theta_{i, t} &= \text{logit}^{-1}(y^{r}_{i, t - 1} (x_{i} \beta_{t}) + \prod_{k = 1}^{k = t - 1}(1 - y^{r}_{i, t = k}) (x_{i} \beta_{t})) \\
+    \beta_{t} &\sim \text{MVN}(u_{t} \gamma, \Sigma). \\
+  \end{aligned}
+  \label{<++>}
+\end{equation}
+
+The product term ensures that loss is an absorbing state (i.e. no de-extinction).
 
 
-% two models
+Horseshoe priors for the regression coefficients with shared shrinkage for each group-level covariate. Remember, each group-level covariate affects each individual-level covariate (including the intercept terms).
+
+\(\lambda\) is a length \(J\) vector of scales.
+
+\(\phi\) is a \(J \times D\) matrix of scales.
+
+\begin{equation}
+  \gamma_{j, d} &\sim \mathcal{N}(0, \lambda_{j}\phi_{j, d}) \\
+  \lambda_{j} &\sim \text{C}^{+}(1) \\
+  \phi_{j, d} &\sim \text{C}^{+}(1) \\
+  \label{eq:horseshoe}
+\end{equation}
+
+
+Decompose \(\Sigma\) into a vector of scale terms \(\tau\) and a correlation matrix \(\Omega\): \(\Sigma = \text{diag}(\tau) \Omega \text{diag}(\tau)\). \(\tau\) is a length \(D\) vector of the between time point scale for each individual-level covariate and \(\Omega\) is a \(D \times D\) correlation matrix; both of these are given weakly informative priors. \(\tau\) is given a half-Cauchy prior and \(\Omega\) is given an LKJ prior following STAN MANUAL; these are defined
+\begin{equation}
+  \begin{aligned}
+    \tau &\sim \text{C}^{+}(1) \\
+    \Omega &\sim \text{LKJ}_{cor}(2). \\
+  \end{aligned}
+  \label{<++>}
+\end{equation}
+
+
+
+% model with imperfect observation
+%   make previous model the hidden layer in a 2-state hidden markov model
+%   follows Royle and Dozario
+\(y^{o}\) is a \(N \times T\) matrix of observed occurrences.
+
+\(z\) is a \(N \times T\) matrix of ``true'' occurrences.
+
+\(p\) is a length \(T\) vector of observation probabilities.
+
+\begin{equation}
+  \begin{aligned}
+    y^{o}_{i,t} &\sim \text{Bernoulli}(z_{i,t} p_{t}) \\
+    z_{i,t} &\sim \text{Bernoulli}(\theta_{i,t}) \\
+    \theta_{i, t} &= z_{i, t - 1} (x_{i} \beta_{t}) + \prod_{k = 1}^{k = t - 1}(1 - z_{i, t = k}) (x_{i} \beta_{t}) \\
+  \end{aligned}
+  \label{<++>}
+\end{equation}
+
+
+% two models; two fitting techniques
 %   one without sampling (implied presence model)
+%     range-through occurrence; assumes observation without error
+%       model effect of traits on occurrence; not diversification
+%       analogous to comparing samples from different sites
+%     full stochastic sampling Bayes
+%       NUTS HMC for posterior sampling
 %   one with sampling (latent discrete model)
+%     only observed presences; estimate probability of observing a true occurrence
+%     model is very complex --> individual level effects are difficult to estimate
+%     variational bayes (like EM algorithm)
+%       MAP estimate
+%       samples from posterior approximated as uncorrelated Gaussians?
+%       ADVI
+%       NEED TO READ MORE
+% why does this matter?
+%   issues surrounding the fossil record and sampling are real
+%     the w/ sampling model takes \uppercase{forever} to fully sample the posterior
+%     finding the mode is a lot faster
+%   ADVI is only approximate; ignores skewness, kertosis present in true posterior
+%     can't make confident inference for specific questions
+%     maybe estimate how different by using one model and both methods
+%   so, fit the w/o sampling model with both NUTS and ADVI
+%   compare parameter estimates for covariate effects
+%     HS nuts vs HS advi vs LD advi
+
+% appendix information
+%   writing the model in stan
+%   latent discrete parameter
+%     lots of help from stan-users
+
 
 \subsection*{Posterior inference and model adequacy}
 
@@ -63,20 +187,24 @@ Species mass data was sourced from the Paleobiology Database, SMITH, TOMIYA, ETC
 %     along with the sampling probability given those combinations as well
 %     see code for implementation? 
 %       it is kind of an annoying amount of math to write up
-%
+
 % full bayes for implied presence model
 %   not too hard
 % ADVI for latent discrete model
-%   large/complicated model -- too slow for full, stochastic sampling based bayesian inference
-%   variational inference simplifies the problem but does fit a full joint probability
-
+%   large/complicated model 
+%     too slow for full, stochastic sampling based bayesian inference
+%   variational inference simplifies the problem but does fit an actual joint probability
 
 % for posterior simulations, just start from t = 1 and roll forward
 %   one-ahead estimate/leave-one-out cross-validation 
-%   use AUC of measure of model performance
-% estimate ROC curve for posterior estimates from entire dataset
+% mean number of occurrences in the whole N x T block
+% edge effects -- exclude the first and last from analysis?
 
 
+% repository information
+%   all code for cleaning, modeling, plotting.
+%   all data for the trees and the unique PBDB download call
+% should I make it more readable/automatic?
 
 
 \end{document}

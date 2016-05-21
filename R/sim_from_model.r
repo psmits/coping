@@ -8,7 +8,7 @@
 #' @param p vector length T of preservation probabilities
 #' @return list of z (true), y (observed)
 #' @export
-model.simulation <- function(ntax, ntime, pred, p = NULL) {
+model.simulation <- function(ntax, ntime, pred, p = NULL, death = TRUE) {
   if(!is.null(p)) p <- as.numeric(p)
   
   y <- z <- matrix(NA, nrow = ntax, ncol = ntime)
@@ -19,8 +19,13 @@ model.simulation <- function(ntax, ntime, pred, p = NULL) {
     prod.term <- 1 - z[nn, 1]
     for(tt in 2:ntime) {
       prod.term <- prod.term * (1 - z[nn, tt - 1])
-      z[nn, tt] <- rbinom(1, 1, prob = z[nn, tt - 1] * pred[nn, tt] + 
-                          prod.term * pred[nn, tt])
+      if(death == TRUE) {
+        z[nn, tt] <- rbinom(1, 1, prob = z[nn, tt - 1] * pred[nn, tt] + 
+                            prod.term * pred[nn, tt])
+      } else {
+        z[nn, tt] <- rbinom(1, 1, prob = z[nn, tt - 1] * pred[nn, tt] + 
+                            (1 - z[nn, tt - 1]) * pred[nn, tt])
+      }
       if(!is.null(p)) y[nn, tt] <- rbinom(1, 1, prob = z[nn, tt] * p[tt])
     }
   }
