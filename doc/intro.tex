@@ -47,7 +47,7 @@
 %     time is the second group-level
 %     seems logical to me
 %   (the combination of 4th corner and my model does exist) 
-%     (i think it works better in my framework)
+%     (i think it makes more sense in my framework)
 %     (species occurrence i at sight j at time t)
 %   does this relate to the row to column ratio of the datasets?
 %     i have lots of species, few time points
@@ -76,13 +76,13 @@
 %   faunal shift at Paleogene-Neogene boundary
 %     Oligo-Miocene boundary (Chattian--Aquitanian)
 %     no known climatic events
-%     kind of modern -- mostly modern
+%     from kind of modern to mostly modern species pool
 %     (mulitple european events)
 %   rise of grasses
 %     janis
 %     stromberg
 %     (fortelius and europe)
-%   other climate events
+%   other climate events? PETM, mid-miocene climatic optimum
 
 
 % analysis of mammal genus fossil record for north america
@@ -117,6 +117,20 @@
 %   including covariates adds a lot of complexity
 %   only doing approximate Bayesian inference (ADVI)
 %   see methods section for longer discussion
+
+% why consider phylogeny?
+%   may or may not be an issue in community ecology/assembly/whatever the fuck
+%     that's whatever
+%   but i'm doing stuff over time
+%     so we actually progress along the tree
+%     much better change of phylogeny actually mattering
+%       clade replacement in NA (carnivores, herbivores, etc)
+%   so i'm just thinking of it as how it affects occurrence
+%     GLMM approach is super effective for this purpose
+%   note that i'm not actually modeling the diversification process
+%     that's what a true J-S model (or PyRate) do
+%     i'm just accounting for phylogenetic autocorrelation in species occurrence
+
 
 % goals of this analysis
 %   questions being addressed
