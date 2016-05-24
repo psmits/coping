@@ -17,6 +17,7 @@ source('../data/data_dump/trait_w_gaps.data.R')
 sight.obs <- sight
 #
 nsim <- 1000
+samp <- sample(4000, nsim)
 
 ###########
 # full Bayes
@@ -26,42 +27,102 @@ post <- list.files('../data/mcmc_out', pattern = '[0-9]', full.names = TRUE)
 fit <- read_stan_csv(post[5:8])
 ext <- extract(fit, permuted = TRUE)
 # sample, group level, individual level
+# send ext$pred through the simulator
+#   ntax <- N
+#   ntime <- T
+#   pred <- ext$pred[1, , ] #?
+#   model.simulation(ntax, ntime, pred)
+sim <- list()
+for(ii in seq(nsim)) {
+  sim[[ii]] <- model.simulation(N, T, ext$pred[samp[ii], , ])
+}
 
-# now for beta
-bytime <- list()
+# break the binary factors up
+nn <- oo <- list()
+diet <- move <- list()
 for(ii in seq(T)) {
-  byindiv <- list()
-  for(jj in seq(D)) {
-    byindiv[[jj]] <- quantile(ext$beta[, ii, jj], 
-                              c(0.10, 0.25, 0.5, 0.75, 0.90))
-    names(byindiv[[jj]]) <- c('low', 'lowmid', 'med', 'highmed', 'high')
-  }
-  byindiv <- Reduce(rbind, byindiv)
-  bytime[[ii]] <- data.frame(byindiv, coef = seq(D), time = ii)
-}
-for(jj in seq(length(T))) {
-  for(ii in seq(from = 2, to = D)) {
-    bytime[[jj]][ii, 1:5] <- bytime[[jj]][1, 1:5] + bytime[[jj]][ii, 1:5]
-  }
-}
+  cept <- ext$beta[, ii, 1]
+  inv.cept <- invlogit(cept)
 
-melted <- Reduce(rbind, bytime)
-melted$coef <- mapvalues(melted$coef, unique(melted$coef),
-                         c('arboreal/carnivore', 'mass', 'herb', 'insect', 
-                           'omni', 'digit', 'foss', 'planti', 'scan', 'unguli'))
-melted$coef <- factor(melted$coef, 
-                      levels = c('arboreal/carnivore', 'mass', 'herb', 
-                                 'insect', 'omni', 'digit', 'foss', 'planti', 
-                                 'scan', 'unguli'))
-melted[, 1:5] <- apply(melted[, 1:5], 2, invlogit)  # probability scale
-# iter, indiv, group, value
-beta.plot <- ggplot(melted, aes(x = time, y = med))
-beta.plot <- beta.plot + geom_hline(yintercept = 0.5, 
-                                    colour = 'grey', size = 0.5)
-beta.plot <- beta.plot + geom_line()
-beta.plot <- beta.plot + geom_linerange(aes(ymax = high, ymin = low))
-beta.plot <- beta.plot + facet_wrap(~ coef, ncol = 2)
-beta.plot <- beta.plot + labs(x = 'Time (My)', y = 'Probability')
+  wcept <- apply(ext$beta[ , ii, 3:10], 2, function(x) x + cept)
+  inv.wcept <- apply(wcept, 2, invlogit)
+
+  rel.wcept <- apply(inv.wcept, 2, function(x) x - inv.cept)
+
+  nn[[ii]] <- cbind(inv.cept, inv.wcept)
+  oo[[ii]] <- cbind(inv.cept, rel.wcept)
+  
+  diet[[ii]] <- nn[[ii]][, c(1:4)]
+
+  move[[ii]] <- nn[[ii]][, c(1, 5:9)]
+}
+diet <- diet[-c(1, T)]
+move <- move[-c(1, T)]
+
+
+diet <- llply(diet, function(x) 
+              apply(x, 2, function(y) 
+                    quantile(y, c(0.1, 0.25, 0.5, 0.75, 0.9))))
+diet <- llply(diet, function(x) {
+              colnames(x) <- c('carnivore', 'herb', 'insect', 'omni')
+              x})
+diet <- llply(diet, t)
+diet <- Map(function(x, y) data.frame(x, type = rownames(x), time = y), 
+            diet, seq(length(diet)))
+diet <- llply(diet, function(x) {
+              names(x) <- c('low', 'lowmed', 'med', 'highmed', 'high', 
+                            'type', 'time')
+              x})
+diet <- data.frame(Reduce(rbind, diet))
+dietdupe <- diet
+dietdupe$group <- dietdupe$type
+dietdupe$type <- NULL
+
+# plot of relative probability of occurrence based on diet
+dietprob <- ggplot(diet, aes(x = time, y = med, fill = type))
+dietprob <- dietprob + geom_ribbon(data = dietdupe, 
+                                 aes(ymax = highmed, ymin = lowmed,
+                                     fill = NULL, group = group), 
+                                 alpha = 0.2, colour = 'grey')
+dietprob <- dietprob + geom_ribbon(aes(ymax = high, ymin = low), 
+                                   alpha = 0.25)
+dietprob <- dietprob + geom_ribbon(aes(ymax = highmed, ymin = lowmed), 
+                                   alpha = 0.5)
+dietprob <- dietprob + facet_wrap(~ type)
+
+
+
+move <- llply(move, function(x) 
+              apply(x, 2, function(y) 
+                    quantile(y, c(0.1, 0.25, 0.5, 0.75, 0.9))))
+move <- llply(move, function(x) {
+              colnames(x) <- c('arboreal', 'digit', 'foss', 
+                               'planti', 'scan', 'unguli')
+              x})
+move <- llply(move, t)
+move <- Map(function(x, y) data.frame(x, type = rownames(x), time = y), 
+            move, seq(length(move)))
+move <- llply(move, function(x) {
+              names(x) <- c('low', 'lowmed', 'med', 'highmed', 'high', 
+                            'type', 'time')
+              x})
+move <- data.frame(Reduce(rbind, move))
+movedupe <- move
+movedupe$group <- movedupe$type
+movedupe$type <- NULL
+
+# plot of relative probability of occurrence based on move
+moveprob <- ggplot(move, aes(x = time, y = med, fill = type))
+moveprob <- moveprob + geom_ribbon(data = movedupe, 
+                                 aes(ymax = highmed, ymin = lowmed,
+                                     fill = NULL, group = group), 
+                                 alpha = 0.15)
+moveprob <- moveprob + geom_ribbon(aes(ymax = high, ymin = low), 
+                                   alpha = 0.25)
+moveprob <- moveprob + geom_ribbon(aes(ymax = highmed, ymin = lowmed), 
+                                   alpha = 0.5)
+moveprob <- moveprob + facet_wrap(~ type)
+
 
 
 
