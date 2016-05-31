@@ -11,7 +11,7 @@ source('../R/phylo_gen.r')
 source('../R/taxon_names.r')
 source('../R/mung.r')
 
-dat <- read.csv('../data/mam-occs.csv', stringsAsFactors = FALSE)
+dat <- read.csv('https://paleobiodb.org/data1.2/occs/list.csv?datainfo&rowcount&base_name=Mammalia&taxon_reso=species&interval=Maastrichtian,Gelasian&cc=NOA&show=class,genus,ecospace,strat,stratext,lith,acconly', stringsAsFactors = FALSE, skip = 20)
 occur <- clean.occurrence(dat)
 
 raia.tree <- read.tree('../data/raia_tree.txt')
@@ -20,6 +20,7 @@ tom.tree <- read.nexus('../data/tomiya_tree.nex')
 hal.list <- list.files('../data/halliday', full.names = TRUE)
 # which of these is recommended by halliday?
 halliday.tree <- read.nexus(hal.list[length(hal.list)])
+dat$
 # this is a genus tree...fuck
 #   assign each genus a random species
 

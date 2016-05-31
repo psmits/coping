@@ -15,6 +15,14 @@ source('../data/data_dump/trait_info.data.R')
 sight.implied <- sight
 source('../data/data_dump/trait_w_gaps.data.R')
 sight.obs <- sight
+
+#
+theme_set(theme_minimal())
+cbp.long <- c('#000000', '#004949', '#009292', '#FF7DB6', '#FFB6DB', 
+              '#490092', '#006DDB', '#B66DFF', '#6DB6FF', '#B6DBFF', 
+              '#920000', '#924900', '#DBD100', '#24FF24', '#FFFF6D')
+grab <- laply(seq(5), function(x) seq(from = x, to = length(cbp.long), by = 5))
+cbp.long <- cbp.long[t(grab)][-1]
 #
 nsim <- 1000
 samp <- sample(4000, nsim)
@@ -32,29 +40,42 @@ ext <- extract(fit, permuted = TRUE)
 #   ntime <- T
 #   pred <- ext$pred[1, , ] #?
 #   model.simulation(ntax, ntime, pred)
-sim <- list()
-for(ii in seq(nsim)) {
-  sim[[ii]] <- model.simulation(N, T, ext$pred[samp[ii], , ])
+#sim <- list()
+#for(ii in seq(nsim)) {
+#  sim[[ii]] <- model.simulation(N, T, ext$pred[samp[ii], , ])
+#}
+#
+#meanocc.obs <- mean(rowSums(sight.obs))
+#meanocc.imp <- mean(rowSums(sight.implied))
+#meanocc.sim <- laply(sim, function(x) mean(rowSums(x$z)))
+
+es <- list()
+for(ii in seq(nrow(u))) {
+  byd <- list()
+  for(dd in seq(D)) {
+    byd[[dd]] <- apply(ext$gamma[samp, , dd], 1, function(x) u[ii, ] %*% x)
+  }
+  es[[ii]] <- byd
 }
 
+
+
+# plot the parameters estimated in the model
 # break the binary factors up
-nn <- oo <- list()
 diet <- move <- list()
 for(ii in seq(T)) {
-  cept <- ext$beta[, ii, 1]
-  inv.cept <- invlogit(cept)
+  cept <- ext$beta[samp, ii, c(1, 3:10)]
 
-  wcept <- apply(ext$beta[ , ii, 3:10], 2, function(x) x + cept)
-  inv.wcept <- apply(wcept, 2, invlogit)
+  tt <- es[[ii]][c(1, 3:10)]
+  for(jj in ncol(cept)) {
+    cept[, jj] <- cept[, jj] - tt[[jj]]
+  }
 
-  rel.wcept <- apply(inv.wcept, 2, function(x) x - inv.cept)
-
-  nn[[ii]] <- cbind(inv.cept, inv.wcept)
-  oo[[ii]] <- cbind(inv.cept, rel.wcept)
+  cept <- invlogit(cept)
   
-  diet[[ii]] <- nn[[ii]][, c(1:4)]
+  diet[[ii]] <- cept[, c(1:4)]
 
-  move[[ii]] <- nn[[ii]][, c(1, 5:9)]
+  move[[ii]] <- cept[, c(1, 5:9)]
 }
 diet <- diet[-c(1, T)]
 move <- move[-c(1, T)]
@@ -64,7 +85,8 @@ diet <- llply(diet, function(x)
               apply(x, 2, function(y) 
                     quantile(y, c(0.1, 0.25, 0.5, 0.75, 0.9))))
 diet <- llply(diet, function(x) {
-              colnames(x) <- c('carnivore', 'herb', 'insect', 'omni')
+              colnames(x) <- c('carnivore', 'herbivore', 
+                               'insectivore', 'omnivore')
               x})
 diet <- llply(diet, t)
 diet <- Map(function(x, y) data.frame(x, type = rownames(x), time = y), 
@@ -80,15 +102,18 @@ dietdupe$type <- NULL
 
 # plot of relative probability of occurrence based on diet
 dietprob <- ggplot(diet, aes(x = time, y = med, fill = type))
-dietprob <- dietprob + geom_ribbon(data = dietdupe, 
-                                 aes(ymax = highmed, ymin = lowmed,
-                                     fill = NULL, group = group), 
-                                 alpha = 0.2, colour = 'grey')
 dietprob <- dietprob + geom_ribbon(aes(ymax = high, ymin = low), 
                                    alpha = 0.25)
 dietprob <- dietprob + geom_ribbon(aes(ymax = highmed, ymin = lowmed), 
                                    alpha = 0.5)
 dietprob <- dietprob + facet_wrap(~ type)
+dietprob <- dietprob + scale_fill_manual(values = cbp.long)
+dietprob <- dietprob + labs(x = 'Time', 
+                            y = 'Probability of occurring relative to average')
+#dietprob <- dietprob + geom_ribbon(data = dietdupe, 
+#                                 aes(ymax = highmed, ymin = lowmed,
+#                                     fill = NULL, group = group), 
+#                                 alpha = 0.2, colour = 'grey')
 
 
 
@@ -96,8 +121,8 @@ move <- llply(move, function(x)
               apply(x, 2, function(y) 
                     quantile(y, c(0.1, 0.25, 0.5, 0.75, 0.9))))
 move <- llply(move, function(x) {
-              colnames(x) <- c('arboreal', 'digit', 'foss', 
-                               'planti', 'scan', 'unguli')
+              colnames(x) <- c('arboreal', 'digitigrade', 'fossorial', 
+                               'plantigrade', 'scansorial', 'unguligrade')
               x})
 move <- llply(move, t)
 move <- Map(function(x, y) data.frame(x, type = rownames(x), time = y), 
@@ -112,18 +137,15 @@ movedupe$group <- movedupe$type
 movedupe$type <- NULL
 
 # plot of relative probability of occurrence based on move
-moveprob <- ggplot(move, aes(x = time, y = med, fill = type))
-moveprob <- moveprob + geom_ribbon(data = movedupe, 
-                                 aes(ymax = highmed, ymin = lowmed,
-                                     fill = NULL, group = group), 
-                                 alpha = 0.15)
-moveprob <- moveprob + geom_ribbon(aes(ymax = high, ymin = low), 
-                                   alpha = 0.25)
-moveprob <- moveprob + geom_ribbon(aes(ymax = highmed, ymin = lowmed), 
-                                   alpha = 0.5)
-moveprob <- moveprob + facet_wrap(~ type)
-
-
+moveprob <- dietprob %+% move
+#moveprob <- moveprob + geom_ribbon(data = movedupe, 
+#                                 aes(ymax = highmed, ymin = lowmed,
+#                                     fill = NULL, group = group), 
+#                                 alpha = 0.15)
+spm <- split(move, move$time)
+rom <- laply(spm, function(x) rank(x[, 3]))
+colnames(rom) <- c('arboreal', 'digitigrade', 'fossorial', 
+                   'plantigrade', 'scansorial', 'unguligrade')
 
 
 # now for gamma
@@ -131,7 +153,7 @@ byindiv <- list()
 for(ii in seq(D)) {
   bygroup <- list()
   for(jj in seq(U)) {
-    bygroup[[jj]] <- quantile(ext$gamma[, jj, ii], 
+    bygroup[[jj]] <- quantile(ext$gamma[samp, jj, ii], 
                               c(0.10, 0.25, 0.5, 0.75, 0.90))
     names(bygroup[[jj]]) <- c('low', 'lowmid', 'med', 'highmed', 'high')
   }
@@ -140,10 +162,10 @@ for(ii in seq(D)) {
 }
 melted <- Reduce(rbind, byindiv)
 melted$group <- mapvalues(melted$group, unique(melted$group), 
-                          c('intercept', 'mean temp', 'range temp', 
+                          c('intercept/phase 1', 'mean temp', 'range temp', 
                             'phase 2', 'phase3'))
 melted$group <- factor(melted$group,
-                       levels = c('intercept', 'mean temp', 'range temp', 
+                       levels = c('intercept/phase 1', 'mean temp', 'range temp', 
                                   'phase 2', 'phase3'))
 melted$indiv <- mapvalues(melted$indiv, unique(melted$indiv),
                           c('arboreal/carnivore', 'mass', 'herb', 
@@ -164,9 +186,22 @@ gamma.plot <- gamma.plot + coord_flip()
 gamma.plot <- gamma.plot + labs(x = 'Coefficient estimate (log odds scale)',
                                 y = 'Individual-level effect')
 
-# sample, D, D
-ext$Omega
-#matrix(ext$Omega[1, , ], ncol = D)
+
+# shrinkage plots
+# for each group level predictor
+lamb.shrink <- apply(ext$lambda, 2, function(x) 
+                     quantile(x, c(0.1, 0.25, 0.5, 0.75, 0.9)))
+# additional shrinkage for individual level predictors
+phi.shrink <- list()
+for(ii in seq(U)) { # this will need to update
+  phi.shrink[[ii]] <- apply(ext$phi[, , ii], 2, function(x)
+                            quantile(x, c(0.1, 0.25, 0.5, 0.75, 0.9)))
+}
+
+lamb.shrink
+phi.shrink
+# these are estimates of variance
+# lamb * phi is the variance of around gamma_u,d
 
 
 

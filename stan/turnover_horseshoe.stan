@@ -11,14 +11,21 @@ data {
 parameters {
   corr_matrix[D] Omega;
   vector<lower=0>[D] tau;
-  matrix[U, D] gamma;
+  matrix[U, D] gamma_std;
   vector[D] beta[T];
 
-  real<lower=0> lambda[U];
-  vector<lower=0>[U] phi[D];
+  real<lower=0> lambda[D];
+  vector<lower=0>[D] phi[U];
 }
 transformed parameters {
+  matrix[U, D] gamma;
   matrix[N, T] pred;
+  
+  for(k in 1:U) {
+    for(j in 1:D) {
+      gamma[k, j] <- gamma_std[k, j] * lambda[j] * phi[k][j];
+    }
+  }
 
   for(t in 1:T) {
     for(n in 1:N) {
@@ -39,13 +46,10 @@ model {
     }
   }
 
-  for(k in 1:U) {
-    for(j in 1:D) {
-      gamma[k, j]  ~ normal(0, lambda[k] * phi[j][k]);
-      phi[j][k] ~ cauchy(0, 1);
-    }
-  }
+  to_vector(gamma_std) ~ normal(0, 1);
+  for(i in 1:U) phi[i] ~ cauchy(0, 1);
   lambda ~ cauchy(0, 1);
+
 
   {
     int prod_state;

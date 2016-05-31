@@ -70,11 +70,11 @@ data {
 parameters {
   corr_matrix[D] Omega;
   vector<lower=0>[D] tau;
-  matrix[U, D] gamma;
+  matrix[U, D] gamma_std;
   vector[D] beta[T];
   
-  real<lower=0> lambda[U];
-  vector<lower=0>[U] phi[D];
+  real<lower=0> lambda[D];
+  vector<lower=0>[D] phi[U];
 
   vector[T] p_norm; 
   real p_mu;
@@ -82,7 +82,16 @@ parameters {
 }
 transformed parameters {
   vector<lower=0,upper=1>[T] p;  // sampling probability
+  matrix[U, D] gamma; 
   matrix[N, T] pred; 
+  
+  
+  // non-centered parameterization following Betacourt and Girolami
+  for(k in 1:U) {
+    for(j in 1:D) {
+      gamma[k, j] <- gamma_std[k, j] * lambda[j] * phi[k][j];
+    }
+  }
 
   for(t in 1:T) {
     p[t] <- inv_logit(p_mu + p_sigma * p_norm[t]);
@@ -91,7 +100,6 @@ transformed parameters {
   // assemble predictor w/ intercept + effects of indiv-level covariates
   for(t in 1:T) {
     for(n in 1:N) {
-      // non-centered parameterization following Betacourt and Girolami
       pred[n, t] <- inv_logit(x[n, ] * beta[t, ]);
     }
   }
@@ -109,12 +117,9 @@ model {
     }
   }
 
-  for(k in 1:U) {
-    for(j in 1:D) {
-      gamma[k, j]  ~ normal(0, lambda[k] * phi[j][k]);
-      phi[j][k] ~ cauchy(0, 1);
-    }
-  }
+  to_vector(gamma_std) ~ normal(0, 1);
+  for(i in 1:U) phi[i] ~ cauchy(0, 1);
+  lambda ~ cauchy(0, 1);
 
   p_mu ~ normal(0, 1);
   p_sigma ~ cauchy(0, 1);
