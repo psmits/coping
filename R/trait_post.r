@@ -9,7 +9,6 @@ library(grid)
 library(pROC)
 library(Metrics)
 source('../R/multiclass_roc.r')
-source('../R/read_one_stan.r')
 source('../R/sim_from_model.r')
 source('../data/data_dump/trait_info.data.R')
 sight.implied <- sight
@@ -59,6 +58,12 @@ for(ii in seq(nrow(u))) {
 }
 
 
+# this whole section changes in an interesting way 
+# diet and life get combined into one graph
+# because i'm looking at interaction
+# make it faceted diet ~ life
+#   diet columns, life rows
+#   drop all non-observed interactions
 
 # plot the parameters estimated in the model
 # break the binary factors up
@@ -101,6 +106,7 @@ dietdupe$group <- dietdupe$type
 dietdupe$type <- NULL
 
 # plot of relative probability of occurrence based on diet
+#   controling for expected occurrence probability due to environmental condition
 dietprob <- ggplot(diet, aes(x = time, y = med, fill = type))
 dietprob <- dietprob + geom_ribbon(aes(ymax = high, ymin = low), 
                                    alpha = 0.25)
@@ -110,6 +116,8 @@ dietprob <- dietprob + facet_wrap(~ type)
 dietprob <- dietprob + scale_fill_manual(values = cbp.long)
 dietprob <- dietprob + labs(x = 'Time', 
                             y = 'Probability of occurring relative to average')
+ggsave(filename = '../doc/figure/diet_occur_prob.png', plot = dietprob,
+       width = 8, height = 6)
 #dietprob <- dietprob + geom_ribbon(data = dietdupe, 
 #                                 aes(ymax = highmed, ymin = lowmed,
 #                                     fill = NULL, group = group), 
@@ -138,6 +146,8 @@ movedupe$type <- NULL
 
 # plot of relative probability of occurrence based on move
 moveprob <- dietprob %+% move
+ggsave(filename = '../doc/figure/move_occur_prob.png', plot = moveprob,
+       width = 8, height = 6)
 #moveprob <- moveprob + geom_ribbon(data = movedupe, 
 #                                 aes(ymax = highmed, ymin = lowmed,
 #                                     fill = NULL, group = group), 
@@ -146,6 +156,11 @@ spm <- split(move, move$time)
 rom <- laply(spm, function(x) rank(x[, 3]))
 colnames(rom) <- c('arboreal', 'digitigrade', 'fossorial', 
                    'plantigrade', 'scansorial', 'unguligrade')
+
+
+
+
+
 
 
 # now for gamma
@@ -198,79 +213,7 @@ for(ii in seq(U)) { # this will need to update
                             quantile(x, c(0.1, 0.25, 0.5, 0.75, 0.9)))
 }
 
-lamb.shrink
-phi.shrink
+#lamb.shrink
+#phi.shrink
 # these are estimates of variance
 # lamb * phi is the variance of around gamma_u,d
-
-
-
-
-
-############
-## advi
-#post <- list.files('../data/mcmc_out', pattern = 'advi',
-#                   full.names = TRUE)
-#
-## horseshoe priors
-#fit <- read_one_stan_csv(post[1])
-#
-## prior predictive simulation
-#preds <- fit[which(str_detect(names(fit), 'pred*'))]
-#pp <- alply(preds, 1, function(x) matrix(x, nrow = N, ncol = T))
-#pp <- llply(pp, function(x) {x <- x[, T:1]
-#            x})
-#pp <- llply(pp, function(x) apply(x, 2, unlist))
-#
-#simout.horse <- model.simulation(N, T, pp[[1]])
-#
-## gammas
-#gams <- fit[which(str_detect(names(fit), 'gamma*'))]
-#
-#st <- seq(from = 1, to = ncol(gams), by = 5)
-#byU <- list()
-#for(ii in seq(length(st))) {
-#  byU[[ii]] <- gams[, seq(st[ii], length.out = 5)]
-#}
-#byU.q <- llply(byU, function(x) 
-#               t(apply(x, 2, function(y) 
-#                       quantile(y, c(.1, .25, .5, .75, .9)))))
-#byU.q <- Reduce(rbind, Map(function(x, y) data.frame(x, d = y), 
-#                           byU.q, seq(length(byU.q))))
-#byU.q$coef <- rownames(byU.q)
-#colnames(byU.q) <- c('low', 'lowmed', 'med', 'highmed', 'high', 'd', 'coef')
-#
-##byU.q$coef <- factor(rep(1:5, each = D))
-### length is 10 --> individual-level traits
-### each element is length 5 --> group-level traits
-##gamma.plot <- ggplot(byU.q, aes(x = coef, y = med))
-##gamma.plot <- gamma.plot + geom_pointrange(aes(ymax = high, ymin = low))
-#
-#
-## model with sampling
-#fit <- read_one_stan_csv(post[2])  # horseshoe
-#
-## prior predictive simulations
-#ps <- rev(fit[which(str_detect(names(fit), 'p\\.[0-9]'))])
-#
-#preds <- fit[which(str_detect(names(fit), 'pred*'))]
-#pp <- alply(preds, 1, function(x) matrix(x, nrow = N, ncol = T))
-#pp <- llply(pp, function(x) {x <- x[, T:1]
-#            x})
-#pp <- llply(pp, function(x) apply(x, 2, unlist))
-#
-#simout.md <- model.simulation(N, T, pp[[1]], ps[1, ])
-#
-## gammas
-#gams <- fit[which(str_detect(names(fit), 'gamma*'))]
-#
-#st <- seq(from = 1, to = ncol(gams), by = 5)
-#byU <- list()
-#for(ii in seq(length(st))) {
-#  byU[[ii]] <- gams[, seq(st[ii], length.out = 5)]
-#}
-#byU.q <- llply(byU, function(x) 
-#               apply(x, 2, function(y) 
-#                     quantile(y, c(.25, .5, .75))))
-## length is 10 --> individual-level traits
-## each element is length 5 --> group-level traits

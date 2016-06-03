@@ -15,7 +15,8 @@ load('../data/body_mass.rdata')
 posture <- read.csv('../data/posture.csv', stringsAsFactors = FALSE) 
 # these specific assignments are based on Carano's papers on posture
 
-dat <- read.csv('https://paleobiodb.org/data1.2/occs/list.csv?datainfo&rowcount&base_name=Mammalia&taxon_reso=species&interval=Maastrichtian,Gelasian&cc=NOA&show=class,genus,ecospace,strat,stratext,lith,acconly', stringsAsFactors = FALSE, skip = 20)
+#dat <- read.csv('https://paleobiodb.org/data1.2/occs/list.csv?datainfo&rowcount&base_name=Mammalia&taxon_reso=species&interval=Maastrichtian,Gelasian&cc=NOA&show=class,genus,ecospace,strat,stratext,lith,acconly', stringsAsFactors = FALSE, skip = 21)
+dat <- read.csv('../data/pbdb_data.csv', stringsAsFactors = FALSE, skip = 21)
 
 occur <- clean.occurrence(dat)
 ss <- split(occur, occur$bins)
@@ -90,12 +91,17 @@ diet <- laply(by.tax, function(x) names(which.max(table(x$comdiet))))
 life <- laply(by.tax, function(x) names(which.max(table(x$comlife))))
 mass <- arm::rescale(log(laply(by.tax, function(x) mean(x$mass))))
 
+inter <- interaction(diet, life, drop = TRUE) # not all are observed
+
 # make covariates the right shape
 diet <- model.matrix( ~ diet - 1)[, -1]
 life <- model.matrix( ~ life - 1)[, -1]
+inter <- model.matrix( ~ inter - 1)[, -1]
+
 
 # covariates
-x <- cbind(mass, diet, life)  # for sep intercept set up
+#x <- cbind(mass, diet, life)  # for sep intercept set up
+x <- cbind(mass, diet, life, inter)  # for sep intercept set up
 D <- ncol(x)
 
 
@@ -160,3 +166,5 @@ sight <- old.sight
 stan_rdump(list = c('N', 'T', 'D', 'U', 
                     'sight', 'x', 'u'),
            file = '../data/data_dump/trait_w_gaps.data.R')
+
+
