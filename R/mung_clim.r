@@ -28,7 +28,8 @@ cram.temp <- read.delim('../data/cramer/cramer_temp.txt', sep = '\t')
 temp.est <- cram.temp$Temperature
 temp.range <- cram.temp$Temperature.max - cram.temp$Temperature.min
 
-b <- unique(occur$bins)
+b <- range(occur$bins)
+b <- seq(b[1], b[2], by = 2)
 b <- as.matrix(cbind(b - 2, b))
 temp.time.mean <- list()
 temp.time.range <- list()

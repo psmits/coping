@@ -66,24 +66,30 @@ occur$mass <- na.mass[match(occur$name.bi, na.mass$name), 2]
 
 # process climate information
 source('../R/mung_clim.r')
+occur <- occur[occur$bins != 66, ]
 
 # save true bins
 occur$true.bin <- occur$bins
+#occur <- occur[occur$bins != min(occur$bins), ]
 # make easy bins
-occur$bins <- mapvalues(occur$bins, 
-                        from = unique(occur$bins), 
-                        to = seq(length(unique(occur$bins))))
+occur$bins <- occur$bins / 2
+#occur$bins <- mapvalues(occur$bins, 
+#                        from = unique(occur$bins), 
+#                        to = seq(length(unique(occur$bins))))
+
+
 
 # !!! makes everything genus level !!!
 # need to make the things work
-occur <- occur[occur$bins != min(occur$bins), ]
 by.tax <- split(occur, occur$name.bi)
 #by.tax <- split(occur, occur$genus)
 
-sight <- matrix(0, nrow = length(by.tax), ncol = length(unique(occur$bins)))
+sight <- matrix(0, nrow = length(by.tax), ncol = max(occur$bins))
+occur$bins
 for(ii in seq(length(by.tax))) {
-  sight[ii, (by.tax[[ii]]$bins) - 1] <- 1
+  sight[ii, (by.tax[[ii]]$bins)] <- 1
 }
+sight <- sight[, -1]
 
 
 N <- length(by.tax)
@@ -131,9 +137,9 @@ eo.mi <- c(50, 16)
 pa.eo <- c(66, 50)
 plants <- rbind(mi.pl, eo.mi, pa.eo)
 
-co.h <- unique(occur$true.bin)
-phase <- array(dim = T)
-for(ii in seq(T)){
+co.h <- seq(4, (ncol(sight) + 1) * 2, by = 2)
+phase <- array(dim = length(co.h))
+for(ii in seq(length(co.h))){
   phase[ii] <- which(plants[, 1] >= co.h[ii] & plants[, 2] < co.h[ii])
 }
 P <- 3
@@ -166,5 +172,3 @@ sight <- old.sight
 stan_rdump(list = c('N', 'T', 'D', 'U', 
                     'sight', 'x', 'u'),
            file = '../data/data_dump/trait_w_gaps.data.R')
-
-
