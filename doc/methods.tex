@@ -82,7 +82,7 @@ Species mass data was sourced from the Paleobiology Database, SMITH, TOMIYA, ETC
     \theta_{i, t} &= \text{logit}^{-1}(y^{r}_{i, t - 1} (x_{i} \beta_{t}) + \prod_{k = 1}^{k = t - 1}(1 - y^{r}_{i, t = k}) (x_{i} \beta_{t})) \\
     \beta_{t} &\sim \text{MVN}(u_{t} \gamma, \Sigma). \\
   \end{aligned}
-  \label{<++>}
+  \label{eq:core}
 \end{equation}
 
 The product term ensures that loss is an absorbing state (i.e. no de-extinction).
@@ -108,7 +108,7 @@ Decompose \(\Sigma\) into a vector of scale terms \(\tau\) and a correlation mat
     \tau &\sim \text{C}^{+}(1) \\
     \Omega &\sim \text{LKJ}_{cor}(2). \\
   \end{aligned}
-  \label{<++>}
+  \label{eq:covariance}
 \end{equation}
 
 
@@ -128,7 +128,7 @@ Decompose \(\Sigma\) into a vector of scale terms \(\tau\) and a correlation mat
     z_{i,t} &\sim \text{Bernoulli}(\theta_{i,t}) \\
     \theta_{i, t} &= z_{i, t - 1} (x_{i} \beta_{t}) + \prod_{k = 1}^{k = t - 1}(1 - z_{i, t = k}) (x_{i} \beta_{t}) \\
   \end{aligned}
-  \label{<++>}
+  \label{eq:latent}
 \end{equation}
 
 

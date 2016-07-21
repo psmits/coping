@@ -23,66 +23,41 @@ sight.obs <- sight
 post <- list.files('../data/mcmc_out', pattern = 'advi',
                    full.names = TRUE)
 
-# horseshoe priors
+# fit w/ implied presences and horseshoe priors
 fit <- read_one_stan_csv(post[1])
 
-# prior predictive simulation
-preds <- fit[which(str_detect(names(fit), 'pred*'))]
-pp <- alply(preds, 1, function(x) matrix(x, nrow = N, ncol = T))
-pp <- llply(pp, function(x) {x <- x[, T:1]
-            x})
-pp <- llply(pp, function(x) apply(x, 2, unlist))
+name.situation <- str_split(colnames(fit), '\\.')
+which.param <- laply(name.situation, function(x) x[1])
+uni.param <- unique(which.param)
 
-simout.horse <- model.simulation(N, T, pp[[1]])
+out <- list()
+for(ii in seq(length(uni.param))) {
+  matching <- which.param == uni.param[ii]
+  name.m <- name.situation[matching]
 
-# gammas
-gams <- fit[which(str_detect(names(fit), 'gamma*'))]
-
-st <- seq(from = 1, to = ncol(gams), by = 5)
-byU <- list()
-for(ii in seq(length(st))) {
-  byU[[ii]] <- gams[, seq(st[ii], length.out = 5)]
+  te <- length(name.m[[1]])
+  if(te == 1) {
+    out[[ii]] <- fit[, matching]
+  } else if (te == 2) {
+    tt <- fit[, matching]
+    numbers <- laply(name.m, function(x) x[-1])
+    dims <- max(as.numeric(numbers))
+    hh <- array(NA, dim = c(1001, dims)) 
+    for(jj in seq(length(numbers))) {
+      posit <- as.numeric(numbers[jj])
+      hh[, posit] <- tt[, jj]
+    }
+    out[[ii]] <- hh
+  } else if (te == 3) {
+    tt <- fit[, matching]
+    numbers <- laply(name.m, function(x) x[-1])
+    dims <- apply(numbers, 2, function(x) max(as.numeric(x)))
+    hh <- array(NA, dim = c(1001, dims))
+    for(jj in seq(nrow(numbers))) {
+      posit <- as.numeric(numbers[jj, ])
+      hh[, posit[1], posit[2]] <- tt[, jj]
+    }
+    out[[ii]] <- hh
+  }
 }
-byU.q <- llply(byU, function(x) 
-               t(apply(x, 2, function(y) 
-                       quantile(y, c(.1, .25, .5, .75, .9)))))
-byU.q <- Reduce(rbind, Map(function(x, y) data.frame(x, d = y), 
-                           byU.q, seq(length(byU.q))))
-byU.q$coef <- rownames(byU.q)
-colnames(byU.q) <- c('low', 'lowmed', 'med', 'highmed', 'high', 'd', 'coef')
-
-#byU.q$coef <- factor(rep(1:5, each = D))
-## length is 10 --> individual-level traits
-## each element is length 5 --> group-level traits
-#gamma.plot <- ggplot(byU.q, aes(x = coef, y = med))
-#gamma.plot <- gamma.plot + geom_pointrange(aes(ymax = high, ymin = low))
-
-
-# model with sampling
-fit <- read_one_stan_csv(post[2])  # horseshoe
-
-# prior predictive simulations
-ps <- rev(fit[which(str_detect(names(fit), 'p\\.[0-9]'))])
-
-preds <- fit[which(str_detect(names(fit), 'pred*'))]
-pp <- alply(preds, 1, function(x) matrix(x, nrow = N, ncol = T))
-pp <- llply(pp, function(x) {x <- x[, T:1]
-            x})
-pp <- llply(pp, function(x) apply(x, 2, unlist))
-
-simout.md <- model.simulation(N, T, pp[[1]], ps[1, ])
-
-# gammas
-gams <- fit[which(str_detect(names(fit), 'gamma*'))]
-
-st <- seq(from = 1, to = ncol(gams), by = 5)
-byU <- list()
-for(ii in seq(length(st))) {
-  byU[[ii]] <- gams[, seq(st[ii], length.out = 5)]
-}
-byU.q <- llply(byU, function(x) 
-               apply(x, 2, function(y) 
-                     quantile(y, c(.25, .5, .75))))
-# length is 10 --> individual-level traits
-# each element is length 5 --> group-level traits
-
+names(out) <- uni.param

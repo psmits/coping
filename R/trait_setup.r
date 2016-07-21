@@ -97,17 +97,13 @@ diet <- laply(by.tax, function(x) names(which.max(table(x$comdiet))))
 life <- laply(by.tax, function(x) names(which.max(table(x$comlife))))
 mass <- arm::rescale(log(laply(by.tax, function(x) mean(x$mass))))
 
-inter <- interaction(diet, life, drop = TRUE) # not all are observed
-
-# make covariates the right shape
-diet <- model.matrix( ~ diet - 1)[, -1]
-life <- model.matrix( ~ life - 1)[, -1]
-inter <- model.matrix( ~ inter - 1)[, -1]
-
-
 # covariates
-#x <- cbind(mass, diet, life)  # for sep intercept set up
-x <- cbind(mass, diet, life, inter)  # for sep intercept set up
+diet <- factor(diet, levels = unique(diet)[c(4, 1:3)])
+life <- factor(life, levels = unique(life))
+inter <- interaction(diet, life, drop = TRUE)
+x <- stats::model.matrix( ~ mass + diet * life)
+x <- x[, colSums(x) != 0]  
+# i think this is the correct thing to do because certain inter not obs
 D <- ncol(x)
 
 
@@ -148,8 +144,7 @@ P <- 3
 sight <- sight[, rev(seq(ncol(sight)))]
 u <- apply(u, 2, rev)
 phase <- factor(rev(phase))
-phase <- model.matrix( ~ phase - 1)[, -1]
-u <- cbind(u, phase)
+u <- model.matrix( ~ u + phase)
 U <- ncol(u)
 
 # just do the range through for it
@@ -159,10 +154,9 @@ for(ii in row(sight)) {
   sight[ii, seq(from = min(mm), to = max(mm))] <- 1
 }
 
-x <- cbind(1, x)
-D <- D + 1
-u <- cbind(1, u)
-U <- U + 1
+
+N <- nrow(sight)
+T <- ncol(sight)
 
 # dump it out
 stan_rdump(list = c('N', 'T', 'D', 'U', 
