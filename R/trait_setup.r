@@ -105,7 +105,7 @@ x <- stats::model.matrix( ~ mass + diet * life)
 x <- x[, colSums(x) != 0]  
 # i think this is the correct thing to do because certain inter not obs
 D <- ncol(x)
-
+name.name <- colnames(x)
 
 # temporal data
 cohort <- occur$bins / 2
