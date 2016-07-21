@@ -188,20 +188,36 @@ gamma.plot <- gamma.plot + facet_grid(group ~ .)
 gamma.plot <- gamma.plot + coord_flip()
 gamma.plot <- gamma.plot + labs(x = 'Coefficient estimate (log odds scale)',
                                 y = 'Individual-level effect')
-#
-#
-## shrinkage plots
-## for each group level predictor
-#lamb.shrink <- apply(ext$lambda, 2, function(x) 
-#                     quantile(x, c(0.1, 0.25, 0.5, 0.75, 0.9)))
-## additional shrinkage for individual level predictors
-#phi.shrink <- list()
-#for(ii in seq(U)) { # this will need to update
-#  phi.shrink[[ii]] <- apply(ext$phi[, , ii], 2, function(x)
-#                            quantile(x, c(0.1, 0.25, 0.5, 0.75, 0.9)))
-#}
-#
-##lamb.shrink
-##phi.shrink
-## these are estimates of variance
-## lamb * phi is the variance of around gamma_u,d
+
+
+# shrinkage plots
+# for each group level predictor
+lamb.shrink <- apply(ext$lambda, 2, function(x) 
+                     quantile(x, c(0.1, 0.25, 0.5, 0.75, 0.9)))
+# additional shrinkage for individual level predictors
+phi.shrink <- list()
+for(ii in seq(U)) { # this will need to update
+  phi.shrink[[ii]] <- apply(ext$phi[, , ii], 2, function(x)
+                            quantile(x, c(0.1, 0.25, 0.5, 0.75, 0.9)))
+}
+#lamb.shrink
+#phi.shrink
+# these are estimates of variance
+# lamb * phi is the variance of around gamma_u,d
+
+# group level predictor shrinkage
+colnames(lamb.shrink) <- name.name
+lamb.shrink <- data.frame(t(lamb.shrink))
+names(lamb.shrink) <- c('low', 'lowmed', 'med', 'hghmed', 'hgh')
+lamb.shrink$var <- rownames(lamb.shrink)
+lamb.shrink$var <- factor(lamb.shrink$var, levels = name.name)
+group.shrink <- ggplot(lamb.shrink, aes(x = var, y = med))
+group.shrink <- group.shrink + geom_point(size = 5)
+group.shrink <- group.shrink + geom_linerange(mapping = aes(ymax = hghmed, 
+                                                            ymin = lowmed),
+                                               size = 1.75)
+group.shrink <- group.shrink + geom_linerange(mapping = aes(ymax = hgh, 
+                                                             ymin = low),
+                                              size = 0.5)
+
+# additional individual level shrinkage
