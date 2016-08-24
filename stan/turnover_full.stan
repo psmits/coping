@@ -8,13 +8,13 @@ functions {
   int last_capture(int[] y_i) {
     for (k_rev in 0:(size(y_i) - 1)) {
       int k;
-      k <- size(y_i) - k_rev;
+      k = size(y_i) - k_rev;
       if (y_i[k])
         return k;
     }
     return 0;
   }
-  real state_space_log(int[] y, row_vector pred, vector p) {
+  real state_space_lp(int[] y, row_vector pred, vector p) {
     int ft;
     int lt;
     int S;
@@ -22,10 +22,10 @@ functions {
     int i;
     int prod_term;
 
-    ft <- first_capture(y);
-    lt <- last_capture(y);
-    S <- size(y);
-    i <- 1;
+    ft = first_capture(y);
+    lt = last_capture(y);
+    S = size(y);
+    i = 1;
 
     for(t_first_alive in 1:ft) {
       for (t_last_alive in lt:S) {
@@ -33,25 +33,25 @@ functions {
         int z[S];
 
         for(l in 1:S) {
-          z[l] <- 0;
+          z[l] = 0;
         }
         for(a in t_first_alive:t_last_alive) {
-          z[a] <- 1;
+          z[a] = 1;
         }
 
-        sl <- bernoulli_log(z[1], pred[1]);
-        prod_term <- 1 - z[1];
+        sl = bernoulli_lpmf(z[1] | pred[1]);
+        prod_term = 1 - z[1];
         for(j in 2:S) {
-          prod_term <- prod_term * (1 - z[j - 1]);
-          sl <- sl + bernoulli_log(z[j], (z[j - 1] * pred[j]) + 
+          prod_term = prod_term * (1 - z[j - 1]);
+          sl = sl + bernoulli_lpmf(z[j] | (z[j - 1] * pred[j]) + 
               prod_term * pred[j]);
         }
         for(k in 1:S) {
-          sl <- sl + bernoulli_log(y[k], z[k] * p[k]);
+          sl = sl + bernoulli_lpmf(y[k] | z[k] * p[k]);
         }
 
-        lp[i] <- sl;
-        i <- i + 1;
+        lp[i] = sl;
+        i = i + 1;
       }
     }
     return log_sum_exp(lp);
@@ -89,18 +89,18 @@ transformed parameters {
   // non-centered parameterization following Betacourt and Girolami
   for(k in 1:U) {
     for(j in 1:D) {
-      gamma[k, j] <- gamma_std[k, j] * lambda[j] * phi[k][j];
+      gamma[k, j] = gamma_std[k, j] * lambda[j] * phi[k][j];
     }
   }
 
   for(t in 1:T) {
-    p[t] <- inv_logit(p_mu + p_sigma * p_norm[t]);
+    p[t] = inv_logit(p_mu + p_sigma * p_norm[t]);
   }
   
   // assemble predictor w/ intercept + effects of indiv-level covariates
   for(t in 1:T) {
     for(n in 1:N) {
-      pred[n, t] <- inv_logit(x[n, ] * beta[t, ]);
+      pred[n, t] = inv_logit(x[n, ] * beta[t, ]);
     }
   }
 }
@@ -110,7 +110,7 @@ model {
 
   {
     matrix[D, D] Sigma_beta;
-    Sigma_beta <- quad_form_diag(Omega, tau);
+    Sigma_beta = quad_form_diag(Omega, tau);
 
     for(t in 1:T) {
       beta[t] ~ multi_normal(u[t] * gamma, Sigma_beta);
@@ -126,7 +126,7 @@ model {
 
 
   for(n in 1:N) {
-    sight[n] ~ state_space(pred[n, ], p);
+    target += state_space_lp(sight[n], pred[n, ], p);
   }
 }
 //generated quantities {

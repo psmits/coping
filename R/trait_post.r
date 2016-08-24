@@ -44,7 +44,7 @@ samp <- sample(1001, nsim)
 ############
 ## full Bayes
 #post <- list.files('../data/mcmc_out', pattern = '[0-9]', full.names = TRUE)
-#
+
 ## horseshoe priors
 #fit <- read_stan_csv(post)
 #ext <- extract(fit, permuted = TRUE)
@@ -220,4 +220,4 @@ group.shrink <- group.shrink + geom_linerange(mapping = aes(ymax = hgh,
                                                              ymin = low),
                                               size = 0.5)
 
-# additional individual level shrinkage
+# phi
