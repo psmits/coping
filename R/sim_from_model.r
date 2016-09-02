@@ -5,7 +5,8 @@
 #' @param ntax int number of taxa
 #' @param ntime int number of time slices
 #' @param pred matrix of predictors for N x T
-#' @param p vector length T of preservation probabilities
+#' @param p vector length T of preservation probabilities (if NULL assumed missing)
+#' @param death logical for if death is absorbing state
 #' @return list of z (true), y (observed)
 #' @export
 model.simulation <- function(ntax, ntime, pred, p = NULL, death = TRUE) {
