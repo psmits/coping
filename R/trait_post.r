@@ -74,11 +74,13 @@ meanocc.simobs <- laply(sim.obs, function(x) mean(rowSums(x$y)))
 meanocc.simimp <- laply(sim.imp, function(x) mean(rowSums(x$z)))
 
 mos <- data.frame(x = c(meanocc.simobs, meanocc.simimp), 
-                  y = c(rep('obs', nsim), rep('imp', nsim)))
+                  y = c(rep('Full', nsim), rep('Basic', nsim)))
 obs <- data.frame(x = c(meanocc.obs, meanocc.imp), 
-                  y = c('obs', 'imp'))
+                  y = c('Full', 'Basic'))
 ocplot <- ggplot(mos, aes(x = x)) + geom_histogram()
 ocplot <- ocplot + geom_vline(data = obs, mapping = aes(xintercept = x))
-ocplot <- ocplot + facet_grid(y ~ .)
-plot(filename = '../doc/figure/pred_occ.png', plot = ocplot,
-     width = 3, height = 6)
+ocplot <- ocplot + facet_grid( ~ y)
+ocplot <- ocplot + labs(x = 'Mean number of observations per species',
+                        y = 'Posterior predictive simulations')
+ggsave(filename = '../doc/figure/pred_occ.png', plot = ocplot,
+       width = 4, height = 3)
