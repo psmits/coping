@@ -45,44 +45,158 @@
 \end{frame}
 
 \begin{frame}
-  Community structure
+  \frametitle{Differences in extinction risk}
+
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
+      \includegraphics[height=\textheight,width=\textwidth,keepaspectratio=true]{figure/diet_diff_est}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \includegraphics[height=\textheight,width=\textwidth,keepaspectratio=true]{figure/loco_diff_est}
+    \end{column}
+  \end{columns}
+
+  \attrib{\footnotesize{Smits, 2015, \em{PNAS}}}
 \end{frame}
 
 \begin{frame}
-  Species pool  
+  \frametitle{Species pool concept}
+
+  \begin{center}
+    \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio=true]{figure/schemske_pool}
+  \end{center}
+
+  \attrib{\footnotesize{Mittelbach and Schemske, 2015, \em{TREE}}}
 \end{frame}
 
 \begin{frame}
-  Bambach Eco-cube ideas from paleo
+  \frametitle{Eco-cube and ecotypes}
+
+  \begin{center}
+    \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio=true]{figure/ecocube}
+  \end{center}
+
+  \attrib{\footnotesize{Bambach \em{et al.}, 2007, \em{Palaeontology}}}
 \end{frame}
 
 \begin{frame}
-  Fourth-corner modeling
-\end{frame}
+  \frametitle{The fourth-corner problem}
 
+  \begin{center}
+    \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio=true]{figure/warton_fourth_corner}
+  \end{center}
+  
+  \attrib{\footnotesize{Brown \em{et al.}, 2014, \em{Methods Ecol. Evol.}}}
+  % 4th corner is from older ordination lit
+  %   presence, traits, environment, trait X environment
+  % there are two general classes of modern presence modeling
+  %   species distribution models
+  %   cats regression which is based on maxent theory of ecology
+  % the modern fourth corner is a model that combines these two things
+  %   there are multiple ways of conceiving of this
+  %   the general strategy is _insert figure here_
+\end{frame}
 
 \begin{frame}
-  results from analysis of extinction selectivity and individual level covariates
+  \frametitle{Paleo-fourth corner model}
+
+  \begin{center}
+    \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio=true]{figure/paleo_fourth_corner}
+  \end{center}
 \end{frame}
 
 \begin{frame}
-  group level covariates
+  \frametitle{Covariates of interest}
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
+      individual-level \\(species i at time unit t)
+      \begin{itemize}
+        \item log-odds of occurrence probability at time t
+        \item effect of locomotor type
+          \begin{itemize}
+            \item arboreal, digitigrade, plantigrade, unguligrade, fossorial, scansorial
+          \end{itemize}
+        \item effect of dietary type
+          \begin{itemize}
+            \item carnivore, herbivore, insectivore, omnivore
+          \end{itemize}
+        \item effect body size \\(rescaled log body mass)
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      group-level (2 My time unit t)
+      \begin{itemize}
+        \item overall mean of log-odds of occurrence probability
+        \item temperature record based on Mg/Ca estimates
+          \begin{itemize}
+            \item mean and interquartile range of rescaled value
+          \end{itemize}
+        \item plant community phase following Graham
+      \end{itemize}
+    \end{column}
+  \end{columns}
 \end{frame}
 
 \begin{frame}
-  Inference
+  \frametitle{Model of taxon occurrence}
+  \begin{itemize}
+    \item response is p/a of genus in NA at time \(t\)
+      \begin{itemize}
+        \item Bernoulli variable 
+        \item probability is (observation prob) times (``true'' presence)
+      \end{itemize}
+    \item observation probability is effect of sampling/fossil record
+    \item the latent discrete ``true'' presence modeled as a \\multi-level logistic regression
+      \begin{itemize}
+        \item individual- and group-level
+      \end{itemize}
+  \end{itemize}
 \end{frame}
 
-% motivation
-%   community structure
-%     maxent, sdm-s
-%   results from analysis of extinction selectivity
-%     decrease in extinction risk through time
-%     certain ecologies ``favored'' over others
-%   climate/environmental change
-%     Paleo vs Neo
-%     floral phase
-%     global temperature
+\begin{frame}
+  \frametitle{Paleo-fourth corner model}
+
+  \begin{center}
+    \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio=true]{figure/paleo_fourth_corner}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Model and sampling statement definition}
+  \footnotesize{
+    \begin{align*}
+      y_{i,t} &\sim \text{Bernoulli}(\rho_{t} z_{i,t}) \\
+      \text{logit}(\rho_{t}) &\sim \mathcal{N}(\rho^{'}, \sigma_{\rho}) \\
+      z_{i,t} &\sim \text{Bernoulli}(\theta_{i, t}) \\
+      \text{logit}(\theta_{i, t}) &= z_{i,t-1} (\alpha_{t} + X_{i} \beta_{t\_}) + (\prod_{k = 1}^{t-1} 1 - z_{i,k}) (\alpha_{t} + X_{i} \beta_{t\_}) \\
+      \beta_{t,d} &\sim \mathcal{N}(\mu_{d}, \sigma_{d}) \\
+      \alpha_{t} &\sim \mathcal{N}(\mu + \phi_{p[t]} + U_{t} \gamma, \sigma_{\mu}) \\
+      \phi_{p} &\sim \mathcal{N}(0, \sigma_{\phi}) \\
+    \end{align*}
+  }
+  \scriptsize{Note: Product term ensures taxon-loss is permanent. Implementation in Stan marginalizes over all possible (range-through) values of \(z\) instead of estimating the discrete parameters. I also use a noncentered parameterization of the hierarchical effects for better posterior sampling behavior. This presentation excludes final (hyper)priors.}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Parameter estimation and inference}
+
+  \begin{columns}
+    \begin{column}{0.45\textwidth}
+      \begin{itemize}
+        \item full HMC/MCMC slow
+        \item Automatic Differentiation Variational Inference (ADVI) 
+          \begin{itemize}
+            \item approximate Bayesian inference
+            \item assumes posterior is Gaussian, no correlation between parameters
+            \item true Bayesian posterior
+          \end{itemize}
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.55\textwidth}
+      \includegraphics[height=0.9\textheight,width=\textwidth,keepaspectratio=true]{figure/stan_logo}
+    \end{column}
+  \end{columns}
+\end{frame}
 % approach
 %   conceptual diagram 
 %   data types
@@ -152,17 +266,44 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Concerns}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Conclusions}
+  \frametitle{Concerns and conclusions}
+  % model with parameters inferred via ADVI fit isn't very adequate
+  %   but no one else checks their model adequacy (e.g. liow)
+  % interpretability
+  %   explaining this to a non-statistician/ecologist is a nightmare
 \end{frame}
 
 \begin{frame}
   \frametitle{Acknowledgements}
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
+      \begin{itemize}
+        \item Advising
+          \begin{itemize}
+            \item Kenneth D. Angielczyk, Michael J. Foote, \\P. David Polly, \\Richard H. Ree, \\Graham Slater
+          \end{itemize}
+        \item Angielczyk Lab
+          \begin{itemize}
+            \item {\small{David Grossnickle, \\Dallas Krentzel, \\Jackie Lungmus}}
+          \end{itemize}
+        \item Foote lab
+          \begin{itemize}
+            \item {\small{Marites Villarosa Garcia, \\Nadia Pierrehumbert}}
+          \end{itemize}
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \begin{itemize}
+        \item {\footnotesize{David Bapst, Ben Frable, \\Graeme Lloyd, Matt Pennell}}
+        \item {\footnotesize{UChicago CEB}}
+      \end{itemize}
+
+      \vspace*{0.05\textheight}
+      \begin{center}
+        \includegraphics[height=0.4\textheight,width=\textwidth,keepaspectratio=true]{figure/paleodb}
+      \end{center}
+    \end{column}
+  \end{columns}
 \end{frame}
-
-
 
 \end{document}

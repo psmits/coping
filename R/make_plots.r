@@ -102,7 +102,7 @@ make.plots <- function(ext1, name = 'basic', name.name) {
                                      alpha = 0.4)
   massplot <- massplot + geom_line(size = 1.5)
   massplot <- massplot + labs(x = 'Time', 
-                              y = 'Change in log-odds of occurrence per change in standard deviation of mass (g)')
+                              y = 'log-odds of occurrence / \nstandard deviation of mass (g)')
   ggsave(filename = paste0('../doc/figure/mass_eff_', name, '.png'),
          plot = massplot, width = 4, height = 3)
 
@@ -126,7 +126,7 @@ make.plots <- function(ext1, name = 'basic', name.name) {
   varplot <- ggplot(eff.var, aes(x = value, y = ..density..))
   varplot <- varplot + geom_histogram()
   varplot <- varplot + facet_grid(X1 ~ X2)
-  varplot <- varplot + labs(x = 'Standard deviation of probability of ecotype given occurrence', y = 'Probability density')
+  varplot <- varplot + labs(x = 'Stdev Prob. of ecotype given occurrence', y = 'Probability density')
   ggsave(filename = paste0('../doc/figure/sd_occur_prob_', name, '.png'),
           plot = varplot, width = 8, height = 6)
 
@@ -147,13 +147,13 @@ make.plots <- function(ext1, name = 'basic', name.name) {
   }
   melted <- Reduce(rbind, byindiv)
   melted$group <- mapvalues(melted$group, unique(melted$group), 
-                            c('intercept/phase 1', 'mean temp', 'range temp', 
+                            c('phase 1', 'mean temp', 'range temp', 
                               'phase 2', 'phase3'))
   melted$group <- factor(melted$group,
-                         levels = c('intercept/phase 1', 'mean temp', 'range temp', 
-                                    'phase 2', 'phase3'))
+                         levels = c('phase 1', 'phase 2', 'phase3', 
+                                    'mean temp', 'range temp'))
   melted$indiv <- mapvalues(melted$indiv, unique(melted$indiv), name.name)
-  melted$indiv <- factor(melted$indiv, levels = name.name)
+  melted$indiv <- factor(melted$indiv, levels = sort(name.name))
   # iter, indiv, group, value
   gamma.plot <- ggplot(melted, aes(x = factor(indiv), y = med))
   gamma.plot <- gamma.plot + geom_hline(yintercept = 0, colour = 'grey')
