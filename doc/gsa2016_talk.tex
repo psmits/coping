@@ -45,14 +45,21 @@
 \end{frame}
 
 \begin{frame}
+  \frametitle{Cenozoic mammals of North America}
+  \begin{center}
+    \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio=true]{figure/Miocene}
+  \end{center}
+\end{frame}
+
+\begin{frame}
   \frametitle{Differences in extinction risk}
 
   \begin{columns}
     \begin{column}{0.5\textwidth}
-      \includegraphics[height=\textheight,width=\textwidth,keepaspectratio=true]{figure/diet_diff_est}
+      \includegraphics[height=\textheight,width=\textwidth,keepaspectratio=true]{figure/loco_diff_est}
     \end{column}
     \begin{column}{0.5\textwidth}
-      \includegraphics[height=\textheight,width=\textwidth,keepaspectratio=true]{figure/loco_diff_est}
+      \includegraphics[height=\textheight,width=\textwidth,keepaspectratio=true]{figure/diet_diff_est}
     \end{column}
   \end{columns}
 
@@ -85,7 +92,7 @@
   \begin{center}
     \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio=true]{figure/warton_fourth_corner}
   \end{center}
-  
+
   \attrib{\footnotesize{Brown \em{et al.}, 2014, \em{Methods Ecol. Evol.}}}
   % 4th corner is from older ordination lit
   %   presence, traits, environment, trait X environment
@@ -146,6 +153,9 @@
         \item probability is (observation prob) times (``true'' presence)
       \end{itemize}
     \item observation probability is effect of sampling/fossil record
+      \begin{itemize}
+        \item basic model does not model sampling
+      \end{itemize}
     \item the latent discrete ``true'' presence modeled as a \\multi-level logistic regression
       \begin{itemize}
         \item individual- and group-level
@@ -266,11 +276,20 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Concerns and conclusions}
-  % model with parameters inferred via ADVI fit isn't very adequate
-  %   but no one else checks their model adequacy (e.g. liow)
-  % interpretability
-  %   explaining this to a non-statistician/ecologist is a nightmare
+  \begin{block}{Concerns and conclusions}
+    \begin{itemize}
+      \item basic and full models have similar fits until Neogene
+      \item posterior predictive simulations disimilar to observed; poor model adequacy
+        \begin{itemize}
+          \item previous work has never evaluated model adequacy, so no baseline for comparison
+          \item second-order Markov process?
+          \item try for full posterior inference
+        \end{itemize}
+      \item decreasing ability to discern arboreal taxa over time (absence/increased rarity)
+      \item increase in scansorial taxa over time
+      \item increase in herbivorous taxa over time
+    \end{itemize}
+  \end{block}
 \end{frame}
 
 \begin{frame}
