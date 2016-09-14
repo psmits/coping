@@ -1,10 +1,15 @@
-make.plots <- function(ext1, name = 'basic', name.name) {
+make.plots <- function(ext1, name = 'basic', name.name, group = TRUE, nsim = 1000) {
+  samp <- sample(1001, nsim)
   # set of the predictors
   es <- list()
   for(ii in seq(nrow(u))) {
     byd <- list()
     for(dd in seq(D)) {
-      byd[[dd]] <- apply(ext1$gamma[samp, , dd], 1, function(x) u[ii, ] %*% x)
+      if(group) {
+        byd[[dd]] <- apply(ext1$gamma[samp, , dd], 1, function(x) u[ii, ] %*% x)
+      } else {
+        byd[[dd]] <- ext1$gamma[samp, dd]
+      }
     }
     es[[ii]] <- byd
   }
@@ -19,7 +24,7 @@ make.plots <- function(ext1, name = 'basic', name.name) {
   # plot the parameters estimated in the model
   # break the binary factors up
   save.cept <- diet <- move <- list()
-  for(ii in seq(T)) {
+  for(ii in seq(T - 1)) {
     cept <- ext1$beta[samp, ii, c(1, 3:22)]
 
     tt <- es[[ii]][c(1, 3:22)]
@@ -68,7 +73,7 @@ make.plots <- function(ext1, name = 'basic', name.name) {
                      x})
   save.cept <- data.frame(Reduce(rbind, save.cept))
   save.cept$diet <- mapvalues(save.cept$diet, unique(save.cept$diet), 
-                          c('omnivore', 'insectivore', 'carnivore', 'herbivore'))
+                              c('omnivore', 'insectivore', 'carnivore', 'herbivore'))
   save.cept$move <- str_replace(save.cept$move, 'life', '')
 
   # plot of relative probability of occurrence based on diet
@@ -116,56 +121,58 @@ make.plots <- function(ext1, name = 'basic', name.name) {
   names(eff.var) <- name.name
   eff.var <- melt(eff.var)
   eff.var <- eff.var[eff.var$L1 != 'mass', ]
- 
+
   eff.var <- data.frame(eff.var, Reduce(rbind, str_split(eff.var$L1, ':')))
   eff.var$X1 <- str_replace(eff.var$X1, 'diet', '')
   eff.var$X1 <- mapvalues(eff.var$X1, unique(eff.var$X1), 
                           c('omnivore', 'insectivore', 'carnivore', 'herbivore'))
   eff.var$X2 <- str_replace(eff.var$X2, 'life', '')
-  
+
   varplot <- ggplot(eff.var, aes(x = value, y = ..density..))
   varplot <- varplot + geom_histogram()
   varplot <- varplot + facet_grid(X1 ~ X2)
   varplot <- varplot + labs(x = 'Stdev Prob. of ecotype given occurrence', y = 'Probability density')
   ggsave(filename = paste0('../doc/figure/sd_occur_prob_', name, '.png'),
-          plot = varplot, width = 8, height = 6)
+         plot = varplot, width = 8, height = 6)
 
 
 
 
-  # now for gamma/group level covariates
-  byindiv <- list()
-  for(ii in seq(D)) {
-    bygroup <- list()
-    for(jj in seq(U)) {
-      bygroup[[jj]] <- quantile(ext1$gamma[samp, jj, ii], 
-                                c(0.10, 0.25, 0.5, 0.75, 0.90))
-      names(bygroup[[jj]]) <- c('low', 'lowmid', 'med', 'highmed', 'high')
+  if(group) {
+    # now for gamma/group level covariates
+    byindiv <- list()
+    for(ii in seq(D)) {
+      bygroup <- list()
+      for(jj in seq(U)) {
+        bygroup[[jj]] <- quantile(ext1$gamma[samp, jj, ii], 
+                                  c(0.10, 0.25, 0.5, 0.75, 0.90))
+        names(bygroup[[jj]]) <- c('low', 'lowmid', 'med', 'highmed', 'high')
+      }
+      bygroup <- Reduce(rbind, bygroup)
+      byindiv[[ii]] <- data.frame(bygroup, group = seq(U), indiv = ii)
     }
-    bygroup <- Reduce(rbind, bygroup)
-    byindiv[[ii]] <- data.frame(bygroup, group = seq(U), indiv = ii)
+    melted <- Reduce(rbind, byindiv)
+    melted$group <- mapvalues(melted$group, unique(melted$group), 
+                              c('phase 1', 'mean temp', 'range temp', 
+                                'phase 2', 'phase3'))
+    melted$group <- factor(melted$group,
+                           levels = c('phase 1', 'phase 2', 'phase3', 
+                                      'mean temp', 'range temp'))
+    melted$indiv <- mapvalues(melted$indiv, unique(melted$indiv), name.name)
+    melted$indiv <- factor(melted$indiv, levels = sort(name.name))
+    # iter, indiv, group, value
+    gamma.plot <- ggplot(melted, aes(x = factor(indiv), y = med))
+    gamma.plot <- gamma.plot + geom_hline(yintercept = 0, colour = 'grey')
+    gamma.plot <- gamma.plot + geom_linerange(aes(ymax = highmed, ymin = lowmid), 
+                                              size = 2)
+    gamma.plot <- gamma.plot + geom_pointrange(aes(ymax = high, ymin = low))
+    gamma.plot <- gamma.plot + facet_grid(~ group)
+    gamma.plot <- gamma.plot + coord_flip()
+    gamma.plot <- gamma.plot + labs(x = 'Coefficient estimate (log odds scale)',
+                                    y = 'Individual-level effect')
+    ggsave(filename = paste0('../doc/figure/gamma_est_', name, '.png'),
+           plot = gamma.plot, width = 8, height = 6)
   }
-  melted <- Reduce(rbind, byindiv)
-  melted$group <- mapvalues(melted$group, unique(melted$group), 
-                            c('phase 1', 'mean temp', 'range temp', 
-                              'phase 2', 'phase3'))
-  melted$group <- factor(melted$group,
-                         levels = c('phase 1', 'phase 2', 'phase3', 
-                                    'mean temp', 'range temp'))
-  melted$indiv <- mapvalues(melted$indiv, unique(melted$indiv), name.name)
-  melted$indiv <- factor(melted$indiv, levels = sort(name.name))
-  # iter, indiv, group, value
-  gamma.plot <- ggplot(melted, aes(x = factor(indiv), y = med))
-  gamma.plot <- gamma.plot + geom_hline(yintercept = 0, colour = 'grey')
-  gamma.plot <- gamma.plot + geom_linerange(aes(ymax = highmed, ymin = lowmid), 
-                                            size = 2)
-  gamma.plot <- gamma.plot + geom_pointrange(aes(ymax = high, ymin = low))
-  gamma.plot <- gamma.plot + facet_grid(~ group)
-  gamma.plot <- gamma.plot + coord_flip()
-  gamma.plot <- gamma.plot + labs(x = 'Coefficient estimate (log odds scale)',
-                                  y = 'Individual-level effect')
-  ggsave(filename = paste0('../doc/figure/gamma_est_', name, '.png'),
-         plot = gamma.plot, width = 8, height = 6)
 }
 
 

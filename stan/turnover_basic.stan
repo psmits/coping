@@ -9,15 +9,17 @@ data {
   row_vector[U] u[T];  // matrix of group-level covariates
 }
 parameters {
+  real<lower=0,upper=1> phi;
   corr_matrix[D] Omega;
   vector<lower=0>[D] tau;
-  matrix[U, D] gamma;
-  vector[D] beta[T];
+  vector[D] gamma;
+  //matrix[U, D] gamma;
+  vector[D] beta[T-1];
 }
 transformed parameters {
-  matrix[N, T] pred;
+  matrix[N, T-1] pred;
   
-  for(t in 1:T) {
+  for(t in 1:(T-1)) {
     for(n in 1:N) {
       pred[n, t] = inv_logit(x[n, ] * beta[t, ]);
     }
@@ -31,9 +33,10 @@ model {
     matrix[D, D] Sigma_beta;
     Sigma_beta = quad_form_diag(Omega, tau);
     
-    for(t in 1:T) {
-      beta[t] ~ multi_normal(u[t] * gamma, Sigma_beta);
-    }
+    beta ~ multi_normal(gamma, Sigma_beta);
+    //for(t in 1:T) {
+    //  beta[t] ~ multi_normal(u[t] * gamma, Sigma_beta);
+    //}
   }
 
   to_vector(gamma) ~ normal(0, 1);
@@ -43,29 +46,12 @@ model {
 
     for(n in 1:N) {
       prod_state = (1 - sight[n, 1]);
-      sight[n, 1] ~ bernoulli(pred[n, 1]);
+      sight[n, 1] ~ bernoulli(phi);
       for(t in 2:T) {
         prod_state = prod_state * (1 - sight[n, t - 1]);
-        sight[n, t] ~ bernoulli(sight[n, t - 1] * pred[n, t] + 
-            prod_state * pred[n, t]);
+        sight[n, t] ~ bernoulli(sight[n, t - 1] * pred[n, t - 1] + 
+            prod_state * pred[n, t - 1]);
       }
     }
   }
 }
-//generated quantities {
-//  int sight_tilde[N, T];  // observed presence
-//
-//  {
-//    int prod_state;
-//
-//    for(n in 1:N) {
-//      prod_state <- (1 - sight[n, 1]);
-//      sight_tilde[n, 1] <- sight[n, 1];
-//      for(t in 2:T) {
-//        prod_state <- prod_state * (1 - sight_tilde[n, t - 1]);
-//        sight_tilde[n, t] <- bernoulli_rng(sight_tilde[n, t - 1] * pred[n, t] + 
-//            prod_state * pred[n, t]);
-//      }
-//    }
-//  }
-//}

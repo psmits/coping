@@ -14,7 +14,7 @@ functions {
     }
     return 0;
   }
-  real state_space_lp(int[] y, row_vector pred, vector p) {
+  real state_space_lp(int[] y, real phi, row_vector pred, vector p) {
     int ft;
     int lt;
     int S;
@@ -70,11 +70,12 @@ data {
 parameters {
   corr_matrix[D] Omega;
   vector<lower=0>[D] tau;
-  matrix[U, D] gamma_std;
-  vector[D] beta[T];
+  vector[D] beta[T-1];
   
-  real<lower=0> lambda[D];
-  vector<lower=0>[D] phi[U];
+  vector[D] gamma; 
+  //matrix[U, D] gamma; 
+
+  real<lower=0,upper=1> phi;
 
   vector[T] p_norm; 
   real p_mu;
@@ -82,23 +83,16 @@ parameters {
 }
 transformed parameters {
   vector<lower=0,upper=1>[T] p;  // sampling probability
-  matrix[U, D] gamma; 
-  matrix[N, T] pred; 
+  matrix[N, T-1] pred; 
   
   
   // non-centered parameterization following Betacourt and Girolami
-  for(k in 1:U) {
-    for(j in 1:D) {
-      gamma[k, j] = gamma_std[k, j] * lambda[j] * phi[k][j];
-    }
-  }
-
   for(t in 1:T) {
     p[t] = inv_logit(p_mu + p_sigma * p_norm[t]);
   }
   
   // assemble predictor w/ intercept + effects of indiv-level covariates
-  for(t in 1:T) {
+  for(t in 1:(T-1)) {
     for(n in 1:N) {
       pred[n, t] = inv_logit(x[n, ] * beta[t, ]);
     }
@@ -112,40 +106,19 @@ model {
     matrix[D, D] Sigma_beta;
     Sigma_beta = quad_form_diag(Omega, tau);
 
-    for(t in 1:T) {
-      beta[t] ~ multi_normal(u[t] * gamma, Sigma_beta);
-    }
+    beta ~ multi_normal(gamma, Sigma_beta);
+    //for(t in 1:T) {
+    //  beta[t] ~ multi_normal(u[t] * gamma, Sigma_beta);
+    //}
   }
 
-  to_vector(gamma_std) ~ normal(0, 1);
-  for(i in 1:U) phi[i] ~ cauchy(0, 1);
-  lambda ~ cauchy(0, 1);
+  to_vector(gamma) ~ normal(0, 1);
 
   p_mu ~ normal(0, 1);
   p_sigma ~ cauchy(0, 1);
 
 
   for(n in 1:N) {
-    target += state_space_lp(sight[n], pred[n, ], p);
+    target += state_space_lp(sight[n], phi, pred[n, ], p);
   }
 }
-//generated quantities {
-//  int true_tilde[N, T]
-//  int sight_tilde[N, T];  // observed presence
-//
-//  {
-//    int prod_state;
-//
-//    for(n in 1:N) {
-//      true_tilde[n, 1] <- bernoulli_rng(pred[n, 1]);
-//      sight_tilde[n, 1] <- bernoulli_rng(p[1] * true_tilde[n, 1]);
-//      prod_state <- (1 - true_tide[n, 1]);
-//      for(t in 2:T) {
-//        prod_state <- prod_state * (1 - true_tilde[n, t]);
-//        true_tilde[n, t] <- bernoulli_rng(true_tilde[n, t - 1] * pred[n, t] + 
-//            prod_state * pred[n, t]);
-//        sight_tilde[n, t] <- bernoulli_rng(p[t] * true_tilde[n, t - 1]);
-//      }
-//    }
-//  }
-//}
