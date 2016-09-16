@@ -43,8 +43,8 @@ functions {
         prod_term = 1 - z[1];
         for(j in 2:S) {
           prod_term = prod_term * (1 - z[j - 1]);
-          sl = sl + bernoulli_lpmf(z[j] | (z[j - 1] * pred[j]) + 
-              prod_term * pred[j]);
+          sl = sl + bernoulli_lpmf(z[j] | (z[j - 1] * pred[j - 1]) + 
+              prod_term * pred[j - 1]);
         }
         for(k in 1:S) {
           sl = sl + bernoulli_lpmf(y[k] | z[k] * p[k]);
@@ -72,8 +72,7 @@ parameters {
   vector<lower=0>[D] tau;
   vector[D] beta[T-1];
   
-  vector[D] gamma; 
-  //matrix[U, D] gamma; 
+  matrix[U, D] gamma; 
 
   real<lower=0,upper=1> phi;
 
@@ -83,7 +82,7 @@ parameters {
 }
 transformed parameters {
   vector<lower=0,upper=1>[T] p;  // sampling probability
-  matrix[N, T-1] pred; 
+  matrix[N, T - 1] pred; 
   
   
   // non-centered parameterization following Betacourt and Girolami
@@ -106,10 +105,9 @@ model {
     matrix[D, D] Sigma_beta;
     Sigma_beta = quad_form_diag(Omega, tau);
 
-    beta ~ multi_normal(gamma, Sigma_beta);
-    //for(t in 1:T) {
-    //  beta[t] ~ multi_normal(u[t] * gamma, Sigma_beta);
-    //}
+    for(t in 1:(T - 1)) {
+      beta[t] ~ multi_normal(u[t + 1] * gamma, Sigma_beta);
+    }
   }
 
   to_vector(gamma) ~ normal(0, 1);

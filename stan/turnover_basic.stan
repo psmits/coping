@@ -12,14 +12,13 @@ parameters {
   real<lower=0,upper=1> phi;
   corr_matrix[D] Omega;
   vector<lower=0>[D] tau;
-  vector[D] gamma;
-  //matrix[U, D] gamma;
-  vector[D] beta[T-1];
+  matrix[U, D] gamma;
+  vector[D] beta[T - 1];
 }
 transformed parameters {
-  matrix[N, T-1] pred;
+  matrix[N, T - 1] pred;
   
-  for(t in 1:(T-1)) {
+  for(t in 1:(T - 1)) {
     for(n in 1:N) {
       pred[n, t] = inv_logit(x[n, ] * beta[t, ]);
     }
@@ -33,10 +32,9 @@ model {
     matrix[D, D] Sigma_beta;
     Sigma_beta = quad_form_diag(Omega, tau);
     
-    beta ~ multi_normal(gamma, Sigma_beta);
-    //for(t in 1:T) {
-    //  beta[t] ~ multi_normal(u[t] * gamma, Sigma_beta);
-    //}
+    for(t in 1:(T - 1)) {
+      beta[t] ~ multi_normal(u[t + 1] * gamma, Sigma_beta);
+    }
   }
 
   to_vector(gamma) ~ normal(0, 1);

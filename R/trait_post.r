@@ -44,8 +44,8 @@ fit2 <- read_one_stan_csv(post[2])
 ext2 <- post.advi(fit2)
 
 # posterior inference plots for advi results
-make.plots(ext1 = ext1, name = 'basic', name.name = name.name, group = FALSE)
-make.plots(ext1 = ext2, name = 'full', name.name = name.name)
+make.plots(ext1 = ext1, name = 'basic', name.name = name.name, group = TRUE)
+make.plots(ext1 = ext2, name = 'full', name.name = name.name, group = TRUE)
 
 
 ## full Bayes
@@ -63,8 +63,10 @@ ntax <- N
 ntime <- T
 sim.obs <- sim.imp <- list()
 for(ii in seq(nsim)) {
-  sim.imp[[ii]] <- model.simulation(N, T, ext1$pred[samp[ii], , ])
-  sim.obs[[ii]] <- model.simulation(N, T, ext2$pred[samp[ii], , ], 
+  sim.imp[[ii]] <- model.simulation(N, T, phi = ext1$phi[samp], 
+                                    pred = ext1$pred[samp[ii], , ])
+  sim.obs[[ii]] <- model.simulation(N, T, phi = ext2$phi[samp],
+                                    pred = ext2$pred[samp[ii], , ], 
                                     p = ext2$p[samp[ii], ])
 }
 

@@ -84,6 +84,7 @@ make.plots <- function(ext1, name = 'basic', name.name, group = TRUE, nsim = 100
   ceptprob <- ceptprob + geom_ribbon(aes(ymax = highmed, ymin = lowmed), 
                                      alpha = 0.4)
   ceptprob <- ceptprob + geom_line(size = 1.5)
+  ceptprob <- ceptprob + geom_hline(yintercept = 0.5)
   ceptprob <- ceptprob + facet_grid(diet ~ move)
   ceptprob <- ceptprob + scale_fill_manual(values = cbp.long)
   ceptprob <- ceptprob + labs(x = 'Time', 
