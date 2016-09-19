@@ -1,5 +1,36 @@
-make.plots <- function(ext1, name = 'basic', name.name, group = TRUE, nsim = 1000) {
+#' Make the plots for the coping project
+#'
+#' @param ext1 output from rstan::extract of model fit
+#' @param name string associated with outputs
+#' @param name.name vector of regression coefficient names
+#' @param group logical are there any group level covariates?
+#' @param sampling logical is sampling parameterized?
+#' @param nsim integer how many random pulls from the posterior?
+make.plots <- function(ext1, 
+                       name = 'basic', 
+                       name.name, 
+                       group = TRUE, 
+                       sampling = FALSE, 
+                       nsim = 1000) {
   samp <- sample(1001, nsim)
+
+  if(sampling) {
+    ss <- t(apply(ext2$p, 2, function(x) 
+                  quantile(x, c(0.1, 0.25, 0.5, 0.75, 0.9))))
+    ss <- data.frame(cbind(seq(nrow(ss)), ss))
+    names(ss) <- c('time', 'low', 'lowmed', 'med', 'highmed', 'high')
+    fosplot <- ggplot(ss, aes(x = time, y = med))
+    fosplot <- fosplot + geom_ribbon(aes(ymax = high, ymin = low), 
+                                     alpha = 0.2)
+    fosplot <- fosplot + geom_ribbon(aes(ymax = highmed, ymin = lowmed), 
+                                     alpha = 0.4)
+    fosplot <- fosplot + geom_line(size = 1.5)
+    fosplot <- fosplot + labs(x = 'Time (My)', y = 'Sampling probability')
+    ggsave(filename = paste0('../doc/figure/samp_prob_', name, '.png'),
+           plot = fosplot, width = 4, height = 3)
+  }
+
+
   # set of the predictors
   es <- list()
   for(ii in seq(nrow(u))) {
