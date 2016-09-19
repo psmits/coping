@@ -186,9 +186,9 @@ make.plots <- function(ext1,
     melted <- Reduce(rbind, byindiv)
     melted$group <- mapvalues(melted$group, unique(melted$group), 
                               c('phase 1', 'mean temp', 'range temp', 
-                                'phase 2', 'phase3'))
+                                'phase 2', 'phase 3'))
     melted$group <- factor(melted$group,
-                           levels = c('phase 1', 'phase 2', 'phase3', 
+                           levels = c('phase 1', 'phase 2', 'phase 3', 
                                       'mean temp', 'range temp'))
     melted$indiv <- mapvalues(melted$indiv, unique(melted$indiv), name.name)
     melted$indiv <- factor(melted$indiv, levels = sort(name.name))

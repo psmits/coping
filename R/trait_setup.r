@@ -70,12 +70,8 @@ occur <- occur[occur$bins != 66, ]
 
 # save true bins
 occur$true.bin <- occur$bins
-#occur <- occur[occur$bins != min(occur$bins), ]
 # make easy bins
 occur$bins <- occur$bins / 2
-#occur$bins <- mapvalues(occur$bins, 
-#                        from = unique(occur$bins), 
-#                        to = seq(length(unique(occur$bins))))
 
 
 
@@ -84,8 +80,8 @@ occur$bins <- occur$bins / 2
 by.tax <- split(occur, occur$name.bi)
 #by.tax <- split(occur, occur$genus)
 
+# cols go from younger to older
 sight <- matrix(0, nrow = length(by.tax), ncol = max(occur$bins))
-occur$bins
 for(ii in seq(length(by.tax))) {
   sight[ii, (by.tax[[ii]]$bins)] <- 1
 }
@@ -106,11 +102,6 @@ x <- x[, colSums(x) != 0]
 # i think this is the correct thing to do because certain inter not obs
 D <- ncol(x)
 name.name <- colnames(x)
-
-# temporal data
-cohort <- occur$bins / 2
-T <- length(unique(cohort))
-cohort <- mapvalues(cohort, from = unique(cohort), to = seq(T))
 
 # phylogenetic data
 #vcv <- vcv(spt)
@@ -141,9 +132,8 @@ for(ii in seq(length(co.h))){
 P <- 3
 
 # fixed the reversed order
-sight <- sight[, rev(seq(ncol(sight)))]
-u <- apply(u, 2, rev)
-phase <- factor(rev(phase))
+sight <- sight[, rev(seq(ncol(sight)))]  # from older to younger
+phase <- factor(rev(phase)) # from older to younger
 u <- model.matrix( ~ u + phase)
 U <- ncol(u)
 
