@@ -44,27 +44,27 @@
   \end{alertblock}
 \end{frame}
 
+
 \begin{frame}
   \frametitle{Cenozoic mammals of North America}
   \begin{center}
     \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio=true]{figure/Miocene}
   \end{center}
+
+  \attrib{\footnotesize{Matternes, 1964}}
 \end{frame}
+
 
 \begin{frame}
   \frametitle{Differences in extinction risk}
 
-  \begin{columns}
-    \begin{column}{0.5\textwidth}
-      \includegraphics[height=\textheight,width=\textwidth,keepaspectratio=true]{figure/loco_diff_est}
-    \end{column}
-    \begin{column}{0.5\textwidth}
-      \includegraphics[height=\textheight,width=\textwidth,keepaspectratio=true]{figure/diet_diff_est}
-    \end{column}
-  \end{columns}
+  \begin{center}
+    \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio=true]{figure/smits_2015_results}
+  \end{center}
 
   \attrib{\footnotesize{Smits, 2015, \em{PNAS}}}
 \end{frame}
+
 
 \begin{frame}
   \frametitle{Species pool concept}
@@ -75,6 +75,7 @@
 
   \attrib{\footnotesize{Mittelbach and Schemske, 2015, \em{TREE}}}
 \end{frame}
+
 
 \begin{frame}
   \frametitle{Eco-cube and ecotypes}
@@ -97,12 +98,32 @@
 \end{frame}
 
 \begin{frame}
+  \frametitle{A worked example of a fourth-corner model}
+
+  \begin{columns}
+    \begin{column}{0.4\textwidth}
+      \begin{itemize}
+        \item Pollock \textit{et al.} 2012 Ecography
+        \item eucalypts in Australia
+        \item species traits: plant height, leaf area, seed mass
+        \item environmental traits: rockiness, valley flatness, 
+          precipitation, temp seasonality, solar radiation, soil sand, soil loam
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.6\textwidth}
+      \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio=true]{figure/pollock_trees}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}
   \frametitle{Paleo-fourth corner model}
 
   \begin{center}
     \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio=true]{figure/paleo_fourth_corner}
   \end{center}
 \end{frame}
+
 
 \begin{frame}
   \frametitle{Covariates of interest}
@@ -130,11 +151,12 @@
           \begin{itemize}
             \item mean and interquartile range of rescaled value
           \end{itemize}
-        \item plant community phase following Graham
+        \item plant community phase following Graham 2011
       \end{itemize}
     \end{column}
   \end{columns}
 \end{frame}
+
 
 \begin{frame}
   \frametitle{Model of taxon occurrence}
@@ -155,6 +177,7 @@
   \end{itemize}
 \end{frame}
 
+
 \begin{frame}
   \frametitle{Paleo-fourth corner model}
 
@@ -162,6 +185,7 @@
     \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio=true]{figure/paleo_fourth_corner}
   \end{center}
 \end{frame}
+
 
 \begin{frame}
   \frametitle{Model and sampling statement definition}
@@ -178,6 +202,7 @@
   }
   \scriptsize{Note: Product term ensures taxon-loss is permanent. Implementation in Stan marginalizes over all possible (range-through) values of \(z\) instead of estimating the discrete parameters. I also use a noncentered parameterization of the hierarchical effects for better posterior sampling behavior. This presentation excludes final (hyper)priors.}
 \end{frame}
+
 
 \begin{frame}
   \frametitle{Parameter estimation and inference}
@@ -216,11 +241,13 @@
   \begin{columns}
     \begin{column}{0.5\textwidth}
       Basic model
+      \vspace*{0.05\textheight}
 
       \includegraphics[height=\textheight,width=\textwidth,keepaspectratio=true]{figure/mass_eff_basic}
     \end{column}
     \begin{column}{0.5\textwidth}
       Full model
+      \vspace*{0.05\textheight}
 
       \includegraphics[height=\textheight,width=\textwidth,keepaspectratio=true]{figure/mass_eff_full}
     \end{column}
@@ -236,6 +263,7 @@
   \end{center}
 \end{frame}
 
+
 \begin{frame}
   \frametitle{Probability occurrence is of ecotype (full model)}
 
@@ -243,6 +271,7 @@
     \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio=true]{figure/cept_occur_prob_full}
   \end{center}
 \end{frame}
+
 
 \begin{frame}
   \frametitle{Group-level effects (climate, plant phase)}
@@ -252,23 +281,25 @@
   \end{center}
 \end{frame}
 
+
 \begin{frame}
   \begin{block}{Concerns and conclusions}
     \begin{itemize}
       \item basic and full models have similar results until Neogene
       \item posterior predictive simulations disimilar to observed; poor model adequacy
         \begin{itemize}
-          \item previous work has never evaluated model adequacy, so no baseline for comparison
+          \item previous work has \emph{never} evaluated model adequacy
           \item second-order Markov process?
-          \item try for full posterior inference
+          \item full posterior inference?
         \end{itemize}
       \item decreasing ability to discern arboreal taxa over time (absence/increased rarity)
       \item increase in scansorial taxa over time
       \item increase in herbivorous taxa over time
-      \item group-level covariates (climate, plants) have very small effects
+      \item plant phase has small, idiosyncratic effects
     \end{itemize}
   \end{block}
 \end{frame}
+
 
 \begin{frame}
   \frametitle{Acknowledgements}

@@ -6,6 +6,7 @@ library(reshape2)
 library(ggplot2)
 library(rstan)
 library(grid)
+library(scales)
 library(pROC)
 library(Metrics)
 source('../R/multiclass_roc.r')
@@ -21,9 +22,17 @@ sight.obs <- sight
 
 #
 theme_set(theme_bw())
+theme_update(axis.text = element_text(size = 12),
+             axis.title = element_text(size = 15),
+             legend.text = element_text(size = 8),
+             legend.title = element_text(size = 10),
+             legend.key.size = unit(0.75, 'cm'),
+             strip.text = element_text(size = 12))
+
 cbp.long <- c('#000000', '#004949', '#009292', '#FF7DB6', '#FFB6DB', 
               '#490092', '#006DDB', '#B66DFF', '#6DB6FF', '#B6DBFF', 
               '#920000', '#924900', '#DBD100', '#24FF24', '#FFFF6D')
+
 grab <- laply(seq(5), function(x) seq(from = x, to = length(cbp.long), by = 5))
 cbp.long <- cbp.long[t(grab)][-1]
 #
@@ -82,9 +91,10 @@ mos <- data.frame(x = c(meanocc.simobs, meanocc.simimp),
 obs <- data.frame(x = c(meanocc.obs, meanocc.imp), 
                   y = c('Full', 'Basic'))
 ocplot <- ggplot(mos, aes(x = x)) + geom_histogram()
-ocplot <- ocplot + geom_vline(data = obs, mapping = aes(xintercept = x))
+ocplot <- ocplot + geom_vline(data = obs, mapping = aes(xintercept = x), 
+                              colour = 'blue', size = 1.5)
 ocplot <- ocplot + facet_grid( ~ y)
-ocplot <- ocplot + labs(x = 'Mean number of observations per species',
-                        y = 'Posterior predictive simulations')
+ocplot <- ocplot + labs(x = 'Mean obs per species',
+                        y = 'Post. pred. simulations')
 ggsave(filename = '../doc/figure/pred_occ.png', plot = ocplot,
        width = 4, height = 3)

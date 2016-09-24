@@ -85,7 +85,7 @@ make.plots <- function(ext1,
 
 
   # big graph
-  save.cept <- save.cept[-c(1, T)]
+  #save.cept <- save.cept[-c(1, T)]
   save.cept <- llply(save.cept, function(x) 
                      apply(x, 2, function(y) 
                            quantile(y, c(0.1, 0.25, 0.5, 0.75, 0.9))))
@@ -107,6 +107,7 @@ make.plots <- function(ext1,
                               c('omnivore', 'insectivore', 'carnivore', 'herbivore'))
   save.cept$move <- str_replace(save.cept$move, 'life', '')
 
+  save.cept$time <- save.cept$time * 2 + 2
   # plot of relative probability of occurrence based on diet
   #   controling for expected occurrence probability due to environmental condition
   ceptprob <- ggplot(save.cept, aes(x = time, y = med))
@@ -132,6 +133,7 @@ make.plots <- function(ext1,
                    quantile(y, c(0.1, 0.25, 0.5, 0.75, 0.9)))
   names(masseff) <- c('bin', 'low', 'lowmed', 'med', 'highmed', 'high')
   masseff$bin <- as.numeric(as.character(masseff$bin))
+  masseff$bin <- masseff$bin* 2 + 2
   massplot <- ggplot(masseff, aes(x = bin, y = med))
   massplot <- massplot + geom_ribbon(aes(ymax = high, ymin = low),
                                      alpha = 0.2)
@@ -139,7 +141,7 @@ make.plots <- function(ext1,
                                      alpha = 0.4)
   massplot <- massplot + geom_line(size = 1.5)
   massplot <- massplot + labs(x = 'Time', 
-                              y = 'log-odds of occurrence / \nstandard deviation of mass (g)')
+                              y = 'log-odds of occ / \nstdev mass (g)')
   ggsave(filename = paste0('../doc/figure/mass_eff_', name, '.png'),
          plot = massplot, width = 4, height = 3)
 
@@ -185,10 +187,14 @@ make.plots <- function(ext1,
     }
     melted <- Reduce(rbind, byindiv)
     melted$group <- mapvalues(melted$group, unique(melted$group), 
-                              c('phase 1', 'mean temp', 'range temp', 
-                                'phase 2', 'phase 3'))
+                              c('m Mio-Plio', 
+                                'mean temp', 'range temp', 
+                                'e Eo-e Mio', 
+                                'Paleo-e Eo'))
     melted$group <- factor(melted$group,
-                           levels = c('phase 1', 'phase 2', 'phase 3', 
+                           levels = c('Paleo-e Eo', 
+                                      'e Eo-e Mio', 
+                                      'm Mio-Plio', 
                                       'mean temp', 'range temp'))
     melted$indiv <- mapvalues(melted$indiv, unique(melted$indiv), name.name)
     melted$indiv <- factor(melted$indiv, levels = sort(name.name))
@@ -202,6 +208,7 @@ make.plots <- function(ext1,
     gamma.plot <- gamma.plot + coord_flip()
     gamma.plot <- gamma.plot + labs(x = 'Coefficient estimate (log odds scale)',
                                     y = 'Individual-level effect')
+    gamma.plot <- gamma.plot + scale_y_continuous(breaks = pretty_breaks(n = 3))
     ggsave(filename = paste0('../doc/figure/gamma_est_', name, '.png'),
            plot = gamma.plot, width = 8, height = 6)
   }
