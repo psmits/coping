@@ -113,9 +113,9 @@ name.name <- colnames(x)
 #u <- cbind(mean.o18, range.o18)
 #U <- ncol(u)
 # WARNING to include need to remove oldest bin!!!!
-u <- cbind(temp.time.mean, temp.time.range)
+u <- cbind(temp.time.mean, temp.time.range)  # young to old
 u <- u[-(nrow(u)), ]
-# old to young
+u <- apply(u, 2, rev)  # old to young
 
 
 # make the plant phase indicator

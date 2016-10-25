@@ -22,6 +22,7 @@ range.o18 <- laply(split(zac$o18, zac.cohort), function(x)
 range.o18 <- arm::rescale(range.o18)
 
 
+
 # how about the mg/ca data...
 cram <- read.delim('../data/cramer/cramer_mgca_pref.txt', sep = '\t')
 cram.temp <- read.delim('../data/cramer/cramer_temp.txt', sep = '\t')

@@ -13,7 +13,6 @@ parameters {
   corr_matrix[D] Omega;
   vector<lower=0>[D] tau;
   vector[D] gamma;
-  //matrix[U, D] gamma;
   vector[D] beta[T-1];
 }
 transformed parameters {
@@ -34,9 +33,6 @@ model {
     Sigma_beta = quad_form_diag(Omega, tau);
     
     beta ~ multi_normal(gamma, Sigma_beta);
-    //for(t in 1:T) {
-    //  beta[t] ~ multi_normal(u[t] * gamma, Sigma_beta);
-    //}
   }
 
   to_vector(gamma) ~ normal(0, 1);

@@ -107,7 +107,7 @@ make.plots <- function(ext1,
                               c('omnivore', 'insectivore', 'carnivore', 'herbivore'))
   save.cept$move <- str_replace(save.cept$move, 'life', '')
 
-  save.cept$time <- save.cept$time * 2 + 2
+  save.cept$time <- rev(save.cept$time * 2 + 2)
   # plot of relative probability of occurrence based on diet
   #   controling for expected occurrence probability due to environmental condition
   ceptprob <- ggplot(save.cept, aes(x = time, y = med))
@@ -119,6 +119,7 @@ make.plots <- function(ext1,
   ceptprob <- ceptprob + geom_hline(yintercept = 0.5)
   ceptprob <- ceptprob + facet_grid(diet ~ move)
   ceptprob <- ceptprob + scale_fill_manual(values = cbp.long)
+  ceptprob <- ceptprob + scale_x_reverse()
   ceptprob <- ceptprob + labs(x = 'Time', 
                               y = 'Probability of occurring relative to average')
   ggsave(filename = paste0('../doc/figure/cept_occur_prob_', name, '.png'), 
@@ -133,13 +134,14 @@ make.plots <- function(ext1,
                    quantile(y, c(0.1, 0.25, 0.5, 0.75, 0.9)))
   names(masseff) <- c('bin', 'low', 'lowmed', 'med', 'highmed', 'high')
   masseff$bin <- as.numeric(as.character(masseff$bin))
-  masseff$bin <- masseff$bin* 2 + 2
+  masseff$bin <- rev(masseff$bin* 2 + 2)
   massplot <- ggplot(masseff, aes(x = bin, y = med))
   massplot <- massplot + geom_ribbon(aes(ymax = high, ymin = low),
                                      alpha = 0.2)
   massplot <- massplot + geom_ribbon(aes(ymax = highmed, ymin = lowmed),
                                      alpha = 0.4)
   massplot <- massplot + geom_line(size = 1.5)
+  massplot <- massplot + scale_x_reverse()
   massplot <- massplot + labs(x = 'Time', 
                               y = 'log-odds of occ / \nstdev mass (g)')
   ggsave(filename = paste0('../doc/figure/mass_eff_', name, '.png'),
@@ -206,8 +208,8 @@ make.plots <- function(ext1,
     gamma.plot <- gamma.plot + geom_pointrange(aes(ymax = high, ymin = low))
     gamma.plot <- gamma.plot + facet_grid(~ group)
     gamma.plot <- gamma.plot + coord_flip()
-    gamma.plot <- gamma.plot + labs(x = 'Coefficient estimate (log odds scale)',
-                                    y = 'Individual-level effect')
+    gamma.plot <- gamma.plot + labs(y = 'Group-level effect',
+                                    x = 'Individual-level effect')
     gamma.plot <- gamma.plot + scale_y_continuous(breaks = pretty_breaks(n = 3))
     ggsave(filename = paste0('../doc/figure/gamma_est_', name, '.png'),
            plot = gamma.plot, width = 8, height = 6)

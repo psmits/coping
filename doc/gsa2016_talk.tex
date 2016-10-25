@@ -194,10 +194,8 @@
       y_{i,t} &\sim \text{Bernoulli}(\rho_{t} z_{i,t}) \\
       \text{logit}(\rho_{t}) &\sim \mathcal{N}(\rho^{'}, \sigma_{\rho}) \\
       z_{i,t} &\sim \text{Bernoulli}(\theta_{i, t}) \\
-      \text{logit}(\theta_{i, t}) &= z_{i,t-1} (\alpha_{t} + X_{i} \beta_{t\_}) + (\prod_{k = 1}^{t-1} 1 - z_{i,k}) (\alpha_{t} + X_{i} \beta_{t\_}) \\
-      \beta_{t,d} &\sim \mathcal{N}(\mu_{d}, \sigma_{d}) \\
-      \alpha_{t} &\sim \mathcal{N}(\mu + \phi_{p[t]} + U_{t} \gamma, \sigma_{\mu}) \\
-      \phi_{p} &\sim \mathcal{N}(0, \sigma_{\phi}) \\
+      \text{logit}(\theta_{i, t}) &= z_{i,t-1} (X_{i} \beta_{t\_}) + (\prod_{k = 1}^{t-1} 1 - z_{i,k}) (X_{i} \beta_{t\_}) \\
+      \beta_{t} &\sim \text{MVN}(\mu, \Sigma) \\
     \end{align*}
   }
   \scriptsize{Note: Product term ensures taxon-loss is permanent. Implementation in Stan marginalizes over all possible (range-through) values of \(z\) instead of estimating the discrete parameters. I also use a noncentered parameterization of the hierarchical effects for better posterior sampling behavior. This presentation excludes final (hyper)priors.}
@@ -274,7 +272,7 @@
 
 
 \begin{frame}
-  \frametitle{Group-level effects (climate, plant phase)}
+  \frametitle{Group-level effects (plant phase, climate)}
 
   \begin{center}
     \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio=true]{figure/gamma_est_full}
