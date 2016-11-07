@@ -73,13 +73,13 @@ data {
 parameters {
   corr_matrix[D] Omega;
   vector<lower=0>[D] tau;
-  vector[D] beta[T-1];
+  vector[D] beta[T - 1];
   
   matrix[U, D] gamma; 
 
-  vector[T] alpha_0;
+  real alpha_0;
   real alpha_1;
-  real mu;
+  vector[T] alpha_time;
   real<lower=0> sigma;
 
   real<lower=0,upper=1> phi;
@@ -90,7 +90,7 @@ transformed parameters {
   
   for(n in 1:N) {
     for(t in 1:T) {
-      p[n, t] = inv_logit(alpha_0[t] + alpha_1 * mass[n]);
+      p[n, t] = inv_logit(alpha_0 + alpha_time[t] + alpha_1 * mass[n]);
     }
   }
   
@@ -116,11 +116,9 @@ model {
 
   to_vector(gamma) ~ normal(0, 1);
 
-  alpha_0 ~ normal(mu, sigma);
-  mu ~ normal(0, 1);
-  sigma ~ normal(0, 1);
-
+  alpha_0 ~ normal(0, 10);
   alpha_1 ~ normal(0, 1);
+  alpha_time ~ normal(0, sigma);
 
   for(n in 1:N) {
     target += state_space_lp(sight[n], phi, pred[n, ], p[n, ]);

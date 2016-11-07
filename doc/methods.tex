@@ -55,6 +55,15 @@ Species mass data was sourced from the Paleobiology Database, SMITH, TOMIYA, ETC
 
 \subsection*{Model specification}
 
+This model is simply a hidden markov model with an absorbing state. The notation follows the Jolly-Seber capture-mark-recapture model presented in Royle and Dorazio (book).
+
+The observed state of a species at a given time is a function of both its ``true'' state (present or absent) and the probability observation. 
+
+The probability of observation (e.g. preservation) is modeled as a logistic regression with species mass as a predictor and a time-varying intercept. Both The intercept and the effect of mass (slope) were given independent, weakly-informative Normal distributed priors, and the time-varying effect was modeled as a Normal distribution with mean 0 and a scale term (\(\sigma\)) which was given a half-Normal distributed prior.
+
+The probability of species occurrence is also modeled as a logistic regression with multiple covariates at the individual-level, where both intercepts and slopes are allowed to vary with time as a function of other group-level covariates. The intercept and slope of the individual-level effects are modeled as a multivariate normal (MVN) distribution where each element of the vector of means are individual regressions with the group-level covariates. The covariance matrix of the MVN distribution is decomposed into a correlation matrix and a vector of scale terms; the correlation matrix was given a weakly informative LKJ prior and the elements of the vector of scales are given independent half-Normal distributed priors.
+
+
 % base model
 %   core is a 2-state markov model
 %   contrain 0 --> 1 and 1 --> 1 to be equal
@@ -63,74 +72,23 @@ Species mass data was sourced from the Paleobiology Database, SMITH, TOMIYA, ETC
 %   this follows Royle and Dorazio
 % occurrence probability
 %   hierarchical logistic regression
-
-\(y^{r}\) is a \(N \times D\) matrix of implied (range-through) occurrences.
-
-\(x\) is a \(N \times D\) matrix of individual-level covariates. \(x_{i}\) is a row vector.
-
-\(\beta\) is a \(D \times T\) matrix of regression coefficients. \(\beta_{t}\) is a column vector.
-
-\(u\) is a \(J \times T\) matrix of group-level covariates. \(u_{t}\) is a row vector.
-
-\(\gamma\) is a \(J \times D\) matrix of regression coefficients.
-
-\(\Sigma\) is a \(D \times D\) covariance matrix.
-
 \begin{equation}
   \begin{aligned}
-    y^{r}_{i,t} &\sim \text{Bernoulli}(\theta_{i,t}) \\
-    \theta_{i, t} &= \text{logit}^{-1}(y^{r}_{i, t - 1} (x_{i} \beta_{t}) + \prod_{k = 1}^{k = t - 1}(1 - y^{r}_{i, t = k}) (x_{i} \beta_{t})) \\
-    \beta_{t} &\sim \text{MVN}(u_{t} \gamma, \Sigma). \\
+    y_{i, t} &\sim \text{Bernoulli}(p_{i, t} z_{i, t}) \\
+    % mass affects preserve
+    p_{i, t} &= \text{logit}^{-1}(\alpha_{0} + \alpha_{1} m + r_{t}) \\ 
+    \alpha_{0} &\sim \mathcal{N}(0, 1) \\
+    \alpha_{1} &\sim \mathcal{N}(0, 1) \\
+    \r_{t} &\sim \mathcal{N}(0, \sigma) \\
+    \sigma &\sim \mathcal{N}^{+}(1) \\
+    z_{i, t} &\sim \text{Bernoulli}(\theta_{i, t}) \\
+    \theta_{i, t} &= \text{logit}^{-1}(x_{i} \beta_{t}) \\
+    \beta_{t} &\sim \text{MVN}(u_{t} \gamma, \Sigma) \\
+    \gamma &\sim \mathcal{N}(0, 1) \\
+    \Sigma &= \text{diag}(tau) \Omega \text{diag}(tau) \\
   \end{aligned}
-  \label{eq:core}
+  \label{eq:full}
 \end{equation}
-
-The product term ensures that loss is an absorbing state (i.e. no de-extinction).
-
-
-Horseshoe priors for the regression coefficients with shared shrinkage for each group-level covariate. Remember, each group-level covariate affects each individual-level covariate (including the intercept terms).
-
-\(\lambda\) is a length \(J\) vector of scales.
-
-\(\phi\) is a \(J \times D\) matrix of scales.
-
-\begin{equation}
-  \gamma_{j, d} &\sim \mathcal{N}(0, \lambda_{j}\phi_{j, d}) \\
-  \lambda_{j} &\sim \text{C}^{+}(1) \\
-  \phi_{j, d} &\sim \text{C}^{+}(1) \\
-  \label{eq:horseshoe}
-\end{equation}
-
-
-Decompose \(\Sigma\) into a vector of scale terms \(\tau\) and a correlation matrix \(\Omega\): \(\Sigma = \text{diag}(\tau) \Omega \text{diag}(\tau)\). \(\tau\) is a length \(D\) vector of the between time point scale for each individual-level covariate and \(\Omega\) is a \(D \times D\) correlation matrix; both of these are given weakly informative priors. \(\tau\) is given a half-Cauchy prior and \(\Omega\) is given an LKJ prior following STAN MANUAL; these are defined
-\begin{equation}
-  \begin{aligned}
-    \tau &\sim \text{C}^{+}(1) \\
-    \Omega &\sim \text{LKJ}_{cor}(2). \\
-  \end{aligned}
-  \label{eq:covariance}
-\end{equation}
-
-
-
-% model with imperfect observation
-%   make previous model the hidden layer in a 2-state hidden markov model
-%   follows Royle and Dozario
-\(y^{o}\) is a \(N \times T\) matrix of observed occurrences.
-
-\(z\) is a \(N \times T\) matrix of ``true'' occurrences.
-
-\(p\) is a length \(T\) vector of observation probabilities.
-
-\begin{equation}
-  \begin{aligned}
-    y^{o}_{i,t} &\sim \text{Bernoulli}(z_{i,t} p_{t}) \\
-    z_{i,t} &\sim \text{Bernoulli}(\theta_{i,t}) \\
-    \theta_{i, t} &= z_{i, t - 1} (x_{i} \beta_{t}) + \prod_{k = 1}^{k = t - 1}(1 - z_{i, t = k}) (x_{i} \beta_{t}) \\
-  \end{aligned}
-  \label{eq:latent}
-\end{equation}
-
 
 % two models; two fitting techniques
 %   one without sampling (implied presence model)

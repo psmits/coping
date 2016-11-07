@@ -12,6 +12,11 @@ source('../R/mung.r')
 load('../data/scaled_super.rdata')
 load('../data/body_mass.rdata')
 
+TESTING.x <- FALSE
+TESTING.u <- TRUE
+
+
+
 posture <- read.csv('../data/posture.csv', stringsAsFactors = FALSE) 
 # these specific assignments are based on Carano's papers on posture
 
@@ -97,8 +102,15 @@ mass <- arm::rescale(log(laply(by.tax, function(x) mean(x$mass))))
 diet <- factor(diet, levels = unique(diet)[c(4, 1:3)])
 life <- factor(life, levels = unique(life))
 inter <- interaction(diet, life, drop = TRUE)
-x <- stats::model.matrix( ~ mass + diet * life)
-x <- x[, colSums(x) != 0]  
+inter <- as.character(inter)
+
+rms <- which(inter == names(which(table(inter) == 1)))
+sight <- sight[-rms, ]
+
+x <- stats::model.matrix( ~ mass + inter)
+x <- x[-rms, ]
+mass <- mass[-rms]
+#x <- x[, colSums(x) != 0]  
 # i think this is the correct thing to do because certain inter not obs
 D <- ncol(x)
 name.name <- colnames(x)
@@ -150,9 +162,20 @@ T <- ncol(sight)
 
 # dump it out
 stan_rdump(list = c('N', 'T', 'D', 'U', 
-                    'sight', 'x', 'u'),
+                    'sight', 'x', 'u', 'mass'),
            file = '../data/data_dump/trait_info.data.R')
 sight <- old.sight
+
+# mod for testing
+if(TESTING.x) {
+  x <- x[, 1:2, drop = FALSE]
+  D <- 2
+}
+if(TESTING.u) {
+  u <- u[, 1, drop = FALSE]
+  U <- 1
+}
+
 stan_rdump(list = c('N', 'T', 'D', 'U', 
-                    'sight', 'x', 'u'),
+                    'sight', 'x', 'u', 'mass'),
            file = '../data/data_dump/trait_w_gaps.data.R')
