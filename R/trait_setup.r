@@ -13,7 +13,7 @@ load('../data/scaled_super.rdata')
 load('../data/body_mass.rdata')
 
 TESTING.x <- FALSE
-TESTING.u <- TRUE
+TESTING.u <- FALSE
 
 
 

@@ -55,31 +55,78 @@ Species mass data was sourced from the Paleobiology Database, SMITH, TOMIYA, ETC
 
 \subsection*{Model specification}
 
+% model diagram
+%   goal is to translate this conceptual diagram into a statistical model
+
+
+
+% basic mechanics
+%   hidden markov model with an absorbing state
+%   also known as a capture-mark-recapture model
+%   constrain transition matrix to only 2 probabilities (existing, not existing)
+
 This model is simply a hidden markov model with an absorbing state. The notation follows the Jolly-Seber capture-mark-recapture model presented in Royle and Dorazio (book).
 
 The observed state of a species at a given time is a function of both its ``true'' state (present or absent) and the probability observation. 
 
-The probability of observation (e.g. preservation) is modeled as a logistic regression with species mass as a predictor and a time-varying intercept. Both The intercept and the effect of mass (slope) were given independent, weakly-informative Normal distributed priors, and the time-varying effect was modeled as a Normal distribution with mean 0 and a scale term (\(\sigma\)) which was given a half-Normal distributed prior.
-
-The probability of species occurrence is also modeled as a logistic regression with multiple covariates at the individual-level, where both intercepts and slopes are allowed to vary with time as a function of other group-level covariates. The intercept and slope of the individual-level effects are modeled as a multivariate normal (MVN) distribution where each element of the vector of means are individual regressions with the group-level covariates. The covariance matrix of the MVN distribution is decomposed into a correlation matrix and a vector of scale terms; the correlation matrix was given a weakly informative LKJ prior and the elements of the vector of scales are given independent half-Normal distributed priors.
 
 
-% base model
-%   core is a 2-state markov model
-%   contrain 0 --> 1 and 1 --> 1 to be equal
-%     probability only for being present
-%   absorbing condition for extinction (1 --> 0)
-%   this follows Royle and Dorazio
-% occurrence probability
-%   hierarchical logistic regression
+% three important probabilities: observation, existing, not existing
+%   all of these vary with time
+%   each of these is modeled as a type of logistic regression
+%   observation
+%     species: mass
+%   existing, not existing 
+%     species: mass, diet X life
+%     group: global temperature (mean, range), NA plant phase
+The underlying hidden Markov model used in this study has three characteristic probabilities: probability \(p\) of observing a species given that it is present, probability \(\phi\) of a species surviving from one time to another, and probability \(\pi\) of a species first appearing. Because the questions being addressed in this study are concerned only with species presence, \(\phi\) and \(\pi\) are constrained to be equal and referred to as \(\theta\): the probability that a species is present at time \(t\) given whatever state that species was in at time \(t - 1\).
+
+The probability of observation a species \(p\) was modeled as a logistic regression with a time-varying intercept and species mass as a predictor. The effect of species mass on probability of observation was considered constant over time. The parameters associated with this aspect of the model 
+
+\begin{table}
+  \centering
+  \begin{tabular}{c l}
+    Parameter & explanation \\
+    \hline
+    \(p\) & probability of observation \\
+    \(\alpha_{0}\) & average observation probability \\
+    \(\alpha_{1}\) & change in average observation probability per change in standard deviation of mass \\
+    \(r_{t}\) & difference in average observation probability at time \(t\) \\
+    \(\sigma\) & standard deviation of values of \(r_{t}\) \\
+  \end{tabular}
+  \caption{Observation parameters}
+  \label{tab:obs_param}
+\end{table}
+
+
+The probability of species occurrence was modeled as a two-level logistic regression: species-level variation and group-level variation. The species-level of the model included all of species specific covariates (e.g. dietary category) while the group-level of the model included all of the time-bin specific covariates (e.g. global temperature). The effects of the species-level covariates were allowed to vary both over time and in response to the group-level covariates in the form of a varying-intercepts, varying-slopes model CITATION. The parameters associated with this part of the model are presented in Table \ref{tab:pres_param}.
+
+\begin{table}
+  \centering
+  \begin{tabular}{c l l}
+    Parameter & dimensions & explanation \\
+    \hline
+    \(\theta\) & \(N \times T - 1\) & probability of species presence \\
+    \(\beta\) & \(T - 1 \times D\) & matrix of species-level regression coefficients \\
+    \(\gamma\) & \(U \times D\) & matrix of group-level regression coefficients \\
+    \(\Sigma\) & \(D \times D\) & covariance matrix between species-level effects over time \\
+    \(\Omega\) & \(D \times D\) & correlation matrix between species-level effects over time \\
+    \(\tau\) & \(D\) & vector of standard deviations of species-level effects over time\\
+  \end{tabular}
+  \caption{Presence parameters}
+  \label{tab:pres_param}
+\end{table}
+
+Following recommendations from CITATION, CITATION, CITATION all parameters not modeled elsewhere were given weakly informative priors. Weakly informative means that priors do not encode previous information but instead help regularize or weakly constrain posterior estimates. These priors have a concentrated probability density around and near zero; this has the effect of tempering our estimates and help prevent overfitting the model to the data CITATION. 
+
 \begin{equation}
   \begin{aligned}
     y_{i, t} &\sim \text{Bernoulli}(p_{i, t} z_{i, t}) \\
-    % mass affects preserve
     p_{i, t} &= \text{logit}^{-1}(\alpha_{0} + \alpha_{1} m + r_{t}) \\ 
+    %p_{i, t} &= \text{logit}^{-1}(\alpha_{0} + \alpha_{1} m + \alpha_{2} m^{2} + r_{t}) \\ 
     \alpha_{0} &\sim \mathcal{N}(0, 1) \\
     \alpha_{1} &\sim \mathcal{N}(0, 1) \\
-    \r_{t} &\sim \mathcal{N}(0, \sigma) \\
+    r_{t} &\sim \mathcal{N}(0, \sigma) \\
     \sigma &\sim \mathcal{N}^{+}(1) \\
     z_{i, t} &\sim \text{Bernoulli}(\theta_{i, t}) \\
     \theta_{i, t} &= \text{logit}^{-1}(x_{i} \beta_{t}) \\
@@ -89,6 +136,7 @@ The probability of species occurrence is also modeled as a logistic regression w
   \end{aligned}
   \label{eq:full}
 \end{equation}
+
 
 % two models; two fitting techniques
 %   one without sampling (implied presence model)
@@ -120,7 +168,6 @@ The probability of species occurrence is also modeled as a logistic regression w
 %   writing the model in stan
 %   latent discrete parameter
 %     lots of help from stan-users
-
 
 \subsection*{Posterior inference and model adequacy}
 

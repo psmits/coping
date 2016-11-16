@@ -79,6 +79,7 @@ parameters {
 
   real alpha_0;
   real alpha_1;
+  real alpha_2;
   vector[T] alpha_time;
   real<lower=0> sigma;
 
@@ -90,7 +91,8 @@ transformed parameters {
   
   for(n in 1:N) {
     for(t in 1:T) {
-      p[n, t] = inv_logit(alpha_0 + alpha_time[t] + alpha_1 * mass[n]);
+      p[n, t] = inv_logit(alpha_0 + alpha_time[t] + 
+        alpha_1 * mass[n] + alpha_2 * (mass[n] * mass[n]));
     }
   }
   
@@ -118,6 +120,7 @@ model {
 
   alpha_0 ~ normal(0, 10);
   alpha_1 ~ normal(0, 1);
+  alpha_2 ~ normal(0, 1);
   alpha_time ~ normal(0, sigma);
   sigma ~ normal(0, 1);
 
