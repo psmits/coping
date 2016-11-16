@@ -39,7 +39,7 @@ functions {
           z[a] = 1;
         }
 
-        sl = bernoulli_lpmf(z[1] | pred[1]);
+        sl = bernoulli_lpmf(z[1] | phi);
         prod_term = 1 - z[1];
         for(j in 2:S) {
           prod_term = prod_term * (1 - z[j - 1]);
@@ -68,13 +68,16 @@ data {
 
   vector[N] mass;
 
-  row_vector[U] u[T];  // matrix of group-level covariates
+  matrix[T - 1, U] u;  // matrix of group-level covariates
 }
 parameters {
-  matrix[T - 1, D] var_a;
-  real<lower=0> tau;
+  real b; 
 
-  matrix[D, U] gamma; 
+  matrix[U, D] gamma; 
+  
+  matrix[D, T - 1] a_z;
+  cholesky_factor_corr[D] L_Omega;
+  vector<lower=0>[D] tau;
 
   real alpha_0;
   real alpha_1;
@@ -85,10 +88,13 @@ parameters {
 }
 transformed parameters {
   matrix[T - 1, D] a;
+  
   matrix<lower=0,upper=1>[N, T] p;  // sampling probability
   matrix[N, T - 1] pred; 
   
-  // probability of observing
+  a = u * gamma + (diag_pre_multiply(tau, L_Omega) * a_z)';
+
+// probability of observing
   for(n in 1:N) {
     for(t in 1:T) {
       p[n, t] = inv_logit(alpha_0 + alpha_time[t] + alpha_1 * mass[n]);
@@ -98,21 +104,17 @@ transformed parameters {
   // probability of occurring
   for(t in 1:(T-1)) {
     for(n in 1:N) {
-      pred[n, t] = inv_logit(a[t, state[n]]);
-    }
-  }
-  
-  // non-centered parameterization
-  for(t in 1:(T - 1)) {
-    for(j in 1:D) {
-      a[t, j] = tau * var_a[t, j] + gamma[j] * u[t]';
+      pred[n, t] = inv_logit(a[t, state[n]] + b * mass[n]);
     }
   }
 }
 model {
-  to_vector(var_a) ~ normal(0, 1);
-  to_vector(gamma) ~ normal(0, 1);
+  to_vector(a_z) ~ normal(0, 1);
+  L_Omega ~ lkj_corr_cholesky(2);
   tau ~ normal(0, 1);
+  to_vector(gamma) ~ normal(0, 1);
+
+  b ~ normal(0, 1);
 
   alpha_0 ~ normal(0, 5);
   alpha_1 ~ normal(0, 1);
