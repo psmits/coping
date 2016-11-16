@@ -179,3 +179,10 @@ if(TESTING.u) {
 stan_rdump(list = c('N', 'T', 'D', 'U', 
                     'sight', 'x', 'u', 'mass'),
            file = '../data/data_dump/trait_w_gaps.data.R')
+
+# for the rewritten form that doesn't use species-level regression and instead just varies
+state <- as.numeric(factor(inter))
+state <- state[-rms]
+stan_rdump(list = c('N', 'T', 'D', 'U', 
+                    'sight', 'state', 'x', 'u', 'mass'),
+           file = '../data/data_dump/trait_w_gaps_revamp.data.R')
