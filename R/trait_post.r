@@ -46,7 +46,7 @@ post <- list.files('../data/mcmc_out', pattern = 'advi',
                    full.names = TRUE)
 
 # fit w/ implied presences and horseshoe priors
-fit1 <- read_one_stan_csv(post[1])
+fit1 <- read_one_stan_csv(post[6])
 ext1 <- post.advi(fit1)
 
 fit2 <- read_one_stan_csv(post[2])

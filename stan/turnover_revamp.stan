@@ -27,27 +27,41 @@ functions {
     S = size(y);
     i = 1;
 
+    // have to go through all possible event histories for each species
     for(t_first_alive in 1:ft) {
       for (t_last_alive in lt:S) {
         real sl;
         int z[S];
 
-        for(l in 1:S) {
-          z[l] = 0;
+        for(j in 1:S) {
+          z[j] = 0;
         }
         for(a in t_first_alive:t_last_alive) {
           z[a] = 1;
         }
 
+        // initial conditions
         sl = bernoulli_lpmf(z[1] | phi);
         prod_term = 1 - z[1];
-        for(j in 2:S) {
-          prod_term = prod_term * (1 - z[j - 1]);
-          sl = sl + bernoulli_lpmf(z[j] | (z[j - 1] * pred[j - 1]) + 
-              prod_term * pred[j - 1]);
+
+        // z as function of trait state
+        {
+          vector[S - 1] gg;
+          for(j in 2:S) {
+            prod_term = prod_term * (1 - z[j - 1]);
+            gg[j - 1] = bernoulli_lpmf(z[j] | (z[j - 1] * pred[j - 1]) + 
+                prod_term * pred[j - 1]);
+          }
+          sl = sl + sum(gg);
         }
-        for(k in 1:S) {
-          sl = sl + bernoulli_lpmf(y[k] | z[k] * p[k]);
+
+        // finally, y as function of z and p
+        {
+          vector[S] hh;
+          for(k in 1:S) {
+            hh[k] = bernoulli_lpmf(y[k] | z[k] * p[k]);
+          }
+          sl = sl + sum(hh);
         }
 
         lp[i] = sl;
@@ -81,6 +95,7 @@ parameters {
 
   real alpha_0;
   real alpha_1;
+  real alpha_2;
   vector[T] alpha_time;
   real<lower=0> sigma;
 
@@ -88,16 +103,18 @@ parameters {
 }
 transformed parameters {
   matrix[T - 1, D] a;
-  
   matrix<lower=0,upper=1>[N, T] p;  // sampling probability
   matrix[N, T - 1] pred; 
   
+  // vectorized, non-centered, chol-decom group-level predictors
+  // multivariate normal
   a = u * gamma + (diag_pre_multiply(tau, L_Omega) * a_z)';
 
-// probability of observing
+  // probability of observing
   for(n in 1:N) {
     for(t in 1:T) {
-      p[n, t] = inv_logit(alpha_0 + alpha_time[t] + alpha_1 * mass[n]);
+      p[n, t] = inv_logit(alpha_0 + alpha_time[t] + 
+          alpha_1 * mass[n] + alpha_2 * (mass[n]^2));
     }
   }
   
@@ -118,10 +135,17 @@ model {
 
   alpha_0 ~ normal(0, 5);
   alpha_1 ~ normal(0, 1);
+  alpha_2 ~ normal(0, 1);
   alpha_time ~ normal(0, sigma);
   sigma ~ normal(0, 1);
 
   for(n in 1:N) {
     target += state_space_lp(sight[n], phi, pred[n, ], p[n, ]);
   }
+}
+generated quantities {
+  corr_matrix[D] Omega;
+  
+  // convert back to a correlation matrix
+  Omega = multiply_lower_tri_self_transpose(L_Omega);
 }
