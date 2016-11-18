@@ -49,14 +49,9 @@ post <- list.files('../data/mcmc_out', pattern = 'advi',
 fit1 <- read_one_stan_csv(post[6])
 ext1 <- post.advi(fit1)
 
-fit2 <- read_one_stan_csv(post[2])
-ext2 <- post.advi(fit2)
-
 # posterior inference plots for advi results
 make.plots(ext1 = ext1, name = 'basic', name.name = name.name, 
            group = TRUE)
-make.plots(ext1 = ext2, name = 'full', name.name = name.name, 
-           group = TRUE, sampling = TRUE)
 
 
 ## full Bayes
@@ -76,24 +71,18 @@ sim.obs <- sim.imp <- list()
 for(ii in seq(nsim)) {
   sim.imp[[ii]] <- model.simulation(N, T, phi = ext1$phi[samp], 
                                     pred = ext1$pred[samp[ii], , ])
-  sim.obs[[ii]] <- model.simulation(N, T, phi = ext2$phi[samp],
-                                    pred = ext2$pred[samp[ii], , ], 
-                                    p = ext2$p[samp[ii], ])
 }
 
-meanocc.obs <- mean(rowSums(sight.obs))
 meanocc.imp <- mean(rowSums(sight.implied))
-meanocc.simobs <- laply(sim.obs, function(x) mean(rowSums(x$y)))
 meanocc.simimp <- laply(sim.imp, function(x) mean(rowSums(x$z)))
 
-mos <- data.frame(x = c(meanocc.simobs, meanocc.simimp), 
-                  y = c(rep('Full', nsim), rep('Basic', nsim)))
-obs <- data.frame(x = c(meanocc.obs, meanocc.imp), 
-                  y = c('Full', 'Basic'))
+mos <- data.frame(x = meanocc.simimp, 
+                  y = rep('Full', nsim))
+obs <- data.frame(x = meanocc.imp, 
+                  y = rep('Full', nsim))
 ocplot <- ggplot(mos, aes(x = x)) + geom_histogram()
 ocplot <- ocplot + geom_vline(data = obs, mapping = aes(xintercept = x), 
                               colour = 'blue', size = 1.5)
-ocplot <- ocplot + facet_grid( ~ y)
 ocplot <- ocplot + labs(x = 'Mean obs per species',
                         y = 'Post. pred. simulations')
 ggsave(filename = '../doc/figure/pred_occ.png', plot = ocplot,

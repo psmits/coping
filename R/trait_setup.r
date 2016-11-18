@@ -184,6 +184,10 @@ stan_rdump(list = c('N', 'T', 'D', 'U',
 state <- as.numeric(factor(inter))
 state <- state[-rms]
 u <- u[-1, ]
+state <- mapvalues(state, 
+                   from = sort(unique(state)), 
+                   to = seq(length(unique(state))))
+D <- length(unique(state))
 stan_rdump(list = c('N', 'T', 'D', 'U', 
                     'sight', 'state', 'x', 'u', 'mass'),
            file = '../data/data_dump/trait_w_gaps_revamp.data.R')

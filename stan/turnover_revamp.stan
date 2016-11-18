@@ -85,26 +85,24 @@ data {
   matrix[T - 1, U] u;  // matrix of group-level covariates
 }
 parameters {
-  real b; 
-
-  matrix[U, D] gamma; 
+  real b; // effect of mass on occurrence
+  matrix[U, D] gamma; // effect of group level covariates
   
-  matrix[D, T - 1] a_z;
+  matrix[D, T - 1] a_z; // part of non-centering
   cholesky_factor_corr[D] L_Omega;
   vector<lower=0>[D] tau;
 
   real alpha_0;
   real alpha_1;
-  real alpha_2;
   vector[T] alpha_time;
   real<lower=0> sigma;
 
   real<lower=0,upper=1> phi;
 }
 transformed parameters {
-  matrix[T - 1, D] a;
+  matrix[T - 1, D] a;  // effect associated with ecology
   matrix<lower=0,upper=1>[N, T] p;  // sampling probability
-  matrix[N, T - 1] pred; 
+  matrix[N, T - 1] pred;  // occurrence probabilty 
   
   // vectorized, non-centered, chol-decom group-level predictors
   // multivariate normal
@@ -113,8 +111,7 @@ transformed parameters {
   // probability of observing
   for(n in 1:N) {
     for(t in 1:T) {
-      p[n, t] = inv_logit(alpha_0 + alpha_time[t] + 
-          alpha_1 * mass[n] + alpha_2 * (mass[n]^2));
+      p[n, t] = inv_logit(alpha_0 + alpha_time[t] + alpha_1 * mass[n]);
     }
   }
   
@@ -131,13 +128,12 @@ model {
   tau ~ normal(0, 1);
   to_vector(gamma) ~ normal(0, 1);
 
-  b ~ normal(0, 1);
-
   alpha_0 ~ normal(0, 5);
   alpha_1 ~ normal(0, 1);
-  alpha_2 ~ normal(0, 1);
   alpha_time ~ normal(0, sigma);
   sigma ~ normal(0, 1);
+  
+  b ~ normal(0, 1);
 
   for(n in 1:N) {
     target += state_space_lp(sight[n], phi, pred[n, ], p[n, ]);
