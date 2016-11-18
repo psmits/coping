@@ -85,7 +85,8 @@ data {
   matrix[T - 1, U] u;  // matrix of group-level covariates
 }
 parameters {
-  real b; // effect of mass on occurrence
+  real b_1; // effect of mass on occurrence
+  real b_2; // effect of mass on occurrence
   matrix[U, D] gamma; // effect of group level covariates
   
   matrix[D, T - 1] a_z; // part of non-centering
@@ -118,7 +119,8 @@ transformed parameters {
   // probability of occurring
   for(t in 1:(T-1)) {
     for(n in 1:N) {
-      pred[n, t] = inv_logit(a[t, state[n]] + b * mass[n]);
+      pred[n, t] = inv_logit(a[t, state[n]] + 
+          b_1 * mass[n] + b_2 * (mass[n] ^ 2));
     }
   }
 }
@@ -133,7 +135,8 @@ model {
   alpha_time ~ normal(0, sigma);
   sigma ~ normal(0, 1);
   
-  b ~ normal(0, 1);
+  b_1 ~ normal(0, 1);
+  b_2 ~ normal(0, 1);
 
   for(n in 1:N) {
     target += state_space_lp(sight[n], phi, pred[n, ], p[n, ]);

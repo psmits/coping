@@ -14,9 +14,9 @@ source('../R/trait_setup.r')
 source('../R/sim_from_model.r')
 source('../R/advi_post.r')
 source('../R/make_plots.r')
-source('../data/data_dump/trait_info.data.R')
-sight.implied <- sight
-source('../data/data_dump/trait_w_gaps.data.R')
+#source('../data/data_dump/trait_info.data.R')
+#sight.implied <- sight
+source('../data/data_dump/trait_w_gaps_revamp.data.R')
 sight.obs <- sight
 
 
@@ -46,12 +46,12 @@ post <- list.files('../data/mcmc_out', pattern = 'advi',
                    full.names = TRUE)
 
 # fit w/ implied presences and horseshoe priors
-fit1 <- read_one_stan_csv(post[6])
+fit1 <- read_one_stan_csv(post[1])
 ext1 <- post.advi(fit1)
 
 # posterior inference plots for advi results
-make.plots(ext1 = ext1, name = 'basic', name.name = name.name, 
-           group = TRUE)
+#make.plots(ext1 = ext1, name = 'basic', name.name = name.name, 
+#           group = TRUE)
 
 
 ## full Bayes
@@ -67,18 +67,19 @@ make.plots(ext1 = ext1, name = 'basic', name.name = name.name,
 # send ext$pred through the simulator
 ntax <- N
 ntime <- T
-sim.obs <- sim.imp <- list()
+sim.obs <- list()
 for(ii in seq(nsim)) {
-  sim.imp[[ii]] <- model.simulation(N, T, phi = ext1$phi[samp], 
-                                    pred = ext1$pred[samp[ii], , ])
+  sim.obs[[ii]] <- model.simulation(ntax, ntime, phi = ext1$phi[samp[ii]], 
+                                    pred = ext1$pred[samp[ii], , ],
+                                    p = ext1$p[samp[ii], , ])
 }
 
-meanocc.imp <- mean(rowSums(sight.implied))
-meanocc.simimp <- laply(sim.imp, function(x) mean(rowSums(x$z)))
+meanocc.obs <- mean(rowSums(sight.obs))
+meanocc.simobs <- laply(sim.obs, function(x) mean(rowSums(x$y)))
 
-mos <- data.frame(x = meanocc.simimp, 
+mos <- data.frame(x = meanocc.simobs, 
                   y = rep('Full', nsim))
-obs <- data.frame(x = meanocc.imp, 
+obs <- data.frame(x = meanocc.obs, 
                   y = rep('Full', nsim))
 ocplot <- ggplot(mos, aes(x = x)) + geom_histogram()
 ocplot <- ocplot + geom_vline(data = obs, mapping = aes(xintercept = x), 
