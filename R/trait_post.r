@@ -14,8 +14,6 @@ source('../R/trait_setup.r')
 source('../R/sim_from_model.r')
 source('../R/advi_post.r')
 source('../R/make_plots.r')
-#source('../data/data_dump/trait_info.data.R')
-#sight.implied <- sight
 source('../data/data_dump/trait_w_gaps_revamp.data.R')
 sight.obs <- sight
 
