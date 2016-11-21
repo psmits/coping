@@ -106,7 +106,6 @@ transformed parameters {
   matrix[N, T - 1] pred;  // occurrence probabilty 
   
   // vectorized, non-centered, chol-decom group-level predictors
-  // multivariate normal
   a = u * gamma + (diag_pre_multiply(tau, L_Omega) * a_z)';
 
   // probability of observing
@@ -131,12 +130,12 @@ model {
   to_vector(gamma) ~ normal(0, 1);
 
   alpha_0 ~ normal(0, 5);
-  alpha_1 ~ normal(0, 1);
+  alpha_1 ~ normal(1, 1);
   alpha_time ~ normal(0, sigma);
   sigma ~ normal(0, 1);
   
   b_1 ~ normal(0, 1);
-  b_2 ~ normal(0, 1);
+  b_2 ~ normal(-1, 1);
 
   for(n in 1:N) {
     target += state_space_lp(sight[n], phi, pred[n, ], p[n, ]);

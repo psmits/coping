@@ -92,7 +92,7 @@ The probability of observation a species \(p\) was modeled as a logistic regress
     \(\alpha_{0}\) & average observation probability \\
     \(\alpha_{1}\) & change in average observation probability per change in standard deviation of mass \\
     \(r_{t}\) & difference in average observation probability at time \(t\) \\
-    \(\sigma\) & standard deviation of values of \(r_{t}\) \\
+    \(\sigma\) & standard deviation of distribution of \(r_{t}\) \\
   \end{tabular}
   \caption{Observation parameters}
   \label{tab:obs_param}
@@ -113,7 +113,7 @@ The probability of species occurrence was modeled as a two-level logistic regres
     \(\gamma\) & \(U \times D\) & matrix of group-level regression coefficients \\
     \(\Sigma\) & \(D \times D\) & covariance matrix between species-level effects over time \\
     \(\Omega\) & \(D \times D\) & correlation matrix between species-level effects over time \\
-    \(\tau\) & \(D\) & vector of standard deviations of species-level effects over time\\
+    \(\tau\) & \(D\) & vector of standard deviations of distributions of species-level effects over time\\
   \end{tabular}
   \caption{Presence parameters}
   \label{tab:pres_param}
