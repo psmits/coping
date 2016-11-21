@@ -81,7 +81,7 @@ The observed state of a species at a given time is a function of both its ``true
 %     group: global temperature (mean, range), NA plant phase
 The underlying hidden Markov model used in this study has three characteristic probabilities: probability \(p\) of observing a species given that it is present, probability \(\phi\) of a species surviving from one time to another, and probability \(\pi\) of a species first appearing. Because the questions being addressed in this study are concerned only with species presence, \(\phi\) and \(\pi\) are constrained to be equal and referred to as \(\theta\): the probability that a species is present at time \(t\) given whatever state that species was in at time \(t - 1\).
 
-The probability of observation a species \(p\) was modeled as a logistic regression with a time-varying intercept and species mass as a predictor. The effect of species mass on probability of observation was considered constant over time. The parameters associated with this aspect of the model 
+The probability of observation a species \(p\) was modeled as a logistic regression with a time-varying intercept and species mass as a predictor. The effect of species mass on probability of observation was assumed linear and constant over time and hypothesized to have a positive relationship; this is reflected both in the structure of the model and choice of parameters. The parameters associated with this aspect of the model are described in Table \ref{tab:obs_param}.
 
 \begin{table}
   \centering
@@ -99,7 +99,7 @@ The probability of observation a species \(p\) was modeled as a logistic regress
 \end{table}
 
 
-The probability of species occurrence was modeled as a two-level logistic regression: species-level variation and group-level variation. The species-level of the model has a single predictor and an intercept that varies by ecotype. The varying-intercepts are themselves modeled as functions of the group-level covariates. The parameters associated with this part of the model are presented in Table \ref{tab:pres_param}.
+The probability of species occurrence was modeled as a two-level logistic regression: species-level variation and group-level variation. The species-level of the model has a single predictor and an intercept that varies by ecotype. The varying-intercepts are themselves modeled as functions of the group-level covariates. Species mass was assumed to have a quadratic relationship with occurrence probability; this was based on the known distribution of mammal body masses where species with an intermediate mass are more common than either small or large bodied extremes. This assumption was also reflected in the choice of priors for those regression coefficients (see below). The parameters associated with this part of the model are presented in Table \ref{tab:pres_param}. 
 
 \begin{table}
   \centering
@@ -107,8 +107,9 @@ The probability of species occurrence was modeled as a two-level logistic regres
     Parameter & dimensions & explanation \\
     \hline
     \(\theta\) & \(N \times T - 1\) & probability of species presence \\
-    \(\beta\) & \(T - 1 \times D\) & effect of ecotype on log-odds of occurrence \\
-    \(b\) & 1 & effect of species mass on log-odds of occurrence \\
+    \(a\) & \(T - 1 \times D\) & effect of ecotype on log-odds of occurrence \\
+    \(b_{1}\) & 1 & effect of species mass on log-odds of occurrence \\
+    \(b_{2}\) & 1 & effect of species mass, squared, on log-odds of occurrence \\
     \(\gamma\) & \(U \times D\) & matrix of group-level regression coefficients \\
     \(\Sigma\) & \(D \times D\) & covariance matrix between species-level effects over time \\
     \(\Omega\) & \(D \times D\) & correlation matrix between species-level effects over time \\
@@ -118,8 +119,8 @@ The probability of species occurrence was modeled as a two-level logistic regres
   \label{tab:pres_param}
 \end{table}
 
-Following recommendations from CITATION, CITATION, CITATION all parameters not modeled elsewhere were given weakly informative priors. Weakly informative means that priors do not encode previous information but instead help regularize or weakly constrain posterior estimates. These priors have a concentrated probability density around and near zero; this has the effect of tempering our estimates and help prevent overfitting the model to the data CITATION. 
 
+Following recommendations from CITATION, CITATION, CITATION all parameters not modeled elsewhere were given weakly informative priors. Weakly informative means that priors do not necessarily encode actual prior information but instead help regularize or weakly constrain posterior estimates. These priors have a concentrated probability density around and near zero; this has the effect of tempering our estimates and help prevent overfitting the model to the data CITATION. 
 
 \begin{equation}
   \begin{aligned}
@@ -127,12 +128,14 @@ Following recommendations from CITATION, CITATION, CITATION all parameters not m
     p_{i, t} &= \text{logit}^{-1}(\alpha_{0} + \alpha_{1} m_{i} + r_{t}) \\ 
     r_{t} &\sim \mathcal{N}(0, \sigma) \\
     z_{i, t} &\sim \text{Bernoulli}(\theta_{i, t}) \\
-    \theta_{i, t} &= \text{logit}^{-1}(\beta_{t, j[i]} + b m_{i}) \\
-    \beta &\sim \text{MVN}(u \gamma, \Sigma) \\
+    \theta_{i, t} &= \text{logit}^{-1}(a_{t, j[i]} + b_{1} m_{i} + b_{2} m_{i}^{2}) \\
+    a &\sim \text{MVN}(u \gamma, \Sigma) \\
     \Sigma &= \text{diag}(tau) \Omega \text{diag}(tau) \\
     \alpha_{0} &\sim \mathcal{N}(0, 1) \\
-    \alpha_{1} &\sim \mathcal{N}(0, 1) \\
+    \alpha_{1} &\sim \mathcal{N}(1, 1) \\
     \sigma &\sim \mathcal{N}^{+}(1) \\
+    b_{1} &\sim \mathcal{N}(0, 1) \\
+    b_{1} &\sim \mathcal{N}(-1, 1) \\
     \gamma &\sim \mathcal{N}(0, 1) \\
     \tau &\sim \mathcal{N}^{+}(1) \\
     \Omega &\sim \text{LKJ}(2) \\

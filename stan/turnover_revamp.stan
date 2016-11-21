@@ -136,7 +136,7 @@ model {
   sigma ~ normal(0, 1);
   
   b_1 ~ normal(0, 1);
-  b_2 ~ normal(-1, 1);
+  b_2 ~ normal(0, 1);
 
   for(n in 1:N) {
     target += state_space_lp(sight[n], phi, pred[n, ], p[n, ]);
