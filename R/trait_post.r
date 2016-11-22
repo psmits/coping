@@ -53,6 +53,19 @@ post <- list.files('../data/mcmc_out', pattern = 'advi',
 fit1 <- read_one_stan_csv(post[1])
 ext1 <- post.advi(fit1)
 
+
+# analysis of model fit
+ntax <- N
+ntime <- T
+post.pred(ext1, ntax, ntime, sight.obs, nsim, samp)
+
+
+# analysis of the posterior
+vis.post(ext1, ecotype, ecotrans, mass, cbp.long)
+
+
+
+
 ## full Bayes
 #post <- list.files('../data/mcmc_out', pattern = '[0-9]', full.names = TRUE)
 #fit <- read_stan_csv(post)
@@ -63,27 +76,3 @@ ext1 <- post.advi(fit1)
 
 
 # sample, group level, individual level
-# send ext$pred through the simulator
-ntax <- N
-ntime <- T
-sim.obs <- list()
-for(ii in seq(nsim)) {
-  sim.obs[[ii]] <- model.simulation(ntax, ntime, phi = ext1$phi[samp[ii]], 
-                                    pred = ext1$pred[samp[ii], , ],
-                                    p = ext1$p[samp[ii], , ])
-}
-
-meanocc.obs <- mean(rowSums(sight.obs))
-meanocc.simobs <- laply(sim.obs, function(x) mean(rowSums(x$y)))
-
-mos <- data.frame(x = meanocc.simobs, 
-                  y = rep('Full', nsim))
-obs <- data.frame(x = meanocc.obs, 
-                  y = rep('Full', nsim))
-ocplot <- ggplot(mos, aes(x = x)) + geom_histogram()
-ocplot <- ocplot + geom_vline(data = obs, mapping = aes(xintercept = x), 
-                              colour = 'blue', size = 1.5)
-ocplot <- ocplot + labs(x = 'Mean obs per species',
-                        y = 'Post. pred. simulations')
-ggsave(filename = '../doc/figure/pred_occ.png', plot = ocplot,
-       width = 4, height = 3)
