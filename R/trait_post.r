@@ -37,6 +37,12 @@ cbp.long <- cbp.long[t(grab)][-1]
 nsim <- 100
 samp <- sample(1001, nsim)
 
+rms <- which(inter == names(which(table(inter) == 1)))
+inter <- inter[-rms]
+break.inter <- str_split(inter, '\\.')
+ecotype <- Reduce(rbind, break.inter)
+
+ecotrans <- Reduce(rbind, str_split(levels(as.factor(inter)), '\\.'))
 
 ###########
 # advi
@@ -46,11 +52,6 @@ post <- list.files('../data/mcmc_out', pattern = 'advi',
 # fit w/ implied presences and horseshoe priors
 fit1 <- read_one_stan_csv(post[1])
 ext1 <- post.advi(fit1)
-
-# posterior inference plots for advi results
-#make.plots(ext1 = ext1, name = 'basic', name.name = name.name, 
-#           group = TRUE)
-
 
 ## full Bayes
 #post <- list.files('../data/mcmc_out', pattern = '[0-9]', full.names = TRUE)

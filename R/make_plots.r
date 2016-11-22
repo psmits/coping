@@ -1,21 +1,22 @@
-#' Make the plots for the coping project
+#' Visualize key aspects of the posterior distribution
 #'
-#' @param ext1 output from rstan::extract of model fit
-#' @param name string associated with outputs
-#' @param name.name vector of regression coefficient names
-#' @param group logical are there any group level covariates?
-#' @param sampling logical is sampling parameterized?
-#' @param nsim integer how many random pulls from the posterior?
-make.plots <- function(ext1) {
+#' @param ext1 extract from stanfit object
+vis.post <- function(ext1, ecotype, ecotrans, mass, cbp.long) {
 
   # log-odds of occurrence associated with ecotype
   #   controlling for mass
   #   given group-level effects
+  
   am <- melt(ext1$a)  # sim, time, state, value
   
-  amplot <- ggplot(am, aes(x = Var2, y = value, group = Var1))
-  amplot <- amplot + geom_line(alpha = 0.1)
-  amplot <- amplot + facet_wrap(~ Var3)
+  # translate the ecotype code into words
+  suppressWarnings(am <- cbind(am, ecotrans[am$Var3, ]))
+  names(am) <- c('sim', 'time', 'state', 'value', 'state_1', 'state_2')
+
+  amplot <- ggplot(am, aes(x = time, y = value, group = sim))
+  amplot <- amplot + geom_hline(yintercept = 0)
+  amplot <- amplot + geom_line(alpha = 0.01)
+  amplot <- amplot + facet_grid(state_1 ~ state_2)
   amplot <- amplot + labs(x = 'Time (Mya)', 
                           y = 'log-odds occurrence')
 
@@ -23,9 +24,19 @@ make.plots <- function(ext1) {
   # effect of group-level on individual-level
   gm <- melt(ext1$gamma)  # sim, pred, ecotype, value
 
-  gmplot <- ggplot(gm, aes(x = Var2, y = value, group = Var2))
-  gmplot <- gmplot + geom_boxplot()
-  gmplot <- gmplot + facet_wrap(~ Var3)
+  # translate the ecotype code into words
+  suppressWarnings(gm <- cbind(gm, ecotrans[gm$Var3, ]))
+  names(gm) <- c('sim', 'predictor', 'ecotype', 'value', 'state_1', 'state_2')
+
+  gm$predictor <- mapvalues(gm$predictor, 
+                            from = unique(gm$predictor), 
+                            to = c('phase 3', 'temp mean', 'temp range', 
+                                   'phase 2', 'phase 1'))
+  gmplot <- ggplot(gm, aes(x = predictor, y = value, group = predictor))
+  gmplot <- gmplot + geom_hline(yintercept = 0)
+  gmplot <- gmplot + geom_violin()
+  gmplot <- gmplot + facet_grid(state_1 ~ state_2)
+  gmplot <- gmplot + theme(axis.text.x = element_text(angle = -90, vjust = 0.5))
   gmplot <- gmplot + labs(x = 'Predictor variable', 
                           y = 'Effect on log-odds of occurrence')
 
@@ -33,21 +44,92 @@ make.plots <- function(ext1) {
   # variation in log-odds of occurrence associated with ecotype
   tm <- melt(ext1$tau)  # sample, ecotype, value
 
+  suppressWarnings(tm <- cbind(tm, ecotrans[tm$Var2, ]))
+  names(tm) <- c('sim', 'ecotype', 'value', 'state_1', 'state_2')
   tmplot <- ggplot(tm, aes(x = value, y = ..density..))
   tmplot <- tmplot + geom_histogram()
-  tmplot <- tmplot + facet_wrap(~ Var2)
+  tmplot <- tmplot + facet_grid(state_1 ~ state_2)
   tmplot <- tmplot + labs(x = 'Estimated standard deviation of distribution of ecotype log-odds of occurrence', 
                           y = 'Probability density')
 
-  ext1$alpha_0
-  apply(ext1$alpha_time, 2, function(x) x + ext1$alpha_0)
 
   # difference from mean log-odds observation due to time
   pm <- melt(ext1$alpha_time)
   
-  pmplot <- ggplot(pm, aes(x = Var2, y = value, group = Var1))
-  pmplot <- pmplot + geom_line(alpha = 0.1)
+  pm$prob <- invlogit(pm$value)
+  pmplot <- ggplot(pm, aes(x = Var2, y = prob, group = Var1))
+  pmplot <- pmplot + geom_line(alpha = 0.01)
   pmplot <- pmplot + labs(x = 'Time (Mya)', 
                           y = 'Difference from mean log-odds observation')
+
+
+  # effect of mass on sampling
+  mass.counter <- data.frame(x = seq(from = min(mass), 
+                                     to = max(mass), 
+                                     by = 0.1))
+  mass.df <- data.frame(x = mass)
+  mass.samp <- function(m) {
+    i <- sample(length(ext1$alpha_0), 1)
+    invlogit(ext1$alpha_1[i] * m + ext1$alpha_0[i])
+  }
+  mass_on_samp <- ggplot(mass.counter, aes(x = x))
+  for(ii in seq(100)) {
+    mass_on_samp <- mass_on_samp + stat_function(fun = mass.samp,
+                                                 alpha = 0.1)
+  }
+  mass_on_samp <- mass_on_samp + geom_rug(data = mass.df, mapping = aes(x = x))
+  mass_on_samp <- mass_on_samp + labs(x = 'Rescaled log mass (g)', 
+                                      y = 'Probability of observing if present')
+  # figure out on to plot on un-rescaled axis
+  
+
+  # effect of mass on observation
+  # the idea is
+  #   grid based on ecotype
+  #   each panel has three counter-factuals
+  #     one for each phase
+  #   rug for observed mass values
+  
+
+
+  mass.obs <- function(m, state, phase) {
+    # intercept
+    if(phase == 3) {
+      cept <- median(ext1$gamma[, 1, state])
+    } else if (phase == 2) {
+      cept <- median(ext1$gamma[, 1, state]) + median(ext1$gamma[, 4, state])
+    } else if (phase == 1) {
+      cept <- median(ext1$gamma[, 1, state]) + median(ext1$gamma[, 5, state])
+    }
+
+    # bring it all together
+    invlogit(cept + median(ext1$b_1) * m + median(ext1$b_2) * (m^2))
+  }
+
+  mass.counter <- seq(from = min(mass), to = max(mass), by = 0.001)
+  out <- list()
+  for(ii in seq(3)) {
+    oo <- list()
+    for(jj in seq(18)) {
+      oo[[jj]] <- cbind(mass = mass.counter, 
+                        est = mass.obs(mass.counter, jj, ii))
+    }
+    out[[ii]] <- oo
+  }
+
+  out <- llply(out, function(a) 
+               Reduce(rbind, Map(function(x, y) cbind(x, y), 
+                                 a, seq(length(a)))))
+
+  out <- Reduce(rbind, Map(function(x, y) cbind(x, y), out, seq(3)))
+  suppressWarnings(out <- data.frame(out, ecotrans[out[, 3], ]))
+  names(out) <- c('mass', 'est', 'state', 'phase', 'state_1', 'state_2')
+
+  mass_on_pres <- ggplot(out, aes(x = mass, y = est, colour = factor(phase)))
+  mass_on_pres <- mass_on_pres + geom_line(size = 1.25)
+  mass_on_pres <- mass_on_pres + facet_grid(state_1 ~ state_2)
+  mass_on_pres <- mass_on_pres + labs(x = 'Rescaled log mass (g)',
+                                      y = 'Probability of occurrence')
+
 
 }
