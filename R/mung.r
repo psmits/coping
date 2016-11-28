@@ -7,6 +7,9 @@ binom.make <- function(genus, species, sep = ' ') {
 }
 
 clean.occurrence <- function(dat) {
+
+  dat <- dat[dat$state != 'Hawaii', ]
+
   # remove specimens that don't have time assigned
   dat <- dat[!is.na(dat$max_ma), ]
   dat <- dat[!is.na(dat$min_ma), ]

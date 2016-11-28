@@ -65,7 +65,6 @@ vis.post(ext1, ecotype, ecotrans, mass, cbp.long)
 
 
 
-
 ## full Bayes
 #post <- list.files('../data/mcmc_out', pattern = '[0-9]', full.names = TRUE)
 #fit <- read_stan_csv(post)
