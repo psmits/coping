@@ -15,7 +15,7 @@ source('../R/sim_from_model.r')
 source('../R/advi_post.r')
 source('../R/make_plots.r')
 source('../data/data_dump/trait_w_gaps_revamp.data.R')
-sight.obs <- sight
+sight.imp <- sight
 
 
 #
@@ -57,7 +57,7 @@ ext1 <- post.advi(fit1)
 # analysis of model fit
 ntax <- N
 ntime <- T
-post.pred(ext1, ntax, ntime, sight.obs, nsim, samp)
+post.pred(ext1, ntax, ntime, sight.imp, nsim, samp)
 
 
 # analysis of the posterior

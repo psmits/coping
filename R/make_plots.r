@@ -41,7 +41,8 @@ post.pred <- function(ext1, ntax, ntime, sight.obs, nsim, samp) {
 #' @param ecotrans
 #' @param mass
 #' @param cbp.long
-vis.post <- function(ext1, ecotype, ecotrans, mass, cbp.long) {
+#' @param
+vis.post <- function(ext1, ecotype, ecotrans, mass, cbp.long, ecoprob = TRUE) {
 
   # log-odds of occurrence associated with ecotype
   #   controlling for mass
@@ -52,6 +53,8 @@ vis.post <- function(ext1, ecotype, ecotrans, mass, cbp.long) {
   # translate the ecotype code into words
   suppressWarnings(am <- cbind(am, ecotrans[am$Var3, ]))
   names(am) <- c('sim', 'time', 'state', 'value', 'state_1', 'state_2')
+
+  if(ecoprob) am$value <- invlogit(am$value)
 
   amplot <- ggplot(am, aes(x = time, y = value, group = sim))
   amplot <- amplot + geom_hline(yintercept = 0)
