@@ -191,3 +191,10 @@ D <- length(unique(state))
 stan_rdump(list = c('N', 'T', 'D', 'U', 
                     'sight', 'state', 'x', 'u', 'mass'),
            file = '../data/data_dump/trait_w_gaps_revamp.data.R')
+
+
+sighta <- rbind(sight, matrix(0, nrow = N, ncol = T))
+M <- nrow(sighta)
+I <- c(rep(1, N), rep(0, N))
+stan_rdump(list = c('N', 'T', 'M', 'I', 'sighta', 'sight'),
+           file = '../data/data_dump/trait_w_gaps_augment.data.R')
