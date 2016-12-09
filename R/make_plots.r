@@ -57,7 +57,6 @@ vis.post <- function(ext1, ecotype, ecotrans, mass, cbp.long, ecoprob = TRUE) {
   if(ecoprob) am$value <- invlogit(am$value)
 
   amplot <- ggplot(am, aes(x = time, y = value, group = sim))
-  amplot <- amplot + geom_hline(yintercept = 0)
   amplot <- amplot + geom_line(alpha = 0.01)
   amplot <- amplot + facet_grid(state_1 ~ state_2)
   amplot <- amplot + labs(x = 'Time (Mya)', 
@@ -106,7 +105,11 @@ vis.post <- function(ext1, ecotype, ecotrans, mass, cbp.long, ecoprob = TRUE) {
   pm <- melt(ext1$alpha_time)
 
   pm$prob <- invlogit(pm$value)
-  pmplot <- ggplot(pm, aes(x = Var2, y = prob, group = Var1))
+  if(!is.null(pm$Var1)) {
+    pmplot <- ggplot(pm, aes(x = Var2, y = prob, group = Var1))
+  } else if (is.null(pm$Var1)) {
+    pmplot <- ggplot(pm, aes(x = Var2, y = prob, group = iterations))
+  }
   pmplot <- pmplot + geom_line(alpha = 0.01)
   pmplot <- pmplot + labs(x = 'Time (Mya)', 
                           y = 'Difference from mean log-odds observation')

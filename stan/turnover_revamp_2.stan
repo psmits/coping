@@ -60,6 +60,7 @@ functions {
           vector[S] hh;
           for(k in 1:S) {
             hh[k] = bernoulli_lpmf(y[k] | z[k] * p[k]);
+            //hh[k] = binomial_lpmf(y[k] | S, z[k] * p[k]);  
           }
           sl = sl + sum(hh);
         }
@@ -95,7 +96,6 @@ parameters {
 
   real alpha_0;
   real alpha_1;
-  real alpha_2;
   vector[T] alpha_time;
   real<lower=0> sigma;
 
@@ -107,14 +107,12 @@ transformed parameters {
   matrix[N, T - 1] pred;  // occurrence probabilty 
   
   // vectorized, non-centered, chol-decom group-level predictors
-  // multivariate normal
   a = u * gamma + (diag_pre_multiply(tau, L_Omega) * a_z)';
 
   // probability of observing
   for(n in 1:N) {
     for(t in 1:T) {
-      p[n, t] = inv_logit(alpha_0 + alpha_time[t] + 
-          alpha_1 * mass[n] + alpha_2 * (mass[n] ^ 2));
+      p[n, t] = inv_logit(alpha_0 + alpha_time[t] + alpha_1 * mass[n]);
     }
   }
   
@@ -134,12 +132,11 @@ model {
 
   alpha_0 ~ normal(0, 5);
   alpha_1 ~ normal(0, 1);
-  alpha_2 ~ normal(0, 1);
   alpha_time ~ normal(0, sigma);
   sigma ~ normal(0, 1);
   
   b_1 ~ normal(0, 1);
-  b_2 ~ normal(-1, 1);
+  b_2 ~ normal(0, 1);
 
   for(n in 1:N) {
     target += state_space_lp(sight[n], phi, pred[n, ], p[n, ]);

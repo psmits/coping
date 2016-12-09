@@ -15,7 +15,7 @@ source('../R/sim_from_model.r')
 source('../R/advi_post.r')
 source('../R/make_plots.r')
 source('../data/data_dump/trait_w_gaps_revamp.data.R')
-sight.imp <- sight
+sight.obs <- sight
 
 
 #
@@ -44,34 +44,36 @@ ecotype <- Reduce(rbind, break.inter)
 
 ecotrans <- Reduce(rbind, str_split(levels(as.factor(inter)), '\\.'))
 
+ntax <- N
+ntime <- T
+
+
 ###########
 # advi
 post <- list.files('../data/mcmc_out', pattern = 'advi',
                    full.names = TRUE)
-
-# fit w/ implied presences and horseshoe priors
 fit1 <- read_one_stan_csv(post[1])
 ext1 <- post.advi(fit1)
 
-
 # analysis of model fit
-ntax <- N
-ntime <- T
-post.pred(ext1, ntax, ntime, sight.imp, nsim, samp)
-
+post.pred(ext1, ntax, ntime, sight.obs, nsim, samp)
 
 # analysis of the posterior
 vis.post(ext1, ecotype, ecotrans, mass, cbp.long)
 
 
-
-## full Bayes
-#post <- list.files('../data/mcmc_out', pattern = '[0-9]', full.names = TRUE)
-#fit <- read_stan_csv(post)
+###########
+# full Bayes
+post <- list.files('../data/mcmc_out', pattern = '[0-9]', full.names = TRUE)
+fit <- read_stan_csv(post)
 #stan_rhat(fit)
-#stan_ess(fit)
-#ext <- rstan::extract(fit, permuted = TRUE)
-#make.plots(ext1 = ext, name = 'basic_mcmc', name.name = name.name)
-
-
-# sample, group level, individual level
+ext <- rstan::extract(fit, permuted = TRUE)
+#x <- model.simulation(ntax, ntime, 
+#                      ext$phi[1], 
+#                      ext$pred[1, , ], 
+#                      ext$p[1, , ], 
+#                      death = TRUE) 
+# the issue is that everything needs to occur min 1
+#   need data augmentation to make occurs "bigger"
+post.pred(ext, ntax, ntime, sight.obs, nsim, samp)  # posterior pred check
+vis.post(ext, ecotype, ecotrans, mass, cbp.long)    # make some plots
