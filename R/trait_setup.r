@@ -193,8 +193,13 @@ stan_rdump(list = c('N', 'T', 'D', 'U',
            file = '../data/data_dump/trait_w_gaps_revamp.data.R')
 
 
-sighta <- rbind(sight, matrix(0, nrow = N, ncol = T))
+# create the augmented dataset
+div <- 2
+sighta <- rbind(sight, matrix(0, nrow = N/div, ncol = T))
 M <- nrow(sighta)
-I <- c(rep(1, N), rep(0, N))
-stan_rdump(list = c('N', 'T', 'M', 'I', 'sighta', 'sight'),
+I <- c(rep(1, N), rep(0, N/div))
+statea <- c(state, rep(max(state) + 1, N/div))
+D <- max(statea)
+stan_rdump(list = c('N', 'T', 'D', 'U', 'M', 'I', 
+                    'sighta', 'statea', 'mass'),
            file = '../data/data_dump/trait_w_gaps_augment.data.R')
