@@ -149,52 +149,19 @@ phase <- factor(rev(phase)) # from older to younger
 u <- model.matrix( ~ u + phase)
 U <- ncol(u)
 
-# just do the range through for it
-old.sight <- sight
-for(ii in row(sight)) {
-  mm <- which(sight[ii, ] == 1)
-  sight[ii, seq(from = min(mm), to = max(mm))] <- 1
-}
-
-
 N <- nrow(sight)
 T <- ncol(sight)
 
-# dump it out
-stan_rdump(list = c('N', 'T', 'D', 'U', 
-                    'sight', 'x', 'u', 'mass'),
-           file = '../data/data_dump/trait_info.data.R')
-sight <- old.sight
-
-# mod for testing
-if(TESTING.x) {
-  x <- x[, 1:2, drop = FALSE]
-  D <- 2
-}
-if(TESTING.u) {
-  u <- u[, 1, drop = FALSE]
-  U <- 1
-}
-
-stan_rdump(list = c('N', 'T', 'D', 'U', 
-                    'sight', 'x', 'u', 'mass'),
-           file = '../data/data_dump/trait_w_gaps.data.R')
-
-# for the rewritten form that doesn't use species-level regression and instead just varies
 state <- as.numeric(factor(inter))
 state <- state[-rms]
 u <- u[-1, ]
 state <- mapvalues(state, 
                    from = sort(unique(state)), 
                    to = seq(length(unique(state))))
-D <- length(unique(state))
-stan_rdump(list = c('N', 'T', 'D', 'U', 
-                    'sight', 'state', 'x', 'u', 'mass'),
-           file = '../data/data_dump/trait_w_gaps_revamp.data.R')
 
 
 # create the augmented dataset
-div <- 2
+div <- 4
 sighta <- rbind(sight, matrix(0, nrow = N/div, ncol = T))
 M <- nrow(sighta)
 I <- c(rep(1, N), rep(0, N/div))

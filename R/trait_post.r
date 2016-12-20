@@ -41,39 +41,51 @@ rms <- which(inter == names(which(table(inter) == 1)))
 inter <- inter[-rms]
 break.inter <- str_split(inter, '\\.')
 ecotype <- Reduce(rbind, break.inter)
+ecotype <- rbind(ecotype, t(replicate(M - N, c('augment', 'augment'))))
 
 ecotrans <- Reduce(rbind, str_split(levels(as.factor(inter)), '\\.'))
+ecotrans <- rbind(ecotrans, c('augment', 'augment'))
 
 ntax <- N
 ntime <- T
 
 
-###########
-# advi
+############
+## advi
 post <- list.files('../data/mcmc_out', pattern = 'advi',
                    full.names = TRUE)
-fit1 <- read_one_stan_csv(post[1])
+
+# just presence
+fit1 <- read_one_stan_csv(post[2])
 ext1 <- post.advi(fit1)
-
 # analysis of model fit
-post.pred(ext1, ntax, ntime, sight.obs, nsim, samp)
-
+post.pred(ext1, ntax = M, ntime = T, sight.obs = sighta, nsim, samp)
 # analysis of the posterior
-vis.post(ext1, ecotype, ecotrans, mass, cbp.long)
+vis.post(ext1, ecotype, ecotrans, mass, cbp.long, ecoprob = TRUE)
 
 
-###########
-# full Bayes
-post <- list.files('../data/mcmc_out', pattern = '[0-9]', full.names = TRUE)
-fit <- read_stan_csv(post)
-#stan_rhat(fit)
-ext <- rstan::extract(fit, permuted = TRUE)
-#x <- model.simulation(ntax, ntime, 
-#                      ext$phi[1], 
-#                      ext$pred[1, , ], 
-#                      ext$p[1, , ], 
-#                      death = TRUE) 
-# the issue is that everything needs to occur min 1
-#   need data augmentation to make occurs "bigger"
-post.pred(ext, ntax, ntime, sight.obs, nsim, samp)  # posterior pred check
-vis.post(ext, ecotype, ecotrans, mass, cbp.long)    # make some plots
+# full birth-death
+fit2 <- read_one_stan_csv(post[1])
+ext2 <- post.advi(fit2)
+# analysis of model fit
+post.pred(ext2, ntax = M, ntime = T, sight.obs = sighta, nsim, samp, bd = TRUE)
+# analysis of the posterior
+vis.bdpost(ext2, ecotype, ecotrans, mass, cbp.long, ecoprob = TRUE)
+
+
+
+############
+## full Bayes
+#post <- list.files('../data/mcmc_out', pattern = '[0-9]', full.names = TRUE)
+#fit <- read_stan_csv(post)
+##stan_rhat(fit)
+#ext <- rstan::extract(fit, permuted = TRUE)
+##x <- model.simulation(ntax, ntime, 
+##                      ext$phi[1], 
+##                      ext$pred[1, , ], 
+##                      ext$p[1, , ], 
+##                      death = TRUE) 
+## the issue is that everything needs to occur min 1
+##   need data augmentation to make occurs "bigger"
+#post.pred(ext, ntax, ntime, sight.obs, nsim, samp)  # posterior pred check
+#vis.post(ext, ecotype, ecotrans, mass, cbp.long)    # make some plots
