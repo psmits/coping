@@ -28,6 +28,8 @@ cram <- read.delim('../data/cramer/cramer_mgca_pref.txt', sep = '\t')
 cram.temp <- read.delim('../data/cramer/cramer_temp.txt', sep = '\t')
 temp.est <- cram.temp$Temperature
 temp.range <- cram.temp$Temperature.max - cram.temp$Temperature.min
+temp.est
+
 
 b <- range(occur$bins)
 b <- seq(b[1], b[2], by = 2)

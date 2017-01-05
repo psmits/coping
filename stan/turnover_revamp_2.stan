@@ -190,10 +190,10 @@ transformed parameters {
 }
 model {
   // imputation of unobserved masses
-  mass ~ normal(mu_mass, sigma_mass);
-  mass_est ~ normal(mu_mass, sigma_mass);
-  mu_mass ~ normal(0, 0.1);
-  sigma_mass ~ normal(0, 1);
+  //mass ~ normal(mu_mass, sigma_mass);
+  mass_est ~ normal(0, 0.5);
+  //mu_mass ~ normal(0, 0.1);
+  //sigma_mass ~ normal(0, 1);
 
   // effects of ecologies
   // origin
