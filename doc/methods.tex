@@ -42,7 +42,7 @@ Two different models were used in this study: a pure-presence model and a birth-
 \subsubsection*{Data augmentation}
 All presence/absence observations are incomplete. The hidden Markov model at the core of this analysis allows for observed absences to be used meaningfully to estimate the number of unobserved species. Of specific concern in this analysis is the unknown ``true'' size of the dataset; how many species could have actually been observed? While many species have been observed, the natural incompleteness of all observations, especially in the case of paleontological data, there are obviously many species which were never sampled.
 
-Let \(N\) by the total number of observed species, \(M\) be the upper limit of possible species that could have existed given a model of species presence, and \(N^{\ast}\) is the all-zero histories where \(N^{\ast} = M - N\). This approach assumes that  \(N + N^{\ast} \sim \text{Binomial}(M, \psi)\) where \(\psi\) is the probability that any augmented species should actually be ``present.'' Because \(M\) is user defined, this approach effectively gives \(\psi\) a uniform prior over \(N\) to \(M\) CITATION. For a more detailed explanation of data augmentation and its application here, please see CITATION, CITATION, and CITATION.
+Let \(N\) by the total number of observed species, \(M\) be the upper limit of possible species that could have existed given a model of species presence, and \(N^{\ast}\) is the all-zero histories where \(N^{\ast} = M - N\). This approach assumes that \(\hat{N} \sim \text{Binomial}(M, \psi)\) where \(\hat{N}\) is the estimated ``true'' number of species and \(\psi\) is the probability that any augmented species should actually be ``present.'' Because \(M\) is user defined, this approach effectively gives \(\psi\) a uniform prior over \(N\) to \(M\) CITATION. For a more detailed explanation of data augmentation and its application here, please see CITATION, CITATION, and CITATION.
 
 Data imputation is the process of estimating missing data for partially observed covariates CITATION, this is simple in a Bayesian context because data are also parameters CITATION. Augmented species also have no known mass so a mass estimate must be imputed for each possible species CITATION ROYLE. This procedure assumes that mass values for augmented species are from the same distribution as observed species. The distribution of observed mass values is estimated as part of the model, and new mass values are then generated from this distribution. This approach is an example of imputing data missing completely at random CITATION. Because log mass values are rescaled as a part of this study, the body mass distribution is already known (\(\mathcal{N}(0, 0.5)\)); augmented species body mass just simply drawn from this distribution. 
 
@@ -251,6 +251,9 @@ In the birth-death model, \(\phi \neq \pi\) and so each of these probabilities a
 %     lots of help from stan-users
 
 \subsection*{Posterior inference and model adequacy}
+Programs that implement joint posterior inference for the above models (Eqs. \ref{eq:pure_presence}, \ref{eq:birth_death}) were implemented in the probabilistic programming language Stan CITATION. The models used here both feature latent discrete parameters in the large matrix \(z\) (Tables \ref{tab:obs_param}, \ref{tab:pres_param}, \ref{tab:bd_param}; Eqs. \ref{eq:obs_model}, \ref{eq:pure_presence}, \ref{eq:birth_death}). All methods for posterior inference implemented in Stan are derivative based which causes complications for actually implementing the above models because integers do not have derivatives. 
+
+Instead of implementing a latent discrete parameterization, the posterior probabilities of all possible states of the latent parameters \(z\) were estimated (i.e. marginalized).
 
 % Stan
 %   version 2.9.0
@@ -261,6 +264,7 @@ In the birth-death model, \(\phi \neq \pi\) and so each of these probabilities a
 %     see code for implementation? 
 %       it is kind of an annoying amount of math to write up
 
+The combined size of the dataset and large number of parameters in both models (Eqs. \ref{eq:pure_presence}, \ref{eq:birth_death}), specifically the total number of latent parameters that are the matrix \(z\), means that stochastic approximate posterior inference is computationally very slow even using HMC.
 % full bayes for implied presence model
 %   not too hard
 % ADVI for latent discrete model
