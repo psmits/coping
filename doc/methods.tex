@@ -251,9 +251,9 @@ In the birth-death model, \(\phi \neq \pi\) and so each of these probabilities a
 %     lots of help from stan-users
 
 \subsection*{Posterior inference and model adequacy}
-Programs that implement joint posterior inference for the above models (Eqs. \ref{eq:pure_presence}, \ref{eq:birth_death}) were implemented in the probabilistic programming language Stan CITATION. The models used here both feature latent discrete parameters in the large matrix \(z\) (Tables \ref{tab:obs_param}, \ref{tab:pres_param}, \ref{tab:bd_param}; Eqs. \ref{eq:obs_model}, \ref{eq:pure_presence}, \ref{eq:birth_death}). All methods for posterior inference implemented in Stan are derivative based which causes complications for actually implementing the above models because integers do not have derivatives. 
+Programs that implement joint posterior inference for the above models (Eqs. \ref{eq:pure_presence}, \ref{eq:birth_death}) were implemented in the probabilistic programming language Stan CITATION. The models used here both feature latent discrete parameters in the large matrix \(z\) (Tables \ref{tab:obs_param}, \ref{tab:pres_param}, \ref{tab:bd_param}; Eqs. \ref{eq:obs_model}, \ref{eq:pure_presence}, \ref{eq:birth_death}). All methods for posterior inference implemented in Stan are derivative based which causes complications for actually implementing the above models because integers do not have derivatives. Instead of implementing a latent discrete parameterization, the posterior probabilities of all possible states of the latent parameters \(z\) were estimated (i.e. marginalized). 
 
-Instead of implementing a latent discrete parameterization, the posterior probabilities of all possible states of the latent parameters \(z\) were estimated (i.e. marginalized).
+Species durations at minimum range-through from the FAD to the LAD, but the incompleteness of all observations means that the actual time of origination or extinction is unknown. The marginalization approach used here means that the probabilities all possible histories for a species are calculated, from the end members of the species having existed for the entire study interval and the species having only existed between the directly observed FAD and LAD to all possible intermediaries CITATION. % this probably needs a figure to explain.
 
 % Stan
 %   version 2.9.0
@@ -264,13 +264,11 @@ Instead of implementing a latent discrete parameterization, the posterior probab
 %     see code for implementation? 
 %       it is kind of an annoying amount of math to write up
 
-The combined size of the dataset and large number of parameters in both models (Eqs. \ref{eq:pure_presence}, \ref{eq:birth_death}), specifically the total number of latent parameters that are the matrix \(z\), means that stochastic approximate posterior inference is computationally very slow even using HMC.
-% full bayes for implied presence model
-%   not too hard
-% ADVI for latent discrete model
-%   large/complicated model 
-%     too slow for full, stochastic sampling based bayesian inference
-%   variational inference simplifies the problem but does fit an actual joint probability
+The combined size of the dataset and large number of parameters in both models (Eqs. \ref{eq:pure_presence}, \ref{eq:birth_death}), specifically the total number of latent parameters that are the matrix \(z\), means that stochastic approximate posterior inference is computationally very slow even using HMC. Instead, an approximate Bayesian approach was used: variational inference. A recently developed automatic variational inference algorithm called ``automatic differention variational inference'' (ADVI) is implemented in Stan and was used here CITATION. ADVI assumes that the posterior is Gaussian but still yields a true Bayesian posterior; this assumption is similar to quadratic approximation of the likelihood function used in maximum likelihood inference CITATION. The principal limitation of assuming the joint posterior is Gaussian is that the true topology of the log-posterior isn't represented; this is a particular burden for scale parameters which are bound to be positive (e.g. standard deviation).
+
+After fitting both models (Eqs. \ref{eq:pure_presence}, \ref{eq:birth_death}) using ADVI, model adequacy and quality of fit was assessed using a series of posterior predictive checks CITATION CITATION. Because all Bayesian models are inherently generative, simulations of new data sets is ``free'' CITATION. By simulating many theoretical data sets using the observed covariate information the congruence between predictions made by the model and the observed empirical data can be assessed. By combining multiple posterior predictive tests of congruence between empirical and simulated values of interest, the holistic adequacy of the model can be analyzed CITATION.
+
+An example posterior predictive check used in this study was comparing the observed average number of observations per species to a distribution of simulated averages; if the empirically observed value sits in the middle of the distribution than the model is adequate in reproducing the observed number of occurrences per species. 
 
 % for posterior simulations, just start from t = 1 and roll forward
 %   one-ahead estimate/leave-one-out cross-validation 
