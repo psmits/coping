@@ -42,27 +42,11 @@ Two different models were used in this study: a pure-presence model and a birth-
 \subsubsection*{Data augmentation}
 All presence/absence observations are incomplete. The hidden Markov model at the core of this analysis allows for observed absences to be used meaningfully to estimate the number of unobserved species. Of specific concern in this analysis is the unknown ``true'' size of the dataset; how many species could have actually been observed? While many species have been observed, the natural incompleteness of all observations, especially in the case of paleontological data, there are obviously many species which were never sampled.
 
-Let \(N\) by the total number of observed species, \(M\) be the upper limit of possible species that could have existed given a model of species presence, and \(N^{\ast}\) is the all-zero histories where \(N^{\ast} = M - N\). This approach assumes that \(\hat{N} \sim \text{Binomial}(M, \psi)\) where \(\hat{N}\) is the estimated ``true'' number of species and \(\psi\) is the probability that any augmented species should actually be ``present.'' Because \(M\) is user defined, this approach effectively gives \(\psi\) a uniform prior over \(N\) to \(M\) CITATION. For a more detailed explanation of data augmentation and its application here, please see CITATION, CITATION, and CITATION.
+Let \(N\) by the total number of observed species, \(M\) be the upper limit of possible species that could have existed given a model of species presence, and \(N^{\ast}\) is the all-zero histories where \(N^{\ast} = M - N\). This approach assumes that \(\hat{N} \sim \text{Binomial}(M, \psi)\) where \(\hat{N}\) is the estimated ``true'' number of species and \(\psi\) is the probability that any augmented species should actually be ``present.'' Because \(M\) is user defined, this approach effectively gives \(\psi\) a uniform prior over \(N\) to \(M\) CITATION. For a more detailed explanation of data augmentation and its application here, please see CITATION, CITATION, and CITATION. For this study, \(M = N + \lfloor{N / 4\rfloor}\).
 
 Data imputation is the process of estimating missing data for partially observed covariates CITATION, this is simple in a Bayesian context because data are also parameters CITATION. Augmented species also have no known mass so a mass estimate must be imputed for each possible species CITATION ROYLE. This procedure assumes that mass values for augmented species are from the same distribution as observed species. The distribution of observed mass values is estimated as part of the model, and new mass values are then generated from this distribution. This approach is an example of imputing data missing completely at random CITATION. Because log mass values are rescaled as a part of this study, the body mass distribution is already known (\(\mathcal{N}(0, 0.5)\)); augmented species body mass just simply drawn from this distribution. 
 
-These augmented species are ecotypically classified as augmented, an additional grouping indicating their unknown biology. 
-
-
-% we definitely aren't sampling everything
-%   we know there are unsampled species
-%   we have no idea what their ecologies were
-% data augmentation
-%   N observed species
-%   A max number of augments
-%   M total (N + A)
-% this effectively puts a uniform prior on the potential pop-size from N to M
-% key is to pick high enough M that it doesn't affect diversity estimates
-% imputation of ecology
-%   new trashbin ecotype -- ``augmented''
-%   distribution mass based on observed species, estimate for augments
-
-
+In addition to body mass information, the augmented species need an ecotype classification. Because these species are completely unknown, they were all classified as ``augmented,'' an additional grouping indicating their unknown biology. This classification has no biological interpretation.
 
 
 
@@ -98,10 +82,11 @@ The probability of observing a species that is present \(p\) is modeled as a log
   \label{eq:obs_model}
 \end{equation}
 
+
 \subsubsection*{Pure-presence process}
 For the pure-presence model there is only a single probability dealing with the presence of a species \(\theta\). This probability was modeled as multi-level logistic regression with both species-level and group-level covariates CITATION. The parameters associated with pure-presence model are presented in Table \ref{tab:pres_param} and the full sampling statement in Equation \ref{eq:pure_presence}.
 
-The species-level of the model (Eq. \ref{eq:pure_presence}) is a varying-intercept model where the intercept varies by ecotype. Additionally, species mass was included as a covariate associated with two regression coefficients allowing a quadratic relationship with log-odds of occurrence. This assumption is based on the known distribution of mammal body masses where species with intermediate mass values are more common than either small or large bodied species. These assumptions are also reflected in the choice of priors for these regression coefficients.
+The species-level of the model (Eq. \ref{eq:pure_presence}) is a logistic regression with varying-intercept that varies by ecotype. Additionally, species mass was included as a covariate associated with two regression coefficients allowing a quadratic relationship with log-odds of occurrence. This assumption is based on the known distribution of mammal body masses where species with intermediate mass values are more common than either small or large bodied species. These assumptions are also reflected in the choice of priors for these regression coefficients.
 
 The values of each ecotype's intercept are themselves modeled as regressions using the group-level covariates associated with environmental context. Each of these regressions has an associated variance of possible values of each ecotype's intercept CITATION. In addition, the covariances between ecotype intercepts, given this group-level regression, are modeled CITATION.
 
@@ -153,6 +138,10 @@ Following recommendations from CITATION, CITATION, CITATION all parameters not m
 
 \subsubsection*{Birth-death process}
 In the birth-death model, \(\phi \neq \pi\) and so each of these probabilities are modeled separately but in a similar manner to how \(\theta\) is modeled in the pure-presence model (Eq. \ref{eq:pure_presence}). The parameters associated with the birth-death presence model are presented in Table \ref{tab:bd_param} and the full sampling statement, including observation (Eq. \ref{eq:obs_model}), is described in Equation \ref{eq:birth_death}. 
+
+Similar to the pure-presence model, both \(\phi\) and \(\pi\) are modeled as logistic regressions with varying-intercept and one covariate associated with two parameters. The possible relationships between mass and both \(\phi\) and \(\pi\) are reflected in the parameterization of the model and choice of priors (Eq. \ref{eq:birth_death}).
+
+The intercepts of \(\phi\) and \(\pi\) both vary by species ecotype and those values are themselves the product of group-level regression using environmental factors as covariates (Eq. \ref{eq:birth_death}); this is identical to the pure presence model (Eq. \ref{eq:pure_presence}).
 
 \begin{table}
   \centering
@@ -215,41 +204,6 @@ In the birth-death model, \(\phi \neq \pi\) and so each of these probabilities a
 \end{equation}
 
 
-
-
-
-
-% two models; two fitting techniques
-%   one without sampling (implied presence model)
-%     range-through occurrence; assumes observation without error
-%       model effect of traits on occurrence; not diversification
-%       analogous to comparing samples from different sites
-%     full stochastic sampling Bayes
-%       NUTS HMC for posterior sampling
-%   one with sampling (latent discrete model)
-%     only observed presences; estimate probability of observing a true occurrence
-%     model is very complex --> individual level effects are difficult to estimate
-%     variational bayes (like EM algorithm)
-%       MAP estimate
-%       samples from posterior approximated as uncorrelated Gaussians?
-%       ADVI
-%       NEED TO READ MORE
-% why does this matter?
-%   issues surrounding the fossil record and sampling are real
-%     the w/ sampling model takes \uppercase{forever} to fully sample the posterior
-%     finding the mode is a lot faster
-%   ADVI is only approximate; ignores skewness, kertosis present in true posterior
-%     can't make confident inference for specific questions
-%     maybe estimate how different by using one model and both methods
-%   so, fit the w/o sampling model with both NUTS and ADVI
-%   compare parameter estimates for covariate effects
-%     HS nuts vs HS advi vs LD advi
-
-% appendix information
-%   writing the model in stan
-%   latent discrete parameter
-%     lots of help from stan-users
-
 \subsection*{Posterior inference and model adequacy}
 Programs that implement joint posterior inference for the above models (Eqs. \ref{eq:pure_presence}, \ref{eq:birth_death}) were implemented in the probabilistic programming language Stan CITATION. The models used here both feature latent discrete parameters in the large matrix \(z\) (Tables \ref{tab:obs_param}, \ref{tab:pres_param}, \ref{tab:bd_param}; Eqs. \ref{eq:obs_model}, \ref{eq:pure_presence}, \ref{eq:birth_death}). All methods for posterior inference implemented in Stan are derivative based which causes complications for actually implementing the above models because integers do not have derivatives. Instead of implementing a latent discrete parameterization, the posterior probabilities of all possible states of the latent parameters \(z\) were estimated (i.e. marginalized). 
 
@@ -270,16 +224,8 @@ After fitting both models (Eqs. \ref{eq:pure_presence}, \ref{eq:birth_death}) us
 
 An example posterior predictive check used in this study was comparing the observed average number of observations per species to a distribution of simulated averages; if the empirically observed value sits in the middle of the distribution than the model is adequate in reproducing the observed number of occurrences per species. 
 
-% for posterior simulations, just start from t = 1 and roll forward
-%   one-ahead estimate/leave-one-out cross-validation 
-% mean number of occurrences in the whole N x T block
-% edge effects -- exclude the first and last from analysis?
+Posterior simulations for time series are start with the values at t = 1 and then just simulating forward. 
 
-
-% repository information
-%   all code for cleaning, modeling, plotting.
-%   all data for the trees and the unique PBDB download call
-% should I make it more readable/automatic?
 
 
 \end{document}
