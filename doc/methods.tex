@@ -24,6 +24,53 @@ The life habit and dietary categories provided through the PBDB where coarsened 
 
 Species mass information was gathered from multiple different sources where a plurality of the body size estimates are from the PBDB. Body part measurements for many species are also available through the PBDB. Just as with \citet{Smits2015}, these measurements and corresponding regression equations were used to get mass estimates for more species. Additional mass estimates and body part measurements were sourced from CITATIONS, the Neogene Old World Database as in \citet{Smits2015}. Mass was log-transformed and then mean-centered and rescaled by dividing by two-times its standard deviation; this insures that the magnitude of effects for both continuous and discrete covariates are comparable and follows CITATION. % gelman and hill
 
+\begin{table}[ht]
+  \centering
+  \caption{Species trait assignments in this study are a coarser version of the information available in the PBDB. Information was coarsened to improve per category sample size and uniformity and followed this table.}
+  \begin{tabular}[ht]{ l | l | l }
+    \hline
+    \multicolumn{2}{ c |}{This study} & PBDB categories \\
+    \hline \hline
+    \multirow{4}{*}{Diet} & Carnivore & Carnivore \\
+    & Herbivore & Browser, folivore, granivore, grazer, herbivore. \\
+    & Insectivore & Insectivore. \\
+    & Omnivore & Frugivore, omnivore. \\ 
+    \hline
+    \multirow{3}{*}{Locomotor} & Arboreal & Arboreal.\\
+    & Ground dwelling & Fossorial, ground dwelling, semifossorial, saltatorial. \\
+    & Scansorial & Scansorial. \\
+    \hline
+  \end{tabular}
+  \label{tab:trait_cats}
+\end{table}
+
+\begin{table}[ht]
+  \centering
+  \caption{Regression equations used in this study for estimating body size. Equations are presented with reference to taxonomic grouping, part name, and reference.}
+  \begin{tabular}{l | l | l | l}
+    Group & Equation & log(Measurement) & Source \\
+    \hline
+    General & \(\log(m) = 1.827x + 1.81\) & lower m1 area &  \cite{Legendre1986} \\
+    General & \(\log(m) = 2.9677x - 5.6712\) & mandible length & \cite{Foster2009a} \\
+    General & \(\log(m) = 3.68x - 3.83\) & skull length & \cite{Luo2001} \\
+    Carnivores & \(\log(m) = 2.97x + 1.681\) & lower m1 length & \cite{VanValkenburgh1990} \\
+    Insectivores & \(\log(m) = 1.628x + 1.726\) & lower m1 area & \cite{Bloch1998} \\
+    Insectivores & \(\log(m) = 1.714x + 0.886\) & upper M1 area & \cite{Bloch1998} \\
+    Lagomorph & \(\log(m) = 2.671x - 2.671\) & lower toothrow area & \cite{Tomiya2013} \\
+    Lagomorph & \(\log(m) = 4.468x - 3.002\) & lower m1 length & \cite{Tomiya2013} \\
+    Marsupials & \(\log(m) = 3.284x + 1.83\) & upper M1 length & \cite{Gordon2003} \\
+    Marsupials & \(\log(m) = 1.733x + 1.571\) & upper M1 area & \cite{Gordon2003} \\
+    Rodentia & \(\log(m) = 1.767x + 2.172\) & lower m1 area & \cite{Legendre1986} \\
+    Ungulates & \(\log(m) = 1.516x + 3.757\) & lower m1 area & \cite{Mendoza2006} \\
+    Ungulates & \(\log(m) = 3.076x + 2.366\) & lower m2 length & \cite{Mendoza2006} \\
+    Ungulates & \(\log(m) = 1.518x + 2.792\) & lower m2 area & \cite{Mendoza2006} \\
+    Ungulates & \(\log(m) = 3.113x - 1.374\) & lower toothrow length & \cite{Mendoza2006} \\
+    \hline
+  \end{tabular}
+  \label{tab:mass_est}
+\end{table}
+
+
 All fossil occurrences from 64 to 2 million years ago (Mya) were binned into 31 2 million year (My) bins. This temporal length was chosen because it is approximately the resolution of the North American mammal fossil record.
 
 
@@ -208,6 +255,10 @@ The intercepts of \(\phi\) and \(\pi\) both vary by species ecotype and those va
 Programs that implement joint posterior inference for the above models (Eqs. \ref{eq:pure_presence}, \ref{eq:birth_death}) were implemented in the probabilistic programming language Stan CITATION. The models used here both feature latent discrete parameters in the large matrix \(z\) (Tables \ref{tab:obs_param}, \ref{tab:pres_param}, \ref{tab:bd_param}; Eqs. \ref{eq:obs_model}, \ref{eq:pure_presence}, \ref{eq:birth_death}). All methods for posterior inference implemented in Stan are derivative based which causes complications for actually implementing the above models because integers do not have derivatives. Instead of implementing a latent discrete parameterization, the posterior probabilities of all possible states of the latent parameters \(z\) were estimated (i.e. marginalized). 
 
 Species durations at minimum range-through from the FAD to the LAD, but the incompleteness of all observations means that the actual time of origination or extinction is unknown. The marginalization approach used here means that the probabilities all possible histories for a species are calculated, from the end members of the species having existed for the entire study interval and the species having only existed between the directly observed FAD and LAD to all possible intermediaries CITATION. % this probably needs a figure to explain.
+
+% 1 2 3 4 5 6
+% ? ? 1 1 1 ?
+% 0 0 1 0 1 0
 
 % Stan
 %   version 2.9.0
