@@ -1,9 +1,10 @@
 \documentclass[12pt,letterpaper]{article}
 
-\usepackage{amsmath, amsthm}
-\usepackage{microtype, parskip}
+\usepackage{amsmath, amsthm, amsfonts, amssymb}
+\usepackage{microtype, parskip, graphicx}
 \usepackage[comma,numbers,sort&compress]{natbib}
 \usepackage{lineno}
+\usepackage{longtable}
 \usepackage{docmute}
 \usepackage{caption, subcaption, multirow, morefloats, rotating}
 \usepackage{wrapfig}
@@ -21,8 +22,6 @@ All fossil occurrence information information was downloaded from the Paleobiolo
 This raw data was then sorted, cleaned, and manipulated programmatically prior to analysis. Species taxonomic assignments given by the PBDB were updated for accuracy and consistency. For example, species classified in the order Artidodactyla were reclassified as Cetartiodactyla. These re-assignments follow \citet{Smits2015} and were based on CITATIONS. Additionally, Taxa who's life habit was classified as either volant (i.e. Chiroptera) or aquatic (e.g. Cetacea) were excluded from this analysis because of both differences in fossilization potential and applicability to the study of terrestrial species pools.
 
 The life habit and dietary categories provided through the PBDB where coarsened to increase per ecotype sample size; this coarsening follows the same procedure as \citet{Smits2015}. Additionally, life habit category was further modified to break-up the vague ``ground-dwelling'' category; re-classifying these species by ankle posture gives more precise information about that species' environmental context. Ground-dwelling taxa were reassigned following \citet{Carrano1997} by species taxonomic context. Species ecotype is defined as the interaction between life habit and diet categories. Ecotype categories with less than 10 species havig ever been that combination were excluded, yielding a total of 18 of 21 possible ecotypes. % make a table.
-
-Species mass information was gathered from multiple different sources where a plurality of the body size estimates are from the PBDB. Body part measurements for many species are also available through the PBDB. Just as with \citet{Smits2015}, these measurements and corresponding regression equations were used to get mass estimates for more species. Additional mass estimates and body part measurements were sourced from CITATIONS, the Neogene Old World Database as in \citet{Smits2015}. Mass was log-transformed and then mean-centered and rescaled by dividing by two-times its standard deviation; this insures that the magnitude of effects for both continuous and discrete covariates are comparable and follows CITATION. % gelman and hill
 
 \begin{table}[ht]
   \centering
@@ -43,6 +42,11 @@ Species mass information was gathered from multiple different sources where a pl
   \end{tabular}
   \label{tab:trait_cats}
 \end{table}
+
+\input{posture_edit.tex}
+
+
+Species mass information was gathered from multiple different sources where a plurality of the body size estimates are from the PBDB. Body part measurements for many species are also available through the PBDB. Just as with \citet{Smits2015}, these measurements and corresponding regression equations were used to get mass estimates for more species. Additional mass estimates and body part measurements were sourced from CITATIONS, the Neogene Old World Database as in \citet{Smits2015}. Mass was log-transformed and then mean-centered and rescaled by dividing by two-times its standard deviation; this insures that the magnitude of effects for both continuous and discrete covariates are comparable and follows CITATION. % gelman and hill
 
 \begin{table}[ht]
   \centering
@@ -221,31 +225,35 @@ The intercepts of \(\phi\) and \(\pi\) both vary by species ecotype and those va
 
 \begin{equation}
   \begin{aligned}
-    y_{i, t} &\sim \text{Bernoulli}(p_{i, t} z_{i, t}) \\
-    p_{i, t} &= \text{logit}^{-1}(\alpha_{0} + \alpha_{1} m_{i} + r_{t}) \\ 
-    r_{t} &\sim \mathcal{N}(0, \sigma) \\
-    \alpha_{0} &\sim \mathcal{N}(0, 1) \\
-    \alpha_{1} &\sim \mathcal{N}(1, 1) \\
-    \sigma &\sim \mathcal{N}^{+}(1) \\
-    z_{i, 1} &\sim \text{Bernoulli}(\rho) \\
-    z_{i, t} &\sim \text{Bernoulli}\left(z_{i, t - 1} \pi + \sum_{x = 1}^{t}(1 - z_{i, x}) \phi_{t}\right) \\
-    \phi_{i, t} &= \text{logit}^{-1}(a^{\phi}_{t, j[i]} + b^{\phi}_{1} m_{i} + b^{\phi}_{2} m_{i}^{2}) \\
-    \pi_{i, t} &= \text{logit}^{-1}(a^{\pi}_{t, j[i]} + b^{\pi}_{1} m_{i} + b^{\pi}_{2} m_{i}^{2}) \\
-    a^{\phi} &\sim \text{MVN}(u \gamma^{\phi}, \Sigma^{\phi}) \\
-    a^{\pi} &\sim \text{MVN}(u \gamma^{\pi}, \Sigma^{\pi}) \\
-    \Sigma^{\phi} &= \text{diag}(\tau^{\phi}) \Omega^{\phi} \text{diag}(\tau^{\phi}) \\
-    \Sigma^{\pi} &= \text{diag}(\tau^{\pi}) \Omega^{\pi} \text{diag}(\tau^{\pi}) \\
-    \rho &\sim \text{U}(0, 1) \\
-    b^{\phi}_{1} &\sim \mathcal{N}(0, 1) \\
-    b^{\pi}_{1} &\sim \mathcal{N}(0, 1) \\
-    b^{\phi}_{2} &\sim \mathcal{N}(-1, 1) \\
-    b^{\pi}_{2} &\sim \mathcal{N}(-1, 1) \\
-    \gamma^{\phi} &\sim \mathcal{N}(0, 1) \\
-    \gamma^{\pi} &\sim \mathcal{N}(0, 1) \\
-    \tau^{\phi} &\sim \mathcal{N}^{+}(1) \\
-    \tau^{\pi} &\sim \mathcal{N}^{+}(1) \\
-    \Omega^{\phi} &\sim \text{LKJ}(2) \\
-    \Omega^{\pi} &\sim \text{LKJ}(2) \\
+    \begin{split}
+      y_{i, t} &\sim \text{Bernoulli}(p_{i, t} z_{i, t}) \\
+      p_{i, t} &= \text{logit}^{-1}(\alpha_{0} + \alpha_{1} m_{i} + r_{t}) \\ 
+      r_{t} &\sim \mathcal{N}(0, \sigma) \\
+      \alpha_{0} &\sim \mathcal{N}(0, 1) \\
+      \alpha_{1} &\sim \mathcal{N}(1, 1) \\
+      \sigma &\sim \mathcal{N}^{+}(1) \\
+      z_{i, 1} &\sim \text{Bernoulli}(\rho) \\
+      z_{i, t} &\sim \text{Bernoulli}\left(z_{i, t - 1} \pi + \sum_{x = 1}^{t}(1 - z_{i, x}) \phi_{t}\right) \\
+      \phi_{i, t} &= \text{logit}^{-1}(a^{\phi}_{t, j[i]} + b^{\phi}_{1} m_{i} + b^{\phi}_{2} m_{i}^{2}) \\
+      \pi_{i, t} &= \text{logit}^{-1}(a^{\pi}_{t, j[i]} + b^{\pi}_{1} m_{i} + b^{\pi}_{2} m_{i}^{2}) \\
+      a^{\phi} &\sim \text{MVN}(u \gamma^{\phi}, \Sigma^{\phi}) \\
+      a^{\pi} &\sim \text{MVN}(u \gamma^{\pi}, \Sigma^{\pi}) \\
+    \end{split}
+    \begin{split}
+      \Sigma^{\phi} &= \text{diag}(\tau^{\phi}) \Omega^{\phi} \text{diag}(\tau^{\phi}) \\
+      \Sigma^{\pi} &= \text{diag}(\tau^{\pi}) \Omega^{\pi} \text{diag}(\tau^{\pi}) \\
+      \rho &\sim \text{U}(0, 1) \\
+      b^{\phi}_{1} &\sim \mathcal{N}(0, 1) \\
+      b^{\pi}_{1} &\sim \mathcal{N}(0, 1) \\
+      b^{\phi}_{2} &\sim \mathcal{N}(-1, 1) \\
+      b^{\pi}_{2} &\sim \mathcal{N}(-1, 1) \\
+      \gamma^{\phi} &\sim \mathcal{N}(0, 1) \\
+      \gamma^{\pi} &\sim \mathcal{N}(0, 1) \\
+      \tau^{\phi} &\sim \mathcal{N}^{+}(1) \\
+      \tau^{\pi} &\sim \mathcal{N}^{+}(1) \\
+      \Omega^{\phi} &\sim \text{LKJ}(2) \\
+      \Omega^{\pi} &\sim \text{LKJ}(2) \\
+    \end{split}
   \end{aligned}
   \label{eq:birth_death}
 \end{equation}
