@@ -264,9 +264,13 @@ Programs that implement joint posterior inference for the above models (Eqs. \re
 
 Species durations at minimum range-through from the FAD to the LAD, but the incompleteness of all observations means that the actual time of origination or extinction is unknown. The marginalization approach used here means that the probabilities all possible histories for a species are calculated, from the end members of the species having existed for the entire study interval and the species having only existed between the directly observed FAD and LAD to all possible intermediaries CITATION. % this probably needs a figure to explain.
 
-% 1 2 3 4 5 6
-% ? ? 1 1 1 ?
-% 0 0 1 0 1 0
+\begin{figure}[ht]
+  \centering
+  \includegraphics[height=0.5\textheight, width=\textwidth, keepaspectratio=true]{figure/margin}
+  \caption[Conceptual figure of all possible occurrence histories for an observed species]{Conceptual figure of all possible occurrence histories for an observed species.}
+  \label{fig:margin_concept}
+\end{figure}
+
 
 % Stan
 %   version 2.9.0
