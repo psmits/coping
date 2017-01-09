@@ -1,3 +1,4 @@
+library(parallel)
 library(plyr)
 library(coda)
 library(arm)
@@ -12,6 +13,7 @@ library(Metrics)
 source('../R/multiclass_roc.r')
 source('../R/trait_setup.r')
 source('../R/sim_from_model.r')
+source('../R/estimate_div.r')
 source('../R/advi_post.r')
 source('../R/make_plots.r')
 source('../data/data_dump/trait_w_gaps_revamp.data.R')
@@ -71,7 +73,17 @@ ext2 <- post.advi(fit2)
 post.pred(ext2, ntax = M, ntime = T, sight.obs = sighta, nsim, samp, bd = TRUE)
 # analysis of the posterior
 vis.bdpost(ext2, ecotype, ecotrans, mass, cbp.long, ecoprob = TRUE)
+# estimate standing diversity
+post.div <- diversity.distribution(sight.obs, ext2, nsim)
 
+# total diversity not broken by grouping
+diversity <- Map(function(x, y) cbind(div = x, time = seq(y)), 
+                 llply(post.div, colSums), ncol(sight.obs))
+diversity <- Map(function(x, y) cbind(x, sim = y),
+                 diversity, seq(nsim))
+diversity <- data.frame(Reduce(rbind, diversity))
+divgg <- ggplot(diversity, aes(x = time, y = div, group = sim))
+divgg <- divgg + geom_line(alpha = 0.1)
 
 
 ############

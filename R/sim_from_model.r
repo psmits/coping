@@ -138,4 +138,3 @@ post.pred <- function(ext1, ntax, ntime, sight.obs, nsim, samp, bd = FALSE) {
          width = 4, height = 3)
 
 }
-
