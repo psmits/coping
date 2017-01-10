@@ -69,12 +69,15 @@ vis.post(ext1, ecotype, ecotrans, mass, cbp.long, ecoprob = TRUE)
 # full birth-death
 fit2 <- read_one_stan_csv(post[1])
 ext2 <- post.advi(fit2)
-# analysis of model fit
+# posterior predictive checks
+#   need to develop more
 post.pred(ext2, ntax = M, ntime = T, sight.obs = sighta, nsim, samp, bd = TRUE)
-# analysis of the posterior
+
+# visualize posterior estimates
 vis.bdpost(ext2, ecotype, ecotrans, mass, cbp.long, ecoprob = TRUE)
-# estimate standing diversity
-post.div <- diversity.distribution(sight.obs, ext2, nsim)
+
+# estimate standing diversity given posterior
+post.div <- diversity.distribution(sighta, ext2, nsim) # 
 
 # total diversity not broken by grouping
 diversity <- Map(function(x, y) cbind(div = x, time = seq(y)), 
@@ -84,6 +87,48 @@ diversity <- Map(function(x, y) cbind(x, sim = y),
 diversity <- data.frame(Reduce(rbind, diversity))
 divgg <- ggplot(diversity, aes(x = time, y = div, group = sim))
 divgg <- divgg + geom_line(alpha = 0.1)
+
+# count number of gains going to t to t+1
+#   ask how many 0 -> 1 in interval
+gains <- list()
+for(jj in seq(nsim)) {
+  oo <- matrix(ncol = T - 1, nrow = M)
+  for(kk in seq(M)) {
+    for(ii in 2:(T - 1)) {
+      oo[kk, ii - 1] <- post.div[[jj]][kk, ii - 1] == 0 & 
+        post.div[[jj]][kk, ii] == 1
+    }
+  }
+  gains[[jj]] <- oo[, -(ncol(oo))]
+}
+#colSums(gains[[1]])
+
+
+# count number of losses going to t to t+1
+#   ask how many 1 -> 0 in interval
+loss <- list()
+for(jj in seq(nsim)) {
+  oo <- matrix(ncol = T - 1, nrow = M)
+  for(kk in seq(M)) {
+    for(ii in 2:(T - 1)) {
+      oo[kk, ii - 1] <- post.div[[jj]][kk, ii - 1] == 1 & 
+        post.div[[jj]][kk, ii] == 0
+    }
+  }
+  loss[[jj]] <- oo[, -(ncol(oo))]
+}
+#colSums(loss[[1]])
+
+# llply(post.div, colSums)  # need this for rate calculation
+
+
+
+# break diversity down by ecotype
+# plot ideas
+#   grid of diversity estimates as lines
+#   relative diversity of ecotypes 
+#     median estimates
+#     allows there to be fractional species
 
 
 ############
