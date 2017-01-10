@@ -1,0 +1,54 @@
+\documentclass[12pt,letterpaper]{article}
+
+\usepackage{amsmath, amsthm}
+\usepackage{microtype, parskip}
+\usepackage[comma,numbers,sort&compress]{natbib}
+\usepackage{lineno}
+\usepackage{docmute}
+\usepackage{caption, subcaption, multirow, morefloats, rotating}
+\usepackage{wrapfig}
+
+\frenchspacing
+
+\begin{document}
+
+\section*{Results}
+
+\subsection*{Comparing the fits of the pure-presence and birth-death models}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/pred_occ}
+  \caption{Posterior predictive check for pure-presence model.}
+  \label{fig:ppc_pure_presence}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/pred_occ_bd}
+  \caption{Posterior predictive check for birth-death model.}
+  \label{fig:ppc_birth_death}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio=true]{figure/ecotype_occurrence}
+  \caption{Probability of ecotype occurring over time. Estimates are from the pure-presence model.}
+  \label{fig:eco_occur}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio=true]{figure/ecotype_origin_bd}
+  \caption{Probability of species origination by ecotype. Estimates are from the birth-death model.}
+  \label{fig:eco_origin}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio=true]{figure/ecotype_survival_bd}
+  \caption{Probability of species survival by ecotype. Estimates are from the birth-death model.}
+  \label{fig:eco_survival}
+\end{figure}<++>
+
+\end{document}
