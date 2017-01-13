@@ -16,19 +16,7 @@
 
 \subsection*{Comparing the fits of the pure-presence and birth-death models}
 
-% look at the posterior predictive checks
-%   which model has better fit
-%   what does that mean?
-% need to inspect the posterior estimates in order to understand the differences
-%   ecotype occurrence (pp), origination + survival (bd) probabilities
-%   effect of mass on 
-%     preservation (pp, bd)
-%     occurrence (pp)
-%     origination + survival (bd)
-%   group-level covariates on 
-%     occurrence (pp)
-%     origination + survival (bd)
-
+Comparison of the posterior predictive performance of the pure-presence and birth-death models reveals a striking difference in quality of the models' fits to the data (Fig. \ref{fig:ppc_pure_presence,fig:ppc_birth_death}). The birth-death model is clearly able to reproduce the observed average number of occurrence, in contrast to the pure-birth model which greatly underestimates the ovserved average number of occurrences. The interpretation of these results is that the results of the birth-death model are more representative of the data than the pure-presence model, though further inspection of the posterior parameter estimates if generally called for CITATION.
 
 \begin{figure}[ht]
   \centering
@@ -43,6 +31,22 @@
   \caption[Posterior predictive check for birth-death model]{Comparison of the average observed number of occurrences per species (blue line) to the average number of occurrences from 100 posterior predictive datasets using the posterior estimate from the birth-death model.}
   \label{fig:ppc_birth_death}
 \end{figure}
+
+
+% look at the posterior predictive checks
+%   which model has better fit
+%   what does that mean?
+% need to inspect the posterior estimates in order to understand the differences
+%   ecotype occurrence (pp), origination + survival (bd) probabilities
+%   effect of mass on 
+%     preservation (pp, bd)
+%     occurrence (pp)
+%     origination + survival (bd)
+%   group-level covariates on 
+%     occurrence (pp)
+%     origination + survival (bd)
+
+
 
 \begin{figure}[ht]
   \centering
