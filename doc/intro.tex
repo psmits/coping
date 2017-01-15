@@ -22,7 +22,6 @@ A regional species pool is the set of species which form communities in a specif
 
 Valentine and Bambach how they presented guilds in paleobiology. Bush and Bambach presented an ecocube to describe what how marine invertebrates partition space and resources CITATION. Unique combinations represent what possible ecotypes are observable. The distribution of ecocube occupancy is then normally analyzed using ordination methods and the change in disparity over is estimated CITATION.
 
-Fourth-corner modeling is concerned with explaining either species abundance or presence/absence as a product of species traits, environmental factors, and the interaction between these factors. In modern ecological studies, the matrix being modeled is of species occurrence at localities distributed in region. In this study, the matrix being modeled is of species occurrence in temporal bins across the Cenozoic in North America. These dimensions are all axes of the same three dimensional occurrence matrix: species by locality by time.
 
 One of the greatest challenges with analyzing species occurrence data is the inherent incompleteness of any sample CITATION. In the modern, only presences are certain as an absence can be caused by both the species being truly absent or the species never having been sampled CITATION. For paleontological data in the context of this study, the incomplete preservation of fossil communities combined with the incomplete sampling of what fossils there are means that the true times of origination or extinction may not be observed CITATION.
 
@@ -50,12 +49,21 @@ There are many global climatic events that may have influenced the distribution 
 %     (fortelius and europe)
 %   other climate events? PETM, mid-miocene climatic optimum
 
+
+Fourth-corner modeling an approach to explaining the patthers of either species abundance or presence/absence as a product of species traits, environmental factors, and the interaction between traits and environment CITATION. In modern ecological studies, what is being modeled is species occurrences at localities distributed across a region CITATION. In this study, what is being modeled is the pattern of species occurrence over time for most of the Cenozoic in North America (Fig. \ref{fig:concept_fourth_corner}). These two approaches, modern and palentologicial, are different views of the same three-dimensional pattern: species at localities over time. The temporal limitations of modern ecological studies and difficulties with uneven spatial occurrences of fossils in paleontological studies means that these approaches are complimentary but reveal different patterns of how species are distributed in time and space.
+
 \begin{figure}[ht]
   \centering
   \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio=true]{figure/paleo_fourth_corner}
-  \caption{Conceptual diagram of the paleontological fourth corner problem. Figure is based on CITATION}
+  \caption[Conceptual diagram of the paleontological fourth-courner problem]{Conceptual diagram of the paleontological fourth corner problem. The observed presence matrix (orange) is the empirical presence/absence pattern for all species for all time points; this matrix is an incomplete observation of the ``true'' presence/absence pattern (purple). The estimated true presence matrix is modeled as a function of both environmental factors over time (blue) and multiple species traits (green). Additionally, the affect of environmental factors on species traits are also modeled as traits are expected to mediate the effects of a species environmental context. This diagram is based partially on material presented in CITATION and CITATION.}
   \label{fig:concept_fourth_corner}
 \end{figure}
+
+
+The major species trait included in this study is species ecotype, defined as the combination of species dietary category (e.g. carnivore) and locomotor category (e.g. arboreal). This trait is a descriptor of a species' ecological guild, similar to the unique combinations of the Bush and Bambach ecocube CITATION. Importantly, the probability of a species ecotype being present was modeled as a function of environmental factors (Fig. \ref{fig:concept_fourth_corner}). Species mass was also included as a species trait, but primarily just to control for that effect on species occurrence. 
+
+The environmental factors included in this study were mean and range of global temperature as estimated by 
+
 
 % individual-level covariates
 %   intercept term, varying by time
