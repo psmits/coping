@@ -19,9 +19,9 @@
 All fossil occurrence information information was downloaded from the Paleobiology Database. Occurrences (PBDB) were restricted to all Mammalia sampled in North America between the Maastrichtian and Gelasian stages. Taxonomic, stratigraphic, and ecological metadata for each occurrence was included. The raw data is available for download at \url{http://goo.gl/2slgeU}.
 %https://paleobiodb.org/data1.2/occs/list.csv?datainfo&rowcount&base_name=Mammalia&taxon_reso=species&interval=Maastrichtian,Gelasian&cc=NOA&show=class,genus,ecospace,loc,strat,stratext,lith,acconly. 
 
-This raw data was then sorted, cleaned, and manipulated programmatically prior to analysis. Species taxonomic assignments given by the PBDB were updated for accuracy and consistency. For example, species classified in the order Artidodactyla were reclassified as Cetartiodactyla. These re-assignments follow \citet{Smits2015} and were based on CITATIONS. Additionally, Taxa who's life habit was classified as either volant (i.e. Chiroptera) or aquatic (e.g. Cetacea) were excluded from this analysis because of both differences in fossilization potential and applicability to the study of terrestrial species pools.
+This raw data was then sorted, cleaned, and manipulated programmatically prior to analysis. Species taxonomic assignments given by the PBDB were updated for accuracy and consistency. For example, species classified in the order Artidodactyla were reclassified as Cetartiodactyla. These re-assignments follow \citet{Smits2015b} and were \citet{Janis1998,Janis2008} and the Encyclopedia of Life WEBSITE. Additionally, Taxa who's life habit was classified as either volant (i.e. Chiroptera) or aquatic (e.g. Cetacea) were excluded from this analysis because of both differences in fossilization potential and applicability to the study of terrestrial species pools.
 
-The life habit and dietary categories provided through the PBDB where coarsened to increase per ecotype sample size; this coarsening follows the same procedure as \citet{Smits2015}. Additionally, life habit category was further modified to break-up the vague ``ground-dwelling'' category; re-classifying these species by ankle posture gives more precise information about that species' environmental context. Ground-dwelling taxa were reassigned following \citet{Carrano1997} by species taxonomic context. Species ecotype is defined as the interaction between life habit and diet categories. Ecotype categories with less than 10 species havig ever been that combination were excluded, yielding a total of 18 of 21 possible ecotypes. % make a table.
+The life habit and dietary categories provided through the PBDB where coarsened to increase per ecotype sample size; this coarsening follows the same procedure as \citet{Smits2015b}. Additionally, life habit category was further modified to break-up the vague ``ground-dwelling'' category; re-classifying these species by ankle posture gives more precise information about that species' environmental context. Ground-dwelling taxa were reassigned following \citet{Carrano1997} by species taxonomic context. Species ecotype is defined as the interaction between life habit and diet categories. Ecotype categories with less than 10 species havig ever been that combination were excluded, yielding a total of 18 of 21 possible ecotypes. % make a table.
 
 \begin{table}[ht]
   \centering
@@ -46,7 +46,7 @@ The life habit and dietary categories provided through the PBDB where coarsened 
 \input{posture_edit.tex}
 
 
-Species mass information was gathered from multiple different sources where a plurality of the body size estimates are from the PBDB. Body part measurements for many species are also available through the PBDB. Just as with \citet{Smits2015}, these measurements and corresponding regression equations were used to get mass estimates for more species. Additional mass estimates and body part measurements were sourced from CITATIONS, the Neogene Old World Database as in \citet{Smits2015}. Mass was log-transformed and then mean-centered and rescaled by dividing by two-times its standard deviation; this insures that the magnitude of effects for both continuous and discrete covariates are comparable and follows CITATION. % gelman and hill
+Species mass information was gathered from multiple different sources where a plurality of the body size estimates are from the PBDB. Body part measurements for many species are also available through the PBDB. Just as with \citet{Smits2015b}, these measurements and corresponding regression equations were used to get mass estimates for more species. Additional mass estimates and body part measurements were sourced from numerous publications and the Neogene Old World Database; see the supplementary material to \citet{Smits2015b} for details. Mass was log-transformed and then mean-centered and rescaled by dividing by two-times its standard deviation; this insures that the magnitude of effects for both continuous and discrete covariates are comparable \citep{Gelman2007,Gelman2008}.
 
 \begin{table}[ht]
   \centering
@@ -80,29 +80,63 @@ All fossil occurrences from 64 to 2 million years ago (Mya) were binned into 31 
 
 
 \subsection*{Environmental and temporal covariates}
-The group-level covariates in this study are descriptors of species' environmental context, such as global temperature and floral interval. 
+The group-level covariates in this study are descriptors of species' environmental context, specifically global temperature estimates and Graham's floral intervals CITATION. Global temperature across most of the Cenozoic was calculated from Mg/Ca isotope record from deep sea carbonates \citep{Cramer2011}. Mg/Ca based temporature estimates are preferable to the frquently used \(\delta^{18}\)O temperature proxy \citep{Zachos2001,Zachos2008,Alroy2000g,Figueirido2012} because Mg/Ca estimtaes do not conflate temperature with ice sheet volume and depth/straitification changes; this makes it preferable as an estimate of global temperature for macroevolutionary and macroecological studies \citep{Ezard2016a}. 
 
-Global temperature was calculated from Mg/Ca isotope data across the Cenozoic CRAMER CITATION. \uppercase{why did i do this? tom ezard has used this and it is probably better than the zachos curve.} Two aspects of the Mg/Ca-based temperature curve were included in this analysis: mean and range. Both were calculated as the mean of all respective estimates for each 2 My temporal bins. Both mean and range were then rescaled as above: subtract mean, divide by twice the standard deviation.
+Two aspects of the Mg/Ca-based temperature curve were included in this analysis: mean and range. Both were calculated as the mean of all respective estimates for each 2 My temporal bins. Both mean and range were then rescaled as above: subtract mean, divide by twice the standard deviation. 
 
-Floral interval is a holistic descriptor of which taxonomic groups are present and their relative modernity of those taxa for a given temporal interval CITATION. Graham CITATION defines four intervals from the Cretaceous to the Pliocene; only three of these intervals are included in this analysis.
+The other major set of environmental factors included in this study are Graham's Cenozoic plant phases CITATION. Graham's plant phases are holistic descriptors of the taxonomic composition of which plants were present at a given time and their relative modernity, with younger phases representing increasingly modern taxa CITATION. Graham CITATION defines four intervals from the Cretaceous to the Pliocene, though only three of these intervals are included in this analysis. Graham's plant phases CITATION was included as a series of ``dummy variables'' encoding the three phases included in this analysis. This means that the first phase is synonymous with the intercept and phases
 
 
 \subsection*{Modelling species occurrence}
-Two different models were used in this study: a pure-presence model and a birth-death model. Both models at their core are hidden Markov model with an absorbing state. The difference between these two models is if the probability of a species origination and survival are considered equal or different. 
+Two different models were used in this study: a pure-presence model and a birth-death model. Both models at their core are hidden Markov model where the latent aspect of the process has an absorbing state \citep{Allen2011}. The difference between these two models is if the probability of a species origination and survival are considered equal or different (Table \ref{tab:transition}). Something that is important to realize is that while there are only two state ``codes'' in a presence-absence matrix (i.e. 0/1), there are in fact three states in a birth-death model: never having originated, extant, and extinct. The last of these is the absorbing state, as once a species has gone extinct it cannot re-originate \citep{Allen2011}; this is made obvious in the transition matrices as the probability of an extinct species changing states is 0 (Table \ref{tab:transition}).
+
+\begin{table}
+  \begin{subtable}[t]{0.45\linewidth}
+    \begin{tabular}[c]{ c c | c | c | c | }
+      \cline{3-5} 
+      & & \multicolumn{3}{ c |}{ State at \(t + 1\)} \\ \cline{3-5}
+      & & \(0_{never}\) & 1 & \(0_{extinct}\) \\ \hline
+      \multicolumn{1}{| c |}{\multirow{3}{*}{State at \(t\)}}
+      & \(0_{never}\) & \(1 - \theta\)  & \(\theta\) & 0 \\ \cline{2-5}
+      \multicolumn{1}{| c |}{} & 1 & 0 & \(\theta\) & \(1 - \theta\) \\ \cline{2-5}
+      \multicolumn{1}{| c |}{} & \(0_{extinct}\) & 0 & 0 & 1 \\
+      \hline
+    \end{tabular}
+    \caption{Pure-presence}
+    \label{tab:pp}
+  \end{subtable}
+  \begin{subtable}[t]{0.45\linewidth}
+    \begin{tabular}[c]{ c c | c | c | c | }
+      \cline{3-5} 
+      & & \multicolumn{3}{ c |}{ State at \(t + 1\)} \\ \cline{3-5}
+      & & \(0_{never}\) & 1 & \(0_{extinct}\) \\ \hline
+      \multicolumn{1}{| c |}{\multirow{3}{*}{State at \(t\)}}
+      & \(0_{never}\) & \(1 - \phi\)  & \(\phi\) & 0 \\ \cline{2-5}
+      \multicolumn{1}{| c |}{} & 1 & 0 & \(\pi\) & \(1 - \pi\) \\ \cline{2-5}
+      \multicolumn{1}{| c |}{} & \(0_{extinct}\) & 0 & 0 & 1 \\
+      \hline
+    \end{tabular}
+    \caption{Birth-death}
+    \label{tab:bd}
+  \end{subtable}
+  \caption{Transition matrices for the pure-presence (\ref{tab:pp}) and birth-death (\ref{tab:bd}) models. Both of these models share the core machinery of discrete-time birth-death processes but make distinct assumptions about the equality of orginating and surviving (Eq. \ref{eq:pure_presence}, and \ref{eq:birth_death}). Note also that while there are only two state ``codes'' (0, 1), there are in fact three states: never having originated \(0_{never}\), present 1, extinct \(0_{extinct}\) \citep{Allen2011}.}
+  \label{tab:transition}
+\end{table}
+
 
 \subsubsection*{Data augmentation}
-All presence/absence observations are incomplete. The hidden Markov model at the core of this analysis allows for observed absences to be used meaningfully to estimate the number of unobserved species. Of specific concern in this analysis is the unknown ``true'' size of the dataset; how many species could have actually been observed? While many species have been observed, the natural incompleteness of all observations, especially in the case of paleontological data, there are obviously many species which were never sampled.
+All presence/absence observations are incomplete. The hidden Markov model at the core of this analysis allows for observed absences to be used meaningfully to estimate the number of unobserved species. Of specific concern in this analysis is the unknown ``true'' size of the dataset; how many species could have actually been observed? While many species have been observed, the natural incompleteness of all observations, especially in the case of paleontological data, there are obviously many species which were never sampled \citep{Royle2008,Royle2007a}.
 
-Let \(N\) by the total number of observed species, \(M\) be the upper limit of possible species that could have existed given a model of species presence, and \(N^{\ast}\) is the all-zero histories where \(N^{\ast} = M - N\). This approach assumes that \(\hat{N} \sim \text{Binomial}(M, \psi)\) where \(\hat{N}\) is the estimated ``true'' number of species and \(\psi\) is the probability that any augmented species should actually be ``present.'' Because \(M\) is user defined, this approach effectively gives \(\psi\) a uniform prior over \(N\) to \(M\) CITATION. For a more detailed explanation of data augmentation and its application here, please see CITATION, CITATION, and CITATION. For this study, \(M = N + \lfloor{N / 4\rfloor}\).
+Let \(N\) by the total number of observed species, \(M\) be the upper limit of possible species that could have existed given a model of species presence, and \(N^{\ast}\) is the all-zero histories where \(N^{\ast} = M - N\). This approach assumes that \(\hat{N} \sim \text{Binomial}(M, \psi)\) where \(\hat{N}\) is the estimated ``true'' number of species and \(\psi\) is the probability that any augmented species should actually be ``present.'' Because \(M\) is user defined, this approach effectively gives \(\psi\) a uniform prior over \(N\) to \(M\) \citep{Royle2008}. For this study, \(M = N + \lfloor{N / 4\rfloor}\).
 
-Data imputation is the process of estimating missing data for partially observed covariates CITATION, this is simple in a Bayesian context because data are also parameters CITATION. Augmented species also have no known mass so a mass estimate must be imputed for each possible species CITATION ROYLE. This procedure assumes that mass values for augmented species are from the same distribution as observed species. The distribution of observed mass values is estimated as part of the model, and new mass values are then generated from this distribution. This approach is an example of imputing data missing completely at random CITATION. Because log mass values are rescaled as a part of this study, the body mass distribution is already known (\(\mathcal{N}(0, 0.5)\)); augmented species body mass just simply drawn from this distribution. 
+Data imputation is the process of estimating missing data for partially observed covariates \citep{Gelman2007,Rubin1996}, this is simple in a Bayesian context because data are also parameters \citep{Gelman2013d}. Augmented species also have no known mass so a mass estimate must be imputed for each possible species \citep{Royle2012b}. This procedure assumes that mass values for augmented species are from the same distribution as observed species. The distribution of observed mass values is estimated as part of the model, and new mass values are then generated from this distribution. This approach is an example of imputing data missing completely at random \citep{Gelman2007,Royle2012b}. Because log mass values are rescaled as a part of this study, the body mass distribution is already known (\(\mathcal{N}(0, 0.5)\)); augmented species body mass just simply drawn from this distribution. 
 
 In addition to body mass information, the augmented species need an ecotype classification. Because these species are completely unknown, they were all classified as ``augmented,'' an additional grouping indicating their unknown biology. This classification has no biological interpretation.
 
 
 
 \subsubsection*{Observation process}
-The type of hidden Markov model used in this study has three characteristic probabilities: probability \(p\) of observing a species given that it is present, probability \(\phi\) of a species surviving from one time to another, and probability \(\pi\) of a species first appearing CITATION. In this formulation, the probability of a species going extinct is \(1 - \pi\). For the pure-presence model \(\phi = \pi\), while for the birth-death model \(\phi \neq \pi\).
+The type of hidden Markov model used in this study has three characteristic probabilities: probability \(p\) of observing a species given that it is present, probability \(\phi\) of a species surviving from one time to another, and probability \(\pi\) of a species first appearing \citep{Royle2008}. In this formulation, the probability of a species going extinct is \(1 - \pi\). For the pure-presence model \(\phi = \pi\), while for the birth-death model \(\phi \neq \pi\).
 
 The probability of observing a species that is present \(p\) is modeled as a logistic regression was a time-varying intercept and species mass as a covariate. The effect of species mass on \(p\) was assumed linear and constant over time and given a prior reflecting a possible positive relationship; these assumptions are reflected in the structure of the model Equation \ref{eq:obs_model}. The parameters associated with this part of the model are described in Table \ref{tab:obs_param}.
 
@@ -134,8 +168,9 @@ The probability of observing a species that is present \(p\) is modeled as a log
 \end{equation}
 
 
+
 \subsubsection*{Pure-presence process}
-For the pure-presence model there is only a single probability dealing with the presence of a species \(\theta\). This probability was modeled as multi-level logistic regression with both species-level and group-level covariates CITATION. The parameters associated with pure-presence model are presented in Table \ref{tab:pres_param} and the full sampling statement in Equation \ref{eq:pure_presence}.
+For the pure-presence model there is only a single probability dealing with the presence of a species \(\theta\) (Table \ref{tab:pp}). This probability was modeled as multi-level logistic regression with both species-level and group-level covariates \citep{Gelman2007,Gelman2013d}. The parameters associated with pure-presence model are presented in Table \ref{tab:pres_param} and the full sampling statement in Equation \ref{eq:pure_presence}.
 
 \begin{table}
   \centering
@@ -160,9 +195,9 @@ For the pure-presence model there is only a single probability dealing with the 
 
 The species-level of the model (Eq. \ref{eq:pure_presence}) is a logistic regression with varying-intercept that varies by ecotype. Additionally, species mass was included as a covariate associated with two regression coefficients allowing a quadratic relationship with log-odds of occurrence. This assumption is based on the known distribution of mammal body masses where species with intermediate mass values are more common than either small or large bodied species. These assumptions are also reflected in the choice of priors for these regression coefficients.
 
-The values of each ecotype's intercept are themselves modeled as regressions using the group-level covariates associated with environmental context. Each of these regressions has an associated variance of possible values of each ecotype's intercept CITATION. In addition, the covariances between ecotype intercepts, given this group-level regression, are modeled CITATION.
+The values of each ecotype's intercept are themselves modeled as regressions using the group-level covariates associated with environmental context. Each of these regressions has an associated variance of possible values of each ecotype's intercept \citep{Gelman2007}. In addition, the covariances between ecotype intercepts, given this group-level regression, are modeled \citep{Gelman2007}.
 
-Following recommendations from CITATION, CITATION, CITATION all parameters not modeled elsewhere were given weakly informative priors. Weakly informative means that priors do not necessarily encode actual prior information but instead help regularize or weakly constrain posterior estimates. These priors have a concentrated probability density around and near zero; this has the effect of tempering our estimates and help prevent overfitting the model to the data CITATION. 
+All parameters not modeled elsewhere were given weakly informative priors \citep{Gelman2013d} CITATION STAN MANUAL STATISTICAL RETHINKING. Weakly informative means that priors do not necessarily encode actual prior information but instead help regularize or weakly constrain posterior estimates. These priors have a concentrated probability density around and near zero; this has the effect of tempering our estimates and help prevent overfitting the model to the data \citep{Gelman2013d} CITATION STAN MANUAL STATISTIcAL RETHINKING. 
 
 \begin{equation}
   \begin{split}
@@ -189,7 +224,7 @@ Following recommendations from CITATION, CITATION, CITATION all parameters not m
 
 
 \subsubsection*{Birth-death process}
-In the birth-death model, \(\phi \neq \pi\) and so each of these probabilities are modeled separately but in a similar manner to how \(\theta\) is modeled in the pure-presence model (Eq. \ref{eq:pure_presence}). The parameters associated with the birth-death presence model are presented in Table \ref{tab:bd_param} and the full sampling statement, including observation (Eq. \ref{eq:obs_model}), is described in Equation \ref{eq:birth_death}. 
+In the birth-death model, \(\phi \neq \pi\) and so each of these probabilities are modeled separately but in a similar manner to how \(\theta\) is modeled in the pure-presence model (Eq. \ref{eq:pure_presence}, Table \ref{tab:bd}). The parameters associated with the birth-death presence model are presented in Table \ref{tab:bd_param} and the full sampling statement, including observation (Eq. \ref{eq:obs_model}), is described in Equation \ref{eq:birth_death}. 
 
 \begin{table}
   \centering
@@ -261,7 +296,7 @@ The intercepts of \(\phi\) and \(\pi\) both vary by species ecotype and those va
 \subsection*{Posterior inference and model adequacy}
 Programs that implement joint posterior inference for the above models (Eqs. \ref{eq:pure_presence}, \ref{eq:birth_death}) were implemented in the probabilistic programming language Stan CITATION. The models used here both feature latent discrete parameters in the large matrix \(z\) (Tables \ref{tab:obs_param}, \ref{tab:pres_param}, \ref{tab:bd_param}; Eqs. \ref{eq:obs_model}, \ref{eq:pure_presence}, \ref{eq:birth_death}). All methods for posterior inference implemented in Stan are derivative based which causes complications for actually implementing the above models because integers do not have derivatives. Instead of implementing a latent discrete parameterization, the posterior probabilities of all possible states of the latent parameters \(z\) were estimated (i.e. marginalized). 
 
-Species durations at minimum range-through from the FAD to the LAD, but the incompleteness of all observations means that the actual time of origination or extinction is unknown. The marginalization approach used here means that the probabilities all possible histories for a species are calculated, from the end members of the species having existed for the entire study interval and the species having only existed between the directly observed FAD and LAD to all possible intermediaries CITATION. % this probably needs a figure to explain.
+Species durations at minimum range-through from the FAD to the LAD, but the incompleteness of all observations means that the actual time of origination or extinction is unknown. The marginalization approach used here means that the probabilities all possible histories for a species are calculated, from the end members of the species having existed for the entire study interval and the species having only existed between the directly observed FAD and LAD to all possible intermediaries CITATION STAN MANUAL. % this probably needs a figure to explain.
 
 \begin{figure}[ht]
   \centering
