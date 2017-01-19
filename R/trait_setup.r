@@ -154,6 +154,7 @@ T <- ncol(sight)
 
 state <- as.numeric(factor(inter))
 state <- state[-rms]
+ufull <- u
 u <- u[-1, ]
 state <- mapvalues(state, 
                    from = sort(unique(state)), 
@@ -168,5 +169,5 @@ I <- c(rep(1, N), rep(0, N/div))
 statea <- c(state, rep(max(state) + 1, N/div))
 D <- max(statea)
 stan_rdump(list = c('N', 'T', 'D', 'U', 'M', 'I', 
-                    'sighta', 'statea', 'u', 'mass'),
+                    'sighta', 'statea', 'u', 'ufull', 'mass'),
            file = '../data/data_dump/trait_w_gaps_augment.data.R')

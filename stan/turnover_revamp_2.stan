@@ -14,7 +14,7 @@ functions {
     }
     return 0;
   }
-  real state_space_lp(int[] y, int I, real phi, row_vector origin, row_vector stay, row_vector p) {
+  real state_space_lp(int[] y, int I, row_vector origin, row_vector stay, row_vector p) {
     // idea
     //  indicator for augmented points
     //  they get lp, ft, lt all calculated differently
@@ -62,7 +62,7 @@ functions {
           }
 
           // initial conditions
-          sl = bernoulli_lpmf(z[1] | phi);
+          sl = bernoulli_lpmf(z[1] | origin[1]);
           prod_term = 1 - z[1];
 
           // z as function of trait state
@@ -71,7 +71,7 @@ functions {
             for(j in 2:S) {
               prod_term = prod_term * (1 - z[j - 1]);
               gg[j - 1] = bernoulli_lpmf(z[j] | (z[j - 1] * stay[j - 1]) + 
-                  prod_term * origin[j - 1]);
+                  prod_term * origin[j]);
             }
             sl = sl + sum(gg);
           }
@@ -107,6 +107,7 @@ data {
 
   vector[N] mass;
 
+  matrix[T, U] ufull;  // matrix of group-level covariates
   matrix[T - 1, U] u;  // matrix of group-level covariates
 }
 transformed data {
@@ -126,13 +127,14 @@ parameters {
   real o_b_2; // effect of mass on occurrence
 
   // effect associated with ecology
-  matrix[D, T - 1] o_a_z; // part of non-centering
+  matrix[D, T] o_a_z; // part of non-centering
   cholesky_factor_corr[D] o_L_Omega;
   vector<lower=0>[D] o_tau;
   
   matrix[U, D] o_gamma; // effect of group level covariates
   
-  
+
+
   // survival
   real s_b_1; // effect of mass on occurrence
   real s_b_2; // effect of mass on occurrence
@@ -152,15 +154,15 @@ parameters {
   real<lower=0> sigma;
 
   // initial state
-  real<lower=0,upper=1> phi;
+//  real<lower=0,upper=1> phi;
 }
 transformed parameters {
   vector[M] mass_full;  // combined observed and estimated values of mass
 
-  matrix[T - 1, D] o_a;  // origin: effect associated with ecology
+  matrix[T, D] o_a;  // origin: effect associated with ecology
   matrix[T - 1, D] s_a;  // survival: effect associated with ecology
   matrix<lower=0,upper=1>[M, T] p;  // sampling probability
-  matrix[M, T - 1] origin;  // occurrence probabilty 
+  matrix[M, T] origin;  // occurrence probabilty 
   matrix[M, T - 1] stay;  // occurrence probabilty 
 
   // combine observed and estmated
@@ -168,7 +170,7 @@ transformed parameters {
   mass_full[(N + 1):M] = mass_est;
 
   // vectorized, non-centered, chol-decom group-level predictors
-  o_a = u * o_gamma + (diag_pre_multiply(o_tau, o_L_Omega) * o_a_z)';
+  o_a = ufull * o_gamma + (diag_pre_multiply(o_tau, o_L_Omega) * o_a_z)';
   s_a = u * s_gamma + (diag_pre_multiply(s_tau, s_L_Omega) * s_a_z)';
 
   // probability of observing
@@ -179,10 +181,15 @@ transformed parameters {
   }
 
   // probability of occurring
-  for(t in 1:(T-1)) {
+
+  for(t in 1:T) {
     for(n in 1:M) {
       origin[n, t] = inv_logit(o_a[t, statea[n]] + 
           o_b_1 * mass_full[n] + o_b_2 * (mass_full[n] ^ 2));
+    }
+  }
+  for(t in 1:(T-1)) {
+    for(n in 1:M) {
       stay[n, t] = inv_logit(s_a[t, statea[n]] + 
           s_b_1 * mass_full[n] + s_b_2 * (mass_full[n] ^ 2));
     }
@@ -221,7 +228,7 @@ model {
   s_b_2 ~ normal(0, 1);
 
   for(n in 1:M) {
-    target += state_space_lp(sighta[n], I[n], phi, origin[n, ], stay[n, ], p[n, ]);
+    target += state_space_lp(sighta[n], I[n], origin[n, ], stay[n, ], p[n, ]);
   }
 }
 generated quantities {

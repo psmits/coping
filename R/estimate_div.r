@@ -28,10 +28,10 @@ estimate.diversity <- function(data, posterior) {
       if(fad > 1) {
         for(jj in seq(fad - 1)) {
           if(jj == 1) {
-            z[ii, jj] <- rbinom(1, 1, prob = posterior$phi[grab])
+            z[ii, jj] <- rbinom(1, 1, prob = posterior$origin[grab, ii, jj])
           } else if(jj > 1) {
             if(z[ii, jj - 1] == 0) {
-              z[ii, jj] <- rbinom(1, 1, prob = posterior$origin[grab, ii, jj - 1])
+              z[ii, jj] <- rbinom(1, 1, prob = posterior$origin[grab, ii, jj])
             } else if(z[ii, jj - 1] == 1) {
               z[ii, jj] <- 1
             }
@@ -50,13 +50,13 @@ estimate.diversity <- function(data, posterior) {
         }
       }
     } else { 
-      z[ii, 1] <- rbinom(1, 1, prob = posterior$phi[grab])
+      z[ii, 1] <- rbinom(1, 1, prob = posterior$origin[grab, ii, 1])
       prod.term <- 1 - z[ii, 1]
       for(tt in 2:(ncol(z))) {
         prod.term <- prod.term * (1 - z[ii, tt - 1])
         # never observed
         pp <- z[ii, tt - 1] * posterior$stay[grab, ii, tt - 1] + 
-          prod.term * posterior$origin[grab, ii, tt - 1]
+          prod.term * posterior$origin[grab, ii, tt]
         z[ii, tt] <- rbinom(1, 1, prob = pp)
       }
     }
