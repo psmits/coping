@@ -54,13 +54,15 @@ growth.rate <- Map(function(x, y) cbind(x, sim = y), growth.rate, seq(nsim))
 growth.rate <- Reduce(rbind, growth.rate)
 growgg <- ggplot(growth.rate, aes(x = time, y = growth, group = sim))
 growgg <- growgg + geom_line(alpha = 0.1)
-growgg <- growgg + labs(x = 'Time (My)', y = 'diversification rate')
+growgg <- growgg + labs(x = 'Time (My)', y = 'diversification rate (species/species/time unit')
 ggsave(filename = '../doc/figure/div_rate.png', plot = growgg,
        width = 6, height = 4)
 
 
 # per capita growth rate (gains per 2 My, loss per 2 My)
-grow.sums <- apply(Reduce(rbind, growth.rate), 2, summary)
+#grow.sums <- apply(Reduce(rbind, growth.rate), 2, summary)
+birth.rate <- Map(function(x, a) x / a[-length(a)], gains, div)
+death.rate <- Map(function(x, a) x / a[-length(a)], loss, div)
 
 
 # break diversity down by ecotype
@@ -103,3 +105,5 @@ degg <- degg + geom_line(alpha = 0.1)
 degg <- degg + facet_grid(eco_1 ~ eco_2)
 degg <- degg + labs(x = 'Time (My)', 
                     y = expression(log~N^{textstyle('stand')}))
+ggsave(filename = '../doc/figure/ecotype_diversity.png', plot = degg,
+       width = 6, height = 4)
