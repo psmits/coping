@@ -14,7 +14,9 @@
 
 \section*{Results}
 
-\subsection*{Comparing the fits of the pure-presence and birth-death models}
+Posterior results take one of two forms: direct inspection of parameter estimates, and downstream estimates of diversity and diversification rates. For the former, both the pure-presence and birth-death models (Eq. \ref{eq:pure_presence}, and \ref{eq:birth_death} are inspected. For the latter, only posterior estimates from the birth-death model are considered; the reason for this is explained below in the comparison of the models' posterior predictive check results.
+
+\subsection*{Comparing parameter estimates from the pure-presence and birth-death models}
 
 % look at the posterior predictive checks
 %   which model has better fit
@@ -47,7 +49,13 @@ Comparison of the posterior predictive performance of the pure-presence and birt
 %     occurrence (pp)
 %     origination + survival (bd)
 
-Posterior results take one of two forms: direct inspection of parameter estimates, and downstream estimates of diversity and diversification rates.
+Occurrence probabilities estimated from the pure-presence model (Fig. \ref{fig:eco_occur}) are much more similar to the origination estimates from the birth-death model (Fig. \ref{fig:eco_origin}) than the estimates of survival probability (Fig. \ref{fig:eco_survival}). 
+
+In general, both occurrence probabilities estimated from the pure-presence model (Fig. \ref{fig:eco_occur}) and origination probabilities estimated from the birth-death model (fig. \ref{fig:eco_origin}) increase with time. Notable, ecotypes with arboreal components do not follow this average; instead, occurrence and origination probabilities appear relatively flat for most of the Cenozoic.
+
+The dramatic differences between origination and survival probabilities indicate how different these processes are, and may be responsible for the better posterior predictive perfomance of the birth-death model over the pure-presence model (Fig. \ref{fig:ppc_pure_presence}, and \ref{fig:ppc_birth_death}). While the estimates of both time series have high variance, what is striking is how mean origination probability changes over time while in general survival probabilities have relatively stable means (Fig. \ref{fig:eco_origin}, and \ref{fig:eco_survival}).
+
+Estimates of origination probabilities appear to have less uncertainty than for survival (Fig. \ref{fig:eco_origin}, and \ref{fig:eco_survival}).
 
 
 \begin{figure}[ht]
@@ -70,6 +78,10 @@ Posterior results take one of two forms: direct inspection of parameter estimate
   \caption[Ecotype survival probability estimated from the birth-death model]{Probability of a mammal ecotype survival probabilities at each time point as estimated from the birth-death model. Each panel depicts 100 random samples from the model's posterior. The columns are by locomotor category and rows by dietary category; their intersections are the observed and analyzed ecotypes. Panels with no lines are ecotypes not observed in the dataset.}
   \label{fig:eco_survival}
 \end{figure}
+
+
+For both the pure-presence and birth-death models there appears to be little effect of mass on the probability of observing a present species (Fig. \ref{fig:mass_preserve_pure_pres}, and \ref{fig:mass_preserve_bd}). These results may be unexpected given that it is generally assumed that larger mammals are more likely to have been collected than smaller mammals CITATION. However, collection is not preservation; 
+
 
 \begin{figure}[ht]
   \centering
@@ -132,7 +144,7 @@ Posterior results take one of two forms: direct inspection of parameter estimate
 \begin{figure}[ht]
   \centering
   \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio=true]{figure/log_diversity}
-  \caption[Estimated mammal log-diversity for the Cenozoic]{Posterior of standing log-diversity of North American mammals for the Cenozoic as estimated from the birth-death model; 100 posterior drawsare plotted to indicate the uncertainty in these estimates. The dramatic differences between diversity estimates at the first and second time points in this series are caused by a well known edge effect in discrete-time birth-death models caused by \(\phi_{\_, t = 1}\) being partially undefined \citep{Royle2008}.}
+  \caption[Estimated mammal log-diversity for the Cenozoic]{Posterior of standing log-diversity of North American mammals for the Cenozoic as estimated from the birth-death model; 100 posterior drawsare plotted to indicate the uncertainty in these estimates. The dramatic differences between diversity estimates at the first and second time points and the penultimate and last time points in this series are caused by well known edge effects in discrete-time birth-death models caused by \(p_{\_, t = 1}\) and \(p_{\_, t = T}\) being partially undefiable \citep{Royle2008}; the hierarchical modeling strategy used here helps mitigate these effects but they are still present \citep{Gelman2013d,Royle2008}.}
   \label{fig:diversity_est}
 \end{figure}
 
