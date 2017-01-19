@@ -88,7 +88,7 @@ The other major set of environmental factors included in this study are Graham's
 
 
 \subsection*{Modelling species occurrence}
-Two different models were used in this study: a pure-presence model and a birth-death model. Both models at their core are hidden Markov model where the latent aspect of the process has an absorbing state \citep{Allen2011}. The difference between these two models is if the probability of a species origination and survival are considered equal or different (Table \ref{tab:transition}). Something that is important to realize is that while there are only two state ``codes'' in a presence-absence matrix (i.e. 0/1), there are in fact three states in a birth-death model: never having originated, extant, and extinct. The last of these is the absorbing state, as once a species has gone extinct it cannot re-originate \citep{Allen2011}; this is made obvious in the transition matrices as the probability of an extinct species changing states is 0 (Table \ref{tab:transition}).
+Two different models were used in this study: a pure-presence model and a birth-death model. Both models at their core are hidden Markov model where the latent aspect of the process has an absorbing state \citep{Allen2011}. The difference between these two models is if the probability of a species origination and survival are considered equal or different (Table \ref{tab:transition}). Something that is important to realize is that while there are only two state ``codes'' in a presence-absence matrix (i.e. 0/1), there are in fact three states in a birth-death model: never having originated, extant, and extinct. The last of these is the absorbing state, as once a species has gone extinct it cannot re-originate \citep{Allen2011}; this is made obvious in the transition matrices as the probability of an extinct species changing states is 0 (Table \ref{tab:transition}). See below for parameter explainations (Tables \ref{tab:pres_param}, and \ref{tab:bd_param}).
 
 \begin{table}
   \begin{subtable}[t]{0.45\linewidth}
@@ -323,6 +323,35 @@ After fitting both models (Eqs. \ref{eq:pure_presence}, \ref{eq:birth_death}) us
 An example posterior predictive check used in this study was comparing the observed average number of observations per species to a distribution of simulated averages; if the empirically observed value sits in the middle of the distribution than the model is adequate in reproducing the observed number of occurrences per species. 
 
 Posterior simulations for time series are start with the values at t = 1 and then just simulating forward. 
+
+
+Given parameter estimates, diversity and diversification rates are estimated through posterior predictive simulations. Given the observed presence-absence matrix \(y\), estimates of the true presence-absence matrix \(z\) can be simulated and the distribution of possible occurrence histories can be analyzed. This is conceptually similar to marginalization where the probability of each possible occurrence history is estimated (Fig. \ref{fig:margin_concept}). 
+
+The posterior distribution of \(z\) gives the estimate of standing diversity \(N^{stand}_{t}\) for all time points as 
+\begin{equation}
+  N^{stand}_{t} = \sum_{i = 1}^{M} z_{i, t}.
+  \label{eq:stand_est}
+\end{equation}
+Given estimates of \(N^{stand}\) for all time points, the estimated number of originations \(O_{t}\) are be estimated as 
+\begin{equation}
+  O_t = \sum_{i = 1}^{M} z_{i, t} = 1 | z_{i, t - 1} = 0
+  \label{eq:orig_est}
+\end{equation}
+and number of extinctions \(E_{t}\) estimated as
+\begin{equation}
+  E_{t} = \sum_{i = 1}^{M} z_{i, t} = 0 | z_{i, t - 1} = 1.
+  \label{eq:death_est}
+\end{equation}
+Per-captia growth \(D^{rate}\), origination \(O^{rate}\) and extinction \(E^{rate}\) rates are then calculated as
+\begin{equation}
+  \begin{aligned}
+    O^{rate}_{t} &= \frac{O_t}{N^{stand}_{t - 1}} \\
+    E^{rate}_{t} &= \frac{E_t}{N^{stand}_{t - 1}} \\
+    D^{rate}_{t} &= O^{rate}_{t} - E^{rate}_{t}. \\
+  \end{aligned}
+  \label{eq:per_capita_est}
+\end{equation}
+
 
 
 
