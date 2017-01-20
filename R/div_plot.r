@@ -54,7 +54,8 @@ growth.rate <- Map(function(x, y) cbind(x, sim = y), growth.rate, seq(nsim))
 growth.rate <- Reduce(rbind, growth.rate)
 growgg <- ggplot(growth.rate, aes(x = time, y = growth, group = sim))
 growgg <- growgg + geom_line(alpha = 0.1)
-growgg <- growgg + labs(x = 'Time (My)', y = 'diversification rate (species/species/time unit')
+growgg <- growgg + labs(x = 'Time (My)', 
+                        y = 'diversification rate (species/species/time unit')
 ggsave(filename = '../doc/figure/div_rate.png', plot = growgg,
        width = 6, height = 4)
 
@@ -62,7 +63,31 @@ ggsave(filename = '../doc/figure/div_rate.png', plot = growgg,
 # per capita growth rate (gains per 2 My, loss per 2 My)
 #grow.sums <- apply(Reduce(rbind, growth.rate), 2, summary)
 birth.rate <- Map(function(x, a) x / a[-length(a)], gains, div)
+birth.rate <- lapply(birth.rate, function(x) 
+                     cbind(rate = x, time = seq(length(x))))
+birth.rate <- Map(function(x, y) data.frame(x, sim = y), 
+                  x = birth.rate, y = seq(length(birth.rate)))
+birth.rate <- Reduce(rbind, birth.rate)
+birthgg <- ggplot(birth.rate, aes(x = time, y = rate, group = sim))
+birthgg <- birthgg + geom_line(alpha = 0.1)
+birthgg <- birthgg + labs(x = 'Time (My)',
+                          y = 'origination rate (originations/species/time unit')
+ggsave(filename = '../doc/figure/orig_rate.png', plot = birthgg,
+       width = 6, height = 4)
+
 death.rate <- Map(function(x, a) x / a[-length(a)], loss, div)
+death.rate <- lapply(death.rate, function(x) 
+                     cbind(rate = x, time = seq(length(x))))
+death.rate <- Map(function(x, y) data.frame(x, sim = y), 
+                  x = death.rate, y = seq(length(death.rate)))
+death.rate <- Reduce(rbind, death.rate)
+deathgg <- ggplot(death.rate, aes(x = time, y = rate, group = sim))
+deathgg <- deathgg + geom_line(alpha = 0.1)
+deathgg <- deathgg + labs(x = 'Time (My)',
+                          y = 'extinction rate (extinctions/species/time unit')
+ggsave(filename = '../doc/figure/death_rate.png', plot = deathgg,
+       width = 6, height = 4)
+
 
 
 # break diversity down by ecotype

@@ -57,11 +57,11 @@ model.simulation <- function(ntax, ntime, phi, pred, p = NULL, death = TRUE) {
 #' @param death logical for if death is absorbing state
 #' @return list of z (true), y (observed)
 #' @export
-bdmodel.simulation <- function(ntax, ntime, phi, origin, stay, p = NULL, death = TRUE) {
+bdmodel.simulation <- function(ntax, ntime, origin, stay, p = NULL, death = TRUE) {
   y <- z <- matrix(NA, nrow = ntax, ncol = ntime)
 
   for(nn in 1:ntax) {
-    z[nn, 1] <- rbinom(1, 1, prob = phi)
+    z[nn, 1] <- rbinom(1, 1, prob = origin[nn, 1])
 
     if(!is.null(p)) 
       y[nn, 1] <- rbinom(1, 1, prob = z[nn, 1] * p[nn, 1])
@@ -71,10 +71,10 @@ bdmodel.simulation <- function(ntax, ntime, phi, origin, stay, p = NULL, death =
       prod.term <- prod.term * (1 - z[nn, tt - 1])
       if(death == TRUE) {
         z[nn, tt] <- rbinom(1, 1, prob = z[nn, tt - 1] * stay[nn, tt - 1] + 
-                            prod.term * origin[nn, tt - 1])
+                            prod.term * origin[nn, tt])
       } else {
         z[nn, tt] <- rbinom(1, 1, prob = z[nn, tt - 1] * stay[nn, tt - 1] + 
-                            (1 - z[nn, tt - 1]) * origin[nn, tt - 1])
+                            (1 - z[nn, tt - 1]) * origin[nn, tt])
       }
       
       # preservation
@@ -104,7 +104,6 @@ post.pred <- function(ext1, ntax, ntime, sight.obs, nsim, samp, bd = FALSE) {
   for(ii in seq(nsim)) {
     if(bd) {
       sim.obs[[ii]] <- bdmodel.simulation(ntax, ntime, 
-                                          phi = ext1$phi[samp[ii]], 
                                           origin = ext1$origin[samp[ii], , ],
                                           stay = ext1$stay[samp[ii], , ],
                                           p = ext1$p[samp[ii], , ])
