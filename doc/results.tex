@@ -22,20 +22,20 @@ Posterior results take one of two forms: direct inspection of parameter estimate
 %   which model has better fit
 %   what does that mean?
 
-Comparison of the posterior predictive performance of the pure-presence and birth-death models reveals a striking difference in quality of the models' fits to the data (Fig. \ref{fig:ppc_pure_presence} and \ref{fig:ppc_birth_death}). The birth-death model is clearly able to reproduce the observed average number of occurrence, in contrast to the pure-birth model which greatly underestimates the ovserved average number of occurrences. The interpretation of these results is that the results of the birth-death model are more representative of the data than the pure-presence model, though further inspection of the posterior parameter estimates can provide further insight into why these models give different posterior predictive results \citep{Gelman2013d}.
+Comparison of the posterior predictive performance of the pure-presence and birth-death models reveals a striking difference in quality of the models' fits to the data (Fig. \ref{fig:ppc_pure_presence} and \ref{fig:ppc_birth_death}). The birth-death model is clearly able to reproduce the observed average number of occurrence, in contrast to the pure-birth model which greatly underestimates the ovserved average number of occurrences. The interpretation of these results is that the results of the birth-death model are more representative of the data than the pure-presence model, though further inspection of the posterior parameter estimates can provide further insight into why these models give different posterior predictive results \citep{Gelman2013d}. However, it is expected that downstream analyses from the birth-death model will be more reliable than that from the pure-presence model.
 
 \begin{figure}[ht]
-  \centering
-  \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/pred_occ}
-  \caption[Posterior predictive check for pure-presence model]{Comparison of the average observed number of occurrences per species (blue line) to the average number of occurrences from 100 posterior predictive datasets using the posterior estimates from the pure-presence model.}
-  \label{fig:ppc_pure_presence}
-\end{figure}
-
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/pred_occ_bd}
-  \caption[Posterior predictive check for birth-death model]{Comparison of the average observed number of occurrences per species (blue line) to the average number of occurrences from 100 posterior predictive datasets using the posterior estimate from the birth-death model.}
-  \label{fig:ppc_birth_death}
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/pred_occ}
+    \caption{Pure-presence model}
+    \label{fig:ppc_pure_presence}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/pred_occ_bd}
+    \caption{Birth-death model}
+    \label{fig:ppc_birth_death}
+  \end{subfigure}
+  \caption[Posterior predictive check of average occurrence]{Comparison of the average observed number of occurrences per species (blue line) to the average number of occurrences from 100 posterior predictive datasets using the posterior estimates from the pure-presence and birth-death models.}
 \end{figure}
 
 
@@ -80,43 +80,64 @@ Estimates of origination probabilities appear to have less uncertainty than for 
 \end{figure}
 
 
-For both the pure-presence and birth-death models there appears to be little effect of mass on the probability of observing a present species (Fig. \ref{fig:mass_preserve_pure_pres}, and \ref{fig:mass_preserve_bd}). These results may be unexpected given that it is generally assumed that larger mammals are more likely to have been collected than smaller mammals CITATION. However, collection is not preservation; 
+
+
+
+There appears to be little effect of mass on the probability of observing a species that is presence as estimate from both the pure-presence (Fig. \ref{fig:mass_preserve_pure_pres}), and  birth-death models (Fig. \ref{fig:mass_preserve_bd}). These results may be unexpected given that it is generally assumed that larger mammals are more likely to have been collected than smaller mammals CITATION. However, collection is not preservation; similarities in preservation rate indicate similarities in how gap-filled species records are. Additionally, this is presence/absence data, so higher preservation and collection in terms of individuals at a location or a single temporal horizon but does not necessarily translate to high preservation over time.
 
 
 \begin{figure}[ht]
-  \centering
-  \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio=true]{figure/mass_on_samp}
-  \caption[Estimates of the effect of mass on observation probability from the pure-presence model]{Estimates of the effect of species mass on probability of observing a present species (\(p\)). Mass has been log-transformed, centered, and rescaled; this means that a mass of 0 corresponds to the mean of log-mass of all observed species and that mass is in standard deviation units. Estimates are from the pure-presence model.}
-  \label{fig:mass_preserve_pure_pres}
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio=true]{figure/mass_on_samp}
+    \caption{Pure-presence model}
+    \label{fig:mass_preserve_pure_pres}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio=true]{figure/mass_on_samp_bd}
+    \caption{Birth-death model}
+    \label{fig:mass_preserve_bd}
+  \end{subfigure}
+  \caption[Estimates of the effect of mass on observation probability]{Estimates of the effect of species mass on probability of observing a present species (\(p\)). Mass has been log-transformed, centered, and rescaled; this means that a mass of 0 corresponds to the mean of log-mass of all observed species and that mass is in standard deviation units. Estimates are from both the pure-presence and birth-death models.}
+  \label{fig:mass_preserve}
 \end{figure}
 
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio=true]{figure/mass_on_samp_bd}
-  \caption[Estimates of the effect of mass on observation probability from the birth-death model]{Estimates of the effect of species mass on probability of observing a present species (\(p\)). Mass has been log-transformed, centered, and rescaled; this means that a mass of 0 corresponds to the mean of log-mass of all observed species and that mass is in standard deviation units. Estimates are from the birth-death model.}
-  \label{fig:mass_preserve_bd}
-\end{figure}
+
+
+
+
+
+
+
+
+The effect of species mass on probability of occurrence as estimated from the pure-presence (Fig. \ref{fig:mass_occur}) is most similar to the effect of species mass on probability of origination as estimates from the birth-death model (Fig. \ref{fig:mass_origin}). In contrast, the effect of species mass on probability of extinction as estimated from the birth-death model indicates little effect of mass on extinction; this is consistent with previous findings from the North American mammal fossil record \citep{Smits2015b,Tomiya2013}.
 
 \begin{figure}[ht]
   \centering
   \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio=true]{figure/mass_on_pres}
-  \caption[Effect of mass on probability of species occurrence as estimated from the pure-presence model]{Mean estimate of the effect of species mass on the probability of a species occurrence for each of the three plant phases. The effect of mass is considered constant over time and that the only aspect of the model that changes with plant phase is the intercept of the relationship between mass and occurrence. The three plant phases are indicated by the color of the line. Mass has been log-transformed, centered, and rescaled; this means that a mass of 0 corresponds to the mean of log-mass of all observed species and that mass is in standard deviation units.}
+  \caption[Effect of mass on probability of species occurrence as estimated from the pure-presence model]{Mean estimate of the effect of species mass on the probability of a species occurrence for each of the three plant phases. The effect of mass is considered constant over time and that the only aspect of the model that changes with plant phase is the intercept of the relationship between mass and occurrence. The three plant phases are indicated by the color of the line. Mass has been log-transformed, centered, and rescaled; this means that a mass of 0 corresponds to the mean of log-mass of all observed species and that mass is in standard deviation units. Only the median estimates of the effects of both mass and plant phase are plotted for clarity; these estimates are obviously made with uncertainty.}
   \label{fig:mass_occur}
 \end{figure}
 
 \begin{figure}[ht]
   \centering
   \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio=true]{figure/mass_on_origin_bd}
-  \caption[Effect of mass on probability of species origination as estimated from the birth-death model]{Mean estimate of the effect of species mass on the probability of a species originating for each of the three plant phases. The effect of mass is considered constant over time and that the only aspect of the model that changes with plant phase is the intercept of the relationship between mass and origination. The three plant phases are indicated by the color of the line. Mass has been log-transformed, centered, and rescaled; this means that a mass of 0 corresponds to the mean of log-mass of all observed species and that mass is in standard deviation units.}
+  \caption[Effect of mass on probability of species origination as estimated from the birth-death model]{Mean estimate of the effect of species mass on the probability of a species originating for each of the three plant phases. The effect of mass is considered constant over time and that the only aspect of the model that changes with plant phase is the intercept of the relationship between mass and origination. The three plant phases are indicated by the color of the line. Mass has been log-transformed, centered, and rescaled; this means that a mass of 0 corresponds to the mean of log-mass of all observed species and that mass is in standard deviation units. Only the median estimates of the effects of both mass and plant phase are plotted for clarity; these estimates are obviously made with uncertainty.}
   \label{fig:mass_origin}
 \end{figure}
 
 \begin{figure}[ht]
   \centering
   \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio=true]{figure/mass_on_surv_bd}
-  \caption[Effect of mass on probability of species survival as estimated from the birth-death model]{Mean estimate of the effect of species mass on the probability of a species survival for each of the three plant phases. The effect of mass is considered constant over time and that the only aspect of the model that changes with plant phase is the intercept of the relationship between mass and survival. The three plant phases are indicated by the color of the line. Mass has been log-transformed, centered, and rescaled; this means that a mass of 0 corresponds to the mean of log-mass of all observed species and that mass is in standard deviation units.}
+  \caption[Effect of mass on probability of species survival as estimated from the birth-death model]{Mean estimate of the effect of species mass on the probability of a species survival for each of the three plant phases. The effect of mass is considered constant over time and that the only aspect of the model that changes with plant phase is the intercept of the relationship between mass and survival. The three plant phases are indicated by the color of the line. Mass has been log-transformed, centered, and rescaled; this means that a mass of 0 corresponds to the mean of log-mass of all observed species and that mass is in standard deviation units. Only the median estimates of the effects of both mass and plant plant are plotted for clarity; these estimates are obviously made with uncertainty.}
   \label{fig:mass_survival}
 \end{figure}
+
+
+
+Similarities in parameters estimates between ecotypes may be due to similar response to environmental factors. Some of the obvious patterns from the individual-level estimates that are of note are the similarities between arboreal taxa and the differences between arboreal and all other taxa.
+
+Inspection of parameter estimates for the group-level covariates 
+
 
 \begin{figure}[ht]
   \centering
@@ -140,34 +161,57 @@ For both the pure-presence and birth-death models there appears to be little eff
 \end{figure}
 
 
+
+
+
 \subsection*{Analysis of diversity}
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio=true]{figure/log_diversity}
-  \caption[Estimated mammal log-diversity for the Cenozoic]{Posterior of standing log-diversity of North American mammals for the Cenozoic as estimated from the birth-death model; 100 posterior draws are plotted to indicate the uncertainty in these estimates and what is technically plotted is log of diversity plus 1. The dramatic differences between diversity estimates at the first and second time points and the penultimate and last time points in this series are caused by well known edge effects in discrete-time birth-death models caused by \(p_{\_, t = 1}\) and \(p_{\_, t = T}\) being partially unidentifiable \citep{Royle2008}; the hierarchical modeling strategy used here helps mitigate these effects but they are still present \citep{Gelman2013d,Royle2008}.}
-  \label{fig:diversity_est}
-\end{figure}
+
+All analyses of diversification and macroevolutionary rates has been done using only the birth-death model; this is because of the models better posterior predictive check performance (Fig. \ref{fig:ppc_pure_presence}, and \ref{fig:ppc_birth_death}). 
 
 \begin{figure}[ht]
-  \centering
-  \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio=true]{figure/div_rate}
-  \caption[Mammal diversification rate estimates]{Posterior estimates of North American mammal diversification rate for the Cenozoic; 100 estimates are plotted to indicate the uncertainty in these estimates. As a reminder, diversification rate is the difference between origination and extinction rates and is in units of species gained per species present per time unit (2 My).}
-  \label{fig:diversity_rate}
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio=true]{figure/log_diversity}
+    \caption{Log diversity}
+    %\caption[Estimated mammal log-diversity for the Cenozoic]{Posterior of standing log-diversity of North American mammals for the Cenozoic as estimated from the birth-death model; 100 posterior draws are plotted to indicate the uncertainty in these estimates and what is technically plotted is log of diversity plus 1. The dramatic differences between diversity estimates at the first and second time points and the penultimate and last time points in this series are caused by well known edge effects in discrete-time birth-death models caused by \(p_{\_, t = 1}\) and \(p_{\_, t = T}\) being partially unidentifiable \citep{Royle2008}; the hierarchical modeling strategy used here helps mitigate these effects but they are still present \citep{Gelman2013d,Royle2008}.}
+    \label{fig:diversity_est}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio=true]{figure/div_rate}
+    \caption{Diversification rate}
+    %\caption[Mammal diversification rate estimates]{Posterior estimates of North American mammal diversification rate for the Cenozoic; 100 estimates are plotted to indicate the uncertainty in these estimates. As a reminder, diversification rate is the difference between origination and extinction rates and is in units of species gained per species present per time unit (2 My).}
+    \label{fig:diversity_rate}
+  \end{subfigure}
+
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio=true]{figure/orig_rate}
+    \caption{Origination rate}
+    %\caption[Mammal origination rate estimates]{Posterior estimates of North American origination rate for the Cenozoic; 100 estimates are plotted to indicate the uncertainty in these estimates. The unit of origination rate is number of species originating per species per time unit (2 My).}
+    \label{fig:origin_rate}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.45\textwidth}
+    \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio=true]{figure/death_rate}
+    \caption{Extinction rate}
+    %\caption[Mammal extinction rate estimates]{Posterior estimates of North American extinction rate for the Cenozoic; 100 estimates are plotted to indicate the uncertainty in these estimates. The unit of extinction rate is number of species becoming extinct per species per time unit (2 My).}
+    \label{fig:extinct_rate}
+  \end{subfigure}
+  \caption[Estimated mammal log-diversity and macroevolutionary rates for the Cenozoic]{Posterior estimates of the time series of Cenozoic North American mammal diversity and it's characteristic macroevolutionary rates; all estimates are from the birth-death model and 100 posterior draws are plotted to indicate the uncertainty in these estimates. The dramatic differences between diversity estimates at the first and second time points and the penultimate and last time points in this series are caused by well known edge effects in discrete-time birth-death models caused by \(p_{\_, t = 1}\) and \(p_{\_, t = T}\) being partially unidentifiable \citep{Royle2008}; the hierarchical modeling strategy used here helps mitigate these effects but they are still present \citep{Gelman2013d,Royle2008}. Diversification rate is in units of species gained per species present per time unit (2 My), origination rate is in units of species originating per species present per time unit, and extinction rate is in units of species becoming extinct per species present per time unit.}
+  \label{fig:macro_values}
 \end{figure}
 
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio=true]{figure/orig_rate}
-  \caption[Mammal origination rate estimates]{Posterior estimates of North American origination rate for the Cenozoic; 100 estimates are plotted to indicate the uncertainty in these estimates. The unit of origination rate is number of species originating per species per time unit (2 My).}
-  \label{fig:origin_rate}
-\end{figure}
 
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio=true]{figure/death_rate}
-  \caption[Mammal extinction rate estimates]{Posterior estimates of North American extinction rate for the Cenozoic; 100 estimates are plotted to indicate the uncertainty in these estimates. The unit of extinction rate is number of species becoming extinct per species per time unit (2 My).}
-  \label{fig:extinct_rate}
-\end{figure}
+
+
+Diversity partitioned by ecotype reveals a lot of the complexity behind the pattern of mammal diversity for the Cenozoic (Fig. \ref{fig:ecotype_diversity}). 
+
+An impressive commonality across multiple ecotype-specific diversity time series are two spikes in diversity, either up or down (Fig. \ref{fig:ecotype_diversity}). Spikes of increased diversity are seen this is seen in all arboreal ecotypes, plantigrade insectivores, scansorial insectivores, and scansorial omnivores. The converse pattern, spikes of decreased diversity, are strongly observed in the diversity history of digitigrade herbivores, with weaker decreases observed in the histories of digitigrade carnivores, and unguiligrade herbivores. % what are the similarities in group-level covariates amongst all these groups?
+
+Arboreal ecotypes are estimated to have disappeared and reappeared as short bursts over the last 65 million years in North America, with arboreal carnivores and insectivores being most often rarer than arboreal herbivores and omnivores.
+
+Fossorial ecotypes, whether herbivorous and insectivorous appear rare or possibly absent for most the Cenozoic, which maximum estimated diversity being obtained in the latter half of the time series (Fig. \ref{fig:ecotype_diversity}).
+
+Plantigrade ecotypes appear most variable, plantigrade herbivores having a very different diveristy history than plantigrade carnivores and omnivores and plantigrade insectivores.
+
+Unguligrade and plantigrade herbivores have relatively stable standing diversities throughout the Cenozoic of North America (Fig. \ref{fig:ecotype_diversity}). Similarly, digitigrade carnivorous taxa appear to have a relatively stable diversity for the Cenozoic.
 
 \begin{figure}[ht]
   \centering
