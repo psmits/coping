@@ -83,7 +83,9 @@ Estimates of origination probabilities appear to have less uncertainty than for 
 
 
 
-There appears to be little effect of mass on the probability of observing a species that is presence as estimate from both the pure-presence (Fig. \ref{fig:mass_preserve_pure_pres}), and  birth-death models (Fig. \ref{fig:mass_preserve_bd}). These results may be unexpected given that it is generally assumed that larger mammals are more likely to have been collected than smaller mammals CITATION. However, collection is not preservation; similarities in preservation rate indicate similarities in how gap-filled species records are. Additionally, this is presence/absence data, so higher preservation and collection in terms of individuals at a location or a single temporal horizon but does not necessarily translate to high preservation over time.
+The pure-presence and birth-death models different in estimated effect of mass on the probability of observing a species that is present (Fig. \ref{fig:mass_preserve}). For the pure-presence model, mass is estimated to have no effect on the probability of observing a species that is presence (Fig. \ref{fig:mass_preserve_pure_pres}). Contrastingly, for the birth-death model mass is found to have a negative relationship with observation such that larger species are less likely to be observed if present than smaller species (Fig. \ref{fig:mass_preserve_bd}). 
+
+The result from the birth-death model is unexpected given that it is generally assumed that larger mammals are more likely to have been collected than smaller mammals CITATION. However, collection is not preservation; similarities in preservation rate indicate similarities in how gap-filled species records are. What this result means is that the record of large bodied species is expected on average to be more gap-filled and less consistent from time point to time point than smaller bodied species. Additionally, this is presence/absence data, so higher preservation and collection in terms of individual specimens at a location or a single temporal horizon does not necessarily translate to high preservation over time.
 
 
 \begin{figure}[ht]
@@ -104,37 +106,34 @@ There appears to be little effect of mass on the probability of observing a spec
 
 
 
-
-
-
-
-
-The effect of species mass on probability of occurrence as estimated from the pure-presence (Fig. \ref{fig:mass_occur}) is most similar to the effect of species mass on probability of origination as estimates from the birth-death model (Fig. \ref{fig:mass_origin}). In contrast, the effect of species mass on probability of extinction as estimated from the birth-death model indicates little effect of mass on extinction; this is consistent with previous findings from the North American mammal fossil record \citep{Smits2015b,Tomiya2013}.
+The effect of species mass on probability of occurrence as estimated from the pure-presence (Fig. \ref{fig:mass_occur}) is most similar to the effect of species mass on probability of origination as estimates from the birth-death model (Fig. \ref{fig:mass_origin}). The striking pattern observable in both sets of estimates is the higher probability of occurrence for species with body sizes closer to the mean than either extremes. This result is consistent with the canonically normal distribution of mammal body sizes CITATION; it is then expected that the most likely to occur species would be those from the middle of the distribution, and that species originating will on average be of average mass, especially considering species shared common ancestry CITATION.
 
 \begin{figure}[ht]
   \centering
   \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio=true]{figure/mass_on_pres}
-  \caption[Effect of mass on probability of species occurrence as estimated from the pure-presence model]{Mean estimate of the effect of species mass on the probability of a species occurrence for each of the three plant phases. The effect of mass is considered constant over time and that the only aspect of the model that changes with plant phase is the intercept of the relationship between mass and occurrence. The three plant phases are indicated by the color of the line. Mass has been log-transformed, centered, and rescaled; this means that a mass of 0 corresponds to the mean of log-mass of all observed species and that mass is in standard deviation units. Only the median estimates of the effects of both mass and plant phase are plotted for clarity; these estimates are obviously made with uncertainty.}
+  \caption[Effect of mass on probability of species occurrence as estimated from the pure-presence model]{Mean estimate of the effect of species mass on the probability of a species occurrence for each of the three plant phases. The effect of mass is considered constant over time and that the only aspect of the model that changes with plant phase is the intercept of the relationship between mass and occurrence. The three plant phases are indicated by the color of the line. Mass has been log-transformed, centered, and rescaled; this means that a mass of 0 corresponds to the mean of log-mass of all observed species and that mass is in standard deviation units. Only the mean estimates of the effects of both mass and plant phase are plotted for clarity; these estimates are obviously made with uncertainty.}
   \label{fig:mass_occur}
 \end{figure}
 
 \begin{figure}[ht]
   \centering
   \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio=true]{figure/mass_on_origin_bd}
-  \caption[Effect of mass on probability of species origination as estimated from the birth-death model]{Mean estimate of the effect of species mass on the probability of a species originating for each of the three plant phases. The effect of mass is considered constant over time and that the only aspect of the model that changes with plant phase is the intercept of the relationship between mass and origination. The three plant phases are indicated by the color of the line. Mass has been log-transformed, centered, and rescaled; this means that a mass of 0 corresponds to the mean of log-mass of all observed species and that mass is in standard deviation units. Only the median estimates of the effects of both mass and plant phase are plotted for clarity; these estimates are obviously made with uncertainty.}
+  \caption[Effect of mass on probability of species origination as estimated from the birth-death model]{Mean estimate of the effect of species mass on the probability of a species originating for each of the three plant phases. The effect of mass is considered constant over time and that the only aspect of the model that changes with plant phase is the intercept of the relationship between mass and origination. The three plant phases are indicated by the color of the line. Mass has been log-transformed, centered, and rescaled; this means that a mass of 0 corresponds to the mean of log-mass of all observed species and that mass is in standard deviation units. Only the mean estimates of the effects of both mass and plant phase are plotted for clarity; these estimates are obviously made with uncertainty.}
   \label{fig:mass_origin}
 \end{figure}
+
+In contrast, the effect of species mass on probability of survival as estimated from the birth-death model (Fig. \ref{fig:mass_survival}) indicates little effect of mass on extinction; this is consistent with previous findings from the North American mammal fossil record \citep{Smits2015b,Tomiya2013}. Note that all variation between ecotypes is due to differences in ecotype-specific survival probability and the associated effects of plant phase.
 
 \begin{figure}[ht]
   \centering
   \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio=true]{figure/mass_on_surv_bd}
-  \caption[Effect of mass on probability of species survival as estimated from the birth-death model]{Mean estimate of the effect of species mass on the probability of a species survival for each of the three plant phases. The effect of mass is considered constant over time and that the only aspect of the model that changes with plant phase is the intercept of the relationship between mass and survival. The three plant phases are indicated by the color of the line. Mass has been log-transformed, centered, and rescaled; this means that a mass of 0 corresponds to the mean of log-mass of all observed species and that mass is in standard deviation units. Only the median estimates of the effects of both mass and plant plant are plotted for clarity; these estimates are obviously made with uncertainty.}
+  \caption[Effect of mass on probability of species survival as estimated from the birth-death model]{Mean estimate of the effect of species mass on the probability of a species survival for each of the three plant phases. The effect of mass is considered constant over time and that the only aspect of the model that changes with plant phase is the intercept of the relationship between mass and survival. The three plant phases are indicated by the color of the line. Mass has been log-transformed, centered, and rescaled; this means that a mass of 0 corresponds to the mean of log-mass of all observed species and that mass is in standard deviation units. Only the mean estimates of the effects of both mass and plant plant are plotted for clarity; these estimates are obviously made with uncertainty.}
   \label{fig:mass_survival}
 \end{figure}
 
 
 
-Similarities in parameters estimates between ecotypes may be due to similar response to environmental factors. Some of the obvious patterns from the individual-level estimates that are of note are the similarities between arboreal taxa and the differences between arboreal and all other taxa.
+Similarities in parameters estimates between ecotypes may be due to similar response to environmental factors. Some of the obvious patterns from inspection of the individual-level estimates of occurrence (Fig. \ref{fig:eco_occur}), origination (Fig. \ref{fig:eco_origin}), and survival probabilities (Fig. \ref{fig:eco_survival}) that are of note are the similarities between arboreal taxa and the differences between arboreal and all other taxa.
 
 Inspection of parameter estimates for the group-level covariates 
 
