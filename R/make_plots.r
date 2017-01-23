@@ -193,7 +193,12 @@ vis.bdpost <- function(ext2,
   amplot <- amplot + facet_grid(state_1 ~ state_2)
   amplot <- amplot + labs(x = 'Time (Mya)', 
                           y = 'Probability of originating')
-  ggsave(filename = '../doc/figure/ecotype_origin_bd.png', plot = amplot,
+  ggsave(filename = '../doc/figure/ecotype_origin_bd_aug.png', plot = amplot,
+         width = 6, height = 4)
+ 
+  sam <- am[am$state_1 != 'augment', ]
+  samplot <- amplot %+% sam
+  ggsave(filename = '../doc/figure/ecotype_origin_bd.png', plot = samplot,
          width = 6, height = 4)
 
   # survival
@@ -208,7 +213,12 @@ vis.bdpost <- function(ext2,
   amplot <- amplot + facet_grid(state_1 ~ state_2)
   amplot <- amplot + labs(x = 'Time (Mya)', 
                           y = 'Probability of surviving')
-  ggsave(filename = '../doc/figure/ecotype_survival_bd.png', plot = amplot,
+  ggsave(filename = '../doc/figure/ecotype_survival_bd_aug.png', plot = amplot,
+         width = 6, height = 4)
+
+  sam <- am[am$state_1 != 'augment', ]
+  samplot <- amplot %+% sam
+  ggsave(filename = '../doc/figure/ecotype_survival_bd.png', plot = samplot,
          width = 6, height = 4)
 
 
@@ -231,8 +241,14 @@ vis.bdpost <- function(ext2,
   gmplot <- gmplot + theme(axis.text.x = element_text(angle = 90, vjust = 0.5))
   gmplot <- gmplot + labs(x = 'Predictor variable', 
                           y = 'Change to log-odds of originating')
-  ggsave(filename = '../doc/figure/group_on_origin_bd.png', plot = gmplot,
+  ggsave(filename = '../doc/figure/group_on_origin_bd_aug.png', plot = gmplot,
          width = 6, height = 4)
+  
+  gam <- gm[gm$state_1 != 'augment', ]
+  samplot <- gmplot %+% gam
+  ggsave(filename = '../doc/figure/group_on_origin_bd.png', plot = samplot,
+         width = 6, height = 4)
+
 
   # survival
   gm <- melt(ext2$s_gamma)  # sim, pred, ecotype, value
@@ -251,7 +267,12 @@ vis.bdpost <- function(ext2,
   gmplot <- gmplot + theme(axis.text.x = element_text(angle = 90, vjust = 0.5))
   gmplot <- gmplot + labs(x = 'Predictor variable', 
                           y = 'Change to log-odds surviving')
-  ggsave(filename = '../doc/figure/group_on_survival_bd.png', plot = gmplot,
+  ggsave(filename = '../doc/figure/group_on_survival_bd_aug.png', plot = gmplot,
+         width = 6, height = 4)
+  
+  gam <- gm[gm$state_1 != 'augment', ]
+  samplot <- gmplot %+% gam
+  ggsave(filename = '../doc/figure/group_on_survival_bd.png', plot = samplot,
          width = 6, height = 4)
 
 
@@ -265,7 +286,12 @@ vis.bdpost <- function(ext2,
   tmplot <- tmplot + facet_grid(state_1 ~ state_2)
   tmplot <- tmplot + labs(x = 'Estimated standard deviation of ecotype log-odds of originating', 
                           y = 'Probability density')
-  ggsave(filename = '../doc/figure/stdev_ecotype_origin_bd.png', plot = tmplot,
+  ggsave(filename = '../doc/figure/stdev_ecotype_origin_bd_aug.png', plot = tmplot,
+         width = 6, height = 4)
+  
+  gam <- tm[tm$state_1 != 'augment', ]
+  samplot <- tmplot %+% gam
+  ggsave(filename = '../doc/figure/stdev_ecotype_origin_bd.png', plot = samplot,
          width = 6, height = 4)
   
   # survival
@@ -277,8 +303,14 @@ vis.bdpost <- function(ext2,
   tmplot <- tmplot + facet_grid(state_1 ~ state_2)
   tmplot <- tmplot + labs(x = 'Estimated standard deviation of ecotype log-odds of suriviving', 
                           y = 'Probability density')
-  ggsave(filename = '../doc/figure/stdev_ecotype_survival_bd.png', plot = tmplot,
+  ggsave(filename = '../doc/figure/stdev_ecotype_survival_bd_aug.png', plot = tmplot,
          width = 6, height = 4)
+  
+  gam <- tm[tm$state_1 != 'augment', ]
+  samplot <- tmplot %+% gam
+  ggsave(filename = '../doc/figure/stdev_ecotype_survival_bd.png', plot = samplot,
+         width = 6, height = 4)
+  
 
 
   # difference from mean log-odds observation due to time
