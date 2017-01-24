@@ -419,8 +419,14 @@ vis.bdpost <- function(ext2,
   mass_on_pres <- mass_on_pres + facet_grid(state_1 ~ state_2)
   mass_on_pres <- mass_on_pres + labs(x = 'Rescaled log mass (g)',
                                       y = 'Probability of occurrence')
-  ggsave(filename = '../doc/figure/mass_on_origin_bd.png', plot = mass_on_pres,
+  ggsave(filename = '../doc/figure/mass_on_origin_bd_aug.png', plot = mass_on_pres,
          width = 6, height = 4)
+
+  sam <- out[out$state_1 != 'augment', ]
+  samplot <- mass_on_pres %+% sam
+  ggsave(filename = '../doc/figure/mass_on_origin_bd.png', plot = samplot,
+         width = 6, height = 4)
+
   
   # survival
   mass.counter <- seq(from = min(mass), to = max(mass), by = 0.001)
@@ -447,7 +453,12 @@ vis.bdpost <- function(ext2,
   mass_on_pres <- mass_on_pres + facet_grid(state_1 ~ state_2)
   mass_on_pres <- mass_on_pres + labs(x = 'Rescaled log mass (g)',
                                       y = 'Probability of survival')
-  ggsave(filename = '../doc/figure/mass_on_surv_bd.png', plot = mass_on_pres,
+  ggsave(filename = '../doc/figure/mass_on_surv_bd_aug.png', plot = mass_on_pres,
+         width = 6, height = 4)
+
+  sam <- out[out$state_1 != 'augment', ]
+  samplot <- mass_on_pres %+% sam
+  ggsave(filename = '../doc/figure/mass_on_surv_bd.png', plot = samplot,
          width = 6, height = 4)
 
 
