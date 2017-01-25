@@ -3,9 +3,7 @@ Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: main_doc.aux
 The style file: amnatnat.bst
 Database file #1: bib.bib
-Warning--I didn't find a database entry for "Janis04"
 Warning--I didn't find a database entry for "Bambach2008"
-Warning--I didn't find a database entry for "Janis1993a"
 Warning--I didn't find a database entry for "Carrano1997"
 Warning--I didn't find a database entry for "Foster2009a"
 Warning--I didn't find a database entry for "Luo2001"
@@ -17,45 +15,45 @@ Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
 Warning--can't use both volume and number fields in Bush2011
 Warning--missing publisher in Bush2011
 Warning--empty journal in Royle2014
-You've used 49 entries,
+You've used 50 entries,
             3251 wiz_defined-function locations,
-            1017 strings with 14093 characters,
-and the built_in function-call counts, 29391 in all, are:
-= -- 2543
-> -- 1298
+            1020 strings with 14270 characters,
+and the built_in function-call counts, 30020 in all, are:
+= -- 2598
+> -- 1328
 < -- 31
-+ -- 436
-- -- 387
-* -- 2046
-:= -- 4789
-add.period$ -- 197
-call.type$ -- 49
-change.case$ -- 372
-chr.to.int$ -- 55
-cite$ -- 52
-duplicate$ -- 2090
-empty$ -- 2147
-format.name$ -- 531
-if$ -- 5863
++ -- 446
+- -- 396
+* -- 2093
+:= -- 4891
+add.period$ -- 201
+call.type$ -- 50
+change.case$ -- 380
+chr.to.int$ -- 56
+cite$ -- 53
+duplicate$ -- 2134
+empty$ -- 2191
+format.name$ -- 543
+if$ -- 5987
 int.to.chr$ -- 1
 int.to.str$ -- 1
-missing$ -- 428
-newline$ -- 247
-num.names$ -- 198
-pop$ -- 814
+missing$ -- 437
+newline$ -- 252
+num.names$ -- 202
+pop$ -- 831
 preamble$ -- 1
-purify$ -- 324
+purify$ -- 331
 quote$ -- 0
-skip$ -- 655
+skip$ -- 667
 stack$ -- 0
-substring$ -- 1606
-swap$ -- 938
+substring$ -- 1642
+swap$ -- 958
 text.length$ -- 3
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 420
+type$ -- 429
 warning$ -- 3
-while$ -- 233
+while$ -- 238
 width$ -- 0
-write$ -- 633
-(There were 13 warnings)
+write$ -- 646
+(There were 11 warnings)
