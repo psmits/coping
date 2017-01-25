@@ -30,8 +30,14 @@ vis.post <- function(ext1,
   amplot <- amplot + facet_grid(state_1 ~ state_2)
   amplot <- amplot + labs(x = 'Time (Mya)', 
                           y = 'Probability of occurrence')
-  ggsave(filename = '../doc/figure/ecotype_occurrence.png', plot = amplot,
+  ggsave(filename = '../doc/figure/ecotype_occurrence_aug.png', plot = amplot,
          width = 6, height = 4)
+  
+  sam <- am[am$state_1 != 'augment', ]
+  samplot <- amplot %+% sam
+  ggsave(filename = '../doc/figure/ecotype_occurrence.png', plot = samplot,
+         width = 6, height = 4)
+
 
 
   # effect of group-level on individual-level
@@ -52,8 +58,14 @@ vis.post <- function(ext1,
   gmplot <- gmplot + theme(axis.text.x = element_text(angle = 90, vjust = 0.5))
   gmplot <- gmplot + labs(x = 'Predictor variable', 
                           y = 'Effect on log-odds of occurrence')
-  ggsave(filename = '../doc/figure/group_on_ecotype.png', plot = gmplot,
+  ggsave(filename = '../doc/figure/group_on_ecotype_aug.png', plot = gmplot,
          width = 6, height = 4)
+  
+  gam <- gm[gm$state_1 != 'augment', ]
+  samplot <- gmplot %+% gam
+  ggsave(filename = '../doc/figure/group_on_ecotype.png', plot = samplot,
+         width = 6, height = 4)
+
 
 
   # variation in log-odds of occurrence associated with ecotype
@@ -66,9 +78,13 @@ vis.post <- function(ext1,
   tmplot <- tmplot + facet_grid(state_1 ~ state_2)
   tmplot <- tmplot + labs(x = 'Estimated standard deviation of distribution of ecotype log-odds of occurrence', 
                           y = 'Probability density')
-  ggsave(filename = '../doc/figure/stdev_ecotype_occurrence.png', plot = tmplot,
+  ggsave(filename = '../doc/figure/stdev_ecotype_occurrence_aug.png', plot = tmplot,
          width = 6, height = 4)
 
+  gam <- tm[tm$state_1 != 'augment', ]
+  samplot <- tmplot %+% gam
+  ggsave(filename = '../doc/figure/stdev_ecotype_occurrence.png', plot = samplot,
+         width = 6, height = 4)
 
   # difference from mean log-odds observation due to time
   pm <- melt(ext1$alpha_time)
@@ -152,7 +168,12 @@ vis.post <- function(ext1,
   mass_on_pres <- mass_on_pres + facet_grid(state_1 ~ state_2)
   mass_on_pres <- mass_on_pres + labs(x = 'Rescaled log mass (g)',
                                       y = 'Probability of occurrence')
-  ggsave(filename = '../doc/figure/mass_on_pres.png', plot = mass_on_pres,
+  ggsave(filename = '../doc/figure/mass_on_pres_aug.png', plot = mass_on_pres,
+         width = 6, height = 4)
+
+  sam <- out[out$state_1 != 'augment', ]
+  samplot <- mass_on_pres %+% sam
+  ggsave(filename = '../doc/figure/mass_on_pres.png', plot = samplot,
          width = 6, height = 4)
 
 

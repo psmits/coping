@@ -14,15 +14,38 @@
 
 \section*{Introduction}
 
-% Taxon occurrence as a function of both emergent biological traits and its environmental context?
 
+% regional species pool
 How do species pools change over time as species are recruited or go extinct? When are ecotypes enriched or depleted? How does global and regional environmental context affect the distribution of species ecotypes (e.g. guilds) in a regional species pool?
 
 A regional species pool is the set of species which form communities in a specific region; local communities are subsets of the regional pool. The composition of a regional species pool changes over time due to speciation, migration, extinction. Local scale processes like resource competition only affect the regional species pool if all communities are affected.
 
-Valentine and Bambach how they presented guilds in paleobiology. Bush and Bambach presented an ecocube to describe what how marine invertebrates partition space and resources \citep{Bush2007,Bambach2007,Bush2011}. Unique combinations represent what possible ecotypes are observable. The distribution of ecocube occupancy is then normally analyzed as raw counts of unique combinations or using ordination methods and the change in disparity over time is estimated \citep{Bush2007,Bambach2007,Bush2011}.
+% guilds and ecocube and ecotypes
+Valentine and Bambach how they presented guilds in paleobiology which is taxa united by similarity of their macroecology \citep{Valentine1969,Bambach1977}. Bush and Bambach presented an ecocube to describe what how marine invertebrates partition space and resources \citep{Bush2007,Bambach2007,Bush2011}. Unique combinations represent what possible ecotypes are observable. The distribution of ecocube occupancy is then normally analyzed as raw counts of unique combinations or using ordination methods and the change in disparity over time is estimated \citep{Bush2007,Bambach2007,Bush2011}.
 
-One of the greatest challenges with analyzing species occurrence data is the inherent incompleteness of any sample \citep{Royle2008,Royle2014,Foote1999a,Foote2001,Lloyd2011,Wang2016b}. In the modern, only presences are certain as an absence can be caused by both the species being truly absent or the species never having been sampled \citep{Royle2008,Royle2014}. For paleontological data in the context of this study, the incomplete preservation of fossil communities combined with the incomplete sampling of what fossils there are means that the true times of origination or extinction may not be observed \citep{Foote1999a,Foote2001,Wang2015,Wang2016b}
+
+% how we think about mammal diversity
+Analysis of mammal diversity and hypotheses as to the processes that have shaped it tend to fall under a few categories: diversity of the whole system \citep{Alroy2000g,Alroy1996a,Figueirido2012,Liow2008}, guild based \citep{Janis04,Janis2000,Jernvall2004,Janis1993c,Pires2015a}, clade based \citep{Quental2013,Slater2015c}, climate based \citep{Blois2009,Janis1993c,Janis1993b}, and location based \citep{Eronen2015,Badgley2013}. Rarely are more than two of these categories considered simultaneously, and instead integration of these diverse observations and hypotheses tends to be based on coincidence. The goal of this study is to pool information from multiple levels of organization by integrating both species and climate data into a single analysis in order to provide a more holistic intepretation of the processes which may have shaped mammal species diversity.
+
+
+% 4th corner as similar but different lens
+Fourth-corner modeling is an approach to explaining the patterns of either species abundance or presence/absence as a product of species traits, environmental factors, and the interaction between traits and environment \citep{Brown2014c,Warton2015a,Pollock2012,Jamil2013} CITATION. In modern ecological studies, what is being modeled is species occurrences at localities distributed across a region \citep{Pollock2012,Jamil2013}. In this study, what is being modeled is the pattern of species occurrence over time for most of the Cenozoic in North America (Fig. \ref{fig:concept_fourth_corner}). These two approaches, modern and palentologicial, are different views of the same three-dimensional pattern: species at localities over time. The temporal limitations of modern ecological studies and difficulties with uneven spatial occurrences of fossils in paleontological studies means that these approaches are complimentary but reveal different patterns of how species are distributed in time and space.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio=true]{figure/paleo_fourth_corner}
+  \caption[Conceptual diagram of the paleontological fourth-courner problem]{Conceptual diagram of the paleontological fourth corner problem. The observed presence matrix (orange) is the empirical presence/absence pattern for all species for all time points; this matrix is an incomplete observation of the ``true'' presence/absence pattern (purple). The estimated true presence matrix is modeled as a function of both environmental factors over time (blue) and multiple species traits (green). Additionally, the affect of environmental factors on species traits are also modeled as traits are expected to mediate the effects of a species environmental context. This diagram is based partially on material presented in \citet{Brown2014c} and \citet{Warton2015a}.}
+  \label{fig:concept_fourth_corner}
+\end{figure}
+
+One of the greatest challenges with analyzing species occurrence data is the inherent incompleteness of any sample \citep{Royle2008,Royle2014,Foote1999a,Foote2001,Lloyd2011,Wang2016b}. In the modern, only presences are certain as an absence can be caused by both the species being truly absent or the species never having been sampled \citep{Royle2008,Royle2014}. For paleontological data in the context of this study, the incomplete preservation of fossil communities combined with the incomplete sampling of what fossils there are means that the true times of origination or extinction may not be observed \citep{Foote1999a,Foote2001,Wang2015,Wang2016b}.
+
+
+
+% what we're dealing with in terms of hypotheses
+In the analyses done here, a few key covariates which describe species' macroecology and environmental context are considered. Because of the complexity of fourth-corner analyses in terms of both number of covariates considered and structure of each model, it is possible to consider and test a large number of possible hypotheses. Presented here are the species traits and related hypotheses, followed by the environmental factors and related hypotheses.
+
+The principle species trait considered in this study is a species' ecotype, defined here as the unique combination of species dietary cateogry and locomotor category (e.g. arboreal omnivore versus unguligrade herbivore). This classification is analogous to the marine invertebrate ecocube discussed above \citep{Bush2007,Bambach2008,Bush2011}. Species mass was also included as a species trait, but is mostly included in order to control for that effect on species observation and occurrence.
 
 
 % hypotheses about the effect of ecotypes
@@ -39,7 +62,6 @@ One of the greatest challenges with analyzing species occurrence data is the inh
 An unresolved question from \citet{Smits2015b} is whether the greater extinction risk faced by arboreal is constant over time or if there was a change in extinction risk at the Paleogene/Neogene boundary. Specifically, the question is whether the extinction risk arboreal taxa increased in the Neogene, driving the loss of arboreal taxa and average extinction risk of arboreal taxa down. 
 
 There are no observed massive cross-taxonomic turnover events in the North American record, unlike the Neogene record Europe \citep{Alroy2009,Alroy1996a,Eronen2015,Janis1993a,Alroy2000g}.
-
 % if we control for one ecotype axis, what is variation along other axis?
 % digitigrade vs unguligrade herbivores
 % plantigrade vs digitigrade carnivores
@@ -51,6 +73,10 @@ There are no observed massive cross-taxonomic turnover events in the North Ameri
 
 
 % effect of climate on diversification process
+The environmental factors included in this study include estimates of global tempreature and the changing floral groups present in North America across the Cenozoic. Why are these factors important? What are the hypotheses associated with environmental context?
+
+Importantly, the probability of a species ecotype being present was modeled as a function of environmental factors (Fig. \ref{fig:concept_fourth_corner}). 
+
 %   all species respond differently, we want to see if there are any emergent macroecological similarities
 % big patterns in isotope records
 %   PETM and the Eocene thermal maximum
@@ -92,19 +118,6 @@ One of the most stunning environmental transitions of the Cenozoic in North Amer
 
 
 
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio=true]{figure/paleo_fourth_corner}
-  \caption[Conceptual diagram of the paleontological fourth-courner problem]{Conceptual diagram of the paleontological fourth corner problem. The observed presence matrix (orange) is the empirical presence/absence pattern for all species for all time points; this matrix is an incomplete observation of the ``true'' presence/absence pattern (purple). The estimated true presence matrix is modeled as a function of both environmental factors over time (blue) and multiple species traits (green). Additionally, the affect of environmental factors on species traits are also modeled as traits are expected to mediate the effects of a species environmental context. This diagram is based partially on material presented in \citet{Brown2014c} and \citet{Warton2015a}.}
-  \label{fig:concept_fourth_corner}
-\end{figure}
-
-Fourth-corner modeling an approach to explaining the patterns of either species abundance or presence/absence as a product of species traits, environmental factors, and the interaction between traits and environment CITATION. In modern ecological studies, what is being modeled is species occurrences at localities distributed across a region CITATION. In this study, what is being modeled is the pattern of species occurrence over time for most of the Cenozoic in North America (Fig. \ref{fig:concept_fourth_corner}). These two approaches, modern and palentologicial, are different views of the same three-dimensional pattern: species at localities over time. The temporal limitations of modern ecological studies and difficulties with uneven spatial occurrences of fossils in paleontological studies means that these approaches are complimentary but reveal different patterns of how species are distributed in time and space.
-
-%The major species trait included in this study is species ecotype, defined as the combination of species dietary category (e.g. carnivore) and locomotor category (e.g. arboreal). This trait is a descriptor of a species' ecological guild, similar to the unique combinations of the ecocube used in analysis of marine invertebrates \citep{Bush2007,Bambach2007,Bush2011}. Importantly, the probability of a species ecotype being present was modeled as a function of environmental factors (Fig. \ref{fig:concept_fourth_corner}). Species mass was also included as a species trait, but primarily just to control for that effect on species occurrence. 
-%
-%
-%The environmental factors included in this study include estimates of global tempreature and the changing floral groups present in North America across the Cenozoic. Why are these factors important? What are the hypotheses associated with environmental context?
 
 
 

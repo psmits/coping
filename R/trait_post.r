@@ -57,13 +57,13 @@ ntime <- T
 post <- list.files('../data/mcmc_out', pattern = 'advi',
                    full.names = TRUE)
 
-## just presence
-#fit1 <- read_one_stan_csv(post[2])
-#ext1 <- post.advi(fit1)
-## analysis of model fit
-#post.pred(ext1, ntax = M, ntime = T, sight.obs = sighta, nsim, samp)
-## analysis of the posterior
-#vis.post(ext1, ecotype, ecotrans, mass, cbp.long, ecoprob = TRUE)
+# just presence
+fit1 <- read_one_stan_csv(post[2])
+ext1 <- post.advi(fit1)
+# analysis of model fit
+post.pred(ext1, ntax = M, ntime = T, sight.obs = sighta, nsim, samp)
+# analysis of the posterior
+vis.post(ext1, ecotype, ecotrans, mass, cbp.long, ecoprob = TRUE)
 
 
 # full birth-death
@@ -75,10 +75,10 @@ post.pred(ext2, ntax = M, ntime = T, sight.obs = sighta, nsim, samp, bd = TRUE)
 # visualize posterior estimates
 vis.bdpost(ext2, ecotype, ecotrans, mass, cbp.long, ecoprob = TRUE)
 # estimate standing diversity given posterior
-#post.div <- diversity.distribution(sighta, ext2, nsim) # 
+post.div <- diversity.distribution(sighta, ext2, nsim) # 
 #
 #
-#source('../R/div_plot.r')  # update this to work as functions, not just source
+source('../R/div_plot.r')  # update this to work as functions, not just source
 
 
 
