@@ -5,6 +5,11 @@ diversity <- Map(function(x, y) cbind(x, sim = y),
                  diversity, seq(nsim))
 diversity <- data.frame(Reduce(rbind, diversity))
 diversity$div <- log(diversity$div + 1)
+
+diversity$time <- mapvalues(diversity$time, 
+                            from = unique(diversity$time), 
+                            to = rev(time.start.stop[, 2]))
+
 divgg <- ggplot(diversity, aes(x = time, y = div, group = sim))
 divgg <- divgg + geom_line(alpha = 0.1)
 divgg <- divgg + labs(x = 'Time (My)', 
@@ -52,6 +57,11 @@ growth.rate <- Map(function(x) data.frame(growth = x, time = seq(length(x))),
                    growth.rate) 
 growth.rate <- Map(function(x, y) cbind(x, sim = y), growth.rate, seq(nsim))
 growth.rate <- Reduce(rbind, growth.rate)
+
+growth.rate$time <- mapvalues(growth.rate$time, 
+                              from = unique(growth.rate$time), 
+                              to = rev(time.start.stop[-T, 2]))
+
 growgg <- ggplot(growth.rate, aes(x = time, y = growth, group = sim))
 growgg <- growgg + geom_line(alpha = 0.1)
 growgg <- growgg + labs(x = 'Time (My)', 
@@ -68,6 +78,11 @@ birth.rate <- lapply(birth.rate, function(x)
 birth.rate <- Map(function(x, y) data.frame(x, sim = y), 
                   x = birth.rate, y = seq(length(birth.rate)))
 birth.rate <- Reduce(rbind, birth.rate)
+
+birth.rate$time <- mapvalues(birth.rate$time, 
+                             from = unique(birth.rate$time), 
+                             to = rev(time.start.stop[-T, 2]))
+
 birthgg <- ggplot(birth.rate, aes(x = time, y = rate, group = sim))
 birthgg <- birthgg + geom_line(alpha = 0.1)
 birthgg <- birthgg + labs(x = 'Time (My)',
@@ -81,6 +96,11 @@ death.rate <- lapply(death.rate, function(x)
 death.rate <- Map(function(x, y) data.frame(x, sim = y), 
                   x = death.rate, y = seq(length(death.rate)))
 death.rate <- Reduce(rbind, death.rate)
+
+death.rate$time <- mapvalues(death.rate$time, 
+                             from = unique(death.rate$time), 
+                             to = rev(time.start.stop[-T, 2]))
+
 deathgg <- ggplot(death.rate, aes(x = time, y = rate, group = sim))
 deathgg <- deathgg + geom_line(alpha = 0.1)
 deathgg <- deathgg + labs(x = 'Time (My)',
@@ -125,6 +145,12 @@ names(div.eco) <- c('et', 'time', 'diversity', 'sim', 'eco_1', 'eco_2')
 
 div.eco <- div.eco[div.eco$eco_1 != 'augment', ]
 div.eco$diversity <- log(div.eco$diversity + 1)
+div.eco$time <- as.numeric(div.eco$time)
+
+div.eco$time <- mapvalues(div.eco$time, 
+                          from = unique(div.eco$time), 
+                          to = rev(time.start.stop[, 2]))
+
 degg <- ggplot(div.eco, aes(x = time, y = diversity, group = sim))
 degg <- degg + geom_line(alpha = 0.1)
 degg <- degg + facet_grid(eco_1 ~ eco_2)

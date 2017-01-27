@@ -51,6 +51,11 @@ ecotrans <- rbind(ecotrans, c('augment', 'augment'))
 ntax <- N
 ntime <- T
 
+# observed time bins
+time.stop <- unique(occur$true.bin)
+b <- range(time.stop)
+b <- seq(b[1], b[2], by = 2)
+time.start.stop <- as.matrix(cbind(b - 2, b))
 
 ############
 ## advi
@@ -63,7 +68,8 @@ ext1 <- post.advi(fit1)
 # analysis of model fit
 post.pred(ext1, ntax = M, ntime = T, sight.obs = sighta, nsim, samp)
 # analysis of the posterior
-vis.post(ext1, ecotype, ecotrans, mass, cbp.long, ecoprob = TRUE)
+vis.post(ext1, ecotype, ecotrans, mass, 
+         cbp.long, time.start.stop, ecoprob = TRUE)
 
 
 # full birth-death

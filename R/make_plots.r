@@ -11,6 +11,7 @@ vis.post <- function(ext1,
                      ecotrans, 
                      mass, 
                      cbp.long, 
+                     time.start.stop,
                      ecoprob = TRUE) {
 
   # log-odds of occurrence associated with ecotype
@@ -24,6 +25,12 @@ vis.post <- function(ext1,
   names(am) <- c('sim', 'time', 'state', 'value', 'state_1', 'state_2')
 
   if(ecoprob) am$value <- invlogit(am$value)
+  
+  this.time <- time.start.stop[-nrow(time.start.stop), ]
+  
+  am$time <- mapvalues(x = am$time, 
+                       from = unique(am$time), 
+                       to = rev(this.time[, 2]))
 
   amplot <- ggplot(am, aes(x = time, y = value, group = sim))
   amplot <- amplot + geom_line(alpha = 0.01)
@@ -88,6 +95,9 @@ vis.post <- function(ext1,
 
   # difference from mean log-odds observation due to time
   pm <- melt(ext1$alpha_time)
+  pm$Var2 <- mapvalues(x = pm$Var2, 
+                       from = unique(pm$Var2), 
+                       to = rev(time.start.stop[, 2]))
 
   pm$prob <- invlogit(pm$value)
   if(!is.null(pm$Var1)) {
@@ -208,6 +218,13 @@ vis.bdpost <- function(ext2,
   suppressWarnings(am <- cbind(am, ecotrans[am$Var3, ]))
   names(am) <- c('sim', 'time', 'state', 'value', 'state_1', 'state_2')
   if(ecoprob) am$value <- invlogit(am$value)
+  
+  orig.time <- time.start.stop
+  surv.time <- time.start.stop[-nrow(time.start.stop), ]
+  
+  am$time <- mapvalues(x = am$time, 
+                       from = unique(am$time), 
+                       to = rev(orig.time[, 2]))
 
   amplot <- ggplot(am, aes(x = time, y = value, group = sim))
   amplot <- amplot + geom_line(alpha = 0.01)
@@ -228,6 +245,10 @@ vis.bdpost <- function(ext2,
   suppressWarnings(am <- cbind(am, ecotrans[am$Var3, ]))
   names(am) <- c('sim', 'time', 'state', 'value', 'state_1', 'state_2')
   if(ecoprob) am$value <- invlogit(am$value)
+  
+  am$time <- mapvalues(x = am$time, 
+                       from = unique(am$time), 
+                       to = rev(surv.time[, 2]))
 
   amplot <- ggplot(am, aes(x = time, y = value, group = sim))
   amplot <- amplot + geom_line(alpha = 0.01)
@@ -336,6 +357,9 @@ vis.bdpost <- function(ext2,
 
   # difference from mean log-odds observation due to time
   pm <- melt(ext2$alpha_time)
+  pm$Var2 <- mapvalues(x = pm$Var2, 
+                       from = unique(pm$Var2), 
+                       to = rev(time.start.stop[, 2]))
 
   pm$prob <- invlogit(pm$value)
   if(!is.null(pm$Var1)) {

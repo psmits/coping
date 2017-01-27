@@ -68,16 +68,18 @@ occur$mass <- na.mass[match(occur$name.bi, na.mass$name), 2]
 #spt <- ape::drop.tip(spt, hot.fix$tree_not_data)
 #occur <- occur[keep[[1]], ]
 
-
 # process climate information
 source('../R/mung_clim.r')
+
+
+
+
 occur <- occur[occur$bins != 66, ]
 
 # save true bins
 occur$true.bin <- occur$bins
 # make easy bins
 occur$bins <- occur$bins / 2
-
 
 
 # !!! makes everything genus level !!!
