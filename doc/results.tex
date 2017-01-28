@@ -49,13 +49,13 @@ Comparison of the posterior predictive performance of the pure-presence and birt
 %     occurrence (pp)
 %     origination + survival (bd)
 
-Occurrence probabilities estimated from the pure-presence model (Fig. \ref{fig:eco_occur}) are much more similar to the origination estimates from the birth-death model (Fig. \ref{fig:eco_origin}) than the estimates of survival probability (Fig. \ref{fig:eco_survival}). 
+Occurrence probabilities estimated from the pure-presence model (Fig. \ref{fig:eco_occur}) are broadly similar to the estimates of origination probability from the birth-death model (Fig. \ref{fig:eco_origin}) as opposed to the estimates of survival probability (Fig. \ref{fig:eco_survival}). This result supports the idea that changes to the North American regional species pool is more likely due to changes to origination than extinction.
 
-In general, both occurrence probabilities estimated from the pure-presence model (Fig. \ref{fig:eco_occur}) and origination probabilities estimated from the birth-death model (fig. \ref{fig:eco_origin}) increase with time. Notable, ecotypes with arboreal components do not follow this average; instead, occurrence and origination probabilities appear relatively flat for most of the Cenozoic.
+For most ecotypes, both estimated occurrence probabilities from the pure-presence model (Fig. \ref{fig:eco_occur}) and origination probabilities estimated from the birth-death model (Fig. \ref{fig:eco_origin}) increase with time. Notably, ecotypes with arboreal components do not appear to follow a similar pattern; instead, occurrence and origination probabilities appear relatively flat for most of the Cenozoic.
 
-The dramatic differences between origination and survival probabilities indicate how different these processes are, and may be responsible for the better posterior predictive perfomance of the birth-death model over the pure-presence model (Fig. \ref{fig:ppc_pure_presence}, and \ref{fig:ppc_birth_death}). While the estimates of both time series have high variance, what is striking is how mean origination probability changes over time while in general survival probabilities have relatively stable means (Fig. \ref{fig:eco_origin}, and \ref{fig:eco_survival}).
+The dramatic differences between origination and survival probabilities indicate how different these processes are, and may be responsible for the better posterior predictive perfomance of the birth-death model over the pure-presence model (Fig. \ref{fig:ppc_pure_presence}, and \ref{fig:ppc_birth_death}). While the estimates of both time series have high variance, what is striking is how mean origination probability changes over time while most ecotype survival probabilities have relatively stable means for the entire Cenozoic (Fig. \ref{fig:eco_origin}, and \ref{fig:eco_survival}).
 
-Estimates of origination probabilities appear to have less uncertainty than for survival (Fig. \ref{fig:eco_origin}, and \ref{fig:eco_survival}).
+For most ecotypes, the estimates of origination probabilities are with less uncertainty than similar estimates of survival probabilities (Fig. \ref{fig:eco_origin}, and \ref{fig:eco_survival}). High uncertainty in the estimates of the underlying log-odds of occurrence, origination, or survival tends to be indicative of extreme rarity or complete absence of the specific ecotype; the latter is called complete seperation, the effect of which has been mitigated by the hierarchical modeling strategy used here \citep{Gelman2013d,Gelman2007} CITATION Statistical Rethinking.
 
 
 \begin{figure}[ht]
@@ -83,10 +83,11 @@ Estimates of origination probabilities appear to have less uncertainty than for 
 
 
 
-The pure-presence and birth-death models different in estimated effect of mass on the probability of observing a species that is present (Fig. \ref{fig:mass_preserve}). For the pure-presence model, mass is estimated to have no effect on the probability of observing a species that is presence (Fig. \ref{fig:mass_preserve_pure_pres}). Contrastingly, for the birth-death model mass is found to have a negative relationship with observation such that larger species are less likely to be observed if present than smaller species (Fig. \ref{fig:mass_preserve_bd}). 
+The pure-presence and birth-death models different in estimated effect of mass on the probability of sampling a species that is present (Fig. \ref{fig:mass_preserve}). For the pure-presence model, mass is estimated to have not have a great effect on the probability of sampling a species that is presence (Fig. \ref{fig:mass_preserve_pure_pres}). Contrastingly, for the birth-death model mass is found to have a negative relationship with observation such that larger species are less likely to be observed if present than smaller species (Fig. \ref{fig:mass_preserve_bd}). 
 
 The result from the birth-death model is unexpected given that it is generally assumed that larger mammals are more likely to have been collected than smaller mammals CITATION. However, collection is not preservation; similarities in preservation rate indicate similarities in how gap-filled species records are. What this result means is that the record of large bodied species is expected on average to be more gap-filled and less consistent from time point to time point than smaller bodied species. Additionally, this is presence/absence data, so higher preservation and collection in terms of individual specimens at a location or a single temporal horizon does not necessarily translate to high preservation over time.
 
+The average probabilities of sampling for both the pure-presence model and birth-death model are both at the point where (rescaled log) mass equals 0; visual comparison indicates that, on average, sampling probability has greater posterior estimate in the pure-presence model than the birth-death model (Fig.\ref{fig:mass_preserve}).
 
 \begin{figure}[ht]
   \begin{subfigure}[b]{0.45\textwidth}
@@ -99,14 +100,14 @@ The result from the birth-death model is unexpected given that it is generally a
     \caption{Birth-death model}
     \label{fig:mass_preserve_bd}
   \end{subfigure}
-  \caption[Estimates of the effect of mass on observation probability]{Estimates of the effect of species mass on probability of observing a present species (\(p\)). Mass has been log-transformed, centered, and rescaled; this means that a mass of 0 corresponds to the mean of log-mass of all observed species and that mass is in standard deviation units. Estimates are from both the pure-presence and birth-death models.}
+  \caption[Estimates of the effect of mass on observation probability]{Estimates of the effect of species mass on probability of sampling a present species (\(p\)). Mass has been log-transformed, centered, and rescaled; this means that a mass of 0 corresponds to the mean of log-mass of all observed species and that mass is in standard deviation units. Estimates are from both the pure-presence and birth-death models.}
   \label{fig:mass_preserve}
 \end{figure}
 
 
 
 
-The effect of species mass on probability of occurrence as estimated from the pure-presence (Fig. \ref{fig:mass_occur}) is most similar to the effect of species mass on probability of origination as estimates from the birth-death model (Fig. \ref{fig:mass_origin}). The striking pattern observable in both sets of estimates is the higher probability of occurrence for species with body sizes closer to the mean than either extremes. This result is consistent with the canonically normal distribution of mammal body sizes CITATION; it is then expected that the most likely to occur species would be those from the middle of the distribution, and that species originating will on average be of average mass, especially considering species shared common ancestry CITATION.
+The effect of species mass on probability of occurrence as estimated from the pure-presence (Fig. \ref{fig:mass_occur}) are most similar to the estimated effect of species mass on probability of origination for the birth-death model (Fig. \ref{fig:mass_origin}). The striking pattern observable in both sets of estimates is the higher probability of occurrence for species with body sizes closer to the mean than either extremes. This result is consistent with the canonically normal distribution of mammal body sizes CITATION; it is then expected that the most likely to occur species would be those from the middle of the distribution, and that species originating will on average be of average mass, especially considering species shared common ancestry CITATION. Note that all variation between ecotypes (Fig. \ref{fig:mass_origin}) is due to differences in ecotype-specific survival probability and the associated effects of plant phase; the effect of mass was considered constant for all ecotypes.
 
 \begin{figure}[ht]
   \centering
@@ -124,7 +125,7 @@ The effect of species mass on probability of occurrence as estimated from the pu
 
 
 
-In contrast, the effect of species mass on probability of survival as estimated from the birth-death model (Fig. \ref{fig:mass_survival}) indicates little effect of mass on extinction; this is consistent with previous findings from the North American mammal fossil record \citep{Smits2015b,Tomiya2013}. Note that all variation between ecotypes is due to differences in ecotype-specific survival probability and the associated effects of plant phase.
+In contrast, the effect of species mass on probability of survival as estimated from the birth-death model (Fig. \ref{fig:mass_survival}) indicates little effect of mass on extinction; this is consistent with previous findings from the North American mammal fossil record \citep{Smits2015b,Tomiya2013}. Note that all variation between ecotypes (Fig. \ref{fig:mass_survival}) is due to differences in ecotype-specific survival probability and the associated effects of plant phase; the effect of mass was considered constant for all ecotypes.
 
 \begin{figure}[ht]
   \centering
@@ -136,8 +137,6 @@ In contrast, the effect of species mass on probability of survival as estimated 
 
 
 Similarities in parameters estimates between ecotypes may be due to similar response to environmental factors. Some of the obvious patterns from inspection of the individual-level estimates of occurrence (Fig. \ref{fig:eco_occur}), origination (Fig. \ref{fig:eco_origin}), and survival probabilities (Fig. \ref{fig:eco_survival}) that are of note are the similarities between arboreal taxa and the differences between arboreal and all other taxa.
-
-Inspection of parameter estimates for the group-level covariates 
 
 
 \begin{figure}[ht]
@@ -167,13 +166,22 @@ Inspection of parameter estimates for the group-level covariates
 
 \subsection*{Analysis of diversity}
 
-All analyses of diversification and macroevolutionary rates has been done using only the birth-death model; this is because of the models better posterior predictive check performance (Fig. \ref{fig:ppc_pure_presence}, and \ref{fig:ppc_birth_death}). 
+All of the following analyses of diversification and macroevolutionary rates has been done using only the birth-death model; this is because of the models better posterior predictive check performance (Fig. \ref{fig:ppc_pure_presence}, and \ref{fig:ppc_birth_death}). 
 
-For the first half of the Cenozoic there appears to be a very slow decline and then plateau in total diversity until the WHEN? (Fig. \ref{fig:diversity_est}). 
 
-When viewed through the lens of diversification rate the structure behind this pattern begins to take shape (Fig. \ref{fig:diversity_rate}). For approximately the first third of the Cenozoic, diversification rate is frequently below zero species gained per species present per two million years; this is broken up by few inferred spikes in diversification WHEN?. During the observed period of possible stability in 
+The general pattern of total estimated North American mammal diversity for the Cenozoic is ``stable'' meaning that mean standing diversity does not fluctuate wildly over the Cenozoic (Fig. \ref{fig:diversity_est}). In broad strokes, the first 15 or so million years of the Cenozoic are characterized by a gradual decline in standing diversity until approximately 45-50 million years ago (early-middle Eocene). Following this decline, standing diversity is broadly constant from 45 to 18 Mya (early Miocene). After this, there is a rapid spike in diversity followed by a slight decline in diversity up to the Modern. This characterization of the estimated diversity history is knowingly broad strokes and diversity time series is not without variation and vagaries.
 
-The comparison between per captia origination and extinction rate estimates reveals how diversification rate is formed (Fig. \ref{fig:origin_rate}, \ref{fig:extinct_rate}). Origination rate seems most closely mimic diversification rate while extinction rate has a saw-toothed pattern for the Cenozoic with no obvious emergent structure; inferred spikes in origination rate do not correspond to any spikes in extinction rate.
+When viewed through the lens of diversification rate, some of the structure behind the estimated diversity history begins to take shape (Fig. \ref{fig:diversity_rate}). For most of the Cenozoic, the diversification rate hovers around zero, punctuated by both positive and negative spikes. The largest spike in diversification rate is at 16 Mya, which is early Oligocene (Fig. \ref{fig:diversity_rate}). Other notable increases in diversification rate occur at 54, 44, 36, 26, and 20 Mya; other possible increases in diversification rate are less certain (e.g. 8 Mya). Notable decreases in diversification rate occur at 52, 48, 42, 32, 14, 10, and 6 Mya. 
+
+The comparison between per capita origination and extinction rate estimates reveals how diversification rate is formed (Fig. \ref{fig:origin_rate}, \ref{fig:extinct_rate}). Diversification rate seems most driven by changes in origination rate as opposed to extinction rate.
+Extinction rate, on the other hand, demonstrates an almost saw-toothed pattern around a constant mean.
+
+Now ask what origin or extinct are doing at the important time points indicated above.
+
+Increases in diversification rate at 54, 44, 36, 26, 20, 16
+
+Decreases in diversification rate at 52, 48, 42, 32, 14, 10, 6
+
 
 \begin{figure}[ht]
   \begin{subfigure}[b]{0.45\textwidth}
@@ -209,20 +217,18 @@ The comparison between per captia origination and extinction rate estimates reve
 
 Diversity partitioned by ecotype reveals a lot of the complexity behind the pattern of mammal diversity for the Cenozoic (Fig. \ref{fig:ecotype_diversity}). 
 
-An impressive commonality across multiple ecotype-specific diversity time series are two spikes in diversity, either up or down (Fig. \ref{fig:ecotype_diversity}). Spikes of increased diversity are seen this is seen in all arboreal ecotypes, plantigrade insectivores, scansorial insectivores, and scansorial omnivores. The converse pattern, spikes of decreased diversity, are strongly observed in the diversity history of digitigrade herbivores, with weaker decreases observed in the histories of digitigrade carnivores, and unguiligrade herbivores. % what are the similarities in group-level covariates amongst all these groups?
+Arboreal ecotypes obtain peak diversity early in the Cenozoic and then decline for the rest of the time series, becoming increasingly rare or absent as diversity approaches the Modern (Fig. \ref{fig:ecotype_diversity}). Arboreal herbivores and omnivores obtain peak diversity at the beginning of the Cenozoic then go into decline while still possibly remaining a part of the species pool, while arboreal carnivores and insectivores obtain peak diversity 52-50 Mya and then quickly decline and become extremely rare or absent from the species pool.
 
-Arboreal ecotypes are estimated to have disappeared and reappeared as short bursts over the last 65 million years in North America, with arboreal carnivores and insectivores being most often rarer than arboreal herbivores and omnivores.
+Digitigrade carnivores
 
-Fossorial ecotypes, whether herbivorous and insectivorous appear rare or possibly absent for most the Cenozoic, which maximum estimated diversity being obtained in the latter half of the time series (Fig. \ref{fig:ecotype_diversity}).
+Digitigrade and unguligrade Herbivores
 
-Plantigrade ecotypes appear most variable, plantigrade herbivores having a very different diveristy history than plantigrade carnivores and omnivores and plantigrade insectivores.
-
-Unguligrade and plantigrade herbivores have relatively stable standing diversities throughout the Cenozoic of North America (Fig. \ref{fig:ecotype_diversity}). Similarly, digitigrade carnivorous taxa appear to have a relatively stable diversity for the Cenozoic.
+Omnivores
 
 \begin{figure}[ht]
   \centering
   \includegraphics[width=\textwidth,height=0.5\textheight,keepaspectratio=true]{figure/ecotype_diversity}
-  \caption[Estimated mammal ecotype log-diversity for the Cenozoic]{Posterior of standing log-diversity of North American mammals by ecotype for the Cenozoic as estimated from the birth-death model; 100 posterior draws are plotted to indicate the uncertainty in these estimates and what is technically plotted is log of diversity plus 1. The dramatic differences between diversity estimates at the first and second time points and the penultimate and last time points in this series are caused by well known edge effects in discrete-time birth-death models caused by \(p_{\_, t = 1}\) and \(p_{\_, t = T}\) being partially unidentifiable \citep{Royle2008}; the hierarchical modeling strategy used here helps mitigate these effects but they are still present \citep{Gelman2013d,Royle2008}.}
+  \caption[Estimated mammal ecotype log-diversity for the Cenozoic]{Posterior of standing log-diversity of North American mammals by ecotype for the Cenozoic as estimated from the birth-death model; 100 posterior draws are plotted to indicate the uncertainty in these estimates and what is technically plotted is log of diversity plus 1.}
   \label{fig:ecotype_diversity}
 \end{figure}
 
