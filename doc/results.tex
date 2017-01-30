@@ -39,16 +39,6 @@ Comparison of the posterior predictive performance of the pure-presence and birt
 \end{figure}
 
 
-% need to inspect the posterior estimates in order to understand the differences
-%   ecotype occurrence (pp), origination + survival (bd) probabilities
-%   effect of mass on 
-%     preservation (pp, bd)
-%     occurrence (pp)
-%     origination + survival (bd)
-%   group-level covariates on 
-%     occurrence (pp)
-%     origination + survival (bd)
-
 Occurrence probabilities estimated from the pure-presence model (Fig. \ref{fig:eco_occur}) are broadly similar to the estimates of origination probability from the birth-death model (Fig. \ref{fig:eco_origin}) as opposed to the estimates of survival probability (Fig. \ref{fig:eco_survival}). This result supports the idea that changes to the North American regional species pool is more likely due to changes to origination than extinction.
 
 For most ecotypes, both estimated occurrence probabilities from the pure-presence model (Fig. \ref{fig:eco_occur}) and origination probabilities estimated from the birth-death model (Fig. \ref{fig:eco_origin}) increase with time. Notably, ecotypes with arboreal components do not appear to follow a similar pattern; instead, occurrence and origination probabilities appear relatively flat for most of the Cenozoic.
@@ -136,15 +126,30 @@ In contrast, the effect of species mass on probability of survival as estimated 
 
 
 
-Similarities in parameters estimates between ecotypes may be due to similar response to environmental factors. Some of the obvious patterns from inspection of the individual-level estimates of occurrence (Fig. \ref{fig:eco_occur}), origination (Fig. \ref{fig:eco_origin}), and survival probabilities (Fig. \ref{fig:eco_survival}) that are of note are the similarities between arboreal taxa and the differences between arboreal and all other taxa.
+Similarities in parameters estimates between ecotypes may be due to similar response to environmental factors (Fig. \ref{fig:group_pure_presence}, \ref{fig:group_origin_bd}, and \ref{fig:group_surv_bd}). As with previous comparisons between posterior estimates from the pure-presence and birth-death models, the effects of the group-level covariates in the pure-presence model (Fig. \ref{fig:group_pure_presence})  are more similar to those estimates of the group-level effects on origination (Fig. \ref{fig:group_origin_bd}) as opposed to survival (Fig. \ref{fig:group_surv_bd}). 
 
+As demonstrated in the comparisons of the effect of mass on occurrence from the pure-presence model (Fig. \ref{fig:mass_occur}) with the effect of mass on origination and survival from the birth-death model (Fig. \ref{fig:mass_origin}, and \ref{fig:mass_survival}), there is considerable variation in the effect of plant phases on ecotype-specific estimates.
 
-\begin{figure}[ht]
+%occurrence
+%  Plant phase
+Plant phase is estimated to structure ecotype occurrence probability, specifically at least one phase has a very different estimates from the others, for non-arboreal carnivores, arboreal and unguligrade herbivores, arboreal and fossorial insectivores, and arboreal and unguligrade omnivores (Fig. \ref{fig:group_pure_presence}). For the other ecotypes, plant phase does not correspond to major differences in diversity over time. 
+%  Temperature
+The temperature covariates do not appear to strongly structure occurrence history for most ecotypes (Fig. \ref{fig:group_pure_presence}). Ecotypes for which at least one temperature covariate is estimated to have strong effect on occurrence are digitigrade canivores (mean only), scansorial carnivores (mean only), and non-arboreal herbivores. For the other ecotypes neither of the temperature covariates are expected to have strong effects on occurrence history.
+
+  \begin{figure}[ht]
   \centering
   \includegraphics[width=\textwidth,height=0.5\textheight,keepaspectratio=true]{figure/group_on_ecotype}
   \caption[Effects of group-level covariates on log-odds of ecotype occurrence as estimated from the the pure-presence model]{Estimated effects of the group-level covariates describing environmental context on log-odds of species occurrence. These estimates are from the pure-presence model.} 
   \label{fig:group_pure_presence}
 \end{figure}
+
+
+
+%origination
+%  Plant phase
+Plant phase is estimated to at least partially structure ecotype origination probability for non-arboreal carnivores, non-fossorial or plantigrade herbivores, arboreal and fossorial insectivores, and plantigrade and scansorial omnivores (Fig. \ref{fig:group_origin_bd}). 
+%  Temperature
+In the case of the temperature covariates, at least one of them is estimated to have strong effects on origination history for the following ecotypes: digitigrade carnivores, and both digitigrade and unguligrade herbivores (Fig. \ref{fig:group_origin_bd}). Neither of the temperature covariates are estimate to have strong effects for the other ecotypes.
 
 \begin{figure}[ht]
   \centering
@@ -152,6 +157,12 @@ Similarities in parameters estimates between ecotypes may be due to similar resp
   \caption[Effects of group-level covariates on log-odds of ecotype origination as estimated from the the birth-death model]{Estimated effects of the group-level covariates describing environmental context on log-odds of species origination. These estimates are from the birth-death model.}
   \label{fig:group_origin_bd}
 \end{figure}
+
+
+%survival
+%  Plant phase
+%  Temperature
+In contrast to both of the above (Fig. \ref{fig:group_pure_presence}, and \ref{fig:group_origin_bd}) group-level covariates are estimate to have almost no effect on survival for all ecotypes (Fig. \ref{fig:group_surv_bd}); this is the case for both the plant phases and temperature coviates.
 
 \begin{figure}[ht]
   \centering
@@ -187,26 +198,22 @@ Decreases in diversification rate at 52, 48, 42, 32, 14, 10, 6
   \begin{subfigure}[b]{0.45\textwidth}
     \includegraphics[width=\textwidth,height=0.5\textheight,keepaspectratio=true]{figure/log_diversity}
     \caption{Log diversity}
-    %\caption[Estimated mammal log-diversity for the Cenozoic]{Posterior of standing log-diversity of North American mammals for the Cenozoic as estimated from the birth-death model; 100 posterior draws are plotted to indicate the uncertainty in these estimates and what is technically plotted is log of diversity plus 1. The dramatic differences between diversity estimates at the first and second time points and the penultimate and last time points in this series are caused by well known edge effects in discrete-time birth-death models caused by \(p_{\_, t = 1}\) and \(p_{\_, t = T}\) being partially unidentifiable \citep{Royle2008}; the hierarchical modeling strategy used here helps mitigate these effects but they are still present \citep{Gelman2013d,Royle2008}.}
     \label{fig:diversity_est}
   \end{subfigure}
   \begin{subfigure}[b]{0.45\textwidth}
     \includegraphics[width=\textwidth,height=0.5\textheight,keepaspectratio=true]{figure/div_rate}
     \caption{Diversification rate}
-    %\caption[Mammal diversification rate estimates]{Posterior estimates of North American mammal diversification rate for the Cenozoic; 100 estimates are plotted to indicate the uncertainty in these estimates. As a reminder, diversification rate is the difference between origination and extinction rates and is in units of species gained per species present per time unit (2 My).}
     \label{fig:diversity_rate}
   \end{subfigure}
 
   \begin{subfigure}[b]{0.45\textwidth}
     \includegraphics[width=\textwidth,height=0.5\textheight,keepaspectratio=true]{figure/orig_rate}
     \caption{Origination rate}
-    %\caption[Mammal origination rate estimates]{Posterior estimates of North American origination rate for the Cenozoic; 100 estimates are plotted to indicate the uncertainty in these estimates. The unit of origination rate is number of species originating per species per time unit (2 My).}
     \label{fig:origin_rate}
   \end{subfigure}
   \begin{subfigure}[b]{0.45\textwidth}
     \includegraphics[width=\textwidth,height=0.5\textheight,keepaspectratio=true]{figure/death_rate}
     \caption{Extinction rate}
-    %\caption[Mammal extinction rate estimates]{Posterior estimates of North American extinction rate for the Cenozoic; 100 estimates are plotted to indicate the uncertainty in these estimates. The unit of extinction rate is number of species becoming extinct per species per time unit (2 My).}
     \label{fig:extinct_rate}
   \end{subfigure}
   \caption[Estimated mammal log-diversity and macroevolutionary rates for the Cenozoic]{Posterior estimates of the time series of Cenozoic North American mammal diversity and it's characteristic macroevolutionary rates; all estimates are from the birth-death model and 100 posterior draws are plotted to indicate the uncertainty in these estimates. The dramatic differences between diversity estimates at the first and second time points and the penultimate and last time points in this series are caused by well known edge effects in discrete-time birth-death models caused by \(p_{\_, t = 1}\) and \(p_{\_, t = T}\) being partially unidentifiable \citep{Royle2008}; the hierarchical modeling strategy used here helps mitigate these effects but they are still present \citep{Gelman2013d,Royle2008}. Diversification rate is in units of species gained per species present per time unit (2 My), origination rate is in units of species originating per species present per time unit, and extinction rate is in units of species becoming extinct per species present per time unit.}
@@ -215,15 +222,17 @@ Decreases in diversification rate at 52, 48, 42, 32, 14, 10, 6
 
 
 
-Diversity partitioned by ecotype reveals a lot of the complexity behind the pattern of mammal diversity for the Cenozoic (Fig. \ref{fig:ecotype_diversity}). 
+Diversity partitioned by ecotype reveals a lot of the complexity behind the pattern of mammal diversity for the Cenozoic (Fig. \ref{fig:ecotype_diversity}). There are many possible orders to present these results; I've chosen to focus on those with particular relevance to observations and hypotheses presented in the introduction.
 
 Arboreal ecotypes obtain peak diversity early in the Cenozoic and then decline for the rest of the time series, becoming increasingly rare or absent as diversity approaches the Modern (Fig. \ref{fig:ecotype_diversity}). Arboreal herbivores and omnivores obtain peak diversity at the beginning of the Cenozoic then go into decline while still possibly remaining a part of the species pool, while arboreal carnivores and insectivores obtain peak diversity 52-50 Mya and then quickly decline and become extremely rare or absent from the species pool.
 
-Digitigrade carnivores
+The diversity of both digitigrade and unguligrade herbivores increase over the Cenozoic (Fig. \ref{fig:ecotype_diversity}). In contrast, plantigrade herbivore diversity does not have a single, broad-strokes pattern; instead, diversity increases, decreases, and may have shallowly increased again. Contrastingly, fossorial and scansorial herbivores demonstrate a much flatter history of diversity, with a slight increase in diversity that is more pronounced in the diversity fossorial taxa than scansorial taxa.
 
-Digitigrade and unguligrade Herbivores
+Digitigrade carnivores have a multi-modal diversity history, with peaks 54-52 and 12-10 Mya (Fig.\ref{fig:ecotype_diversity}). Between these two peaks digitigrade carnivore diversity dips below average diversity following the first peak and then grows slowly until the second peak. Plantigrade carnivores obtain peak diversity in the early Cenozoic and then maintain a relatively stable diversity until another peak at the end of the Cenozoic.
 
-Omnivores
+There are some broad similarities in diversity histories of insectivorous and omnivorous taxa. The diversity histories of arbreal, plantigrade, and scansorial insectivorous taxa all demonstrate a decreasing pattern with time, while fossorial insectivores have a flat diversity history with a rapid peak approximately 10 Mya (Fig. \ref{fig:ecotype_diversity}). Arboreal and scansorial omnivores decrease in diversity from their initial peaks early in the Cenozoic, and plantigrade omnivores have a generally flat diversity history with a sudden peak in diversity late in the Cenozoic (Fig. \ref{fig:ecotype_diversity}). Unguligrade omnivores also demonstrate a possible decrease in diversity over the Cenozoic, but not as clearly as arboreal and scansorial omnivores.
+
+Many of the estimated ecotype specific diversity histories share a similar increases in diversity to one degree or another at the late Cenozoic 16-14 Mya (Fig. \ref{fig:ecotype_diversity}); these increases are either sustained or temporary: digitigrade carnivores, plantigrade carnivores, scansorial carnivores, unguligrade herbivores, fossorial insectivores, and plantigrade omnivores.
 
 \begin{figure}[ht]
   \centering
@@ -231,5 +240,7 @@ Omnivores
   \caption[Estimated mammal ecotype log-diversity for the Cenozoic]{Posterior of standing log-diversity of North American mammals by ecotype for the Cenozoic as estimated from the birth-death model; 100 posterior draws are plotted to indicate the uncertainty in these estimates and what is technically plotted is log of diversity plus 1.}
   \label{fig:ecotype_diversity}
 \end{figure}
+
+
 
 \end{document}
