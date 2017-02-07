@@ -86,7 +86,7 @@ post.div <- diversity.distribution(sighta, ext2, nsim) #
 #
 source('../R/div_plot.r')  # update this to work as functions, not just source
 
-
+source('../R/prob_calc.r')  # important posterior probabilities and related
 
 
 ############
