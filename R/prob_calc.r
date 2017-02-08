@@ -1,3 +1,5 @@
+library(xtable)
+
 # need to calculate a bunch of posterior probabilites
 #   group-level effects
 #     P(eff of temp < 0)
@@ -18,15 +20,39 @@ for(ii in seq(nrow(ecotrans))) {
                           sum(x > 0) / length(x))
 }
 out.occur <- Reduce(rbind, out.occur)
-
 out.origin <- Reduce(rbind, out.origin)
 out.surv <- Reduce(rbind, out.surv)
+
+# make fancy tables
+ecotrans[, 1] <- mapvalues(ecotrans[, 1], 
+                           unique(ecotrans[, 1]),
+                           c('carnivore', 'herbivore', 
+                             'insectivore', 'omnivore', 
+                             'augment'))
+rown <- apply(ecotrans, 1, function(x) Reduce(paste, rev(x)))
+
+rownames(out.occur) <- rownames(out.origin) <- rownames(out.surv) <- rown
+colnames(out.occur) <- colnames(out.origin) <- colnames(out.surv) <- 
+  c('P(gamma_{temp mean} > 0)', 'P(gamma_{temp range} > 0)')
+
+# make/print tables
+out.occur.tab <- xtable(out.occur, label = 'tab:occur_temp', digits = 3)
+print.xtable(x = out.occur.tab, file = '../doc/occur_temp_raw.tex')
+
+out.origin.tab <- xtable(out.origin, label = 'tab:origin_temp', digits = 3)
+print.xtable(x = out.origin.tab, file = '../doc/origin_temp_raw.tex')
+
+out.surv.tab <- xtable(out.surv, label = 'tab:surv_temp', digits = 3)
+print.xtable(x = out.surv.tab, file = '../doc/surv_temp_raw.tex')
+
 
 
 # calculate differences amoungst plant phases
 plant.oc <- plant.or <- plant.su <- list()
 for(ii in seq(nrow(ecotrans))) {
-  tt <- ext2$gamma[, c(5, 4, 1), ii]
+  tt <- ext1$gamma[, c(5, 4, 1), ii]
+  tt[, 2] <- tt[, 2] + tt[, 1]
+  tt[, 3] <- tt[, 3] + tt[, 1]
   plantp <- c()
   plantp[1] <- sum(tt[, 1] - tt[, 2] > 0) / nrow(tt)
   plantp[2] <- sum(tt[, 2] - tt[, 3] > 0) / nrow(tt)
@@ -34,6 +60,8 @@ for(ii in seq(nrow(ecotrans))) {
   plant.oc[[ii]] <- plantp
 
   tt <- ext2$o_gamma[, c(5, 4, 1), ii]
+  tt[, 2] <- tt[, 2] + tt[, 1]
+  tt[, 3] <- tt[, 3] + tt[, 1]
   plantp <- c()
   plantp[1] <- sum(tt[, 1] - tt[, 2] > 0) / nrow(tt)
   plantp[2] <- sum(tt[, 2] - tt[, 3] > 0) / nrow(tt)
@@ -41,6 +69,8 @@ for(ii in seq(nrow(ecotrans))) {
   plant.or[[ii]] <- plantp
 
   tt <- ext2$s_gamma[, c(5, 4, 1), ii]
+  tt[, 2] <- tt[, 2] + tt[, 1]
+  tt[, 3] <- tt[, 3] + tt[, 1]
   plantp <- c()
   plantp[1] <- sum(tt[, 1] - tt[, 2] > 0) / nrow(tt)
   plantp[2] <- sum(tt[, 2] - tt[, 3] > 0) / nrow(tt)
@@ -50,6 +80,20 @@ for(ii in seq(nrow(ecotrans))) {
 plant.oc <- Reduce(rbind, plant.oc)
 plant.or <- Reduce(rbind, plant.or)
 plant.su <- Reduce(rbind, plant.su)
+
+rownames(plant.oc) <- rownames(plant.or) <- rownames(plant.su) <- rown
+colnames(plant.oc) <- colnames(plant.or) <- colnames(plant.su) <- 
+  c('P(Phase 1 > Phase 2)', 'P(Phase 2 > Phase 3)', 'P(Phase 1 > Phase 3)')
+
+plant.oc.tab <- xtable(plant.oc, label = 'tab:occur_plant', digits = 3)
+print.xtable(x = plant.oc.tab, file = '../doc/occur_plant_raw.tex')
+
+plant.or.tab <- xtable(plant.or, label = 'tab:origin_plant', digits = 3)
+print.xtable(x = plant.oc.tab, file = '../doc/origin_plant_raw.tex')
+
+plant.su.tab <- xtable(plant.su, label = 'tab:surv_plant', digits = 3)
+print.xtable(x = plant.su.tab, file = '../doc/surv_plant_raw.tex')
+
 
 
 # diversity and diversification
@@ -61,6 +105,12 @@ pdiv <- c()
 for(ii in seq(ncol(div.calc))) {
   pdiv[ii] <- sum(div.calc[, ii] > avg.div) / nrow(div.calc)
 }
+
+div.peaks <- data.frame(time = rev(sort(unique(diversity$time))), prob = pdiv)
+names(div.peaks) <- c('Time (Mya)', 'P(N^{stand}_{t} > bar{N^{stand}})')
+div.peaks.tab <- xtable(div.peaks, label = 'tab:div_peak')
+print.xtable(x = div.peaks.tab, file = '../doc/div_peak_raw.tex')
+
 
 # diversification rate
 # count number of gains going to t to t+1
@@ -104,3 +154,8 @@ prate <- c()
 for(ii in seq(ncol(growth.rate))) {
   prate[ii] <- sum(growth.rate[, ii] > avg.grow) / nrow(growth.rate)
 }
+
+rat.peaks <- data.frame(time = rev(sort(unique(diversity$time))[-31]), prob = prate)
+names(rat.peaks) <- c('Time (Mya)', 'P(D^{rate}_{t} > bar{D^{rate}})')
+rat.peaks.tab <- xtable(rat.peaks, label = 'tab:rate_peak')
+print.xtable(x = rat.peaks.tab, file = '../doc/rate_peak_raw.tex')
