@@ -48,7 +48,13 @@ vis.post <- function(ext1,
 
 
   # effect of group-level on individual-level
-  gm <- melt(ext1$gamma)  # sim, pred, ecotype, value
+  tt <- ext1$gamma
+  for(ii in seq(19)) {
+    tt[, 4, ii] <- tt[, 1, ii] + tt[, 4, ii]
+    tt[, 5, ii] <- tt[, 1, ii] + tt[, 5, ii]
+  }
+  #gm <- melt(ext1$gamma)  # sim, pred, ecotype, value
+  gm <- melt(tt)  # sim, pred, ecotype, value
 
   # translate the ecotype code into words
   suppressWarnings(gm <- cbind(gm, ecotrans[gm$Var3, ]))
@@ -267,7 +273,13 @@ vis.bdpost <- function(ext2,
 
   # effect of group-level on individual-level
   # origination
-  gm <- melt(ext2$o_gamma)  # sim, pred, ecotype, value
+  tt <- ext2$o_gamma
+  for(ii in seq(19)) {
+    tt[, 4, ii] <- tt[, 1, ii] + tt[, 4, ii]
+    tt[, 5, ii] <- tt[, 1, ii] + tt[, 5, ii]
+  }
+  gm <- melt(tt)  # sim, pred, ecotype, value
+  
   # translate the ecotype code into words
   suppressWarnings(gm <- cbind(gm, ecotrans[gm$Var3, ]))
   names(gm) <- c('sim', 'predictor', 'ecotype', 'value', 'state_1', 'state_2')
@@ -293,7 +305,13 @@ vis.bdpost <- function(ext2,
 
 
   # survival
-  gm <- melt(ext2$s_gamma)  # sim, pred, ecotype, value
+  tt <- ext2$s_gamma
+  for(ii in seq(19)) {
+    tt[, 4, ii] <- tt[, 1, ii] + tt[, 4, ii]
+    tt[, 5, ii] <- tt[, 1, ii] + tt[, 5, ii]
+  }
+  #gm <- melt(ext2$s_gamma)  # sim, pred, ecotype, value
+  gm <- melt(tt)  # sim, pred, ecotype, value
   # translate the ecotype code into words
   suppressWarnings(gm <- cbind(gm, ecotrans[gm$Var3, ]))
   names(gm) <- c('sim', 'predictor', 'ecotype', 'value', 'state_1', 'state_2')

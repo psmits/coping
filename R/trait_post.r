@@ -88,6 +88,7 @@ source('../R/div_plot.r')  # update this to work as functions, not just source
 source('../R/prob_calc.r')  # important posterior probabilities and related
 
 
+
 ############
 ## full Bayes
 #post <- list.files('../data/mcmc_out', pattern = '[0-9]', full.names = TRUE)
