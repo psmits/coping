@@ -51,21 +51,21 @@ For most ecotypes, the estimates of origination probabilities are with less unce
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=\textwidth,height=0.5\textheight,keepaspectratio=true]{figure/ecotype_occurrence}
+  \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/ecotype_occurrence}
   \caption[Ecotype occurrence probability estimated from the pure-presence model]{Probability of a mammal ecotype occurring over time as estimated from the pure-presence model. Each panel depicts 100 random samples from the model's posterior. The columns are by locomotor category and rows by dietary category; their intersections are the observed and analyzed ecotypes. Panels with no lines are ecotypes not observed in the dataset.}
   \label{fig:eco_occur}
 \end{figure}
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=\textwidth,height=0.5\textheight,keepaspectratio=true]{figure/ecotype_origin_bd}
+  \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/ecotype_origin_bd}
   \caption[Ecotype origination probability estimated from the birth-death model]{Probability of a mammal ecotype origination probabliities at each time point as estimated from the birth-death model. Each panel depicts 100 random samples from the model's posterior. The columns are by locomotor category and rows by dietary category; their intersections are the observed and analyzed ecotypes. Panels with no lines are ecotypes not observed in the dataset.}
   \label{fig:eco_origin}
 \end{figure}
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=\textwidth,height=0.5\textheight,keepaspectratio=true]{figure/ecotype_survival_bd}
+  \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/ecotype_survival_bd}
   \caption[Ecotype survival probability estimated from the birth-death model]{Probability of a mammal ecotype survival probabilities at each time point as estimated from the birth-death model. Each panel depicts 100 random samples from the model's posterior. The columns are by locomotor category and rows by dietary category; their intersections are the observed and analyzed ecotypes. Panels with no lines are ecotypes not observed in the dataset.}
   \label{fig:eco_survival}
 \end{figure}
@@ -82,12 +82,12 @@ The average sampling probabilities for both the pure-presence model and birth-de
 
 \begin{figure}[ht]
   \begin{subfigure}[b]{0.45\textwidth}
-    \includegraphics[width=\textwidth,height=0.5\textheight,keepaspectratio=true]{figure/mass_on_samp}
+    \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/mass_on_samp}
     \caption{Pure-presence model}
     \label{fig:mass_preserve_pure_pres}
   \end{subfigure}
   \begin{subfigure}[b]{0.45\textwidth}
-    \includegraphics[width=\textwidth,height=0.5\textheight,keepaspectratio=true]{figure/mass_on_samp_bd}
+    \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/mass_on_samp_bd}
     \caption{Birth-death model}
     \label{fig:mass_preserve_bd}
   \end{subfigure}
@@ -100,14 +100,14 @@ The effect of species mass on probability of occurrence as estimated from the pu
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=\textwidth,height=0.5\textheight,keepaspectratio=true]{figure/mass_on_pres}
+  \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/mass_on_pres}
   \caption[Effect of mass on probability of species occurrence as estimated from the pure-presence model]{Mean estimate of the effect of species mass on the probability of a species occurrence for each of the three plant phases. The effect of mass is considered constant over time and that the only aspect of the model that changes with plant phase is the intercept of the relationship between mass and occurrence. The three plant phases are indicated by the color of the line. Mass has been log-transformed, centered, and rescaled; this means that a mass of 0 corresponds to the mean of log-mass of all observed species and that mass is in standard deviation units. Only the mean estimates of the effects of both mass and plant phase are plotted for clarity; these estimates are obviously made with uncertainty.}
   \label{fig:mass_occur}
 \end{figure}
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=\textwidth,height=0.5\textheight,keepaspectratio=true]{figure/mass_on_origin_bd}
+  \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/mass_on_origin_bd}
   \caption[Effect of mass on probability of species origination as estimated from the birth-death model]{Mean estimate of the effect of species mass on the probability of a species originating for each of the three plant phases. The effect of mass is considered constant over time and that the only aspect of the model that changes with plant phase is the intercept of the relationship between mass and origination. The three plant phases are indicated by the color of the line. Mass has been log-transformed, centered, and rescaled; this means that a mass of 0 corresponds to the mean of log-mass of all observed species and that mass is in standard deviation units. Only the mean estimates of the effects of both mass and plant phase are plotted for clarity; these estimates are obviously made with uncertainty.}
   \label{fig:mass_origin}
 \end{figure}
@@ -118,27 +118,27 @@ In contrast, the effect of species mass on probability of survival as estimated 
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=\textwidth,height=0.5\textheight,keepaspectratio=true]{figure/mass_on_surv_bd}
+  \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/mass_on_surv_bd}
   \caption[Effect of mass on probability of species survival as estimated from the birth-death model]{Mean estimate of the effect of species mass on the probability of a species survival for each of the three plant phases. The effect of mass is considered constant over time and that the only aspect of the model that changes with plant phase is the intercept of the relationship between mass and survival. The three plant phases are indicated by the color of the line. Mass has been log-transformed, centered, and rescaled; this means that a mass of 0 corresponds to the mean of log-mass of all observed species and that mass is in standard deviation units. Only the mean estimates of the effects of both mass and plant plant are plotted for clarity; these estimates are obviously made with uncertainty.}
   \label{fig:mass_survival}
 \end{figure}
 
 
-
-Similarities in parameters estimates between ecotypes may be due to similar response to environmental factors (Fig. \ref{fig:group_pure_presence}, \ref{fig:group_origin_bd}, and \ref{fig:group_surv_bd}). As with previous comparisons between posterior estimates from the pure-presence and birth-death models, the effects of the group-level covariates in the pure-presence model (Fig. \ref{fig:group_pure_presence})  are more similar to those estimates of the group-level effects on origination (Fig. \ref{fig:group_origin_bd}) as opposed to survival (Fig. \ref{fig:group_surv_bd}). 
-
-As demonstrated in the comparisons of the effect of mass on occurrence from the pure-presence model (Fig. \ref{fig:mass_occur}) with the effect of mass on origination and survival from the birth-death model (Fig. \ref{fig:mass_origin}, and \ref{fig:mass_survival}), there is considerable variation in the effect of plant phases on ecotype-specific estimates.
-%occurrence
-%  Plant phase
+Similarities in parameters estimates between ecotypes may be due to similar response to environmental factors (Fig. \ref{fig:group_pure_presence}, \ref{fig:group_origin_bd}, and \ref{fig:group_surv_bd}). As with previous comparisons between posterior estimates from the pure-presence and birth-death models, the effects of the group-level covariates in the pure-presence model (Fig. \ref{fig:group_pure_presence})  are more similar to those estimates of the group-level effects on origination (Fig. \ref{fig:group_origin_bd}) as opposed to survival (Fig. \ref{fig:group_surv_bd}). As demonstrated in the comparisons of the effect of mass on occurrence from the pure-presence model (Fig. \ref{fig:mass_occur}) with the effect of mass on origination and survival from the birth-death model (Fig. \ref{fig:mass_origin}, and \ref{fig:mass_survival}), there is considerable variation in the effect of plant phases on ecotype-specific estimates.
 
 
-Plant phase is estimated to structure ecotype occurrence probability, specifically at least one phase has a very different estimates from the others, for non-arboreal carnivores, arboreal and unguligrade herbivores, arboreal and fossorial insectivores, and arboreal and unguligrade omnivores (Fig. \ref{fig:group_pure_presence}). For the other ecotypes, plant phase does not correspond to major differences in diversity over time. 
+
+Which ecotypes have major differences in occurrence probabilities by plant phase? When are there increases vs decreases? Are their similarities along ecotype axes? 
+
+Which ecotypes are associated with a strong effect of either of the temperature covariates? Are these relationships positive (inc temp, inc occ) or negative (dec temp, inc occ)? Are their similarities along ecotype axes?
+
+%Plant phase is estimated to structure ecotype occurrence probability, specifically at least one phase has a very different estimates from the others, for non-arboreal carnivores, arboreal and unguligrade herbivores, arboreal and fossorial insectivores, and arboreal and unguligrade omnivores (Fig. \ref{fig:group_pure_presence}). For the other ecotypes, plant phase does not correspond to major differences in diversity over time. 
 %  Temperature
-The temperature covariates do not appear to strongly structure occurrence history for most ecotypes (Fig. \ref{fig:group_pure_presence}). Ecotypes for which at least one temperature covariate is estimated to have strong effect on occurrence are digitigrade canivores (mean only), scansorial carnivores (mean only), and non-arboreal herbivores. For the other ecotypes neither of the global temperature covariates are expected to have strong effects on occurrence history.
+%The temperature covariates do not appear to strongly structure occurrence history for most ecotypes (Fig. \ref{fig:group_pure_presence}). Ecotypes for which at least one temperature covariate is estimated to have strong effect on occurrence are digitigrade canivores (mean only), scansorial carnivores (mean only), and non-arboreal herbivores. For the other ecotypes neither of the global temperature covariates are expected to have strong effects on occurrence history.
 
   \begin{figure}[ht]
   \centering
-  \includegraphics[width=\textwidth,height=0.5\textheight,keepaspectratio=true]{figure/group_on_ecotype}
+  \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/group_on_ecotype}
   \caption[Effects of group-level covariates on log-odds of ecotype occurrence as estimated from the the pure-presence model]{Estimated effects of the group-level covariates describing environmental context on log-odds of species occurrence. These estimates are from the pure-presence model.} 
   \label{fig:group_pure_presence}
 \end{figure}
@@ -207,14 +207,18 @@ The temperature covariates do not appear to strongly structure occurrence histor
 
 
 %origination
+Which ecotypes have major differences in origination probabilities by plant phase? When are there increases vs decreases? Are their similarities along ecotype axes? 
+
+Which ecotypes are associated with a strong effect of either of the temperature covariates? Are these relationships positive (inc temp, inc orig) or negative (dec temp, inc orig)? Are their similarities along ecotype axes?
+
 %  Plant phase
-Plant phase is estimated to at least partially structure ecotype origination probability for non-arboreal carnivores, non-fossorial or plantigrade herbivores, arboreal and fossorial insectivores, and plantigrade and scansorial omnivores (Fig. \ref{fig:group_origin_bd}). 
+%Plant phase is estimated to at least partially structure ecotype origination probability for non-arboreal carnivores, non-fossorial or plantigrade herbivores, arboreal and fossorial insectivores, and plantigrade and scansorial omnivores (Fig. \ref{fig:group_origin_bd}). 
 %  Temperature
-In the case of the temperature covariates, at least one of them is estimated to have strong effects on origination history for the following ecotypes: digitigrade carnivores, and both digitigrade and unguligrade herbivores (Fig. \ref{fig:group_origin_bd}). Neither of the temperature covariates are estimate to have strong effects for the other ecotypes. Results like these, assuming their accuracy, are probably responsible for many of the arguments over the effects of climate on mammal diversity and diversification \citep{Alroy1996a,Alroy2000g,Figueirido2012,Janis1993c,Blois2009}; because different ecotypes have different responses, a myopic or limited view of mammal diversity can be misleading when attempting to generalize for the entire system.
+%In the case of the temperature covariates, at least one of them is estimated to have strong effects on origination history for the following ecotypes: digitigrade carnivores, and both digitigrade and unguligrade herbivores (Fig. \ref{fig:group_origin_bd}). Neither of the temperature covariates are estimate to have strong effects for the other ecotypes. Results like these, assuming their accuracy, are probably responsible for many of the arguments over the effects of climate on mammal diversity and diversification \citep{Alroy1996a,Alroy2000g,Figueirido2012,Janis1993c,Blois2009}; because different ecotypes have different responses, a myopic or limited view of mammal diversity can be misleading when attempting to generalize for the entire system.
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=\textwidth,height=0.5\textheight,keepaspectratio=true]{figure/group_on_origin_bd}
+  \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/group_on_origin_bd}
   \caption[Effects of group-level covariates on log-odds of ecotype origination as estimated from the the birth-death model]{Estimated effects of the group-level covariates describing environmental context on log-odds of species origination. These estimates are from the birth-death model.}
   \label{fig:group_origin_bd}
 \end{figure}
@@ -282,13 +286,17 @@ In the case of the temperature covariates, at least one of them is estimated to 
 
 
 %survival
+Which ecotypes have major differences in survival probabilities by plant phase? When are there increases vs decreases? Are their similarities along ecotype axes? 
+
+Which ecotypes are associated with a strong effect of either of the temperature covariates? Are these relationships positive (inc temp, inc surv) or negative (dec temp, inc surv)? Are their similarities along ecotype axes?
+
 %  Plant phase
 %  Temperature
-In contrast to both of the descriptions above of the group-level effects on origination (Fig. \ref{fig:group_pure_presence}, and \ref{fig:group_origin_bd}), group-level covariates are estimate to have almost no effect on survival for all ecotypes (Fig. \ref{fig:group_surv_bd}); this is the case for both the plant phases and temperature covariates.
+%In contrast to both of the descriptions above of the group-level effects on origination (Fig. \ref{fig:group_pure_presence}, and \ref{fig:group_origin_bd}), group-level covariates are estimate to have almost no effect on survival for all ecotypes (Fig. \ref{fig:group_surv_bd}); this is the case for both the plant phases and temperature covariates.
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=\textwidth,height=0.5\textheight,keepaspectratio=true]{figure/group_on_survival_bd}
+  \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/group_on_survival_bd}
   \caption[Effects of group-level covariates on log-odds of ecotype survival as estimated from the the birth-death model]{Estimated effects of the group-level covariates describing environmental context on log-odds of species survlval. These estimates are from the birth-death model.}
   \label{fig:group_surv_bd}
 \end{figure}
@@ -364,37 +372,34 @@ All of the following analyses of diversification and macroevolutionary rates has
 
 The general pattern of total estimated North American mammal diversity for the Cenozoic is ``stable'' in that mean standing diversity does not fluctuate wildly and rapidly over the Cenozoic (Fig. \ref{fig:diversity_est}). In broad strokes, the first 15 or so million years of the Cenozoic are characterized by a gradual decline in standing diversity until approximately 45-50 million years ago (early-middle Eocene). Following this decline, standing diversity is broadly constant from 45 to 18 Mya (early Miocene). After this, there is a rapid spike in diversity followed by a slight decline in diversity up to the Modern. This characterization of the estimated diversity history is knowingly broad strokes and diversity time series is not without variation and vagaries.
 
-When viewed through the lens of diversification rate, some of the structure behind the estimated diversity history begins to take shape (Fig. \ref{fig:diversity_rate}). For most of the Cenozoic, the diversification rate hovers around zero, punctuated by both positive and negative spikes. The largest spike in diversification rate is at 16 Mya, which is early Oligocene (Fig. \ref{fig:diversity_rate}). Other notable increases in diversification rate occur at 54, 44, 36, 26, and 20 Mya; other possible increases in diversification rate are less certain (e.g. 8 Mya). Notable decreases in diversification rate occur at 52, 48, 42, 32, 14, 10, and 6 Mya. 
+When viewed through the lens of diversification rate, some of the structure behind the estimated diversity history begins to take shape (Fig. \ref{fig:diversity_rate}). For most of the Cenozoic, the diversification rate hovers around zero, punctuated by both positive and negative spikes. The largest spike in diversification rate is at 16 Mya, which is early Oligocene (Fig. \ref{fig:diversity_rate}). Other notable increases in diversification rate occur at \uppercase{when?} Mya (Table \ref{tab:div_peak}); other possible increases in diversification rate are less certain (e.g. 8 Mya). Notable decreases in diversification rate occur at \uppercase{when?} (Table \ref{tab:div_peak}).
 
-The comparison between per capita origination and extinction rate estimates reveals how diversification rate is formed (Fig. \ref{fig:origin_rate}, \ref{fig:extinct_rate}). As expected given previous inspection of origination and survival probabilities, diversification rate seems most driven by changes in origination rate as opposed to extinction rate. 
-Extinction rate, on the other hand, demonstrates an almost saw-toothed pattern around a constant mean.
+
+The comparison between per capita origination and extinction rate estimates reveals how diversification rate is formed (Fig. \ref{fig:origin_rate}, \ref{fig:extinct_rate}). As expected given previous inspection of origination and survival probabilities, diversification rate seems most driven by changes in origination rate as opposed to extinction rate. Extinction rate, on the other hand, demonstrates an almost saw-toothed pattern around a constant mean.
 
 Now ask what origin or extinct are doing at the important time points indicated above.
 
-Increases in diversification rate at 54, 44, 36, 26, 20, 16
-
-Decreases in diversification rate at 52, 48, 42, 32, 14, 10, 6
 
 
 \begin{figure}[ht]
   \begin{subfigure}[b]{0.45\textwidth}
-    \includegraphics[width=\textwidth,height=0.5\textheight,keepaspectratio=true]{figure/log_diversity}
+    \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/log_diversity}
     \caption{Log diversity}
     \label{fig:diversity_est}
   \end{subfigure}
   \begin{subfigure}[b]{0.45\textwidth}
-    \includegraphics[width=\textwidth,height=0.5\textheight,keepaspectratio=true]{figure/div_rate}
+    \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/div_rate}
     \caption{Diversification rate}
     \label{fig:diversity_rate}
   \end{subfigure}
 
   \begin{subfigure}[b]{0.45\textwidth}
-    \includegraphics[width=\textwidth,height=0.5\textheight,keepaspectratio=true]{figure/orig_rate}
+    \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/orig_rate}
     \caption{Origination rate}
     \label{fig:origin_rate}
   \end{subfigure}
   \begin{subfigure}[b]{0.45\textwidth}
-    \includegraphics[width=\textwidth,height=0.5\textheight,keepaspectratio=true]{figure/death_rate}
+    \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/death_rate}
     \caption{Extinction rate}
     \label{fig:extinct_rate}
   \end{subfigure}
@@ -460,7 +465,7 @@ Many of the estimated ecotype specific diversity histories share a similar incre
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=\textwidth,height=0.5\textheight,keepaspectratio=true]{figure/ecotype_diversity}
+  \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/ecotype_diversity}
   \caption[Estimated mammal ecotype log-diversity for the Cenozoic]{Posterior of standing log-diversity of North American mammals by ecotype for the Cenozoic as estimated from the birth-death model; 100 posterior draws are plotted to indicate the uncertainty in these estimates and what is technically plotted is log of diversity plus 1.}
   \label{fig:ecotype_diversity}
 \end{figure}
