@@ -81,7 +81,20 @@ All fossil occurrences from 64 to 2 million years long (Mya) were binned into 31
 \subsection*{Environmental and temporal covariates}
 The environmental covariates used in this study are collectively referred to as group-level covariates because they predict the response of a ``group'' of individual-level observations (i.e. species occurrences of an ecotype). Additionally, these covariates are defined for temporal bins and not the species themselves; as such they predict the parts of each species occurrence history. The group-level covariates in this study are two global temperature estimates and the Cenozoic ``plant phases'' defined by Graham CITATION. Global temperature across most of the Cenozoic was calculated from Mg/Ca isotope record from deep sea carbonates \citep{Cramer2011}. Mg/Ca based temperature estimates are preferable to the frequently used \(\delta^{18}\)O temperature proxy \citep{Zachos2001,Zachos2008,Alroy2000g,Figueirido2012} because Mg/Ca estimates do not conflate temperature with ice sheet volume and depth/stratification changes. The former is particularly important to this analysis as the current polar ice-caps appeared and grew over the Cenozoic. These properties make Mg/Ca based temperature estimates preferable for macroevolutionary and macroecological studies \citep{Ezard2016a}. Two aspects of the Mg/Ca-based temperature curve were included in this analysis: mean and range. Both were calculated as the mean of all respective estimates for each 2 My temporal bins. Both mean and range were then rescaled by subtracting the mean and then dividing by twice the standard deviation. 
 
-The second set of environmental factors included in this study are the Cenozoic plant phases defined in Graham CITATION. Graham's plant phases are holistic descriptors of the taxonomic composition of 12 ecosystem types, which plants are present at a given time, and the relative modernity of those plant groups with younger phases representing increasingly modern taxa CITATION. Graham CITATION defines four intervals from the Cretaceous to the Pliocene, though only three of these intervals are included in this analysis. Graham's plant phases CITATION was included as a series of ``dummy variables'' encoding the three phases included in this analysis. This means that the first phase is synonymous with the intercept and subsequent phases are defined by their differences from the first phase.
+The second set of environmental factors included in this study are the Cenozoic plant phases defined in Graham CITATION. Graham's plant phases are holistic descriptors of the taxonomic composition of 12 ecosystem types, which plants are present at a given time, and the relative modernity of those plant groups with younger phases representing increasingly modern taxa CITATION. Graham CITATION defines four intervals from the Cretaceous to the Pliocene, though only three of these intervals are included in this analysis. Graham's plant phases CITATION was included as a series of ``dummy variables'' encoding the three phases included in this analysis. This means that the first phase is synonymous with the intercept and subsequent phases are defined by their differences from the first phase. The temporal boundries of these plant phases are defined in Table \ref{tab:plant_def}.
+
+\begin{table}
+  \centering
+  \caption[Plant phase defintions]{Definitions of the start and stop times of the three plant phases used this study as defined by Graham CITATION.}
+  \label{tab:plant_def}
+  \begin{tabular}{l c c c}
+    Plant phase & Phase number & Start & Stop \\
+    \hline
+    Paleocene-Eocene & 1 & 66 & 50 \\
+    Eocene-Miocene & 2 & 50 & 16 \\
+    Miocene-Pleistocene & 3 & 16 & 2 \\
+  \end{tabular}
+\end{table}
 
 
 \subsection*{Modelling species occurrence}
