@@ -22,7 +22,6 @@ The results of the anlyses described above take one of two forms: direct inspect
 %   which model has better fit
 %   what does that mean?
 
-Comparison of the posterior predictive results from the pure-presence and birth-death models reveals a striking difference in performance of either model to preidct the structure of the underlying data (Fig. \ref{fig:ppc}). The simulated datasets generated from the birth-death model are clearly able to better reproduce the observed average number of occurrence than the pure-birth model which greatly underestimates the ovserved average number of occurrences. This result means that inferences based on the birth-death model are more likely to be representative of the underlying data than inferences based on the pure-presence model. Further inspection of the posterior parameter estimates from both models gives further insight into the resons for this difference in posterior predictive results \citep{Gelman2013d}. 
 
 \begin{figure}[ht]
   \begin{subfigure}[b]{0.45\textwidth}
@@ -38,6 +37,8 @@ Comparison of the posterior predictive results from the pure-presence and birth-
   \caption[Posterior predictive check of average occurrence]{Comparison of the average observed number of occurrences per species (blue line) to the average number of occurrences from 100 posterior predictive datasets using the posterior estimates from the pure-presence and birth-death models.}
   \label{fig:ppc}
 \end{figure}
+
+Comparison of the posterior predictive results from the pure-presence and birth-death models reveals a striking difference in performance of either model to preidct the structure of the underlying data (Fig. \ref{fig:ppc}). The simulated datasets generated from the birth-death model are clearly able to better reproduce the observed average number of occurrence than the pure-birth model which greatly underestimates the ovserved average number of occurrences. This result means that inferences based on the birth-death model are more likely to be representative of the underlying data than inferences based on the pure-presence model. Further inspection of the posterior parameter estimates from both models gives further insight into the resons for this difference in posterior predictive results \citep{Gelman2013d}. 
 
 
 Occurrence probabilities estimated from the pure-presence model (Fig. \ref{fig:eco_occur}) are broadly similar to the estimates of origination probability from the birth-death model (Fig. \ref{fig:eco_origin}) but not the survival probability estimates (Fig. \ref{fig:eco_survival}). This result supports the idea that changes to the North American regional species pool is more likely due to changes in origination than extinction, a result that is returned to later in the discussion of per-capita diversification, origination, and extinction rates.
@@ -435,6 +436,13 @@ The comparison between per capita origination and extinction rate estimates reve
 
 Diversity partitioned by ecotype reveals a lot of the complexity behind the pattern of mammal diversity for the Cenozoic (Fig. \ref{fig:ecotype_diversity}). 
 
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/ecotype_diversity}
+  \caption[Estimated mammal ecotype log-diversity for the Cenozoic]{Posterior of standing log-diversity of North American mammals by ecotype for the Cenozoic as estimated from the birth-death model; 100 posterior draws are plotted to indicate the uncertainty in these estimates and what is technically plotted is log of diversity plus 1.}
+  \label{fig:ecotype_diversity}
+\end{figure}
+
 Arboreal ecotypes obtain peak diversity early in the Cenozoic and then decline for the rest of the time series, becoming increasingly rare or absent as diversity approaches the Modern (Fig. \ref{fig:ecotype_diversity}). Arboreal herbivores and omnivores obtain peak diversity at the beginning of the Cenozoic then go into decline while remaining a small part of the species pool, while arboreal carnivores and insectivores obtain peak diversity 52-50 Mya and then quickly decline and become extremely rare or entirely absent from the species pool.
 
 The diversity of both digitigrade and unguligrade herbivores increase over the Cenozoic (Fig. \ref{fig:ecotype_diversity}). In contrast, plantigrade herbivore diversity does not have a single, broad-strokes pattern; instead, diversity increases, decreases, and may have then increased till the Modern. Contrastingly, fossorial and scansorial herbivores demonstrate a much flatter history of diversity, with a slight increase in diversity that over time is more pronounced among fossorial taxa than scansorial taxa.
@@ -444,13 +452,6 @@ Digitigrade carnivores have a multi-modal diversity history, with peaks 54-52 an
 There are some broad similarities in diversity histories of insectivorous and omnivorous taxa. The diversity histories of arbreal, plantigrade, and scansorial insectivorous taxa all demonstrate a decreasing pattern with time, while fossorial insectivores have a flat diversity history with a peak approximately 10 Mya (Fig. \ref{fig:ecotype_diversity}). Arboreal and scansorial omnivores decrease in diversity from their initial peaks early in the Cenozoic, and plantigrade omnivores have a generally flat diversity history with a sudden peak in diversity late in the Cenozoic (Fig. \ref{fig:ecotype_diversity}). Unguligrade omnivores also demonstrate a possible decrease in diversity over the Cenozoic, but not as clearly as arboreal and scansorial omnivores.
 
 Many of the estimated ecotype specific diversity histories share a similar increases in diversity to one degree or another at the late Cenozoic 16-14 Mya (Fig. \ref{fig:ecotype_diversity}); these increases are either sustained or temporary: digitigrade carnivores, plantigrade carnivores, scansorial carnivores, unguligrade herbivores, fossorial insectivores, and plantigrade omnivores.
-
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/ecotype_diversity}
-  \caption[Estimated mammal ecotype log-diversity for the Cenozoic]{Posterior of standing log-diversity of North American mammals by ecotype for the Cenozoic as estimated from the birth-death model; 100 posterior draws are plotted to indicate the uncertainty in these estimates and what is technically plotted is log of diversity plus 1.}
-  \label{fig:ecotype_diversity}
-\end{figure}
 
 When ecotype diversity is decomposed into the number of origination events per time bin (Fig. \ref{fig:ecotype_birth}) and the number of extinction events per time bin (Fig. \ref{fig:ecotype_death}) the estimates are clearly similar; there are no obvious major cross-ecotype origination or extinction events, and there is no evidence of a sudden turnover as expected peaks in originations proceed peaks in peaks in the number of extinctions. Also, it is clear that the sustained increases in digitigrade and unguligrade herbivore diversity observed above (Fig. \ref{fig:ecotype_diversity}) is driven by an increase in the average number of originations as with a relatively constant number of extinctions over time (Fig. \ref{fig:ecotype_birth}, \ref{fig:ecotype_death}).
 
