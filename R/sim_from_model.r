@@ -124,7 +124,7 @@ post.pred <- function(ext1, ntax, ntime, sight.obs, nsim, samp, bd = FALSE) {
   ocplot <- ggplot(mos, aes(x = x)) + geom_histogram()
   ocplot <- ocplot + geom_vline(data = obs, mapping = aes(xintercept = x), 
                                 colour = 'blue', size = 1.5)
-  ocplot <- ocplot + labs(x = 'Mean obs per species',
+  ocplot <- ocplot + labs(x = 'Mean obs. per species',
                           y = 'Post. pred. simulations')
 
   if(bd) {
@@ -134,6 +134,6 @@ post.pred <- function(ext1, ntax, ntime, sight.obs, nsim, samp, bd = FALSE) {
   }
 
   ggsave(filename = plotname, plot = ocplot,
-         width = 4, height = 3)
+         width = 3, height = 2.5)
 
 }

@@ -27,7 +27,7 @@ theme_update(axis.text = element_text(size = 10),
              legend.text = element_text(size = 5),
              legend.title = element_text(size = 8),
              legend.key.size = unit(0.75, 'cm'),
-             strip.text = element_text(size = 9))
+             strip.text = element_text(size = 8))
 
 cbp.long <- c('#000000', '#004949', '#009292', '#FF7DB6', '#FFB6DB', 
               '#490092', '#006DDB', '#B66DFF', '#6DB6FF', '#B6DBFF', 

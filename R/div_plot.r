@@ -36,7 +36,7 @@ divgg <- divgg + geom_line(alpha = 0.1)
 divgg <- divgg + labs(x = 'Time (Mya)', 
                       y = expression(log~N^{textstyle('stand')}))
 ggsave(filename = '../doc/figure/log_diversity.png', plot = divgg,
-       width = 6, height = 4)
+       width = 6, height = 5)
 
 # count number of gains going to t to t+1
 #   ask how many 0 -> 1 in interval
@@ -46,7 +46,7 @@ for(jj in seq(nsim)) {
   for(kk in seq(M)) {
     for(ii in 2:(ncol(oo) + 1)) {
       oo[kk, ii - 1] <- post.div[[jj]][kk, ii - 1] == 0 & 
-        post.div[[jj]][kk, ii] == 1
+      post.div[[jj]][kk, ii] == 1
     }
   }
   gains[[jj]] <- oo
@@ -61,7 +61,7 @@ for(jj in seq(nsim)) {
   for(kk in seq(M)) {
     for(ii in 2:(ncol(oo) + 1)) {
       oo[kk, ii - 1] <- post.div[[jj]][kk, ii - 1] == 1 & 
-        post.div[[jj]][kk, ii] == 0
+      post.div[[jj]][kk, ii] == 0
     }
   }
   loss [[jj]] <- oo
@@ -92,22 +92,22 @@ avg.grow <- data.frame(rbind(c(avg.grow, time = min(growth.rate$time)),
 
 growgg <- ggplot(growth.rate, aes(x = time, y = growth, group = sim))
 growgg <- growgg + geom_line(data = avg.grow,
-                           mapping = aes(x = time, y = mid, group = NULL),
-                           colour = 'blue',
-                           alpha = 0.5)
+                             mapping = aes(x = time, y = mid, group = NULL),
+                             colour = 'blue',
+                             alpha = 0.5)
 growgg <- growgg + geom_ribbon(data = avg.grow,
-                             mapping = aes(x = time, 
-                                           ymin = low, 
-                                           y = NULL,
-                                           ymax = high, 
-                                           group = NULL),
-                             fill = 'blue',
-                             alpha = 0.25)
+                               mapping = aes(x = time, 
+                                             ymin = low, 
+                                             y = NULL,
+                                             ymax = high, 
+                                             group = NULL),
+                               fill = 'blue',
+                               alpha = 0.25)
 growgg <- growgg + geom_line(alpha = 0.1)
 growgg <- growgg + labs(x = 'Time (Mya)', 
                         y = 'diversification rate (species/species/time unit')
 ggsave(filename = '../doc/figure/div_rate.png', plot = growgg,
-       width = 6, height = 4)
+       width = 6, height = 5)
 
 
 # per capita growth rate (gains per 2 My, loss per 2 My)
@@ -128,7 +128,7 @@ avg.birth <- quantile(avg.birth, c(0.1, 0.5, 0.9))
 names(avg.birth) <- c('low', 'mid', 'high')
 
 avg.birth <- data.frame(rbind(c(avg.birth, time = min(birth.rate$time)),
-                             c(avg.birth, time = max(birth.rate$time))))
+                              c(avg.birth, time = max(birth.rate$time))))
 
 birthgg <- ggplot(birth.rate, aes(x = time, y = rate, group = sim))
 birthgg <- birthgg + geom_line(data = avg.birth,
@@ -147,7 +147,7 @@ birthgg <- birthgg + geom_line(alpha = 0.1)
 birthgg <- birthgg + labs(x = 'Time (Mya)',
                           y = 'origination rate (originations/species/time unit')
 ggsave(filename = '../doc/figure/orig_rate.png', plot = birthgg,
-       width = 6, height = 4)
+       width = 6, height = 5)
 
 
 
@@ -167,26 +167,26 @@ avg.death <- quantile(avg.death, c(0.1, 0.5, 0.9))
 names(avg.death) <- c('low', 'mid', 'high')
 
 avg.death <- data.frame(rbind(c(avg.death, time = min(death.rate$time)),
-                             c(avg.death, time = max(death.rate$time))))
+                              c(avg.death, time = max(death.rate$time))))
 
 deathgg <- ggplot(death.rate, aes(x = time, y = rate, group = sim))
 deathgg <- deathgg + geom_line(data = avg.death,
-                           mapping = aes(x = time, y = mid, group = NULL),
-                           colour = 'blue',
-                           alpha = 0.5)
+                               mapping = aes(x = time, y = mid, group = NULL),
+                               colour = 'blue',
+                               alpha = 0.5)
 deathgg <- deathgg + geom_ribbon(data = avg.death,
-                             mapping = aes(x = time, 
-                                           ymin = low, 
-                                           y = NULL,
-                                           ymax = high, 
-                                           group = NULL),
-                             fill = 'blue',
-                             alpha = 0.25)
+                                 mapping = aes(x = time, 
+                                               ymin = low, 
+                                               y = NULL,
+                                               ymax = high, 
+                                               group = NULL),
+                                 fill = 'blue',
+                                 alpha = 0.25)
 deathgg <- deathgg + geom_line(alpha = 0.1)
 deathgg <- deathgg + labs(x = 'Time (Mya)',
                           y = 'extinction rate (extinctions/species/time unit')
 ggsave(filename = '../doc/figure/death_rate.png', plot = deathgg,
-       width = 6, height = 4)
+       width = 6, height = 5)
 
 
 
@@ -223,6 +223,12 @@ div.eco <- Reduce(rbind, div.eco)
 div.eco <- cbind(div.eco, str_split(div.eco[, 1], '\\.', simplify = TRUE))
 names(div.eco) <- c('et', 'time', 'diversity', 'sim', 'eco_1', 'eco_2')
 
+div.eco$eco_1 <- as.character(div.eco$eco_1)
+div.eco$eco_1 <- mapvalues(div.eco$eco_1, 
+                           from = unique(div.eco$eco_1), 
+                           to = c('carnivore', 'herbivore', 'insectivore', 
+                                  'omnivore', 'augment'))
+
 div.eco <- div.eco[div.eco$eco_1 != 'augment', ]
 div.eco$diversity <- log(div.eco$diversity + 1)
 div.eco$time <- as.numeric(div.eco$time)
@@ -237,7 +243,7 @@ degg <- degg + facet_grid(eco_1 ~ eco_2)
 degg <- degg + labs(x = 'Time (Mya)', 
                     y = expression(log~N^{textstyle('stand')}))
 ggsave(filename = '../doc/figure/ecotype_diversity.png', plot = degg,
-       width = 6, height = 4)
+       width = 6, height = 5)
 
 # gains and losses by ecotype
 se <- dd <- list()
@@ -249,10 +255,10 @@ for(ss in seq(nsim)) {
     for(jj in seq(nrow(ge[[kk]]))) {
       for(ii in 2:T) {
         ge[[kk]][jj, ii - 1] <- div.byeco[[ss]][[kk]][jj, ii - 1] == 0 & 
-          div.byeco[[ss]][[kk]][jj, ii] == 1
-        
+        div.byeco[[ss]][[kk]][jj, ii] == 1
+
         le[[kk]][jj, ii - 1] <- div.byeco[[ss]][[kk]][jj, ii - 1] == 1 & 
-          div.byeco[[ss]][[kk]][jj, ii] == 0
+        div.byeco[[ss]][[kk]][jj, ii] == 0
       }
     }
   }
@@ -273,6 +279,12 @@ gbe <- cbind(gbe, str_split(gbe$eco, '\\.', simplify = TRUE))
 names(gbe) <- c('gains', 'time', 'sim', 'eco', 'eco_1', 'eco_2')
 gbe$gains <- log(gbe$gains + 1)
 
+gbe$eco_1 <- as.character(gbe$eco_1)
+gbe$eco_1 <- mapvalues(gbe$eco_1, 
+                       from = unique(gbe$eco_1), 
+                       to = c('carnivore', 'herbivore', 'insectivore', 
+                              'omnivore', 'augment'))
+
 gbe$time <- mapvalues(gbe$time, 
                       from = unique(gbe$time), 
                       to = rev(time.start.stop[-T, 2]))
@@ -285,7 +297,7 @@ gbegg <- gbegg + facet_grid(eco_1 ~ eco_2)
 gbegg <- gbegg + labs(x = 'Time (Mya)', 
                       y = expression(log~(O+1)))
 ggsave(filename = '../doc/figure/birth_eco.png', plot = gbegg, 
-       width = 6, height = 4)
+       width = 6, height = 5)
 
 
 # make a plot of log(loss + 1) over time
@@ -299,6 +311,12 @@ lbe <- cbind(lbe, str_split(lbe$eco, '\\.', simplify = TRUE))
 names(lbe) <- c('loss', 'time', 'sim', 'eco', 'eco_1', 'eco_2')
 lbe$loss <- log(lbe$loss + 1)
 
+lbe$eco_1 <- as.character(lbe$eco_1)
+lbe$eco_1 <- mapvalues(lbe$eco_1, 
+                       from = unique(lbe$eco_1), 
+                       to = c('carnivore', 'herbivore', 'insectivore', 
+                              'omnivore', 'augment'))
+
 lbe$time <- mapvalues(lbe$time, 
                       from = unique(lbe$time), 
                       to = rev(time.start.stop[-T, 2]))
@@ -311,4 +329,4 @@ lbegg <- lbegg + facet_grid(eco_1 ~ eco_2)
 lbegg <- lbegg + labs(x = 'Time (Mya)', 
                       y = expression(log~(E+1)))
 ggsave(filename = '../doc/figure/death_eco.png', plot = lbegg, 
-       width = 6, height = 4)
+       width = 6, height = 5)
