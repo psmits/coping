@@ -226,7 +226,7 @@ names(div.eco) <- c('et', 'time', 'diversity', 'sim', 'eco_1', 'eco_2')
 div.eco$eco_1 <- as.character(div.eco$eco_1)
 div.eco$eco_1 <- mapvalues(div.eco$eco_1, 
                            from = unique(div.eco$eco_1), 
-                           to = c('carnivore', 'herbivore', 'insectivore', 
+                           to = c('insectivore', 'carnivore', 'herbivore', 
                                   'omnivore', 'augment'))
 
 div.eco <- div.eco[div.eco$eco_1 != 'augment', ]
@@ -282,7 +282,7 @@ gbe$gains <- log(gbe$gains + 1)
 gbe$eco_1 <- as.character(gbe$eco_1)
 gbe$eco_1 <- mapvalues(gbe$eco_1, 
                        from = unique(gbe$eco_1), 
-                       to = c('carnivore', 'herbivore', 'insectivore', 
+                       to = c('insectivore', 'carnivore', 'herbivore', 
                               'omnivore', 'augment'))
 
 gbe$time <- mapvalues(gbe$time, 
@@ -314,7 +314,7 @@ lbe$loss <- log(lbe$loss + 1)
 lbe$eco_1 <- as.character(lbe$eco_1)
 lbe$eco_1 <- mapvalues(lbe$eco_1, 
                        from = unique(lbe$eco_1), 
-                       to = c('carnivore', 'herbivore', 'insectivore', 
+                       to = c('insectivore', 'carnivore', 'herbivore', 
                               'omnivore', 'augment'))
 
 lbe$time <- mapvalues(lbe$time, 
