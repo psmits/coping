@@ -35,6 +35,7 @@ divgg <- divgg + geom_ribbon(data = avg.div,
 divgg <- divgg + geom_line(alpha = 0.1)
 divgg <- divgg + labs(x = 'Time (Mya)', 
                       y = expression(log~N^{textstyle('stand')}))
+divgg <- divgg + scale_x_reverse()
 ggsave(filename = '../doc/figure/log_diversity.png', plot = divgg,
        width = 6, height = 5)
 
@@ -106,6 +107,7 @@ growgg <- growgg + geom_ribbon(data = avg.grow,
 growgg <- growgg + geom_line(alpha = 0.1)
 growgg <- growgg + labs(x = 'Time (Mya)', 
                         y = 'diversification rate (species/species/time unit')
+growgg <- growgg + scale_x_reverse()
 ggsave(filename = '../doc/figure/div_rate.png', plot = growgg,
        width = 6, height = 5)
 
@@ -146,6 +148,7 @@ birthgg <- birthgg + geom_ribbon(data = avg.birth,
 birthgg <- birthgg + geom_line(alpha = 0.1)
 birthgg <- birthgg + labs(x = 'Time (Mya)',
                           y = 'origination rate (originations/species/time unit')
+birthgg <- birthgg + scale_x_reverse()
 ggsave(filename = '../doc/figure/orig_rate.png', plot = birthgg,
        width = 6, height = 5)
 
@@ -185,6 +188,7 @@ deathgg <- deathgg + geom_ribbon(data = avg.death,
 deathgg <- deathgg + geom_line(alpha = 0.1)
 deathgg <- deathgg + labs(x = 'Time (Mya)',
                           y = 'extinction rate (extinctions/species/time unit')
+deathgg <- deathgg + scale_x_reverse()
 ggsave(filename = '../doc/figure/death_rate.png', plot = deathgg,
        width = 6, height = 5)
 
@@ -242,6 +246,7 @@ degg <- degg + geom_line(alpha = 0.1)
 degg <- degg + facet_grid(eco_1 ~ eco_2)
 degg <- degg + labs(x = 'Time (Mya)', 
                     y = expression(log~N^{textstyle('stand')}))
+degg <- degg + scale_x_reverse()
 ggsave(filename = '../doc/figure/ecotype_diversity.png', plot = degg,
        width = 6, height = 5)
 
@@ -296,6 +301,7 @@ gbegg <- gbegg + geom_line(alpha = 0.1)
 gbegg <- gbegg + facet_grid(eco_1 ~ eco_2)
 gbegg <- gbegg + labs(x = 'Time (Mya)', 
                       y = expression(log~(O+1)))
+gbegg <- gbegg + scale_x_reverse()
 ggsave(filename = '../doc/figure/birth_eco.png', plot = gbegg, 
        width = 6, height = 5)
 
@@ -328,5 +334,6 @@ lbegg <- lbegg + geom_line(alpha = 0.1)
 lbegg <- lbegg + facet_grid(eco_1 ~ eco_2)
 lbegg <- lbegg + labs(x = 'Time (Mya)', 
                       y = expression(log~(E+1)))
+lbegg <- lbegg + scale_x_reverse()
 ggsave(filename = '../doc/figure/death_eco.png', plot = lbegg, 
        width = 6, height = 5)

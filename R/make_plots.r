@@ -43,6 +43,7 @@ vis.post <- function(ext1,
   amplot <- amplot + facet_grid(state_1 ~ state_2)
   amplot <- amplot + labs(x = 'Time (Mya)', 
                           y = 'Probability of occurrence')
+  amplot <- amplot + scale_x_reverse()
   ggsave(filename = '../doc/figure/ecotype_occurrence_aug.png', plot = amplot,
          width = 6, height = 5)
   
@@ -125,6 +126,7 @@ vis.post <- function(ext1,
     pmplot <- ggplot(pm, aes(x = Var2, y = prob, group = iterations))
   }
   pmplot <- pmplot + geom_line(alpha = 0.01)
+  pmplot <- pmplot + scale_x_reverse()
   pmplot <- pmplot + labs(x = 'Time (Mya)', 
                           y = 'Difference from mean log-odds observation')
   ggsave(filename = '../doc/figure/prob_preservation.png', plot = pmplot,
@@ -148,6 +150,8 @@ vis.post <- function(ext1,
   mass_on_samp <- mass_on_samp + geom_rug(data = mass.df, mapping = aes(x = x))
   mass_on_samp <- mass_on_samp + labs(x = 'Rescaled log mass (g)', 
                                       y = 'Probability of sampling')
+  mass_on_samp <- mass_on_samp + theme(axis.title = element_text(size = 8),
+                                       axis.text = element_text(size = 6))
   ggsave(filename = '../doc/figure/mass_on_samp.png', plot = mass_on_samp,
          width = 3, height = 2)
   # figure out on to plot on un-rescaled axis
@@ -203,6 +207,11 @@ vis.post <- function(ext1,
   mass_on_pres <- mass_on_pres + facet_grid(state_1 ~ state_2)
   mass_on_pres <- mass_on_pres + labs(x = 'Rescaled log mass (g)',
                                       y = 'Probability of occurrence')
+  mass_on_pres <- mass_on_pres + theme(axis.title = element_text(size = 10),
+                                       axis.text = element_text(size = 8))
+  mass_on_pres <- mass_on_pres + 
+    scale_x_continuous(breaks = round(seq(min(out$mass), max(out$mass), 
+                                          by = 0.5), 1))
   ggsave(filename = '../doc/figure/mass_on_pres_aug.png', plot = mass_on_pres,
          width = 6, height = 5)
 
@@ -262,6 +271,7 @@ vis.bdpost <- function(ext2,
   amplot <- amplot + facet_grid(state_1 ~ state_2)
   amplot <- amplot + labs(x = 'Time (Mya)', 
                           y = 'Probability of originating')
+  amplot <- amplot + scale_x_reverse()
   ggsave(filename = '../doc/figure/ecotype_origin_bd_aug.png', plot = amplot,
          width = 6, height = 5)
 
@@ -290,6 +300,7 @@ vis.bdpost <- function(ext2,
   amplot <- ggplot(am, aes(x = time, y = value, group = sim))
   amplot <- amplot + geom_line(alpha = 0.01)
   amplot <- amplot + facet_grid(state_1 ~ state_2)
+  amplot <- amplot + scale_x_reverse()
   amplot <- amplot + labs(x = 'Time (Mya)', 
                           y = 'Probability of surviving')
   ggsave(filename = '../doc/figure/ecotype_survival_bd_aug.png', plot = amplot,
@@ -431,6 +442,7 @@ vis.bdpost <- function(ext2,
     pmplot <- ggplot(pm, aes(x = Var2, y = prob, group = iterations))
   }
   pmplot <- pmplot + geom_line(alpha = 0.01)
+  pmplot <- pmplot + scale_x_reverse()
   pmplot <- pmplot + labs(x = 'Time (Mya)', 
                           y = 'Difference from mean log-odds observation')
   ggsave(filename = '../doc/figure/prob_preservation_bd.png', plot = pmplot,
@@ -454,6 +466,8 @@ vis.bdpost <- function(ext2,
   mass_on_samp <- mass_on_samp + geom_rug(data = mass.df, mapping = aes(x = x))
   mass_on_samp <- mass_on_samp + labs(x = 'Rescaled log mass (g)', 
                                       y = 'Probability of sampling')
+  mass_on_samp <- mass_on_samp + theme(axis.title = element_text(size = 8),
+                                       axis.text = element_text(size = 6))
   ggsave(filename = '../doc/figure/mass_on_samp_bd.png', plot = mass_on_samp,
          width = 3, height = 2)
   # figure out on to plot on un-rescaled axis
@@ -533,6 +547,11 @@ vis.bdpost <- function(ext2,
   mass_on_pres <- mass_on_pres + facet_grid(state_1 ~ state_2)
   mass_on_pres <- mass_on_pres + labs(x = 'Rescaled log mass (g)',
                                       y = 'Probability of originating')
+  mass_on_pres <- mass_on_pres + theme(axis.title = element_text(size = 10),
+                                       axis.text = element_text(size = 8))
+  mass_on_pres <- mass_on_pres + 
+    scale_x_continuous(breaks = round(seq(min(out$mass), max(out$mass), 
+                                          by = 0.5), 1))
   ggsave(filename = '../doc/figure/mass_on_origin_bd_aug.png', plot = mass_on_pres,
          width = 6, height = 5)
 
@@ -573,6 +592,11 @@ vis.bdpost <- function(ext2,
   mass_on_pres <- mass_on_pres + facet_grid(state_1 ~ state_2)
   mass_on_pres <- mass_on_pres + labs(x = 'Rescaled log mass (g)',
                                       y = 'Probability of survival')
+  mass_on_pres <- mass_on_pres + theme(axis.title = element_text(size = 10),
+                                       axis.text = element_text(size = 8))
+  mass_on_pres <- mass_on_pres + 
+    scale_x_continuous(breaks = round(seq(min(out$mass), max(out$mass), 
+                                          by = 0.5), 1))
   ggsave(filename = '../doc/figure/mass_on_surv_bd_aug.png', plot = mass_on_pres,
          width = 6, height = 5)
 

@@ -164,11 +164,11 @@ state <- mapvalues(state,
 
 
 # create the augmented dataset
-div <- 4
-sighta <- rbind(sight, matrix(0, nrow = N/div, ncol = T))
+div <- N
+sighta <- rbind(sight, matrix(0, nrow = N/div + 1, ncol = T))
 M <- nrow(sighta)
-I <- c(rep(1, N), rep(0, N/div))
-statea <- c(state, rep(max(state) + 1, N/div))
+I <- c(rep(1, N), rep(0, N/div + 1))
+statea <- c(state, rep(max(state) + 1, N/div + 1))
 D <- max(statea)
 stan_rdump(list = c('N', 'T', 'D', 'U', 'M', 'I', 
                     'sighta', 'statea', 'u', 'ufull', 'mass'),

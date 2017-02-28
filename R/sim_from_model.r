@@ -126,6 +126,8 @@ post.pred <- function(ext1, ntax, ntime, sight.obs, nsim, samp, bd = FALSE) {
                                 colour = 'blue', size = 1.5)
   ocplot <- ocplot + labs(x = 'Mean obs. per species',
                           y = 'Post. pred. simulations')
+  ocplot <- ocplot + theme(axis.title = element_text(size = 8),
+                           axis.text = element_text(size = 6))
 
   if(bd) {
     plotname <- paste0('../doc/figure/pred_occ_bd.png') 
