@@ -14,7 +14,7 @@
 
 \section*{Results}
 
-The results of the anlyses described above take one of two forms: direct inspection of parameter posterior estimates from both models, and downstream estimates of diversity and diversification rates based on posterior predictive simulations from the birth-death model; the reason for which is explained below in the comparison of the models' posterior predictive check results.
+The results of the analyses described above take one of two forms: direct inspection of parameter posterior estimates from both models, and downstream estimates of diversity and diversification rates based on posterior predictive simulations from the birth-death model; the reason for which is explained below in the comparison of the models' posterior predictive check results.
 
 \subsection*{Comparing parameter estimates from the pure-presence and birth-death models}
 
@@ -38,14 +38,14 @@ The results of the anlyses described above take one of two forms: direct inspect
   \label{fig:ppc}
 \end{figure}
 
-Comparison of the posterior predictive results from the pure-presence and birth-death models reveals a striking difference in performance of either model to preidct the structure of the underlying data (Fig. \ref{fig:ppc}). The simulated datasets generated from the birth-death model are clearly able to better reproduce the observed average number of occurrence than the pure-birth model which greatly underestimates the ovserved average number of occurrences. This result means that inferences based on the birth-death model are more likely to be representative of the underlying data than inferences based on the pure-presence model. Further inspection of the posterior parameter estimates from both models gives further insight into the resons for this difference in posterior predictive results \citep{Gelman2013d}. 
+Comparison of the posterior predictive results from the pure-presence and birth-death models reveals a striking difference in performance of either model to predict the structure of the underlying data (Fig. \ref{fig:ppc}). The simulated datasets generated from the birth-death model are clearly able to better reproduce the observed average number of occurrence than the pure-birth model which greatly underestimates the observed average number of occurrences. This result means that inferences based on the birth-death model are more likely to be representative of the underlying data than inferences based on the pure-presence model. Further inspection of the posterior parameter estimates from both models gives further insight into the resins for this difference in posterior predictive results \citep{Gelman2013d}. 
 
 
 Occurrence probabilities estimated from the pure-presence model (Fig. \ref{fig:eco_occur}) are broadly similar to the estimates of origination probability from the birth-death model (Fig. \ref{fig:eco_origin}) but not the survival probability estimates (Fig. \ref{fig:eco_survival}). This result supports the idea that changes to the North American regional species pool is more likely due to changes in origination than extinction, a result that is returned to later in the discussion of per-capita diversification, origination, and extinction rates.
 
 For most ecotypes, both estimated occurrence probabilities from the pure-presence model (Fig. \ref{fig:eco_occur}) and origination probabilities estimated from the birth-death model (Fig. \ref{fig:eco_origin}) increase with time. This makes sense given that, over time, all species that have at least one observed occurrence must have had that occurrence by the last time point, so our certainty in a species occurring must increase with time. Importantly, there are potential issues surrounding the partial identifiability of the observation parameters \(p\) which may contribute to edge effects in estimates of occurrence, origination, and extinction \citep{Royle2008}. Notably, ecotypes with arboreal components do not appear to follow a similar pattern; instead, occurrence and origination probabilities appear relatively flat for most of the Cenozoic; this is most likely caused by those species of those ecotypes no longer originating or originating very rarely.
 
-The dramatic differences in the estimates origination and survival probabilities are indicative of how differently these processes affect the diversification process and may also be responsible for the better posterior predictive perfomance of the birth-death model over the pure-presence model (Fig. \ref{fig:ppc_pure_presence}, and \ref{fig:ppc_birth_death}). While the estimates at all points along both time series have high variance, what is striking is how mean origination probability changes over time while most ecotype survival probabilities have relatively stable means for the entire Cenozoic (Fig. \ref{fig:eco_origin}, and \ref{fig:eco_survival}).
+The dramatic differences in the estimates origination and survival probabilities are indicative of how differently these processes affect the diversification process and may also be responsible for the better posterior predictive performance of the birth-death model over the pure-presence model (Fig. \ref{fig:ppc_pure_presence}, and \ref{fig:ppc_birth_death}). While the estimates at all points along both time series have high variance, what is striking is how mean origination probability changes over time while most ecotype survival probabilities have relatively stable means for the entire Cenozoic (Fig. \ref{fig:eco_origin}, and \ref{fig:eco_survival}).
 
 For most ecotypes, the estimates of origination probabilities are with less uncertainty than similar estimates of survival probabilities (Fig. \ref{fig:eco_origin}, and \ref{fig:eco_survival}). In logistic regression, high uncertainty in the estimates of the underlying log-odds of occurrence, origination, or survival tends to be indicative of extreme rarity or complete absence of the specific ecotype; the latter is called complete separation which occurs when there is no uncertainty in the effect of a covariate on presence/absence, the effect of which has been mitigated by the hierarchical modeling strategy used here \citep{Gelman2013d,Gelman2007,McElreath2016}.
 
@@ -130,21 +130,21 @@ Similarities in parameters estimates between ecotypes may be due to similar resp
 \begin{figure}[ht]
   \centering
   \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/group_on_ecotype}
-  \caption[Effects of group-level covariates on log-odds of ecotype occurrence as estimated from the the pure-presence model]{Estimated effects of the group-level covariates describing environmental context on log-odds of species occurrence. These estimates are from the pure-presence model. The effect of plant phase graphed here is calculated as Phase 1\( = \gamma_{phase\ 1}\), Phase 2\( = \gamma_{phase\ 1} + \gamma_{phase\ 2}\), and so on.} 
+  \caption[Effects of group-level covariates on log-odds of ecotype occurrence as estimated from the pure-presence model]{Estimated effects of the group-level covariates describing environmental context on log-odds of species occurrence. These estimates are from the pure-presence model. The effect of plant phase graphed here is calculated as Phase 1\( = \gamma_{phase\ 1}\), Phase 2\( = \gamma_{phase\ 1} + \gamma_{phase\ 2}\), and so on.} 
   \label{fig:group_pure_presence}
 \end{figure}
 
 \begin{figure}[ht]
   \centering
   \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/group_on_origin_bd}
-  \caption[Effects of group-level covariates on log-odds of ecotype origination as estimated from the the birth-death model]{Estimated effects of the group-level covariates describing environmental context on log-odds of species origination. These estimates are from the birth-death model. The effect of plant phase graphed here is calculated as Phase 1\( = \gamma_{phase\ 1}\), Phase 2\( = \gamma_{phase\ 1} + \gamma_{phase\ 2}\), and so on.} 
+  \caption[Effects of group-level covariates on log-odds of ecotype origination as estimated from the birth-death model]{Estimated effects of the group-level covariates describing environmental context on log-odds of species origination. These estimates are from the birth-death model. The effect of plant phase graphed here is calculated as Phase 1\( = \gamma_{phase\ 1}\), Phase 2\( = \gamma_{phase\ 1} + \gamma_{phase\ 2}\), and so on.} 
   \label{fig:group_origin_bd}
 \end{figure}
 
 \begin{figure}[ht]
   \centering
   \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/group_on_survival_bd}
-  \caption[Effects of group-level covariates on log-odds of ecotype survival as estimated from the the birth-death model]{Estimated effects of the group-level covariates describing environmental context on log-odds of species survlval. These estimates are from the birth-death model. The effect of plant phase graphed here is calculated as Phase 1\( = \gamma_{phase\ 1}\), Phase 2\( = \gamma_{phase\ 1} + \gamma_{phase\ 2}\), and so on.} 
+  \caption[Effects of group-level covariates on log-odds of ecotype survival as estimated from the birth-death model]{Estimated effects of the group-level covariates describing environmental context on log-odds of species survlval. These estimates are from the birth-death model. The effect of plant phase graphed here is calculated as Phase 1\( = \gamma_{phase\ 1}\), Phase 2\( = \gamma_{phase\ 1} + \gamma_{phase\ 2}\), and so on.} 
   \label{fig:group_surv_bd}
 \end{figure}
 
@@ -157,7 +157,7 @@ Plant phases are associated with large differences in log-odds for occurrence an
 
 The almost universal pattern of the effect of plant phase on ecotype occurrence or origination is that the during first and last plant phases ecotypes have a greater log-odds of occurrence or origination than the second plant phase (Fig. \ref{fig:eco_occur}, \ref{fig:eco_origin}). The three ecotypes that do not follow this pattern are fossorial herbivores, scansorial herbivores, and arboreal insectivores.
 
-The difference between the third plant phase and the other two plant phases, for all ecotypes except arboreal carnivores, is obvious upon inspection the occurrence and origination time series as there is large up-tick in probability of occurring or originating towards the modern (Fig. \ref{fig:eco_occur}, \ref{fig:eco_origin}). The differences in mean probability of occurring or originating attributable to the plant phases are observable as shifts along the time series correponding to the phase barriers (Table \ref{tab:plant_def}). For example, scansorial herbivore occurrence and origination probabilities demonstrate clear shifts at 50 Mya and 16 Mya (Fig. \ref{fig:eco_occur}, \ref{fig:eco_origin}).
+The difference between the third plant phase and the other two plant phases, for all ecotypes except arboreal carnivores, is obvious upon inspection the occurrence and origination time series as there is large up-tick in probability of occurring or originating towards the modern (Fig. \ref{fig:eco_occur}, \ref{fig:eco_origin}). The differences in mean probability of occurring or originating attributable to the plant phases are observable as shifts along the time series corresponding to the phase barriers (Table \ref{tab:plant_def}). For example, scansorial herbivore occurrence and origination probabilities demonstrate clear shifts at 50 Mya and 16 Mya (Fig. \ref{fig:eco_occur}, \ref{fig:eco_origin}).
 
 \begin{table}[ht]
   \centering
@@ -256,7 +256,7 @@ Both aspects of global temperature analyzed here are estimated to have strong ef
 
 \begin{table}[ht]
   \centering
-  \caption[Posterior probablity of effects of temperature on occurrence]{Posterior probability the the effects of the two temperature covariates on the the log-odds of an ecotype occurring are greater than 0. What is estimated is the probability that these estimates are greater than 0; high or low probabilities indicate the ``strength'' of the covariate in that direction (positive and negative, respectively). These estimates are from the pure-presence model.}
+  \caption[Posterior probablity of effects of temperature on occurrence]{Posterior probability the effects of the two temperature covariates on the log-odds of an ecotype occurring are greater than 0. What is estimated is the probability that these estimates are greater than 0; high or low probabilities indicate the ``strength'' of the covariate in that direction (positive and negative, respectively). These estimates are from the pure-presence model.}
   \label{tab:occur_temp}
   \begin{tabular}{ l r r }
     \hline
@@ -288,7 +288,7 @@ Both aspects of global temperature analyzed here are estimated to have strong ef
 
 \begin{table}[ht]
   \centering
-  \caption[Posterior probablity of effects of temperature on origination]{Posterior probability that the effects of the two temperature covariates on the the log-odds of an ecotype origination are greater than 0. What is estimated is the probability that these estimates are greater than 0; high or low probabilities indicate the ``strength'' of the covariate in that direction (positive and negative, respectively). These estimates are from the birth-death model.}
+  \caption[Posterior probablity of effects of temperature on origination]{Posterior probability that the effects of the two temperature covariates on the log-odds of an ecotype origination are greater than 0. What is estimated is the probability that these estimates are greater than 0; high or low probabilities indicate the ``strength'' of the covariate in that direction (positive and negative, respectively). These estimates are from the birth-death model.}
   \label{tab:origin_temp}
   \begin{tabular}{ l r r }
     \hline
@@ -318,7 +318,7 @@ Both aspects of global temperature analyzed here are estimated to have strong ef
 
 \begin{table}[ht]
   \centering
-  \caption[Posterior probablity of effects of temperature on survival]{Posterior probability that the effects of the two temperature covariates on the the log-odds of an ecotype survival are greater than 0. What is estimated is the probability that these estimates are greater than 0; high or low probabilities indicate the ``strength'' of the covariate in that direction (positive and negative, respectively). These estimates are from the birth-death model.}
+  \caption[Posterior probablity of effects of temperature on survival]{Posterior probability that the effects of the two temperature covariates on the log-odds of an ecotype survival are greater than 0. What is estimated is the probability that these estimates are greater than 0; high or low probabilities indicate the ``strength'' of the covariate in that direction (positive and negative, respectively). These estimates are from the birth-death model.}
   \label{tab:surv_temp}
   \begin{tabular}{ l r r }
     \hline
@@ -384,13 +384,13 @@ The comparison between per capita origination and extinction rate estimates reve
     \caption{Extinction rate}
     \label{fig:extinct_rate}
   \end{subfigure}
-  \caption[Estimated mammal log-diversity and macroevolutionary rates for the Cenozoic]{Posterior estimates of the time series of Cenozoic North American mammal diversity and it's characteristic macroevolutionary rates; all estimates are from the birth-death model and 100 posterior draws are plotted to indicate the uncertainty in these estimates. The blue horizontal strip corresponds to the 80\% credible interval of estimated mean standing diversity, diversification rate, origination rate, and extinction rate respectively; the median esimate is also indicated. What is also plotted is the  The dramatic differences between diversity estimates at the first and second time points and the penultimate and last time points in this series are caused by well known edge effects in discrete-time birth-death models caused by \(p_{\_, t = 1}\) and \(p_{\_, t = T}\) being partially unidentifiable \citep{Royle2008}; the hierarchical modeling strategy used here helps mitigate these effects but they are still present \citep{Gelman2013d,Royle2008}. Diversification rate is in units of species gained per species present per time unit (2 My), origination rate is in units of species originating per species present per time unit, and extinction rate is in units of species becoming extinct per species present per time unit.}
+  \caption[Estimated mammal log-diversity and macroevolutionary rates for the Cenozoic]{Posterior estimates of the time series of Cenozoic North American mammal diversity and it's characteristic macroevolutionary rates; all estimates are from the birth-death model and 100 posterior draws are plotted to indicate the uncertainty in these estimates. The blue horizontal strip corresponds to the 80\% credible interval of estimated mean standing diversity, diversification rate, origination rate, and extinction rate respectively; the median estimate is also indicated. What is also plotted is the  The dramatic differences between diversity estimates at the first and second time points and the penultimate and last time points in this series are caused by well known edge effects in discrete-time birth-death models caused by \(p_{\_, t = 1}\) and \(p_{\_, t = T}\) being partially unidentifiable \citep{Royle2008}; the hierarchical modeling strategy used here helps mitigate these effects but they are still present \citep{Gelman2013d,Royle2008}. Diversification rate is in units of species gained per species present per time unit (2 My), origination rate is in units of species originating per species present per time unit, and extinction rate is in units of species becoming extinct per species present per time unit.}
   \label{fig:macro_values}
 \end{figure}
 
 \begin{table}[ht]
   \centering
-  \caption[Posterior probability estimates of a peak in diversity, diversification]{Posterior probabilities of diversity \(N^{stand}_{t}\) or diversification rate \(D^{rate}_{t}\) being greater than average standing diversity \(\overline{N^{stand}}\) or average diversification rate \(\overline{D^{rate}}\) for the whole Cenozoic. The ``Time'' column corresponds to the top of each of the temporal bins. Diversification rate can not be estimated for the last time point because it is unknown how many more species originated or went extinct following this tempral bin. The estimates are from the birth-death model.}
+  \caption[Posterior probability estimates of a peak in diversity, diversification]{Posterior probabilities of diversity \(N^{stand}_{t}\) or diversification rate \(D^{rate}_{t}\) being greater than average standing diversity \(\overline{N^{stand}}\) or average diversification rate \(\overline{D^{rate}}\) for the whole Cenozoic. The ``Time'' column corresponds to the top of each of the temporal bins. Diversification rate can not be estimated for the last time point because it is unknown how many more species originated or went extinct following this temporal bin. The estimates are from the birth-death model.}
   \label{tab:div_peak}
   \begin{tabular}{ r r r }
     \hline
@@ -457,14 +457,14 @@ When ecotype diversity is decomposed into the number of origination events per t
 \begin{figure}[ht]
   \centering
   \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/birth_eco}
-  \caption[Estimated number of origination events by mammal ecotype]{Posterior estimates of the number of origination events from one temporal bin to another, plotted at the bin they originate from. 100 posterior draws are plotted to indicate the uncertainty in these estimates. Also, what is ploted is log of the number of originations plus 1.}
+  \caption[Estimated number of origination events by mammal ecotype]{Posterior estimates of the number of origination events from one temporal bin to another, plotted at the bin they originate from. 100 posterior draws are plotted to indicate the uncertainty in these estimates. Also, what is plotted is log of the number of originations plus 1.}
   \label{fig:ecotype_birth}
 \end{figure}
 
 \begin{figure}[ht]
   \centering
   \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/death_eco}
-  \caption[Estimated number of extinction events by mammal ecotype]{Posterior estimates of the number of extinction events from one temporal bin to another, plotted at the bin they go extinct from. 100 posterior draws are plotted to indicate the uncertainty in these estimates. Also, what is ploted is log of the number of extinctions plus 1.}
+  \caption[Estimated number of extinction events by mammal ecotype]{Posterior estimates of the number of extinction events from one temporal bin to another, plotted at the bin they go extinct from. 100 posterior draws are plotted to indicate the uncertainty in these estimates. Also, what is plotted is log of the number of extinctions plus 1.}
   \label{fig:ecotype_death}
 \end{figure}
 
