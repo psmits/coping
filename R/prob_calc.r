@@ -88,7 +88,7 @@ plant.oc.tab <- xtable(plant.oc, label = 'tab:occur_plant', digits = 3)
 print.xtable(x = plant.oc.tab, file = '../doc/occur_plant_raw.tex')
 
 plant.or.tab <- xtable(plant.or, label = 'tab:origin_plant', digits = 3)
-print.xtable(x = plant.oc.tab, file = '../doc/origin_plant_raw.tex')
+print.xtable(x = plant.or.tab, file = '../doc/origin_plant_raw.tex')
 
 plant.su.tab <- xtable(plant.su, label = 'tab:surv_plant', digits = 3)
 print.xtable(x = plant.su.tab, file = '../doc/surv_plant_raw.tex')
