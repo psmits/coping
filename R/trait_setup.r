@@ -165,4 +165,4 @@ state <- mapvalues(state,
 # dump out the stan data
 stan_rdump(list = c('N', 'T', 'D', 'U', 
                     'sight', 'state', 'u', 'ufull', 'mass'),
-           file = '../data/data_dump/trait_w_gaps_augment.data.R')
+           file = '../data/data_dump/trait_w_gaps.data.R')

@@ -4,44 +4,44 @@ The top-level auxiliary file: main_doc.aux
 The style file: amnatnat.bst
 Database file #1: bib.bib
 Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
-You've used 114 entries,
+You've used 110 entries,
             3251 wiz_defined-function locations,
-            1403 strings with 26443 characters,
-and the built_in function-call counts, 71325 in all, are:
-= -- 6112
-> -- 3393
-< -- 75
-+ -- 1138
-- -- 1024
-* -- 5013
-:= -- 11575
-add.period$ -- 463
-call.type$ -- 114
-change.case$ -- 918
-chr.to.int$ -- 120
-cite$ -- 114
-duplicate$ -- 5058
-empty$ -- 5064
-format.name$ -- 1361
-if$ -- 14215
+            1374 strings with 25705 characters,
+and the built_in function-call counts, 68950 in all, are:
+= -- 5896
+> -- 3312
+< -- 71
++ -- 1111
+- -- 1001
+* -- 4862
+:= -- 11197
+add.period$ -- 446
+call.type$ -- 110
+change.case$ -- 889
+chr.to.int$ -- 116
+cite$ -- 110
+duplicate$ -- 4881
+empty$ -- 4876
+format.name$ -- 1327
+if$ -- 13727
 int.to.chr$ -- 1
 int.to.str$ -- 1
-missing$ -- 1031
-newline$ -- 574
-num.names$ -- 466
-pop$ -- 1966
+missing$ -- 998
+newline$ -- 554
+num.names$ -- 448
+pop$ -- 1904
 preamble$ -- 1
-purify$ -- 793
+purify$ -- 770
 quote$ -- 0
-skip$ -- 1562
+skip$ -- 1498
 stack$ -- 0
-substring$ -- 3800
-swap$ -- 2318
-text.length$ -- 12
+substring$ -- 3663
+swap$ -- 2237
+text.length$ -- 11
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 1002
+type$ -- 966
 warning$ -- 0
-while$ -- 560
+while$ -- 538
 width$ -- 0
-write$ -- 1481
+write$ -- 1428
