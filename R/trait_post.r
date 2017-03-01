@@ -16,7 +16,8 @@ source('../R/sim_from_model.r')
 source('../R/estimate_div.r')
 source('../R/advi_post.r')
 source('../R/make_plots.r')
-source('../data/data_dump/trait_w_gaps_revamp.data.R')
+source('../data/data_dump/trait_w_gaps.data.R')
+#source('../data/data_dump/trait_w_gaps_revamp.data.R')
 sight.obs <- sight
 
 
@@ -38,15 +39,16 @@ cbp.long <- cbp.long[t(grab)][-1]
 #
 nsim <- 100
 samp <- sample(1001, nsim)
+ecoprob <- TRUE
 
 rms <- which(inter == names(which(table(inter) == 1)))
 inter <- inter[-rms]
 break.inter <- str_split(inter, '\\.')
 ecotype <- Reduce(rbind, break.inter)
-ecotype <- rbind(ecotype, t(replicate(M - N, c('augment', 'augment'))))
+#ecotype <- rbind(ecotype, t(replicate(M - N, c('augment', 'augment'))))
 
 ecotrans <- Reduce(rbind, str_split(levels(as.factor(inter)), '\\.'))
-ecotrans <- rbind(ecotrans, c('augment', 'augment'))
+#ecotrans <- rbind(ecotrans, c('augment', 'augment'))
 
 ntax <- N
 ntime <- T
@@ -57,31 +59,35 @@ b <- range(time.stop)
 b <- seq(b[1], b[2], by = 2)
 time.start.stop <- as.matrix(cbind(b - 2, b))
 
+
+
 ############
 ## advi
-post <- list.files('../data/mcmc_out', pattern = 'advi',
+post <- list.files('../data/mcmc_out', pattern = 'revamp_[0-9]_advi',
                    full.names = TRUE)
 
 # just presence
-fit1 <- read_one_stan_csv(post[2])
+fit1 <- read_one_stan_csv(post[1])
 ext1 <- post.advi(fit1)
+
+
 # analysis of model fit
-post.pred(ext1, ntax = M, ntime = T, sight.obs = sighta, nsim, samp)
+post.pred(ext1, ntax = N, ntime = T, sight.obs = sight, nsim, samp)
 # analysis of the posterior
 vis.post(ext1, ecotype, ecotrans, mass, 
-         cbp.long, time.start.stop, ecoprob = TRUE)
+         cbp.long, time.start.stop, ecoprob = ecoprob)
 
 
 # full birth-death
-fit2 <- read_one_stan_csv(post[1])
+fit2 <- read_one_stan_csv(post[2])
 ext2 <- post.advi(fit2)
 # posterior predictive checks
 #   need to develop more
-post.pred(ext2, ntax = M, ntime = T, sight.obs = sighta, nsim, samp, bd = TRUE)
+post.pred(ext2, ntax = N, ntime = T, sight.obs = sight, nsim, samp, bd = TRUE)
 # visualize posterior estimates
-vis.bdpost(ext2, ecotype, ecotrans, mass, cbp.long, ecoprob = TRUE)
+vis.bdpost(ext2, ecotype, ecotrans, mass, cbp.long, ecoprob = ecoprob)
 # estimate standing diversity given posterior
-post.div <- diversity.distribution(sighta, ext2, nsim) # 
+post.div <- diversity.distribution(sight, ext2, nsim) # 
 
 source('../R/div_plot.r')  # update this to work as functions, not just source
 

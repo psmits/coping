@@ -161,6 +161,7 @@ u <- u[-1, ]
 state <- mapvalues(state, 
                    from = sort(unique(state)), 
                    to = seq(length(unique(state))))
+D <- length(unique(state))
 
 # dump out the stan data
 stan_rdump(list = c('N', 'T', 'D', 'U', 

@@ -27,8 +27,7 @@ out.surv <- Reduce(rbind, out.surv)
 ecotrans[, 1] <- mapvalues(ecotrans[, 1], 
                            unique(ecotrans[, 1]),
                            c('carnivore', 'herbivore', 
-                             'insectivore', 'omnivore', 
-                             'augment'))
+                             'insectivore', 'omnivore'))
 rown <- apply(ecotrans, 1, function(x) Reduce(paste, rev(x)))
 
 rownames(out.occur) <- rownames(out.origin) <- rownames(out.surv) <- rown
@@ -117,8 +116,8 @@ print.xtable(x = div.peaks.tab, file = '../doc/div_peak_raw.tex')
 #   ask how many 0 -> 1 in interval
 gains <- list()
 for(jj in seq(nsim)) {
-  oo <- matrix(ncol = T - 1, nrow = M)
-  for(kk in seq(M)) {
+  oo <- matrix(ncol = T - 1, nrow = N)
+  for(kk in seq(N)) {
     for(ii in 2:(ncol(oo) + 1)) {
       oo[kk, ii - 1] <- post.div[[jj]][kk, ii - 1] == 0 & 
         post.div[[jj]][kk, ii] == 1
@@ -132,8 +131,8 @@ gains <- lapply(gains, colSums)
 #   ask how many 1 -> 0 in interval
 loss <- list()
 for(jj in seq(nsim)) {
-  oo <- matrix(ncol = T - 1, nrow = M)
-  for(kk in seq(M)) {
+  oo <- matrix(ncol = T - 1, nrow = N)
+  for(kk in seq(N)) {
     for(ii in 2:(ncol(oo) + 1)) {
       oo[kk, ii - 1] <- post.div[[jj]][kk, ii - 1] == 1 & 
         post.div[[jj]][kk, ii] == 0

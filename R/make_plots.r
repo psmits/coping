@@ -36,7 +36,7 @@ vis.post <- function(ext1,
   am$state_1 <- mapvalues(am$state_1, 
                           from = unique(am$state_1), 
                           to = c('carnivore', 'herbivore', 'insectivore', 
-                                 'omnivore', 'augment'))
+                                 'omnivore'))
 
   amplot <- ggplot(am, aes(x = time, y = value, group = sim))
   amplot <- amplot + geom_line(alpha = 0.01)
@@ -44,19 +44,13 @@ vis.post <- function(ext1,
   amplot <- amplot + labs(x = 'Time (Mya)', 
                           y = 'Probability of occurrence')
   amplot <- amplot + scale_x_reverse()
-  ggsave(filename = '../doc/figure/ecotype_occurrence_aug.png', plot = amplot,
-         width = 6, height = 5)
-  
-  sam <- am[am$state_1 != 'augment', ]
-  samplot <- amplot %+% sam
-  ggsave(filename = '../doc/figure/ecotype_occurrence.png', plot = samplot,
-         width = 6, height = 5)
-
+  ggsave(filename = '../doc/figure/ecotype_occurrence.png', plot = amplot,
+         width = 6, height = 4)
 
 
   # effect of group-level on individual-level
   tt <- ext1$gamma
-  for(ii in seq(19)) {
+  for(ii in seq(18)) {
     tt[, 4, ii] <- tt[, 1, ii] + tt[, 4, ii]
     tt[, 5, ii] <- tt[, 1, ii] + tt[, 5, ii]
   }
@@ -76,7 +70,7 @@ vis.post <- function(ext1,
   gm$state_1 <- mapvalues(gm$state_1, 
                           from = unique(gm$state_1), 
                           to = c('carnivore', 'herbivore', 'insectivore', 
-                                 'omnivore', 'augment'))
+                                 'omnivore'))
 
   gmplot <- ggplot(gm, aes(x = predictor, y = value, group = predictor))
   gmplot <- gmplot + geom_hline(yintercept = 0)
@@ -85,14 +79,8 @@ vis.post <- function(ext1,
   gmplot <- gmplot + theme(axis.text.x = element_text(angle = 90, vjust = 0.5))
   gmplot <- gmplot + labs(x = 'Predictor variable', 
                           y = 'Effect on log-odds of occurrence')
-  ggsave(filename = '../doc/figure/group_on_ecotype_aug.png', plot = gmplot,
-         width = 6, height = 5)
-  
-  gam <- gm[gm$state_1 != 'augment', ]
-  samplot <- gmplot %+% gam
-  ggsave(filename = '../doc/figure/group_on_ecotype.png', plot = samplot,
-         width = 6, height = 5)
-
+  ggsave(filename = '../doc/figure/group_on_ecotype.png', plot = gmplot,
+         width = 6, height = 4)
 
 
   # variation in log-odds of occurrence associated with ecotype
@@ -105,13 +93,8 @@ vis.post <- function(ext1,
   tmplot <- tmplot + facet_grid(state_1 ~ state_2)
   tmplot <- tmplot + labs(x = 'Estimated standard deviation of distribution of ecotype log-odds of occurrence', 
                           y = 'Probability density')
-  ggsave(filename = '../doc/figure/stdev_ecotype_occurrence_aug.png', plot = tmplot,
-         width = 6, height = 5)
-
-  gam <- tm[tm$state_1 != 'augment', ]
-  samplot <- tmplot %+% gam
-  ggsave(filename = '../doc/figure/stdev_ecotype_occurrence.png', plot = samplot,
-         width = 6, height = 5)
+  ggsave(filename = '../doc/figure/stdev_ecotype_occurrence.png', plot = tmplot,
+         width = 6, height = 4)
 
   # difference from mean log-odds observation due to time
   pm <- melt(ext1$alpha_time)
@@ -212,14 +195,8 @@ vis.post <- function(ext1,
   mass_on_pres <- mass_on_pres + 
     scale_x_continuous(breaks = round(seq(min(out$mass), max(out$mass), 
                                           by = 0.5), 1))
-  ggsave(filename = '../doc/figure/mass_on_pres_aug.png', plot = mass_on_pres,
+  ggsave(filename = '../doc/figure/mass_on_pres.png', plot = mass_on_pres,
          width = 6, height = 5)
-
-  sam <- out[out$state_1 != 'augment', ]
-  samplot <- mass_on_pres %+% sam
-  ggsave(filename = '../doc/figure/mass_on_pres.png', plot = samplot,
-         width = 6, height = 5)
-
 
 }
 
@@ -264,7 +241,7 @@ vis.bdpost <- function(ext2,
   am$state_1 <- mapvalues(am$state_1, 
                           from = unique(am$state_1), 
                           to = c('carnivore', 'herbivore', 'insectivore', 
-                                 'omnivore', 'augment'))
+                                 'omnivore'))
 
   amplot <- ggplot(am, aes(x = time, y = value, group = sim))
   amplot <- amplot + geom_line(alpha = 0.01)
@@ -272,13 +249,8 @@ vis.bdpost <- function(ext2,
   amplot <- amplot + labs(x = 'Time (Mya)', 
                           y = 'Probability of originating')
   amplot <- amplot + scale_x_reverse()
-  ggsave(filename = '../doc/figure/ecotype_origin_bd_aug.png', plot = amplot,
-         width = 6, height = 5)
-
-  sam <- am[am$state_1 != 'augment', ]
-  samplot <- amplot %+% sam
-  ggsave(filename = '../doc/figure/ecotype_origin_bd.png', plot = samplot,
-         width = 6, height = 5)
+  ggsave(filename = '../doc/figure/ecotype_origin_bd.png', plot = amplot,
+         width = 6, height = 4)
 
   # survival
   am <- melt(ext2$s_a)  # sim, time, state, value
@@ -295,7 +267,7 @@ vis.bdpost <- function(ext2,
   am$state_1 <- mapvalues(am$state_1, 
                           from = unique(am$state_1), 
                           to = c('carnivore', 'herbivore', 'insectivore', 
-                                 'omnivore', 'augment'))
+                                 'omnivore'))
 
   amplot <- ggplot(am, aes(x = time, y = value, group = sim))
   amplot <- amplot + geom_line(alpha = 0.01)
@@ -303,20 +275,15 @@ vis.bdpost <- function(ext2,
   amplot <- amplot + scale_x_reverse()
   amplot <- amplot + labs(x = 'Time (Mya)', 
                           y = 'Probability of surviving')
-  ggsave(filename = '../doc/figure/ecotype_survival_bd_aug.png', plot = amplot,
-         width = 6, height = 5)
-
-  sam <- am[am$state_1 != 'augment', ]
-  samplot <- amplot %+% sam
-  ggsave(filename = '../doc/figure/ecotype_survival_bd.png', plot = samplot,
-         width = 6, height = 5)
+  ggsave(filename = '../doc/figure/ecotype_survival_bd.png', plot = amplot,
+         width = 6, height = 4)
 
 
 
   # effect of group-level on individual-level
   # origination
   tt <- ext2$o_gamma
-  for(ii in seq(19)) {
+  for(ii in seq(18)) {
     tt[, 4, ii] <- tt[, 1, ii] + tt[, 4, ii]
     tt[, 5, ii] <- tt[, 1, ii] + tt[, 5, ii]
   }
@@ -335,7 +302,7 @@ vis.bdpost <- function(ext2,
   gm$state_1 <- mapvalues(gm$state_1, 
                           from = unique(gm$state_1), 
                           to = c('carnivore', 'herbivore', 'insectivore', 
-                                 'omnivore', 'augment'))
+                                 'omnivore'))
 
   gmplot <- ggplot(gm, aes(x = predictor, y = value, group = predictor))
   gmplot <- gmplot + geom_hline(yintercept = 0)
@@ -344,18 +311,12 @@ vis.bdpost <- function(ext2,
   gmplot <- gmplot + theme(axis.text.x = element_text(angle = 90, vjust = 0.5))
   gmplot <- gmplot + labs(x = 'Predictor variable', 
                           y = 'Change to log-odds of originating')
-  ggsave(filename = '../doc/figure/group_on_origin_bd_aug.png', plot = gmplot,
-         width = 6, height = 5)
-
-  gam <- gm[gm$state_1 != 'augment', ]
-  samplot <- gmplot %+% gam
-  ggsave(filename = '../doc/figure/group_on_origin_bd.png', plot = samplot,
-         width = 6, height = 5)
-
+  ggsave(filename = '../doc/figure/group_on_origin_bd.png', plot = gmplot,
+         width = 6, height = 4)
 
   # survival
   tt <- ext2$s_gamma
-  for(ii in seq(19)) {
+  for(ii in seq(18)) {
     tt[, 4, ii] <- tt[, 1, ii] + tt[, 4, ii]
     tt[, 5, ii] <- tt[, 1, ii] + tt[, 5, ii]
   }
@@ -374,7 +335,7 @@ vis.bdpost <- function(ext2,
   gm$state_1 <- mapvalues(gm$state_1, 
                           from = unique(gm$state_1), 
                           to = c('carnivore', 'herbivore', 'insectivore', 
-                                 'omnivore', 'augment'))
+                                 'omnivore'))
 
   gmplot <- ggplot(gm, aes(x = predictor, y = value, group = predictor))
   gmplot <- gmplot + geom_hline(yintercept = 0)
@@ -383,14 +344,8 @@ vis.bdpost <- function(ext2,
   gmplot <- gmplot + theme(axis.text.x = element_text(angle = 90, vjust = 0.5))
   gmplot <- gmplot + labs(x = 'Predictor variable', 
                           y = 'Change to log-odds surviving')
-  ggsave(filename = '../doc/figure/group_on_survival_bd_aug.png', plot = gmplot,
-         width = 6, height = 5)
-
-  gam <- gm[gm$state_1 != 'augment', ]
-  samplot <- gmplot %+% gam
-  ggsave(filename = '../doc/figure/group_on_survival_bd.png', plot = samplot,
-         width = 6, height = 5)
-
+  ggsave(filename = '../doc/figure/group_on_survival_bd.png', plot = gmplot,
+         width = 6, height = 4)
 
   # variation in log-odds of occurrence associated with ecotype
   # origination
@@ -402,13 +357,8 @@ vis.bdpost <- function(ext2,
   tmplot <- tmplot + facet_grid(state_1 ~ state_2)
   tmplot <- tmplot + labs(x = 'Estimated standard deviation of ecotype log-odds of originating', 
                           y = 'Probability density')
-  ggsave(filename = '../doc/figure/stdev_ecotype_origin_bd_aug.png', plot = tmplot,
-         width = 6, height = 5)
-
-  gam <- tm[tm$state_1 != 'augment', ]
-  samplot <- tmplot %+% gam
-  ggsave(filename = '../doc/figure/stdev_ecotype_origin_bd.png', plot = samplot,
-         width = 6, height = 5)
+  ggsave(filename = '../doc/figure/stdev_ecotype_origin_bd.png', plot = tmplot,
+         width = 6, height = 4)
 
   # survival
   tm <- melt(ext2$s_tau)  # sample, ecotype, value
@@ -419,14 +369,8 @@ vis.bdpost <- function(ext2,
   tmplot <- tmplot + facet_grid(state_1 ~ state_2)
   tmplot <- tmplot + labs(x = 'Estimated standard deviation of ecotype log-odds of suriviving', 
                           y = 'Probability density')
-  ggsave(filename = '../doc/figure/stdev_ecotype_survival_bd_aug.png', plot = tmplot,
-         width = 6, height = 5)
-
-  gam <- tm[tm$state_1 != 'augment', ]
-  samplot <- tmplot %+% gam
-  ggsave(filename = '../doc/figure/stdev_ecotype_survival_bd.png', plot = samplot,
-         width = 6, height = 5)
-
+  ggsave(filename = '../doc/figure/stdev_ecotype_survival_bd.png', plot = tmplot,
+         width = 6, height = 4)
 
 
   # difference from mean log-odds observation due to time
@@ -521,7 +465,7 @@ vis.bdpost <- function(ext2,
   out <- list()
   for(ii in seq(3)) {
     oo <- list()
-    for(jj in seq(19)) {
+    for(jj in seq(18)) {
       oo[[jj]] <- cbind(mass = mass.counter, 
                         est = mass.obs(mass.counter, jj, ii, origin = TRUE))
     }
@@ -540,7 +484,7 @@ vis.bdpost <- function(ext2,
   out$state_1 <- mapvalues(out$state_1, 
                           from = unique(out$state_1), 
                           to = c('carnivore', 'herbivore', 'insectivore', 
-                                 'omnivore', 'augment'))
+                                 'omnivore'))
 
   mass_on_pres <- ggplot(out, aes(x = mass, y = est, colour = factor(phase)))
   mass_on_pres <- mass_on_pres + geom_line(size = 1.25)
@@ -552,21 +496,15 @@ vis.bdpost <- function(ext2,
   mass_on_pres <- mass_on_pres + 
     scale_x_continuous(breaks = round(seq(min(out$mass), max(out$mass), 
                                           by = 0.5), 1))
-  ggsave(filename = '../doc/figure/mass_on_origin_bd_aug.png', plot = mass_on_pres,
-         width = 6, height = 5)
-
-  sam <- out[out$state_1 != 'augment', ]
-  samplot <- mass_on_pres %+% sam
-  ggsave(filename = '../doc/figure/mass_on_origin_bd.png', plot = samplot,
-         width = 6, height = 5)
-
+  ggsave(filename = '../doc/figure/mass_on_origin_bd.png', plot = mass_on_pres,
+         width = 6, height = 4)
 
   # survival
   mass.counter <- seq(from = min(mass), to = max(mass), by = 0.001)
   out <- list()
   for(ii in seq(3)) {
     oo <- list()
-    for(jj in seq(19)) {
+    for(jj in seq(18)) {
       oo[[jj]] <- cbind(mass = mass.counter, 
                         est = mass.obs(mass.counter, jj, ii, origin = FALSE))
     }
@@ -585,7 +523,7 @@ vis.bdpost <- function(ext2,
   out$state_1 <- mapvalues(out$state_1, 
                           from = unique(out$state_1), 
                           to = c('carnivore', 'herbivore', 'insectivore', 
-                                 'omnivore', 'augment'))
+                                 'omnivore'))
 
   mass_on_pres <- ggplot(out, aes(x = mass, y = est, colour = factor(phase)))
   mass_on_pres <- mass_on_pres + geom_line(size = 1.25)
@@ -597,13 +535,7 @@ vis.bdpost <- function(ext2,
   mass_on_pres <- mass_on_pres + 
     scale_x_continuous(breaks = round(seq(min(out$mass), max(out$mass), 
                                           by = 0.5), 1))
-  ggsave(filename = '../doc/figure/mass_on_surv_bd_aug.png', plot = mass_on_pres,
-         width = 6, height = 5)
-
-  sam <- out[out$state_1 != 'augment', ]
-  samplot <- mass_on_pres %+% sam
-  ggsave(filename = '../doc/figure/mass_on_surv_bd.png', plot = samplot,
-         width = 6, height = 5)
-
+  ggsave(filename = '../doc/figure/mass_on_surv_bd.png', plot = mass_on_pres,
+         width = 6, height = 4)
 
 }

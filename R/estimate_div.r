@@ -65,7 +65,7 @@ estimate.diversity <- function(data, posterior) {
   return(z)
 }
 
-#' Wrapper for estimate.diveristy to give posterior of diversity
+#' Wrapper for estimate.diveristy to give posterior of diversity from birth-death model
 #'
 #' @param data mtraix of observed occurrences
 #' @param posterior stanfit object, extracted

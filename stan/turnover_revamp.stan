@@ -80,7 +80,7 @@ functions {
 data {
   int N;  // sample size of taxa
   int T;  // sample size of temporal units
-  int D;  // number of indiv-level predictors
+  int D;  // number of ecotypes
   int U;  // number of group-level predictors
 
   int sight[N, T];  // observed presence

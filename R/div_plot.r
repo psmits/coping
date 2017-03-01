@@ -34,17 +34,17 @@ divgg <- divgg + geom_ribbon(data = avg.div,
                              alpha = 0.25)
 divgg <- divgg + geom_line(alpha = 0.1)
 divgg <- divgg + labs(x = 'Time (Mya)', 
-                      y = expression(log~N^{textstyle('stand')}))
+                      y = expression(log~(N^{textstyle('stand')} + 1)))
 divgg <- divgg + scale_x_reverse()
 ggsave(filename = '../doc/figure/log_diversity.png', plot = divgg,
-       width = 6, height = 5)
+       width = 6, height = 4)
 
 # count number of gains going to t to t+1
 #   ask how many 0 -> 1 in interval
 gains <- list()
 for(jj in seq(nsim)) {
-  oo <- matrix(ncol = T - 1, nrow = M)
-  for(kk in seq(M)) {
+  oo <- matrix(ncol = T - 1, nrow = N)
+  for(kk in seq(N)) {
     for(ii in 2:(ncol(oo) + 1)) {
       oo[kk, ii - 1] <- post.div[[jj]][kk, ii - 1] == 0 & 
       post.div[[jj]][kk, ii] == 1
@@ -58,8 +58,8 @@ gains <- lapply(gains, colSums)
 #   ask how many 1 -> 0 in interval
 loss <- list()
 for(jj in seq(nsim)) {
-  oo <- matrix(ncol = T - 1, nrow = M)
-  for(kk in seq(M)) {
+  oo <- matrix(ncol = T - 1, nrow = N)
+  for(kk in seq(N)) {
     for(ii in 2:(ncol(oo) + 1)) {
       oo[kk, ii - 1] <- post.div[[jj]][kk, ii - 1] == 1 & 
       post.div[[jj]][kk, ii] == 0
@@ -106,10 +106,10 @@ growgg <- growgg + geom_ribbon(data = avg.grow,
                                alpha = 0.25)
 growgg <- growgg + geom_line(alpha = 0.1)
 growgg <- growgg + labs(x = 'Time (Mya)', 
-                        y = 'diversification rate (species/species/time unit')
+                        y = 'per capita diversification rate')
 growgg <- growgg + scale_x_reverse()
 ggsave(filename = '../doc/figure/div_rate.png', plot = growgg,
-       width = 6, height = 5)
+       width = 6, height = 4)
 
 
 # per capita growth rate (gains per 2 My, loss per 2 My)
@@ -147,10 +147,10 @@ birthgg <- birthgg + geom_ribbon(data = avg.birth,
                                  alpha = 0.25)
 birthgg <- birthgg + geom_line(alpha = 0.1)
 birthgg <- birthgg + labs(x = 'Time (Mya)',
-                          y = 'origination rate (originations/species/time unit')
+                          y = 'per capita origination rate')
 birthgg <- birthgg + scale_x_reverse()
 ggsave(filename = '../doc/figure/orig_rate.png', plot = birthgg,
-       width = 6, height = 5)
+       width = 6, height = 4)
 
 
 
@@ -187,13 +187,15 @@ deathgg <- deathgg + geom_ribbon(data = avg.death,
                                  alpha = 0.25)
 deathgg <- deathgg + geom_line(alpha = 0.1)
 deathgg <- deathgg + labs(x = 'Time (Mya)',
-                          y = 'extinction rate (extinctions/species/time unit')
+                          y = 'per capita extinction rate')
 deathgg <- deathgg + scale_x_reverse()
 ggsave(filename = '../doc/figure/death_rate.png', plot = deathgg,
-       width = 6, height = 5)
+       width = 6, height = 4)
 
 
 
+
+################################################################################
 # break diversity down by ecotype
 # plot ideas
 #   grid of diversity estimates as lines
@@ -214,6 +216,8 @@ for(jj in seq(length(post.div))) {
 }
 
 div.eco <- llply(div.byeco, function(x) Reduce(rbind, llply(x, colSums)))
+div.eco.mean <- llply(div.eco, rowMeans)
+
 div.eco <- llply(div.eco, function(x) 
                  suppressWarnings(melt(data.frame(x, et))))
 div.eco <- Map(function(x, y) cbind(x, sim = y), div.eco, seq(nsim))
@@ -231,9 +235,21 @@ div.eco$eco_1 <- as.character(div.eco$eco_1)
 div.eco$eco_1 <- mapvalues(div.eco$eco_1, 
                            from = unique(div.eco$eco_1), 
                            to = c('insectivore', 'carnivore', 'herbivore', 
-                                  'omnivore', 'augment'))
+                                  'omnivore'))
+# get mean estimate of diversity
+div.eco.mean <- colMeans(Reduce(rbind, div.eco.mean))
+div.eco.mean <- data.frame(div.eco.mean, et)
+div.eco.mean <- cbind(div.eco.mean, 
+                      str_split(div.eco.mean[, 2], '\\.', simplify = TRUE))
+names(div.eco.mean) <- c('diversity', 'et', 'eco_1', 'eco_2')
+div.eco.mean$eco_1 <- as.character(div.eco.mean$eco_1)
+div.eco.mean$eco_1 <- mapvalues(div.eco.mean$eco_1, 
+                                from = unique(div.eco.mean$eco_1), 
+                                to = c('insectivore', 'carnivore', 
+                                       'herbivore', 'omnivore'))
+div.eco.mean$diversity <- log(div.eco.mean$diversity + 1)
 
-div.eco <- div.eco[div.eco$eco_1 != 'augment', ]
+# transform and plot
 div.eco$diversity <- log(div.eco$diversity + 1)
 div.eco$time <- as.numeric(div.eco$time)
 
@@ -242,13 +258,16 @@ div.eco$time <- mapvalues(div.eco$time,
                           to = rev(time.start.stop[, 2]))
 
 degg <- ggplot(div.eco, aes(x = time, y = diversity, group = sim))
+degg <- degg + geom_hline(data = div.eco.mean,
+                          mapping = aes(yintercept = diversity, sim = NULL),
+                          colour = 'blue', size = 1.1, alpha = 0.5)
 degg <- degg + geom_line(alpha = 0.1)
 degg <- degg + facet_grid(eco_1 ~ eco_2)
 degg <- degg + labs(x = 'Time (Mya)', 
-                    y = expression(log~N^{textstyle('stand')}))
+                    y = expression(log~(N^{textstyle('stand')} + 1)))
 degg <- degg + scale_x_reverse()
 ggsave(filename = '../doc/figure/ecotype_diversity.png', plot = degg,
-       width = 6, height = 5)
+       width = 6, height = 4)
 
 # gains and losses by ecotype
 se <- dd <- list()
@@ -273,7 +292,21 @@ for(ss in seq(nsim)) {
 gains.byeco <- llply(se, function(x) lapply(x, colSums))
 loss.byeco <- llply(dd, function(x) lapply(x, colSums))
 
-# make a plot of log(gains + 1) over time
+gains.byeco <- Map(function(x, y) 
+                   lapply(x, function(a) a / y[-(ntime)]), 
+                   x = gains.byeco, y = div)
+loss.byeco <- Map(function(x, y) 
+                  lapply(x, function(a) a / y[-(ntime)]), 
+                  x = loss.byeco, y = div)
+
+gains.byeco.mean <- colMeans(Reduce(rbind, 
+                                    llply(gains.byeco, 
+                                          function(x) laply(x, mean))))
+loss.byeco.mean <- colMeans(Reduce(rbind, 
+                                   llply(loss.byeco, 
+                                         function(x) laply(x, mean))))
+
+
 gbe <- lapply(gains.byeco, function(y) 
               Map(function(x) data.frame(gains = x, time = seq(length(x))), y))
 gbe <- Map(function(a, b) Map(function(x, y) cbind(x, sim = y), a, b),
@@ -282,28 +315,40 @@ gbe <- lapply(gbe, function(a) Map(function(x, y) cbind(x, eco = y), a, et))
 gbe <- Reduce(rbind, lapply(gbe, function(x) Reduce(rbind, x)))
 gbe <- cbind(gbe, str_split(gbe$eco, '\\.', simplify = TRUE))
 names(gbe) <- c('gains', 'time', 'sim', 'eco', 'eco_1', 'eco_2')
-gbe$gains <- log(gbe$gains + 1)
 
 gbe$eco_1 <- as.character(gbe$eco_1)
 gbe$eco_1 <- mapvalues(gbe$eco_1, 
                        from = unique(gbe$eco_1), 
                        to = c('insectivore', 'carnivore', 'herbivore', 
-                              'omnivore', 'augment'))
+                              'omnivore'))
 
 gbe$time <- mapvalues(gbe$time, 
                       from = unique(gbe$time), 
                       to = rev(time.start.stop[-T, 2]))
 
-gbe <- gbe[gbe$eco_1 != 'augment', ]
+# get mean estimate of birth rate
+gain.eco.mean <- data.frame(gains.byeco.mean, et)
+gain.eco.mean <- cbind(gain.eco.mean, 
+                      str_split(gain.eco.mean[, 2], '\\.', simplify = TRUE))
+names(gain.eco.mean) <- c('gains', 'et', 'eco_1', 'eco_2')
+gain.eco.mean$eco_1 <- as.character(gain.eco.mean$eco_1)
+gain.eco.mean$eco_1 <- mapvalues(gain.eco.mean$eco_1, 
+                                from = unique(gain.eco.mean$eco_1), 
+                                to = c('insectivore', 'carnivore', 
+                                       'herbivore', 'omnivore'))
 
+# make the plot
 gbegg <- ggplot(gbe, aes(x = time, y = gains, group = sim))
+gbegg <- gbegg + geom_hline(data = gain.eco.mean,
+                            mapping = aes(yintercept = gains, sim = NULL),
+                            colour = 'blue', size = 1.1, alpha = 0.5)
 gbegg <- gbegg + geom_line(alpha = 0.1)
 gbegg <- gbegg + facet_grid(eco_1 ~ eco_2)
 gbegg <- gbegg + labs(x = 'Time (Mya)', 
-                      y = expression(log~(O+1)))
+                      y = 'per capita origination rate')
 gbegg <- gbegg + scale_x_reverse()
 ggsave(filename = '../doc/figure/birth_eco.png', plot = gbegg, 
-       width = 6, height = 5)
+       width = 6, height = 4)
 
 
 # make a plot of log(loss + 1) over time
@@ -315,25 +360,38 @@ lbe <- lapply(lbe, function(a) Map(function(x, y) cbind(x, eco = y), a, et))
 lbe <- Reduce(rbind, lapply(lbe, function(x) Reduce(rbind, x)))
 lbe <- cbind(lbe, str_split(lbe$eco, '\\.', simplify = TRUE))
 names(lbe) <- c('loss', 'time', 'sim', 'eco', 'eco_1', 'eco_2')
-lbe$loss <- log(lbe$loss + 1)
+#lbe$loss <- log(lbe$loss + 1)
 
 lbe$eco_1 <- as.character(lbe$eco_1)
 lbe$eco_1 <- mapvalues(lbe$eco_1, 
                        from = unique(lbe$eco_1), 
                        to = c('insectivore', 'carnivore', 'herbivore', 
-                              'omnivore', 'augment'))
-
+                              'omnivore'))
 lbe$time <- mapvalues(lbe$time, 
                       from = unique(lbe$time), 
                       to = rev(time.start.stop[-T, 2]))
 
-lbe <- lbe[lbe$eco_1 != 'augment', ]
+# get mean estimate of birth rate
+loss.eco.mean <- data.frame(loss.byeco.mean, et)
+loss.eco.mean <- cbind(loss.eco.mean, 
+                      str_split(loss.eco.mean[, 2], '\\.', simplify = TRUE))
+names(loss.eco.mean) <- c('loss', 'et', 'eco_1', 'eco_2')
+loss.eco.mean$eco_1 <- as.character(loss.eco.mean$eco_1)
+loss.eco.mean$eco_1 <- mapvalues(loss.eco.mean$eco_1, 
+                                from = unique(loss.eco.mean$eco_1), 
+                                to = c('insectivore', 'carnivore', 
+                                       'herbivore', 'omnivore'))
+#lbe$loss <- log1p(lbe$loss)
+#loss.eco.mean$loss <- log1p(loss.eco.mean$loss)
 
 lbegg <- ggplot(lbe, aes(x = time, y = loss, group = sim))
+lbegg <- lbegg + geom_hline(data = loss.eco.mean,
+                            mapping = aes(yintercept = loss, sim = NULL),
+                            colour = 'blue', size = 1.1, alpha = 0.5)
 lbegg <- lbegg + geom_line(alpha = 0.1)
 lbegg <- lbegg + facet_grid(eco_1 ~ eco_2)
 lbegg <- lbegg + labs(x = 'Time (Mya)', 
-                      y = expression(log~(E+1)))
+                      y = 'per capita extinction rate')
 lbegg <- lbegg + scale_x_reverse()
 ggsave(filename = '../doc/figure/death_eco.png', plot = lbegg, 
-       width = 6, height = 5)
+       width = 6, height = 4)
