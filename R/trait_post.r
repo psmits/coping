@@ -70,7 +70,6 @@ post <- list.files('../data/mcmc_out', pattern = 'revamp_[0-9]_advi',
 fit1 <- read_one_stan_csv(post[1])
 ext1 <- post.advi(fit1)
 
-
 # analysis of model fit
 post.pred(ext1, ntax = N, ntime = T, sight.obs = sight, nsim, samp)
 # analysis of the posterior
