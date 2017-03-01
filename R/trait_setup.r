@@ -162,14 +162,7 @@ state <- mapvalues(state,
                    from = sort(unique(state)), 
                    to = seq(length(unique(state))))
 
-
-# create the augmented dataset
-div <- N
-sighta <- rbind(sight, matrix(0, nrow = N/div + 1, ncol = T))
-M <- nrow(sighta)
-I <- c(rep(1, N), rep(0, N/div + 1))
-statea <- c(state, rep(max(state) + 1, N/div + 1))
-D <- max(statea)
-stan_rdump(list = c('N', 'T', 'D', 'U', 'M', 'I', 
-                    'sighta', 'statea', 'u', 'ufull', 'mass'),
+# dump out the stan data
+stan_rdump(list = c('N', 'T', 'D', 'U', 
+                    'sight', 'state', 'u', 'ufull', 'mass'),
            file = '../data/data_dump/trait_w_gaps_augment.data.R')

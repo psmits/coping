@@ -89,7 +89,7 @@ source('../R/prob_calc.r')  # important posterior probabilities and related
 
 
 
-############
+#############
 ## full Bayes
 #post <- list.files('../data/mcmc_out', pattern = '[0-9]', full.names = TRUE)
 #fit <- read_stan_csv(post)
