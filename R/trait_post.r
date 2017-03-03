@@ -10,6 +10,7 @@ library(grid)
 library(scales)
 library(pROC)
 library(Metrics)
+source('../R/borrow_plotcorr.r')
 source('../R/multiclass_roc.r')
 source('../R/trait_setup.r')
 source('../R/sim_from_model.r')
@@ -80,6 +81,7 @@ vis.post(ext1, ecotype, ecotrans, mass,
 # full birth-death
 fit2 <- read_one_stan_csv(post[2])
 ext2 <- post.advi(fit2)
+
 # posterior predictive checks
 #   need to develop more
 post.pred(ext2, ntax = N, ntime = T, sight.obs = sight, nsim, samp, bd = TRUE)
@@ -91,7 +93,7 @@ post.div <- diversity.distribution(sight, ext2, nsim) #
 source('../R/div_plot.r')  # update this to work as functions, not just source
 
 source('../R/prob_calc.r')  # important posterior probabilities and related
-
+source('../R/cor_plot.r')  # plot and inspect correlation matrix from b+d
 
 
 #############
