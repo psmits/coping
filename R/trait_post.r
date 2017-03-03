@@ -93,6 +93,7 @@ post.div <- diversity.distribution(sight, ext2, nsim) #
 source('../R/div_plot.r')  # update this to work as functions, not just source
 
 source('../R/prob_calc.r')  # important posterior probabilities and related
+
 source('../R/cor_plot.r')  # plot and inspect correlation matrix from b+d
 
 
