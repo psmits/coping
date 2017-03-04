@@ -349,6 +349,47 @@ Both aspects of global temperature analyzed here are estimated to have strong ef
 
 
 
+The apparent similarities in origination rate of digitgrade carnivores, digitigrade herbivores, plantigrade herbivores, and unguligrade herbivores (Fig. \ref{fig:eco_origin} can be tested by inspecting the estimates of the two correlation matrices \(\Omega^{\phi}\) and \(\Omega^{\pi}\). The elements of these matrices are estimates of the correlation in origination and survival probabilities, respectively, between each of the 18 observed ecotypes. However, because ADVI-based inference assumes that the joint posterior is Gaussian, estimates of scale and correlation parameters are very approximate as these parameters tend to have decidedly non-Gaussian true posterior distributions \citep{Gelman2013d}. Because of this fundamental limitation, inference based on these correlation matrices are very approximate and subject to change.
+
+Consistent with visual inspection of the ecotype origination probability time series, there are some strong positive correlations between a few ecotypes (Fig. \ref{fig:origin_corr}). Given the posterior distribution of correlation estimates, the probability of these correlation estimates being greater than 0 can be estimated. Again, because of the assumed Gaussian posterior, these probability estimates are at best approximate and are subject to change given full posterior inference. To visualize these results, I've plotted an association graph of the correlations between ecotypes that are estimated to have a greater than 95\% posterior probability of being greater than 0 (Fig. \ref{fig:origin_corr_graph}); in total there are 35 correlations that fit this criterion. The ecotypes correlated with the most number (9) of other ecotyes are digitigrade carnivores, plantigrade herbivores, and unguligrade herbivores. Scansorial carnivores, digitigrade herbivores, fossorial herbivores are correlated with seven other ecotypes, each. These results support the conclusion that the origination probabilities of many ecotypes are correlated which I interpret to mean that changes to the species pool's environment context can lead to the simultaneous enrichment of multiple ecotypes instead of each ecotype respondingly independently. This result is most obvious for digitigrade carnivores, scansorial carnivores, digitigrade herbivores, fossorial herbivores, plantigrade herbivores, and unguligrade herbivores; these ecotypes are heavily cross-correlated with each other.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth,height=\textheight,keepaspectratio=true]{figure/origination_correlation}
+  \caption[Estimated correlations in origination probability between ecotypes]{Posterior mean estimates of the correlations in origination probability between the mammal ecotypes. The lower triangle of the matrix is populated with ellipses corresponding to the level of correlation between the two ecotypes, while the upper triangle of the matrix corresponds to the mean estimated correlation between ecotypes. Darker values correspond to a greater magnitude of correlation with blue values corresponding to a positive correlation and red values a negative correlation.}
+  \label{fig:origin_corr}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth,height=\textheight,keepaspectratio=true]{figure/origin_sig_corr}
+  \caption[Ecotypes with strong correlations in origination probability]{Ecotypes that have a strong correlation in origination probability. These ecotypes have a greater than 95\% posterior probability of being positively correlated. The number plotted at the midpoint of each edge corresponds to the mean estimated correlation between those two ecotypes.}
+  \label{fig:origin_corr_graph}
+\end{figure}
+
+
+In contrast to the visually obvious correlations in ecotype origination probability, visual inspection of the ecotype-specific survival probabilities (Fig. \ref{fig:eco_survival}) does not indicate that many strong correlations between ecotype survival probabilities. This conclusion is supported by the estimated correlations in ecotype survival probability (Fig. \ref{fig:survival_corr}). There are very few large magnitude estimates of correlation between any of the ecotypes. This result is further supported by the fact that only a single correlation, survival probability of digitigrade carnivores and unguligrade herbivores, has a greater than 95\% posterior probability of being positive (Fig. \ref{fig:surv_corr_graph}). This single correlation, however, adds more nuance to the interpretations from the origination probability correlations. In addition to correlation in enrichment, these ecotypes are correlated in their depletions. This result supports the conclusion that the diversity history of digitigrade carnivores and unguligrade herbivores are strongly related to each other both in terms of origination and survival, which stands in contrast to those ecotypes which are only correlated for origination.
+
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth,height=\textheight,keepaspectratio=true]{figure/survival_correlation}
+  \caption[Estimated correlations in survival probability between ecotypes]{Posterior mean estimates of the correlations in survival probability between the mammal ecotypes. The lower triangle of the matrix is populated with ellipses corresponding to the level of correlation between the two ecotypes, while the upper triangle of the matrix corresponds to the mean estimated correlation between ecotypes. Darker values correspond to a greater magnitude of correlation with blue values corresponding to a positive correlation and red values a negative correlation.}
+  \label{fig:survival_corr}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/surv_sig_corr}
+  \caption[Ecotypes with strong correlations in survival probability]{Ecotypes that have a strong correlation in survival probability. These ecotypes have a greater than 95\% posterior probability of being positively correlated. The number plotted at the midpoint of each edge corresponds to the mean estimated correlation between those two ecotypes.}
+  \label{fig:surv_corr_graph}
+\end{figure}
+
+
+
+
+
+
 
 
 
@@ -362,7 +403,9 @@ The general pattern of the estimated North American total mammal diversity for t
 
 The pattern exhibited by the diversity history estimated in this study (Fig. \ref{fig:diversity_est}) has some major similarities with previous mammal diversity curves \citep{Alroy2009}: both curves begin with an increase in diversity most of the major increases in diversity are retained including the large diversity spike during the Miocene. Unlike subsampling based approaches to estimating diversity \citep{Alroy2010c}, I'm able to interpolate over unsampled/poorly sampled time periods because of how the hierarchical model can share information across the different units \cite{Gelman2013d}; for cases like unsampled temporal bins, this may lead to estimates with high uncertainty, but that is preferable to no estimate at all. Finally, the Bayesian framework here gives a distribution of possible estimates of diversity allowing for direct inspection of the uncertainty of our inferences, something that is preferable to both traditional and resampling based confidence interval estimates \citep{Gelman2013d}. Note that my time series of estimated diversity begins at a slightly different point than that of \citet{Alroy2009} and that the time intervals used by \citet{Alroy2009} are slightly shorter than those used here, so this may cause some of the minor differences between the curves. Also, please note that the diversity values are plotted at the ``ceiling'' of each temporal interval and not at the midpoint (Fig. \ref{fig:diversity_est}).
 
-When viewed through the lens of diversification rate, some of the structure behind the estimated diversity history begins to take shape (Fig. \ref{fig:diversity_rate}). For most of the Cenozoic, the diversification rate hovers around zero, punctuated by both positive and negative spikes. The largest spike in diversification rate is at 16 Mya, which is early Oligocene (Fig. \ref{fig:diversity_rate}). Other notable increases in diversification rate occur 56, 46, 22, 18, and 6 Mya (Table \ref{tab:div_peak}), though the last of these may be due to edge effects surrounding the partial-identifiability of \(p_{t = T}\). Notable decreases in diversification rate occur at 54, 50, 48, 44, 40, 34, 30, 24, 20, 16, 12, and 8 Mya (Table \ref{tab:div_peak}), meaning that diversification rate has more major decreases than increases. While diversification rates significantly lower than average are more common than diversification rates greater than average, when diversification rate does increases it is with a greater magnitude than most decreases (Fig. \ref{fig:diversity_rate}). Given that diversification rate more closely resembles origination rate than extinction rate (Fig. \ref{fig:diversity_rate}, \ref{fig:origin_rate}, \ref{fig:extinct_rate}), these decreases in diversification rate may be indicative of ``depletions'' (failure to replace extinct taxa) rather than pulses of extinction.
+When viewed through the lens of diversification rate, some of the structure behind the estimated diversity history begins to take shape (Fig. \ref{fig:diversity_rate}). For most of the Cenozoic, the diversification rate hovers around zero, punctuated by both positive and negative spikes. The largest spike in diversification rate is at 16 Mya, which is early Oligocene (Fig. \ref{fig:diversity_rate}). Other notable increases in diversification rate occur 56, 46, 22, 18, and 6 Mya (Table \ref{tab:div_peak}), though the last of these may be due to edge effects surrounding the partial-identifiability of \(p_{t = T}\). Notable decreases in diversification rate occur at 54, 50, 48, 44, 40, 34, 30, 24, 20, 16, 12, and 8 Mya (Table \ref{tab:div_peak}), meaning that diversification rate has more major decreases than increases. While diversification rates significantly lower than average are more common than diversification rates greater than average, when diversification rate does increases it is with a greater magnitude than most decreases (Fig. \ref{fig:diversity_rate}). Given that diversification rate more closely resembles origination rate than extinction rate (Fig. \ref{fig:diversity_rate}, \ref{fig:origin_rate}, \ref{fig:extinct_rate}), these decreases in diversification rate may be indicative of ``depletions'' (failure to replace extinct taxa) rather than pulses of extinction. 
+
+The estimates from this study of per capita origination and extinction rates for the entire species pool (Fig. \ref{fig:origin_rate}, \ref{fig:extinct_rate}) are very different from the origination and extinction rates estimated by \citet{Alroy2009}. The two most striking difference are the very different estimates of extinction rate between the two studies and the very different scales of the origination rate estimates. This may be due to the fundamentally different way these rates are calculated, and how the diversification process was modeled. The per capita rates estimated in this study follow straight from the definition of a per capita rate (e.g. number of originations between time \(t\) and \(t + 1\) divided by the diversity at time \(t\)) while the rates calculated in \citet{Alroy2009} are based on log ratios of standing diversity.
 
 The comparison between per capita origination and extinction rate estimates reveals how diversification rate is formed (Fig. \ref{fig:origin_rate}, \ref{fig:extinct_rate}). As expected given previous inspection of the ecotype specific estimates of origination and survival probabilities from the birth-death model, diversification rate seems most driven by changes in origination rate as opposed to extinction rate. Extinction rate, on the other hand, demonstrates an almost saw-toothed pattern around a constant mean (Fig. \ref{fig:extinct_rate}). These results are broadly consistent with those from previous analyses of North American mammals diversity and diversification \citep{Alroy1996a,Alroy2000g,Alroy2009}.
 
@@ -477,46 +520,5 @@ In contrast to ecotype-specific per capita origination rates which demonstrate d
 \end{figure}
 
 
-
-
-
-
-
-The apparent similarities in origination rate of digitgrade carnivores, digitigrade herbivores, plantigrade herbivores, and unguligrade herbivores (Fig. \ref{fig:eco_origin}, \ref{fig:ecotype_birth}) can be tested by inspecting the estimates of the two correlation matrices \(\Omega^{\phi}\) and \(\Omega^{\pi}\). The elements of these matrices are estimates of the correlation in origination and survival probabilities, respectively, between each of the 18 observed ecotypes. However, because ADVI-based inference assumes that the joint posterior is Gaussian, estimates of scale and correlation parameters are very approximate as these parameters tend to have decidedly non-Gaussian true posterior distributions \citep{Gelman2013d}.Because of this fundamental limitation, inference based on these correlation matrices are very approximate and subject to change.
-
-Consistent with visual inspection of the ecotype origination probability time series, there are some strong positive correlations between a few ecotypes (Fig. \ref{fig:origin_corr}). Given the posterior distribution of correlation estimates, the probability of these correlation estimates being greater than 0 can be estimated. Again, because of the assumed Gaussian posterior, these probability estimates are at best approximate and are subject to change given full posterior inference. To visualize these results, I've plotted an association graph of the correlations between ecotypes that are estimated to have a greater than 95\% posterior probability of being greater than 0 (Fig. \ref{fig:origin_corr_graph}); in total there are 35 correlations that fit this criterion. The ecotypes correlated with the most number (9) of other ecotyes are digitigrade carnivores, plantigrade herbivores, and unguligrade herbivores. Scansorial carnivores, digitigrade herbivores, fossorial herbivores are correlated with seven other ecotypes, each. These results support the conclusion that the origination probabilities of many ecotypes are correlated which I interpret to mean that changes to the species pool's environment context can lead to the simultaneous enrichment of multiple ecotypes instead of each ecotype respondingly independently. This result is most obvious for digitigrade carnivores, scansorial carnivores, digitigrade herbivores, fossorial herbivores, plantigrade herbivores, and unguligrade herbivores; these ecotypes are heavily cross-correlated with each other.
-
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=\textwidth,height=\textheight,keepaspectratio=true]{figure/origination_correlation}
-  \caption[Estimated correlations in origination probability between ecotypes]{Posterior mean estimates of the correlations in origination probability between the mammal ecotypes. The lower triangle of the matrix is populated with ellipses corresponding to the level of correlation between the two ecotypes, while the upper triangle of the matrix corresponds to the mean estimated correlation between ecotypes. Darker values correspond to a greater magnitude of correlation with blue values corresponding to a positive correlation and red values a negative correlation.}
-  \label{fig:origin_corr}
-\end{figure}
-
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=\textwidth,height=\textheight,keepaspectratio=true]{figure/origin_sig_corr}
-  \caption[Ecotypes with strong correlations in origination probability]{Ecotypes that have a strong correlation in origination probability. These ecotypes have a greater than 95\% posterior probability of being positively correlated. The number plotted at the midpoint of each edge corresponds to the mean estimated correlation between those two ecotypes.}
-  \label{fig:origin_corr_graph}
-\end{figure}
-
-
-In contrast to the visually obvious correlations in ecotype origination probability, visual inspection of the ecotype-specific survival probabilities (Fig. \ref{fig:eco_survival}) and per capita extinction rates (Fig. \ref{fig:ecotype_death}) does not indicate that many strong correlations between ecotype survival probabilities. This conclusion is supported by the estimated correlations in ecotype survival probability (Fig. \ref{fig:survival_corr}). There are very few large magnitude estimates of correlation between any of the ecotypes. This result is further supported by the fact that only a single correlation, survival probability of digitigrade carnivores and unguligrade herbivores, has a greater than 95\% posterior probability of being positive (Fig. \ref{fig:surv_corr_graph}). This single correlation, however, adds more nuance to the interpretations from the origination probability correlations. In addition to correlation in enrichment, these ecotypes are correlated in their depletions. This result supports the conclusion that the diversity history of digitigrade carnivores and unguligrade herbivores are strongly related to each other both in terms of origination and survival, which stands in contrast to those ecotypes which are only correlated for origination.
-
-
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=\textwidth,height=\textheight,keepaspectratio=true]{figure/survival_correlation}
-  \caption[Estimated correlations in survival probability between ecotypes]{Posterior mean estimates of the correlations in survival probability between the mammal ecotypes. The lower triangle of the matrix is populated with ellipses corresponding to the level of correlation between the two ecotypes, while the upper triangle of the matrix corresponds to the mean estimated correlation between ecotypes. Darker values correspond to a greater magnitude of correlation with blue values corresponding to a positive correlation and red values a negative correlation.}
-  \label{fig:survival_corr}
-\end{figure}
-
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/surv_sig_corr}
-  \caption[Ecotypes with strong correlations in survival probability]{Ecotypes that have a strong correlation in survival probability. These ecotypes have a greater than 95\% posterior probability of being positively correlated. The number plotted at the midpoint of each edge corresponds to the mean estimated correlation between those two ecotypes.}
-  \label{fig:surv_corr_graph}
-\end{figure}
-
-
 \end{document}
+
