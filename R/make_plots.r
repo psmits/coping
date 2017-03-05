@@ -194,7 +194,7 @@ vis.post <- function(ext1,
                                        axis.text = element_text(size = 8))
   mass_on_pres <- mass_on_pres + 
     scale_x_continuous(breaks = round(seq(min(out$mass), max(out$mass), 
-                                          by = 0.5), 1))
+                                          by = 1), 1))
   ggsave(filename = '../doc/figure/mass_on_pres.png', plot = mass_on_pres,
          width = 6, height = 5)
 
@@ -495,7 +495,7 @@ vis.bdpost <- function(ext2,
                                        axis.text = element_text(size = 8))
   mass_on_pres <- mass_on_pres + 
     scale_x_continuous(breaks = round(seq(min(out$mass), max(out$mass), 
-                                          by = 0.5), 1))
+                                          by = 1), 1))
   ggsave(filename = '../doc/figure/mass_on_origin_bd.png', plot = mass_on_pres,
          width = 6, height = 4)
 
@@ -534,7 +534,7 @@ vis.bdpost <- function(ext2,
                                        axis.text = element_text(size = 8))
   mass_on_pres <- mass_on_pres + 
     scale_x_continuous(breaks = round(seq(min(out$mass), max(out$mass), 
-                                          by = 0.5), 1))
+                                          by = 1), 1))
   ggsave(filename = '../doc/figure/mass_on_surv_bd.png', plot = mass_on_pres,
          width = 6, height = 4)
 

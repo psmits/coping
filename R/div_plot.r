@@ -216,6 +216,7 @@ for(jj in seq(length(post.div))) {
 }
 
 div.eco <- llply(div.byeco, function(x) Reduce(rbind, llply(x, colSums)))
+# need to also make the relative mean diversity
 div.eco.mean <- llply(div.eco, rowMeans)
 
 div.eco <- llply(div.eco, function(x) 
@@ -268,6 +269,9 @@ degg <- degg + labs(x = 'Time (Mya)',
 degg <- degg + scale_x_reverse()
 ggsave(filename = '../doc/figure/ecotype_diversity.png', plot = degg,
        width = 6, height = 4)
+
+
+
 
 # gains and losses by ecotype
 se <- dd <- list()
