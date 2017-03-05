@@ -33,7 +33,8 @@ theme_update(axis.text = element_text(size = 10),
 
 cbp.long <- c('#000000', '#004949', '#009292', '#FF7DB6', '#FFB6DB', 
               '#490092', '#006DDB', '#B66DFF', '#6DB6FF', '#B6DBFF', 
-              '#920000', '#924900', '#DBD100', '#24FF24', '#FFFF6D')
+              '#920000', '#924900', '#DBD100', '#24FF24', '#FFFF6D',
+              '#000000', '#004949', '#009292', '#FF7DB6', '#FFB6DB')
 
 grab <- laply(seq(5), function(x) seq(from = x, to = length(cbp.long), by = 5))
 cbp.long <- cbp.long[t(grab)][-1]

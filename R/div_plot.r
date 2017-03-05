@@ -1,3 +1,9 @@
+tol18rainbow <- c("#771155", "#AA4488", "#CC99BB", "#114477", "#4477AA", 
+                  "#77AADD", "#117777", "#44AAAA", "#77CCCC", "#777711", 
+                  "#AAAA44", "#DDDD77", "#774411", "#AA7744", "#DDAA77", 
+                  "#771122", "#AA4455", "#DD7788")
+
+
 # total diversity not broken by grouping
 diversity <- Map(function(x, y) cbind(div = x, time = seq(y)), 
                  llply(post.div, colSums), ncol(sight.obs))
@@ -214,9 +220,10 @@ for(jj in seq(length(post.div))) {
   }
   div.byeco[[jj]] <- byeco
 }
-
 div.eco <- llply(div.byeco, function(x) Reduce(rbind, llply(x, colSums)))
-# need to also make the relative mean diversity
+
+
+# overall average
 div.eco.mean <- llply(div.eco, rowMeans)
 
 div.eco <- llply(div.eco, function(x) 
@@ -258,6 +265,43 @@ div.eco$time <- mapvalues(div.eco$time,
                           from = unique(div.eco$time), 
                           to = rev(time.start.stop[, 2]))
 
+
+# get mean curve
+ded <- lapply(split(div.eco, div.eco$et), function(x) split(x, x$time))
+
+kk <- list()
+for(ii in seq(length(ded))) {
+  oo <- list()
+  for(jj in seq(T)) {
+    hold <- ded[[ii]][[jj]][1, ]
+    hold$diversity <- log(mean(exp(ded[[ii]][[jj]]$diversity)))
+    oo[[jj]] <- hold
+  }
+  kk[[ii]] <- oo
+}
+em <- lapply(kk, function(x) Reduce(rbind, x))
+em <- data.frame(Reduce(rbind, em))
+
+em$eco_1 <- mapvalues(em$eco_1, 
+                      from = unique(em$eco_1), 
+                      to = c('carnivore', 'herbivore', 
+                             'insectivore', 'omnivore'))
+em$et <- paste(em$eco_1, em$eco_2)
+em$et <- factor(em$et)
+em$et <- factor(em$et, levels = rev(levels(em$et)))
+
+emgg <- ggplot(em, aes(x = time, y = diversity, fill = et))
+emgg <- emgg + geom_area(position = 'fill')
+emgg <- emgg + scale_fill_manual(values = tol18rainbow,
+                                 name = 'Ecotype',
+                                 guide = guide_legend(ncol = 2))
+emgg <- emgg + scale_x_reverse()
+emgg <- emgg + labs(x = 'Time (Mya)',
+                    y = 'Relative log diversity')
+ggsave(filename = '../doc/figure/relative_diversity.png', plot = emgg,
+       width = 6, height = 4)
+
+# faceted diversity plot
 degg <- ggplot(div.eco, aes(x = time, y = diversity, group = sim))
 degg <- degg + geom_hline(data = div.eco.mean,
                           mapping = aes(yintercept = diversity, sim = NULL),
