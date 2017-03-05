@@ -1,4 +1,6 @@
+ee=$(bc -l <<< '1/10')
 ../stan/turnover_revamp variational \
+  eta=$ee \
   id=1 \
   init=0 \
   data file=../data/data_dump/trait_w_gaps.data.R \
