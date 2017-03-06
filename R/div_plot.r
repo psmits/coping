@@ -295,11 +295,12 @@ emgg <- emgg + geom_area(position = 'fill')
 emgg <- emgg + scale_fill_manual(values = tol18rainbow,
                                  name = 'Ecotype',
                                  guide = guide_legend(ncol = 2))
+emgg <- emgg + theme(legend.text = element_text(size = 6))
 emgg <- emgg + scale_x_reverse()
 emgg <- emgg + labs(x = 'Time (Mya)',
                     y = 'Relative log diversity')
 ggsave(filename = '../doc/figure/relative_diversity.png', plot = emgg,
-       width = 6, height = 4)
+       width = 8, height = 4)
 
 # faceted diversity plot
 degg <- ggplot(div.eco, aes(x = time, y = diversity, group = sim))

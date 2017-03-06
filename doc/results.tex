@@ -42,13 +42,7 @@ Comparison of the posterior predictive results from the pure-presence and birth-
 
 Increases in the occurrence probability of an ecotype is interpreted as an increase in the commonness of that ecotype in the species pool. In turn, decreases in the occurrence probability of an ecotype are interpreted to a decrease in the commonness of that ecotype in the species pool. Additionally, when the uncertainty surrounding a probability estimate is very high, as with arboreal insectivores, this is interpreted as complete separation which means that that ecotype has most likely all but disappeared from the species pool \citep{Gelman2007}. In logistic regression, high uncertainty in the estimates of the underlying log-odds of occurrence, origination, or survival tends to indicate extreme rarity or complete absence of the specific ecotype. The latter is called complete separation and occurs when there is no uncertainty in the effect of a covariate on presence/absence. The problem of complete separation is mitigated by the hierarchical modeling strategy used here \citep{Gelman2013d,Gelman2007,McElreath2016}.
 
-There are a few shared patterns of ecotype occurrence probabilities as estimated from the pure-presence model (Fig. \ref{fig:eco_occur}). The first pattern I identify is that shared by digitigrade carnivores, scansorial carnivores, fossorial herbivores, scansorial herbivores, and unguligrade herbivores. All of these ecotypes begin with the Cenozoic with very low occurrence probability and then quickly jumping up to very high probability of presence at approximately 50 Mya. The occurrence probabilities of these ecotypes stay high until the start of the third plant phase 18 Mya where it decreases slightly. The second pattern I identify is where occurrence probability begins very high and then slowly decreases over the Cenozoic. Example ecotypes that fit into this category are arboreal carnivores, plantigrade insectivores, scansorial insectivores, arboreal omnivores, scansorial omnivores, and unguligrade omnivores. The third pattern I identify is that shared by fossorial insectivores, and plantigrade omnivores. The occurrence probabilities of all these ecotypes begin very low and jump up at the start of the third plant phase 18 Mya. The final shared pattern is a ``washtub'' pattern with occurrence being higher in the first plant phase than the second, which in turn is lower than the occurrence probabilities for the third plant phase. The only ecotype that doesn't share its pattern of occurrence probability with any other ecotype are arboreal insectivores. Instead, the occurrence probability time series for this ecotype is with such uncertainty that it is not possible to distinguish a simple pattern. 
-
-Origination probabilities estimated from the birth-death model are very different from the occurrence probability estimates from the pure-presence model(Fig. \ref{fig:eco_origin}); this is also the case for the survival probability estimates (Fig. \ref{fig:eco_survival}). 
-%This result supports the idea that changes to the North American regional species pool is more likely due to changes in origination than extinction, a result to which I will return to later in the discussion of per-capita diversification, origination, and extinction rates.
-For most ecotypes, origination probabilities estimated from the birth-death model (Fig. \ref{fig:eco_origin}) increase with time. This makes sense given that, over time, all species that have at least one observed occurrence must have had that occurrence by the last time point, so our certainty in a species occurring must increase with time. Notably, ecotypes with arboreal components do not appear to follow the same pattern as most other ecotypes; instead, origination probabilities appear relatively flat with high posterior variance for most of the Cenozoic. For most ecotypes, the origination probability is estimated with less uncertainty than its estimate of survival probability (Fig. \ref{fig:eco_origin}, and \ref{fig:eco_survival}). 
-
-The dramatic differences in the estimates origination and survival probabilities are indicative of how differently these processes affect the diversification process and may also be responsible for the better posterior predictive performance of the birth-death model over the pure-presence model (Fig. \ref{fig:ppc_pure_presence}, and \ref{fig:ppc_birth_death}). While the estimates at all points along both time series have high variance, what is striking is how mean origination probability changes over time while most ecotype survival probabilities have relatively stable means for the entire Cenozoic (Fig. \ref{fig:eco_origin}, and \ref{fig:eco_survival}).
+Estimates of occurrence probability estimated from the pure-presence model and estimates of origination probability from the birth-death model are broadly similar (Fig. \ref{fig:eco_occur}), \ref{fig:eco_origin}); this is not the case for the survival probability estimates (Fig. \ref{fig:eco_survival}). This result supports the idea that changes to the North American regional species pool is more likely due to changes in origination than extinction, a result to which I will return to later in the discussion of per-capita diversification, origination, and extinction rates. For most ecotypes, occurrence and origination probability estimates increase with time (Fig. \ref{fig:eco_origin}). This makes sense given that, over time, all species that have at least one observed occurrence must have had that occurrence by the last time point, so our certainty in a species occurring must increase with time. Notably, ecotypes with arboreal components do not appear to follow the same pattern as most other ecotypes; instead, origination probabilities appear relatively flat with high posterior variance for most of the Cenozoic. For most ecotypes, occurrence or origination probability is estimated with less uncertainty than its estimate of survival probability (Fig. \ref{fig:eco_occur}, \ref{fig:eco_origin}, \ref{fig:eco_survival}). 
 
 
 
@@ -74,10 +68,7 @@ The dramatic differences in the estimates origination and survival probabilities
 \end{figure}
 
 
-The pure-presence and birth-death models have very different estimates of the relationship between species mass and the probability of sampling a species that is present (Fig. \ref{fig:mass_preserve}). For both models this relationship is positive, which means that as species body mass increases it is expected that they are more likely to be sampled if present. The pure-presence model has a much lower overall chance of sampling a present species than the birth-death model. Additionally, the estimated relationship from the pure-presence model is with less uncertainty than that from the birth-death model (Fig. \ref{fig:mass_preserve}). These results are consistent with the intuition that larger fossils are easier to sample because they are more visible to the eye. In turn, this means that observed occurrence histories small bodied species are more likely to have gaps, where \(y = 0\) for that species the true state \(z\) is 1. 
-%For the pure-presence model, mass is estimated to not have a strong effect on the probability of sampling a species that is presence (Fig. \ref{fig:mass_preserve_pure_pres}). In contrast, for the birth-death model mass is found to have a negative relationship with observation such that larger species are less likely to be observed if present than smaller species (Fig. \ref{fig:mass_preserve_bd}). The result from the birth-death model is partially expected based on previous research \citep{Damuth1982}. What this result means is that the record of large bodied species is expected on average to have more gaps in sampling and a less consistent record from time point to time point than smaller bodied species. Additionally, as this is presence/absence data higher preservation and collection in terms of individual specimens at a location or a single temporal horizon does not necessarily translate to high preservation over multiple time points.
-%
-%The average sampling probabilities for both the pure-presence model and birth-death model are both at the point where (rescaled log) mass equals 0; visual comparison indicates that, on average, sampling probability has greater posterior estimate in the pure-presence model than the birth-death model (Fig.\ref{fig:mass_preserve}). The probability that one estimate is different from the other, however, is not directly calculable as they come from different models; what this tells us is how adding more information to the model (i.e. replacing occurrence with origination and extinction) changes parameter estimates in the model.
+The pure-presence and birth-death models have similar estimates of the relationship between species mass and the probability of sampling a species that is present (Fig. \ref{fig:mass_preserve}). For both models this relationship is at least weakly positive, which means that as species body mass increases it is expected that they are more likely to be sampled if present. The estimated relationship from the pure-presence model is with greater uncertainty than that from the birth-death model (Fig. \ref{fig:mass_preserve}). These results are consistent with the intuition that larger fossils are easier to sample because they are more visible to the eye. In turn, this means that observed occurrence histories small bodied species are more likely to have gaps, where \(y = 0\) for that species the true state \(z\) is 1. 
 
 \begin{figure}[ht]
   \begin{subfigure}[b]{0.45\textwidth}
@@ -94,9 +85,9 @@ The pure-presence and birth-death models have very different estimates of the re
   \label{fig:mass_preserve}
 \end{figure}
 
-For the pure-presence model, species mass is found to have either no relationship with occurrence or a negative one (Fig. \ref{fig:mass_occur}). A negative relationship between body size and occurrence is interpreted to mean that large bodied species are likely to occur less frequently than smaller bodied species. Note that all variation in estimates between ecotypes (Fig. \ref{fig:mass_occur}) is due to differences in ecotype-specific occurrence probability and the associated effects of plant phase; the effect of mass was considered constant for all ecotypes.
+%For the pure-presence model, species mass is found to have either no relationship with occurrence or a negative one (Fig. \ref{fig:mass_occur}). A negative relationship between body size and occurrence is interpreted to mean that large bodied species are likely to occur less frequently than smaller bodied species. Note that all variation in estimates between ecotypes (Fig. \ref{fig:mass_occur}) is due to differences in ecotype-specific occurrence probability and the associated effects of plant phase; the effect of mass was considered constant for all ecotypes.
 
-is most similar to the estimated effect of species mass on probability of origination for the birth-death model (Fig. \ref{fig:mass_origin}). The striking pattern is higher probability of origination for species with body sizes closer to the mean than either extremes. This result is consistent with the canonically normal distribution of mammal body sizes \citep{Smith2004}; it is then expected that the most likely to occur species would be those from the middle of the distribution, and that species originating will on average be of average mass, especially considering species shared common ancestry \citep{Felsenstein1985b}. As with the results from the pure-presence model (Fig. \ref{fig:mass_occur}) all variation in estimates between ecotypes (Fig. \ref{fig:mass_origin} is due to differences in ecotype-specific origination probabilities and the associated effects of plant phase; the effect of mass was considered constant for all ecotypes.
+There is broad congruence between the estimated effect of body mass on occurrence proability (Fig. \ref{fig:mass_occur}) and the effect of species mass on body mass on origination probaiblity (Fig. \ref{fig:mass_origin}). The striking pattern is higher probability of origination for species with body sizes closer to the mean than either extremes. This result is consistent with the canonically normal distribution of mammal body sizes \citep{Smith2004}; it is then expected that the most likely to occur species would be those from the middle of the distribution, and that species originating will on average be of average mass, especially considering species shared common ancestry \citep{Felsenstein1985b}. All variation in estimates between ecotypes (Fig. \ref{fig:mass_occur}, \ref{fig:mass_origin}) is due to differences in ecotype-specific origination probabilities and the associated effects of plant phase; the effect of mass was considered constant for all ecotypes.
 
 \begin{figure}[ht]
   \centering
@@ -153,11 +144,9 @@ An association between plant phase and differences in the log-odds of occurrence
 One of the limitations to this interpretation is the almost determistic increase in probability of occurrence and origination for most ecotypes (Fig. \ref{fig:eco_occur}, \ref{fig:eco_origin}). This ``pull of the Recent'' means that interpreting the biological meaning of differences between the final plant phase and the two previous phases is difficult as the guanteed occurrence of the later taxa increases the average probability for that phase, which in turn affects the other time bins in that phase.
 
 Plant phases are associated with large differences in log-odds for occurrence and origination probabilities (Tables \ref{tab:occur_plant}, \ref{tab:origin_plant}), though there is little evidence of plant phase being an important distinguishing factor in species survival, as only a few ecotypes demonstrate strong affinities with some plant phases (Table \ref{tab:surv_plant}). 
-Curiously, the effects of plant phase on occurrence probability (Fig. \ref{fig:group_pure_presence} are almost the opposite of the effects of plant phase on origination probability (Fig. \ref{fig:group_origin_bd}). This discrepancy is another example of how modeling species occurrence as two separate processes reveals how different origination and extinction are from each other and how they shape diversity in different ways.
 
-The most common pattern of the effects of plant phase on ecotype occurrence is that the during first and last plant phases ecotypes have a lower log-odds of occurrence than the second plant phase (Fig. \ref{fig:eco_occur}. This is the case for all ecotypes identified as the first major pattern in occurrence probabilities (Fig. \ref{fig:eco_occur}). Even within those ecotypes, the slightly different occurrence probability estimates for digitgrade herbivores is reflected in the less extreme increase in log-odds of occurrence for the second plant phase (Fig. \ref{fig:group_pure_presence}). In contrast, the almost universal pattern of the effect of plant phase on ecotype origination is that the during first and last plant phases ecotypes have a greater log-odds of occurrence or origination than the second plant phase (Fig. \ref{fig:eco_occur}, \ref{fig:eco_origin}). The three ecotypes that do not follow this pattern are fossorial herbivores, scansorial herbivores, and arboreal insectivores.
+The effects of plant phase on occurrence and origination probabilities are broadly congruent with each other (Fig. \ref{fig:group_pure_presence}, \ref{fig:group_origin_bd}). The almost universal pattern of the effect of plant phase on ecotype origination is that the during first and last plant phases ecotypes have a greater log-odds of occurrence or origination than the second plant phase (Fig. \ref{fig:eco_occur}, \ref{fig:eco_origin}). The three ecotypes that do not follow this pattern are fossorial herbivores, scansorial herbivores, and arboreal insectivores.
 
-%The difference between the third plant phase and the other two plant phases, for all ecotypes except arboreal carnivores, is obvious upon inspection of the occurrence and origination time series as there is large up-tick in probability of occurring or originating towards the modern (Fig. \ref{fig:eco_occur}, \ref{fig:eco_origin}). The differences in mean probability of occurring or originating attributable to the plant phases are observable as shifts along the time series corresponding to the phase barriers (Table \ref{tab:plant_def}). For example, scansorial herbivore occurrence and origination probabilities demonstrate clear shifts at 50 Mya and 16 Mya (Fig. \ref{fig:eco_occur}, \ref{fig:eco_origin}).
 
 \begin{table}[ht]
   \centering
@@ -167,24 +156,24 @@ The most common pattern of the effects of plant phase on ecotype occurrence is t
     \hline
     & P(Phase 1 $>$ Phase 2) & P(Phase 2 $>$ Phase 3) & P(Phase 1 $>$ Phase 3) \\ 
     \hline
-    arboreal carnivore & 0.214 & 0.837 & 0.704 \\ 
-    digitigrade carnivore & 0.000 & 1.000 & 0.024 \\ 
-    plantigrade carnivore & 0.000 & 1.000 & 0.001 \\ 
-    scansorial carnivore & 0.000 & 0.998 & 0.000 \\ 
-    arboreal herbivore & 1.000 & 0.731 & 1.000 \\ 
-    digitigrade herbivore & 1.000 & 1.000 & 1.000 \\ 
-    fossorial herbivore & 1.000 & 0.991 & 1.000 \\ 
-    plantigrade herbivore & 1.000 & 0.999 & 1.000 \\ 
-    scansorial herbivore & 0.000 & 1.000 & 0.267 \\ 
-    unguligrade herbivore & 1.000 & 0.000 & 0.000 \\ 
-    arboreal insectivore & 0.001 & 1.000 & 0.984 \\ 
+    arboreal carnivore & 0.323 & 0.874 & 0.926 \\ 
+    digitigrade carnivore & 1.000 & 0.000 & 1.000 \\ 
+    plantigrade carnivore & 1.000 & 0.040 & 1.000 \\ 
+    scansorial carnivore & 1.000 & 0.015 & 1.000 \\ 
+    arboreal herbivore & 1.000 & 0.515 & 1.000 \\ 
+    digitigrade herbivore & 1.000 & 0.995 & 1.000 \\ 
+    fossorial herbivore & 1.000 & 0.923 & 1.000 \\ 
+    plantigrade herbivore & 1.000 & 0.995 & 1.000 \\ 
+    scansorial herbivore & 1.000 & 0.717 & 1.000 \\ 
+    unguligrade herbivore & 1.000 & 0.000 & 1.000 \\ 
+    arboreal insectivore & 0.024 & 0.999 & 0.997 \\ 
     fossorial insectivore & 1.000 & 0.000 & 1.000 \\ 
-    plantigrade insectivore & 0.000 & 0.964 & 0.004 \\ 
-    scansorial insectivore & 0.000 & 1.000 & 0.023 \\ 
-    arboreal omnivore & 0.003 & 0.174 & 0.000 \\ 
-    plantigrade omnivore & 1.000 & 0.272 & 1.000 \\ 
-    scansorial omnivore & 1.000 & 0.723 & 1.000 \\ 
-    unguligrade omnivore & 0.000 & 1.000 & 0.152 \\ 
+    plantigrade insectivore & 0.923 & 0.558 & 0.985 \\ 
+    scansorial insectivore & 0.982 & 0.483 & 0.992 \\ 
+    arboreal omnivore & 0.959 & 0.837 & 1.000 \\ 
+    plantigrade omnivore & 1.000 & 0.247 & 1.000 \\ 
+    scansorial omnivore & 0.983 & 0.861 & 1.000 \\ 
+    unguligrade omnivore & 1.000 & 0.189 & 0.998 \\ 
     \hline
   \end{tabular}
 \end{table}
@@ -251,7 +240,7 @@ The most common pattern of the effects of plant phase on ecotype occurrence is t
 \end{table}
 
 
-Both aspects of global temperature analyzed here are estimated to have strong effects on species occurrence and origination for most mammal ecotypes (Tables \ref{tab:occur_temp}, \ref{tab:origin_temp}). Similarity, the probability that temperature has a large effect on species extinction is very low for all ecotypes (Table \ref{tab:surv_temp}). The effects of the temperature covariates on ecotype occurrence and origination tend to be negative, which which means that as temperature decreases, occurrence or origination are expected to increase. However, there is a positive relationship between mean temperature and the occurrence probabilities of arboreal herbivores (Table \ref{tab:occur_temp}). Similarly there are positive relationships between temperature range and occurrence of arboreal herbivores, platigrade herbivores, arboreal insectivores, and scansorial omnivores. A positive relationship is interpreted to mean that as temperature increases, the occurrence of those ecotypes is expected to increase. In the case of survival, the only strong ecotype association for either of the temperature covariates is a positive relationship between temperature range and occurrence probabilities of with plantigrade herbivores, and to a less certain extent plantigrade herbivores (Tab. \ref{tab:surv_temp}).
+Both aspects of global temperature analyzed here are estimated to have strong effects on species occurrence and origination for most mammal ecotypes (Tables \ref{tab:occur_temp}, \ref{tab:origin_temp}). Similarity, the probability that temperature has a large effect on species extinction is very low for all ecotypes (Table \ref{tab:surv_temp}). The effects of the temperature covariates on ecotype occurrence and origination are estimated to be negative, which which means that as temperature decreases, occurrence or origination are expected to increase. In the case of survival, the only strong ecotype association for either of the temperature covariates is a positive relationship between temperature range and occurrence probabilities of with plantigrade herbivores (Tab. \ref{tab:surv_temp}).
 
 \begin{table}[ht]
   \centering
@@ -261,24 +250,24 @@ Both aspects of global temperature analyzed here are estimated to have strong ef
     \hline
     & \(P(\gamma_{temp\ mean} > 0)\) & \(P(\gamma_{temp\ range} > 0)\) \\ 
     \hline
-    arboreal carnivore & 0.094 & 0.486 \\ 
+    arboreal carnivore & 0.067 & 0.043 \\ 
     digitigrade carnivore & 0.000 & 0.000 \\ 
-    plantigrade carnivore & 0.000 & 0.000 \\ 
-    scansorial carnivore & 0.000 & 0.000 \\ 
-    arboreal herbivore & 0.969 & 0.999 \\ 
+    plantigrade carnivore & 0.012 & 0.054 \\ 
+    scansorial carnivore & 0.007 & 0.086 \\ 
+    arboreal herbivore & 0.762 & 0.852 \\ 
     digitigrade herbivore & 0.000 & 0.000 \\ 
-    fossorial herbivore & 0.000 & 0.006 \\ 
-    plantigrade herbivore & 0.000 & 0.999 \\ 
-    scansorial herbivore & 0.000 & 0.000 \\ 
-    unguligrade herbivore & 0.000 & 0.000 \\ 
-    arboreal insectivore & 0.013 & 0.960 \\ 
-    fossorial insectivore & 0.008 & 0.000 \\ 
-    plantigrade insectivore & 0.002 & 0.042 \\ 
-    scansorial insectivore & 0.004 & 0.003 \\ 
-    arboreal omnivore & 0.000 & 0.006 \\ 
-    plantigrade omnivore & 0.000 & 0.145 \\ 
-    scansorial omnivore & 0.800 & 0.998 \\ 
-    unguligrade omnivore & 0.040 & 0.000 \\ 
+    fossorial herbivore & 0.000 & 0.002 \\ 
+    plantigrade herbivore & 0.000 & 0.364 \\ 
+    scansorial herbivore & 0.141 & 0.004 \\ 
+    unguligrade herbivore & 0.001 & 0.000 \\ 
+    arboreal insectivore & 0.031 & 0.251 \\ 
+    fossorial insectivore & 0.014 & 0.002 \\ 
+    plantigrade insectivore & 0.164 & 0.058 \\ 
+    scansorial insectivore & 0.197 & 0.250 \\ 
+    arboreal omnivore & 0.711 & 0.449 \\ 
+    plantigrade omnivore & 0.009 & 0.103 \\ 
+    scansorial omnivore & 0.754 & 0.732 \\ 
+    unguligrade omnivore & 0.015 & 0.022 \\ 
     \hline
   \end{tabular}
 \end{table}
