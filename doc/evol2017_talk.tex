@@ -44,14 +44,6 @@
   \end{alertblock}
 \end{frame}
 
-
-\begin{frame}
-  \frametitle{Age of Mammals}
-  \begin{center}
-    \includegraphics[width = \textwidth,height = 0.8\textheight,keepaspectratio = true]{figure/aom}
-  \end{center}
-\end{frame}
-
 \begin{frame}
   \frametitle{Species pool concept}
 
@@ -60,16 +52,6 @@
   \end{center}
 
   \attrib{\footnotesize{Mittelbach and Schemske, 2015, \em{TREE}}}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Differences in extinction risk}
-
-  \begin{center}
-    \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio=true]{figure/smits_2015_results}
-  \end{center}
-
-  \attrib{\footnotesize{Smits 2015 \em{PNAS}}}
 \end{frame}
 
 \begin{frame}
@@ -83,17 +65,7 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Functional groups over time}
-
-  \begin{center}
-    \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio=true]{figure/bush_cube_time}
-  \end{center}
-
-  \tiny{\attrib{Bush and Bambach 2011 \em{Annu. Rev. Earth Planet Sci.}}}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Structured data in biology and paleontology}
+  \frametitle{Structured data in biology; the fourth-corner problem}
 
   \begin{center}
     \includegraphics[width = \textwidth,height = 0.8\textheight,keepaspectratio = true]{figure/ovaskainen_data}
@@ -102,33 +74,54 @@
   \tiny{\attrib{Ovaskainen \textit{et al.} 2017 \em{Ecology Letters}}}
 \end{frame}
 
-\begin{frame}
-  \frametitle{Models of structured data}
-
-  \begin{center}
-    \includegraphics[width = \textwidth,height = 0.8\textheight,keepaspectratio = true]{figure/ovaskainen_dag}
-  \end{center}
-
-  \tiny{\attrib{Ovaskainen \textit{et al.} 2017 \em{Ecology Letters}}}
-\end{frame}
 
 \begin{frame}
-  \frametitle{The fourth-corner problem}
-
+  \frametitle{Age of Mammals}
   \begin{center}
-    \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio=true]{figure/warton_fourth_corner}
+    \includegraphics[width = \textwidth,height = 0.8\textheight,keepaspectratio = true]{figure/aom}
   \end{center}
-
-  \attrib{\footnotesize{Brown \em{et al.}, 2014, \em{Methods Ecol. Evol.}}}
 \end{frame}
+
 
 \begin{frame}
-  \frametitle{Paleo-fourth corner model}
+  \frametitle{Differences in extinction risk}
 
   \begin{center}
-    \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio=true]{figure/paleo_fourth_corner}
+    \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio=true]{figure/smits_2015_results}
   \end{center}
+
+  \attrib{\footnotesize{Smits 2015 \em{PNAS}}}
 \end{frame}
+
+%\begin{frame}
+%  \frametitle{Functional groups over time}
+%
+%  \begin{center}
+%    \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio=true]{figure/bush_cube_time}
+%  \end{center}
+%
+%  \tiny{\attrib{Bush and Bambach 2011 \em{Annu. Rev. Earth Planet Sci.}}}
+%\end{frame}
+
+%\begin{frame}
+%  \frametitle{Models of structured data}
+%
+%  \begin{center}
+%    \includegraphics[width = \textwidth,height = 0.8\textheight,keepaspectratio = true]{figure/ovaskainen_dag}
+%  \end{center}
+%
+%  \tiny{\attrib{Ovaskainen \textit{et al.} 2017 \em{Ecology Letters}}}
+%\end{frame}
+
+%\begin{frame}
+%  \frametitle{The fourth-corner problem}
+%
+%  \begin{center}
+%    \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio=true]{figure/warton_fourth_corner}
+%  \end{center}
+%
+%  \attrib{\footnotesize{Brown \em{et al.}, 2014, \em{Methods Ecol. Evol.}}}
+%\end{frame}
 
 
 \begin{frame}
@@ -161,24 +154,24 @@
   \end{columns}
 \end{frame}
 
-\begin{frame}
-  \frametitle{Model of taxon occurrence}
-  \begin{itemize}
-    \item response is p/a of genus in NA at time \(t\)
-      \begin{itemize}
-        \item Bernoulli variable 
-        \item probability is (observation prob) times (``true'' presence)
-      \end{itemize}
-    \item observation probability is effect of sampling/fossil record
-      \begin{itemize}
-        \item basic model does not model sampling
-      \end{itemize}
-    \item the latent discrete ``true'' presence modeled as a \\multi-level logistic regression
-      \begin{itemize}
-        \item individual- and group-level
-      \end{itemize}
-  \end{itemize}
-\end{frame}
+%\begin{frame}
+%  \frametitle{Model of taxon occurrence}
+%  \begin{itemize}
+%    \item response is p/a of genus in NA at time \(t\)
+%      \begin{itemize}
+%        \item Bernoulli variable 
+%        \item probability is (observation prob) times (``true'' presence)
+%      \end{itemize}
+%    \item observation probability is effect of sampling/fossil record
+%      \begin{itemize}
+%        \item basic model does not model sampling
+%      \end{itemize}
+%    \item the latent discrete ``true'' presence modeled as a \\multi-level logistic regression
+%      \begin{itemize}
+%        \item individual- and group-level
+%      \end{itemize}
+%  \end{itemize}
+%\end{frame}
 
 \begin{frame}
   \frametitle{Paleo-fourth corner model}
@@ -187,6 +180,7 @@
     \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio=true]{figure/paleo_fourth_corner}
   \end{center}
 \end{frame}
+
 
 \begin{frame}
   \frametitle{Model and sampling statement definition}
@@ -230,6 +224,14 @@
     \end{scriptsize} 
   \end{center}
 \end{frame}
+
+%\begin{frame}
+%  \frametitle{Paleo-fourth corner model}
+%
+%  \begin{center}
+%    \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio=true]{figure/paleo_fourth_corner}
+%  \end{center}
+%\end{frame}
 
 
 \begin{frame}
