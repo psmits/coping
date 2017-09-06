@@ -113,28 +113,28 @@ parameters {
   matrix[U, D] s_gamma; // effect of group level covariates
 
   // preservation
-  real alpha_0;
-  real alpha_1;
-  vector[T] alpha_time;
-  real<lower=0> sigma;
+  real p_b_1;
+  real p_b_2;
+
+  // effect associated with ecology
+  matrix[D, T] p_a_z; // part of non-centering
+  cholesky_factor_corr[D] p_L_Omega;
+  vector<lower=0>[D] p_tau;
+
+  matrix[U, D] p_gamma; // effect of group level covariates
 }
 transformed parameters {
   matrix[T, D] o_a;  // origin: effect associated with ecology
   matrix[T - 1, D] s_a;  // survival: effect associated with ecology
-  matrix<lower=0,upper=1>[N, T] p;  // sampling probability
+  matrix[T, D] p_a;  // origin: effect associated with ecology
   matrix[N, T] origin;  // occurrence probabilty 
   matrix[N, T - 1] stay;  // occurrence probabilty 
+  matrix[N, T] p;  // sampling probability
 
   // vectorized, non-centered, chol-decom group-level predictors
-  o_a = ufull * o_gamma + (diag_pre_multiply(o_tau, o_L_Omega) * o_a_z)';
-  s_a = u * s_gamma + (diag_pre_multiply(s_tau, s_L_Omega) * s_a_z)';
-
-  // probability of observing
-  for(n in 1:N) {
-    for(t in 1:T) {
-      p[n, t] = inv_logit(alpha_0 + alpha_time[t] + alpha_1 * mass[n]);
-    }
-  }
+  o_a = ufull * o_gamma + (diag_pre_multiply(o_tau, o_L_Omega) * o_a_z)'; // or
+  s_a = u * s_gamma + (diag_pre_multiply(s_tau, s_L_Omega) * s_a_z)'; // ext
+  p_a = ufull * p_gamma + (diag_pre_multiply(p_tau, p_L_Omega) * p_a_z)'; // pr
 
   // probability of occurring
 
@@ -142,6 +142,8 @@ transformed parameters {
     for(n in 1:N) {
       origin[n, t] = inv_logit(o_a[t, state[n]] + 
           o_b_1 * mass[n] + o_b_2 * (mass[n] ^ 2));
+      p[n, t] = inv_logit(p_a[t, state[n]] + 
+          p_b_1 * mass[n] + p_b_2 * (mass[n] ^ 2));
     }
   }
   for(t in 1:(T-1)) {
@@ -164,18 +166,20 @@ model {
   s_L_Omega ~ lkj_corr_cholesky(2);
   s_tau ~ normal(0, 1);
   to_vector(s_gamma) ~ normal(0, 1);
+  
+  // survival
+  to_vector(p_a_z) ~ normal(0, 1);
+  p_L_Omega ~ lkj_corr_cholesky(2);
+  p_tau ~ normal(0, 1);
+  to_vector(p_gamma) ~ normal(0, 1);
 
-  // effects of mass on occurrence
-  alpha_0 ~ normal(0, 5);
-  alpha_1 ~ normal(0, 1);
-  alpha_time ~ normal(0, sigma);
-  sigma ~ normal(0, 1);
-
-  // effects of mass on observation
+  // effects of mass on orignation, survival, observation
   o_b_1 ~ normal(0, 1);
   o_b_2 ~ normal(0, 1);
   s_b_1 ~ normal(0, 1);
   s_b_2 ~ normal(0, 1);
+  p_b_1 ~ normal(0, 1);
+  p_b_2 ~ normal(0, 1);
 
   for(n in 1:N) {
     target += state_space_lp(sight[n], origin[n, ], stay[n, ], p[n, ]);
@@ -184,8 +188,10 @@ model {
 generated quantities {
   corr_matrix[D] o_Omega;
   corr_matrix[D] s_Omega;
+  corr_matrix[D] p_Omega;
 
   // convert back to a correlation matrix
   o_Omega = multiply_lower_tri_self_transpose(o_L_Omega);
   s_Omega = multiply_lower_tri_self_transpose(s_L_Omega);
+  p_Omega = multiply_lower_tri_self_transpose(p_L_Omega);
 }
