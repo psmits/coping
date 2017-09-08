@@ -80,11 +80,14 @@ data {
   int T;  // sample size of temporal units
   int D;  // number of indiv-level predictors
   int U;  // number of group-level predictors
+  int O;  // number of mammal orders
 
   int sight[N, T];  // observed presence
   int state[N];  // vector of ecology state
 
-  vector[N] mass;
+  vector[N] mass;  // each species mass
+
+  int ords[N];  // each species order
 
   matrix[T, U] ufull;  // matrix of group-level covariates
   matrix[T - 1, U] u;  // matrix of group-level covariates
@@ -122,6 +125,13 @@ parameters {
   vector<lower=0>[D] p_tau;
 
   matrix[U, D] p_gamma; // effect of group level covariates
+
+  vector[O] o_ordeff;
+  vector[O] s_ordeff;
+  vector[O] p_ordeff;
+  real<lower=0> o_ordscale;
+  real<lower=0> s_ordscale;
+  real<lower=0> p_ordscale;
 }
 transformed parameters {
   matrix[T, D] o_a;  // origin: effect associated with ecology
@@ -141,15 +151,15 @@ transformed parameters {
   for(t in 1:T) {
     for(n in 1:N) {
       origin[n, t] = inv_logit(o_a[t, state[n]] + 
-          o_b_1 * mass[n] + o_b_2 * (mass[n] ^ 2));
+          o_b_1 * mass[n] + o_b_2 * (mass[n] ^ 2) + o_ordeff[ords[n]]);
       p[n, t] = inv_logit(p_a[t, state[n]] + 
-          p_b_1 * mass[n] + p_b_2 * (mass[n] ^ 2));
+          p_b_1 * mass[n] + p_b_2 * (mass[n] ^ 2) + p_ordeff[ords[n]]);
     }
   }
   for(t in 1:(T-1)) {
     for(n in 1:N) {
       stay[n, t] = inv_logit(s_a[t, state[n]] + 
-          s_b_1 * mass[n] + s_b_2 * (mass[n] ^ 2));
+          s_b_1 * mass[n] + s_b_2 * (mass[n] ^ 2) + s_ordeff[ords[n]]);
     }
   }
 }
@@ -180,6 +190,15 @@ model {
   s_b_2 ~ normal(0, 1);
   p_b_1 ~ normal(0, 1);
   p_b_2 ~ normal(0, 1);
+
+  // priors for order effect scale
+
+  o_ordeff ~ normal(0, o_ordscale);
+  s_ordeff ~ normal(0, s_ordscale);
+  p_ordeff ~ normal(0, p_ordscale);
+  o_ordscale ~ normal(0, 1);
+  s_ordscale ~ normal(0, 1);
+  p_ordscale ~ normal(0, 1);
 
   for(n in 1:N) {
     target += state_space_lp(sight[n], origin[n, ], stay[n, ], p[n, ]);

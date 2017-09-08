@@ -50,10 +50,19 @@ taxmy <- c('order', 'family', 'genus')
 occur[, taxmy] <- update.taxonomy.eol(occur[, taxmy], key = eol.key)
 
 # i also do this for all the extinct groups that aren't on EoL
+  # also consolidate some nonsense in that
 occur[, taxmy] <- update.taxonomy.extinct(occur[, taxmy], extinct = extinct)
+
 # need to consolidate
-occur$order[occur$order == 'Lipotyphla'] <- 'Eulioptyphla'
-occur$order[occur$order == 'Soricomorpha'] <- 'Eulioptyphla'
+#   EoL makes some families Orders
+aa <- llply(extinct[[2]], function(x) occur$order %in% x)
+for(ii in seq(length(aa))) {
+  if(any(aa[[ii]])) {
+    occur$order[which(aa[[ii]])] <- names(extinct[[2]][ii])
+  }
+}
+occur$order[occur$order == 'Lipotyphla'] <- 'Eulipotyphla'
+occur$order[occur$order == 'Soricomorpha'] <- 'Eulipotyphla'
 occur$order[occur$order == 'Ancylopoda'] <- 'Perissodactyla'
 
 # update postures
@@ -78,6 +87,7 @@ occur$mass <- na.mass[match(occur$name.bi, na.mass$name), 2]
 
 # everything has to have an order
 occur <- occur[occur$order != '', ]
+
 
 ## make data and tree match
 #name <- matrix(str_replace(occur$name.bi, ' ', '_'), ncol = 1)
@@ -132,13 +142,17 @@ diet <- factor(diet, levels = unique(diet)[c(4, 1:3)])
 life <- factor(life, levels = unique(life))
 inter <- interaction(diet, life, drop = TRUE)
 inter <- as.character(inter)
+inter.cypher <- levels(factor(inter))
 
+
+# ecotypes with membership too small to estimate
 rms <- which(inter == names(which(table(inter) == 1)))
 sight <- sight[-rms, ]
 diet <- diet[-rms]
 life <- life[-rms]
+inter <- inter[-rms]
 ords <- ords[-rms]
-
+mass <- mass[-rms]
 
 # phylogenetic data
 #vcv <- vcv(spt)
@@ -178,8 +192,10 @@ N <- nrow(sight)
 T <- ncol(sight)
 
 state <- as.numeric(factor(inter))
+
 ufull <- u
 u <- u[-1, ]
+
 state <- mapvalues(state, 
                    from = sort(unique(state)), 
                    to = seq(length(unique(state))))

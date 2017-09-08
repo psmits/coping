@@ -20,17 +20,19 @@ lipotyphla <- c('Geolabididae')
 creodonta <- c('Hyaenodontidae', 'Oxyaenidae')
 leptictida <- c('Didymoconidae', 'Gypsonictopidae', 'Kulbeckiidae', 'Leptictidae', 'Pseudorhyncocyonidae')
 cimolesta <- c('Apatemyidae', 'Palaeoryctidae', 'Esthonychidae', 'Coryphodontidae', 'Pentacodontidae', 'Barylambdidae', 'Cimolestidae', 'Cyriacotheriidae', 'Titanoideidae', 'Pantolambdidae', 'Pantolestidae', 'Stylinodontidae', 'Conoryctidae')
-eulipotyphla <- c('Nyctitheriidae', 'Erinaceomorpha', 'Soricidae', 'Heterosoricidae')
+eulipotyphla <- c('Nyctitheriidae', 'Erinaceomorpha', 'Soricidae', 'Heterosoricidae', 'Talpidae')
 multituberculata <- c('Neoplagiaulacidae', 'Microcosmodontidae', 'Ptilodontidae', 'Cimolodontidae', 'Taeniolabididae', 'Eucosmodontidae')
 dermoptera <- c('Plagiomenidae', 'Mixodectidae')
 pholidota <- c('Epoicotheriidae', 'Metacheiromyidae', 'Escavadodontidae')
 mesonychia <- c('Mesonychidae', 'Hapalodectidae', 'Triisodontidae')
 condylarthra <- c('Hyopsodontidae', 'Phenacodontidae', 'Arctocyonidae', 'Periptychidae', 'Chriacidae')
 dinocerata <- c('Uintatheriidae', 'Prodinoceratidae')
-carnivora <- c('Viverravidae', 'Miacidae')
-artiodactyla <- c('Gelocidae', 'Protoceratidae', 'Merycoidodontidae', 'Palaeomerycidae', 'Leptomerycidae', 'Anthracotheriidae', 'Entelodontidae', 'Hypertragulidae', 'Agriochoeridae', 'Leptochoeridae', 'Oromerycidae', 'Dichobunidae', 'Achaenodontidae', 'Homacodontidae')
+carnivora <- c('Viverravidae', 'Miacidae', 'Canidae', 'Felidae', 'Mephitidae', 'Mustelidae')
+artiodactyla <- c('Gelocidae', 'Protoceratidae', 'Merycoidodontidae', 'Palaeomerycidae', 'Leptomerycidae', 'Anthracotheriidae', 'Entelodontidae', 'Hypertragulidae', 'Agriochoeridae', 'Leptochoeridae', 'Oromerycidae', 'Dichobunidae', 'Achaenodontidae', 'Homacodontidae', 'Camelidae', 'Cervidae', 'Tayassuidae')
 didelphimorphia <- c('Herpetotheriidae', 'Peradectidae')
 acreodi <- c('Triisodontidae', 'Mesonychidae', 'Hapalodectidae')
+rodentia <- c('Cricetidae', 'Dipodidae', 'Geomyidae', 'Heteromyidae', 'Sciuridae')
+lagomorpha <- c('Leporidae', 'Ochotonidae')
 
 extinct[[2]] <- list(Cingulata = cingulata, 
                      Pilosa = pilosa,
@@ -50,4 +52,6 @@ extinct[[2]] <- list(Cingulata = cingulata,
                      Carnivora = carnivora,
                      Artiodactyla = artiodactyla,
                      Didelphimorphia = didelphimorphia,
-                     Acreodi = acreodi)
+                     Acreodi = acreodi,
+                     Rodentia = rodentia,
+                     Lagomorpha = lagomorpha)

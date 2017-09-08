@@ -18,7 +18,7 @@ update.taxonomy.eol <- function(occur, key) {
   out <- llply(eol.class, function(x) {
                  if(class(x[[1]]) == 'data.frame') {
                    # make sure it is a mammal
-                   if(x[[1]][x[[1]]$rank == 'class', 1] == 'Mammalia') {
+                   if(any(x[[1]][, 1] == 'Mammalia')) {
                      a <- x[[1]]$rank %in% c('order', 'family')
                      b <- x[[1]][a, ]
                      b[, 1]
