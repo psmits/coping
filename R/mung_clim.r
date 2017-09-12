@@ -1,51 +1,31 @@
-# process the "climate" information
-zac <- read.csv('../data/2008_zachos_data.csv', stringsAsFactors = FALSE)
+sort.climate <- function(x, val = 'mean', bin = '2My', nalma = NULL) {
 
-names(zac) <- c('loc', 'age', 'genus', 'o18', 'c13', 
-                'o18.5pt', 'c13.5pt', 'comment')
-zac <- zac[zac$age <= (max(occur$bins)), ]
-zac <- zac[!is.na(zac$o18), ]
-b <- unique(occur$bins)
-b <- as.matrix(cbind(b - 2, b))
-isotope <- list()
-zac.cohort <- array(NA, dim = nrow(zac))
-for(ii in seq(nrow(b))) {
-  isotope[[ii]] <- zac$o18[zac$age > b[ii, 1] & zac$age <= b[ii, 2]]
-  zac.cohort[(zac$age > b[ii, 1] & zac$age <= b[ii, 2])] <- ii
+  temp.est <- x$Temperature
+  temp.range <- x$Temperature.max - x$Temperature.min
+
+  temp.time.mean <- list()
+  temp.time.range <- list()
+  if(bin == '2My') {
+    b <- range(occur$bins)
+    b <- seq(b[1], b[2], by = 2)
+    b <- as.matrix(cbind(b - 2, b))
+    for(ii in seq(nrow(b))) {
+      temp.time.mean[[ii]] <- temp.est[x$Age >= b[ii, 1] & x$Age < b[ii, 2]]
+      temp.time.range[[ii]] <- temp.range[x$Age >= b[ii, 1] & x$Age < b[ii, 2]]
+    }
+  } else if (bin == 'NALMA') {
+		b <- cbind(c(0, nalma$ma[-nrow(nalma)]), nalma$ma)
+    for(ii in seq(nrow(b))) {
+      temp.time.mean[[ii]] <- temp.est[x$Age >= b[ii, 1] & x$Age < b[ii, 2]]
+      temp.time.range[[ii]] <- temp.range[x$Age >= b[ii, 1] & x$Age < b[ii, 2]]
+    }
+  }
+  if(val == 'mean') {
+    out <- arm::rescale(laply(temp.time.mean, function(x) 
+                              mean(x, na.rm = TRUE)))
+  } else if (val == 'range') {
+    out <- arm::rescale(laply(temp.time.range, function(x) 
+                              mean(x, na.rm = TRUE)))
+  }
+  out
 }
-zac <- zac[!is.na(zac.cohort), ]
-zac.cohort <- zac.cohort[!is.na(zac.cohort)]
-mean.o18 <- laply(split(zac$o18, zac.cohort), mean)
-mean.o18 <- arm::rescale(mean.o18)
-range.o18 <- laply(split(zac$o18, zac.cohort), function(x) 
-                   abs(quantile(x, 0.25) - quantile(x, 0.75)))
-range.o18 <- arm::rescale(range.o18)
-
-
-
-# how about the mg/ca data...
-cram <- read.delim('../data/cramer/cramer_mgca_pref.txt', sep = '\t')
-cram.temp <- read.delim('../data/cramer/cramer_temp.txt', sep = '\t')
-temp.est <- cram.temp$Temperature
-temp.range <- cram.temp$Temperature.max - cram.temp$Temperature.min
-temp.est
-
-
-b <- range(occur$bins)
-b <- seq(b[1], b[2], by = 2)
-b <- as.matrix(cbind(b - 2, b))
-temp.time.mean <- list()
-temp.time.range <- list()
-for(ii in seq(nrow(b))) {
-  temp.time.mean[[ii]] <- temp.est[cram.temp$Age > b[ii, 1] & 
-                                   cram.temp$Age <= b[ii, 2]]
-  temp.time.range[[ii]] <- temp.range[cram.temp$Age > b[ii, 1] & 
-                                      cram.temp$Age <= b[ii, 2]]
-}
-#temp.time.mean <- laply(temp.time.mean, function(x) mean(x, na.rm = TRUE))
-temp.time.mean <- arm::rescale(laply(temp.time.mean, function(x) 
-                                     mean(x, na.rm = TRUE)))
-temp.time.range <- arm::rescale(laply(temp.time.range, function(x) 
-                                      mean(x, na.rm = TRUE)))
-#plot(cram.temp$Age, cram.temp$Temperature)
-#points(seq(length(temp.time.mean)) * 2, temp.time.mean, col = 'blue')

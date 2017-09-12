@@ -9,9 +9,10 @@ library(caret)
 library(taxize)
 library(parallel)
 
-source('../R/mung.r')
 source('../R/extinct_families.r')
 source('../R/taxonomy.r')
+source('../R/mung.r')
+source('../R/mung_clim.r')
 
 #load('../data/scaled_super.rdata')
 load('../data/body_mass.rdata')
@@ -20,6 +21,8 @@ eol.key = '2a9932f264f3f0421db36158b6e785b535c6da0e'
 
 TESTING.x <- FALSE
 TESTING.u <- FALSE
+bin <- 'NALMA'
+#bin <- '2My'
 
 nalma <- read.csv('../data/nalma.csv', stringsAsFactors = FALSE)
 posture <- read.csv('../data/posture.csv', stringsAsFactors = FALSE) 
@@ -29,10 +32,7 @@ posture <- read.csv('../data/posture.csv', stringsAsFactors = FALSE)
 dat <- read.csv('../data/pbdb_data.csv', stringsAsFactors = FALSE, skip = 21)
 
 #occur <- clean.occurrence(dat, bin = '2My', nalma = NULL)
-occur <- clean.occurrence(dat, bin = 'NALMA', nalma = nalma)
-
-
-
+occur <- clean.occurrence(dat, bin = bin, nalma = nalma)
 ss <- split(occur, occur$bins)
 occur <- Reduce(rbind, llply(ss, function(x) x[duplicated(x$name.bi), ]))
 
@@ -68,6 +68,10 @@ occur$order[occur$order == 'Lipotyphla'] <- 'Eulipotyphla'
 occur$order[occur$order == 'Soricomorpha'] <- 'Eulipotyphla'
 occur$order[occur$order == 'Ancylopoda'] <- 'Perissodactyla'
 
+# everything has to have an order
+# if they don't have an order i don't want 'em
+occur <- occur[occur$order != '', ]
+
 # update postures
 stance.group <- split(posture$taxon, posture$stance)
 for(ii in seq(length(stance.group))) {
@@ -88,9 +92,6 @@ na.mass$name <- str_replace(na.mass[, 1], ' ', '_')
 occur <- occur[occur$name.bi %in% na.mass$name, ]
 occur$mass <- na.mass[match(occur$name.bi, na.mass$name), 2]
 
-# everything has to have an order
-occur <- occur[occur$order != '', ]
-
 
 ## make data and tree match
 #name <- matrix(str_replace(occur$name.bi, ' ', '_'), ncol = 1)
@@ -106,28 +107,38 @@ occur <- occur[occur$order != '', ]
 #spt <- ape::drop.tip(spt, hot.fix$tree_not_data)
 #occur <- occur[keep[[1]], ]
 
-# process climate information
-source('../R/mung_clim.r')
 
-occur <- occur[occur$bins != 66, ]
+if(bin == '2My') {
+  occur <- occur[occur$bins != 66, ]
 
-# save true bins
-occur$true.bin <- occur$bins
-# make easy bins
-occur$bins <- occur$bins / 2
+  # save true bins
+  occur$true.bin <- occur$bins
+  # make easy bins
+  occur$bins <- occur$bins / 2
+} else if (bin == 'NALMA') {
+  occur <- occur[occur$bins != 65.0, ]
+
+  # save true bins
+  occur$true.bin <- occur$bins
+  # make easy bins
+  occur$bins <- match(occur$bins, nalma$ma) - 1
+}
+
+
 
 
 # !!! makes everything genus level !!!
-# need to make the things work
-by.tax <- split(occur, occur$name.bi)
 #by.tax <- split(occur, occur$genus)
+# need to make the things work
+# or by species level
+by.tax <- split(occur, occur$name.bi)
 
 # cols go from younger to older
 sight <- matrix(0, nrow = length(by.tax), ncol = max(occur$bins))
 for(ii in seq(length(by.tax))) {
   sight[ii, (by.tax[[ii]]$bins)] <- 1
 }
-sight <- sight[, -1]
+#sight <- sight[, -1]
 
 
 N <- length(by.tax)
@@ -164,11 +175,18 @@ mass <- mass[-rms]
 #id <- as.numeric(as.factor(occur$name.bi))
 
 # climate data
+# process climate information
+cram.temp <- read.delim('../data/cramer/cramer_temp.txt', sep = '\t')
+temp.time.mean <- sort.climate(cram.temp, val = 'mean', 
+                               bin = bin, nalma = nalma)
+temp.time.range <- sort.climate(cram.temp, val = 'range', 
+                                bin = bin, nalma = nalma)
+
 #u <- cbind(mean.o18, range.o18)
 #U <- ncol(u)
 # WARNING to include need to remove oldest bin!!!!
 u <- cbind(temp.time.mean, temp.time.range)  # young to old
-u <- u[-(nrow(u)), ]
+u <- u[-c(1, nrow(u)), ]
 u <- apply(u, 2, rev)  # old to young
 
 
@@ -178,12 +196,18 @@ eo.mi <- c(50, 16)
 pa.eo <- c(66, 50)
 plants <- rbind(mi.pl, eo.mi, pa.eo)
 
-co.h <- seq(4, (ncol(sight) + 1) * 2, by = 2)
+if(bin == '2My') {
+  co.h <- seq(4, (ncol(sight) + 1) * 2, by = 2)
+} else if (bin == 'NALMA') {
+  co.h <- sort(unique(occur$true.bin))
+}
 phase <- array(dim = length(co.h))
 for(ii in seq(length(co.h))){
   phase[ii] <- which(plants[, 1] >= co.h[ii] & plants[, 2] < co.h[ii])
 }
 P <- 3
+
+
 
 # fixed the reversed order
 sight <- sight[, rev(seq(ncol(sight)))]  # from older to younger
@@ -214,4 +238,4 @@ O <- length(unique(ords))
 # dump out the stan data
 stan_rdump(list = c('N', 'T', 'D', 'U', 'O', 
                     'sight', 'state', 'u', 'ufull', 'mass', 'ords'),
-           file = '../data/data_dump/trait_w_gaps.data.R')
+           file = paste0('../data/data_dump/trait_w_gaps_', bin, '.data.R')

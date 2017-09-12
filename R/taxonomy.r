@@ -21,7 +21,13 @@ update.taxonomy.eol <- function(occur, key) {
                    if(any(x[[1]][, 1] == 'Mammalia')) {
                      a <- x[[1]]$rank %in% c('order', 'family')
                      b <- x[[1]][a, ]
-                     b[, 1]
+                     if(nrow(b) == 1) {
+                       c(NA, b)
+                     } else {
+                       b[, 1]
+                     }
+                   } else {
+                     c(NA, NA)
                    }
                  } else {  # bad responses incl. errors
                    c(NA, NA)
