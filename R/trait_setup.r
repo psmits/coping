@@ -238,4 +238,6 @@ O <- length(unique(ords))
 # dump out the stan data
 stan_rdump(list = c('N', 'T', 'D', 'U', 'O', 
                     'sight', 'state', 'u', 'ufull', 'mass', 'ords'),
-           file = paste0('../data/data_dump/trait_w_gaps_', bin, '.data.R')
+           file = paste0('../data/data_dump/trait_w_gaps_', bin, '.data.R'))
+
+save.image(file = '../data/trait_setup_run.rdata')

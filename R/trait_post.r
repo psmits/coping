@@ -10,17 +10,18 @@ library(grid)
 library(scales)
 library(pROC)
 library(Metrics)
+library(ggjoy)
 source('../R/borrow_plotcorr.r')
 source('../R/multiclass_roc.r')
-source('../R/trait_setup.r')
+#source('../R/trait_setup.r')
 source('../R/sim_from_model.r')
 source('../R/estimate_div.r')
 source('../R/advi_post.r')
 source('../R/make_plots.r')
-source('../data/data_dump/trait_w_gaps.data.R')
+source('../data/data_dump/trait_w_gaps_NALMA.data.R')
 #source('../data/data_dump/trait_w_gaps_revamp.data.R')
 sight.obs <- sight
-
+base::load('../data/trait_setup_run.rdata')
 
 #
 theme_set(theme_bw())
@@ -42,52 +43,38 @@ nsim <- 100
 samp <- sample(1001, nsim)
 ecoprob <- TRUE
 
-rms <- which(inter == names(which(table(inter) == 1)))
-inter <- inter[-rms]
-break.inter <- str_split(inter, '\\.')
-ecotype <- Reduce(rbind, break.inter)
-#ecotype <- rbind(ecotype, t(replicate(M - N, c('augment', 'augment'))))
-
+ecotype <- Reduce(rbind, str_split(inter, '\\.'))
 ecotrans <- Reduce(rbind, str_split(levels(as.factor(inter)), '\\.'))
-#ecotrans <- rbind(ecotrans, c('augment', 'augment'))
-
 ntax <- N
 ntime <- T
 
 # observed time bins
 time.stop <- unique(occur$true.bin)
-b <- range(time.stop)
-b <- seq(b[1], b[2], by = 2)
-time.start.stop <- as.matrix(cbind(b - 2, b))
+if(bin == '2My') {
+  b <- range(time.stop)
+  b <- seq(b[1], b[2], by = 2)
+  time.start.stop <- as.matrix(cbind(b - 2, b))
+} else if(bin == 'NALMA') {
+  time.start.stop <- cbind(c(1.8, time.stop[-length(time.stop)]), time.stop)
+}
 
 
 
 ############
 ## advi
-post <- list.files('../data/mcmc_out', pattern = 'revamp_[0-9]_advi',
+post <- list.files('../data/mcmc_out', pattern = 'revamp_[0-9]_advi_NALMA',
                    full.names = TRUE)
 
-# just presence
-fit1 <- read_one_stan_csv(post[1])
-ext1 <- post.advi(fit1)
-
-# analysis of model fit
-post.pred(ext1, ntax = N, ntime = T, sight.obs = sight, nsim, samp)
-# analysis of the posterior
-vis.post(ext1, ecotype, ecotrans, mass, 
-         cbp.long, time.start.stop, ecoprob = ecoprob)
-
-
 # full birth-death
-fit2 <- read_one_stan_csv(post[2])
+fit2 <- read_one_stan_csv(post)
 ext2 <- post.advi(fit2)
 
 # posterior predictive checks
 #   need to develop more
 post.pred(ext2, ntax = N, ntime = T, sight.obs = sight, nsim, samp, bd = TRUE)
 # visualize posterior estimates
-vis.bdpost(ext2, ecotype, ecotrans, mass, cbp.long, ecoprob = ecoprob)
-# estimate standing diversity given posterior
+vis.bdpost(ext2, ecotype, ecotrans, mass, cbp.long, time.start.stop, ecoprob = ecoprob, order.cypher)
+## estimate standing diversity given posterior
 post.div <- diversity.distribution(sight, ext2, nsim) # 
 
 source('../R/div_plot.r')  # update this to work as functions, not just source
@@ -97,18 +84,18 @@ source('../R/prob_calc.r')  # important posterior probabilities and related
 source('../R/cor_plot.r')  # plot and inspect correlation matrix from b+d
 
 
-#############
-## full Bayes
-#post <- list.files('../data/mcmc_out', pattern = '[0-9]', full.names = TRUE)
-#fit <- read_stan_csv(post)
-##stan_rhat(fit)
-#ext <- rstan::extract(fit, permuted = TRUE)
-##x <- model.simulation(ntax, ntime, 
-##                      ext$phi[1], 
-##                      ext$pred[1, , ], 
-##                      ext$p[1, , ], 
-##                      death = TRUE) 
-## the issue is that everything needs to occur min 1
-##   need data augmentation to make occurs "bigger"
-#post.pred(ext, ntax, ntime, sight.obs, nsim, samp)  # posterior pred check
-#vis.post(ext, ecotype, ecotrans, mass, cbp.long)    # make some plots
+##############
+### full Bayes
+##post <- list.files('../data/mcmc_out', pattern = '[0-9]', full.names = TRUE)
+##fit <- read_stan_csv(post)
+###stan_rhat(fit)
+##ext <- rstan::extract(fit, permuted = TRUE)
+###x <- model.simulation(ntax, ntime, 
+###                      ext$phi[1], 
+###                      ext$pred[1, , ], 
+###                      ext$p[1, , ], 
+###                      death = TRUE) 
+### the issue is that everything needs to occur min 1
+###   need data augmentation to make occurs "bigger"
+##post.pred(ext, ntax, ntime, sight.obs, nsim, samp)  # posterior pred check
+##vis.post(ext, ecotype, ecotrans, mass, cbp.long)    # make some plots
