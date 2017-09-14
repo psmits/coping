@@ -73,7 +73,8 @@ ext2 <- post.advi(fit2)
 #   need to develop more
 post.pred(ext2, ntax = N, ntime = T, sight.obs = sight, nsim, samp, bd = TRUE)
 # visualize posterior estimates
-vis.bdpost(ext2, ecotype, ecotrans, mass, cbp.long, time.start.stop, ecoprob = ecoprob, order.cypher)
+vis.bdpost(ext2, ecotype, ecotrans, mass, cbp.long, 
+           time.start.stop, ecoprob = ecoprob, order.cypher)
 ## estimate standing diversity given posterior
 post.div <- diversity.distribution(sight, ext2, nsim) # 
 

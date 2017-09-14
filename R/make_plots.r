@@ -64,6 +64,12 @@ vis.bdpost <- function(ext2,
     med$state <- as.character(med$state)
     med <- cbind(med, Reduce(rbind, str_split(med$state, '\\_')))
     names(med) <- c('time', 'state', 'value', 'state_1', 'state_2')
+    med$state_1 <- as.character(med$state_1)
+    med$state_1 <- mapvalues(med$state_1, 
+                             from = unique(med$state_1), 
+                             to = c('carnivore', 'herbivore', 'insectivore', 
+                                    'omnivore'))
+
     if(ecoprob) med$value <- invlogit(med$value)
 
     amplot <- ggplot(am, aes(x = time, y = value, group = sim))
@@ -197,10 +203,8 @@ vis.bdpost <- function(ext2,
          width = 6, height = 4)
 
 
-
   # variation in log-odds of occurrence associated with ecotype
   # origination
-
   ecotypevar.plot <- function(tm, ecotrans) {
     suppressWarnings(tm <- cbind(tm, ecotrans[tm$Var2, ]))
     names(tm) <- c('sim', 'ecotype', 'value', 'state_1', 'state_2')
@@ -223,51 +227,6 @@ vis.bdpost <- function(ext2,
                           y = 'Probability density')
   ggsave(filename = '../doc/figure/stdev_ecotype_survival_bd.png', plot = tmplot,
          width = 6, height = 4)
-
-
-  #  # difference from mean log-odds observation due to time
-  #  pm <- melt(ext2$alpha_time)
-  #  pm$Var2 <- mapvalues(x = pm$Var2, 
-  #                       from = unique(pm$Var2), 
-  #                       to = rev(time.start.stop[, 2]))
-  #
-  #  pm$prob <- invlogit(pm$value)
-  #  if(!is.null(pm$Var1)) {
-  #    pmplot <- ggplot(pm, aes(x = Var2, y = prob, group = Var1))
-  #  } else if (is.null(pm$Var1)) {
-  #    pmplot <- ggplot(pm, aes(x = Var2, y = prob, group = iterations))
-  #  }
-  #  pmplot <- pmplot + geom_line(alpha = 0.01)
-  #  pmplot <- pmplot + scale_x_reverse()
-  #  pmplot <- pmplot + labs(x = 'Time (Mya)', 
-  #                          y = 'Difference from mean log-odds observation')
-  #  ggsave(filename = '../doc/figure/prob_preservation_bd.png', plot = pmplot,
-  #         width = 3, height = 2)
-  #
-  #
-  #  # effect of mass on sampling
-  #  mass.counter <- data.frame(x = seq(from = min(mass), 
-  #                                     to = max(mass), 
-  #                                     by = 0.1))
-  #  mass.df <- data.frame(x = mass)
-  #  mass.samp <- function(m) {
-  #    i <- sample(length(ext2$alpha_0), 1)
-  #    invlogit(ext2$alpha_1[i] * m + ext2$alpha_0[i])
-  #  }
-  #  mass_on_samp <- ggplot(mass.counter, aes(x = x))
-  #  for(ii in seq(100)) {
-  #    mass_on_samp <- mass_on_samp + stat_function(fun = mass.samp,
-  #                                                 alpha = 0.1)
-  #  }
-  #  mass_on_samp <- mass_on_samp + geom_rug(data = mass.df, mapping = aes(x = x))
-  #  mass_on_samp <- mass_on_samp + labs(x = 'Rescaled log mass (g)', 
-  #                                      y = 'Probability of sampling')
-  #  mass_on_samp <- mass_on_samp + theme(axis.title = element_text(size = 8),
-  #                                       axis.text = element_text(size = 6))
-  #  ggsave(filename = '../doc/figure/mass_on_samp_bd.png', plot = mass_on_samp,
-  #         width = 3, height = 2)
-  #  # figure out on to plot on un-rescaled axis
-
 
   # effect of mass on observation
   # the idea is
