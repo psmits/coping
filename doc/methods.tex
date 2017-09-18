@@ -77,8 +77,7 @@ In total, 1400 mammal species occurrence histories were included in this study a
 \end{table}
 
 
-All fossil occurrences from 64 to 2 million years ago (Mya) were binned into 31 2 million year (My) bins. This temporal length was chosen because it is approximately the resolution of the North American mammal fossil record \citep{Alroy1996a,Alroy2000g,Marcot2014,Alroy2009}.
-
+All fossil occurrences from 64 to 2 million years ago (Mya) were binned into the 19 North American Land Mammal Ages (NALMA) covered by this interval CITATION. The choice of binning by NALMA reflects the belief that these represent distinct communities or periods of mammal evolution, something that is central to this study. Additionally, because of the inherently discrete nature of the fossil record it can be hard to re-bin fossils by temporal interval because of the inherent uncertainty in their ages CITATION.
 
 
 \subsection*{Environmental and temporal covariates}
@@ -104,26 +103,11 @@ The second set of environmental factors included in this study are the Cenozoic 
 
 
 \subsection*{Modelling species occurrence}
-Two different models were used in this study: a pure-presence model and a birth-death model. Both models at their core are hidden Markov models where the latent process has an absorbing state \citep{Allen2011}. The difference between these two models lies in whether the probabilities of a species originating or surviving are considered equal or different (Table \ref{tab:transition}). While there are only two state ``codes'' in a presence-absence matrix (i.e. 0/1), there are in fact three states in a birth-death model: not having originated yet, extant, and extinct. The last of these is the absorbing state, as once a species has gone extinct it cannot re-originate \citep{Allen2011}. Thus, in the transition matrices the probability of an extinct species changing states is 0 (Table \ref{tab:transition}). See below for parameter explanations (Tables \ref{tab:obs_param}, \ref{tab:pres_param}, and \ref{tab:bd_param}).
+At the core of the model used in this study is hidden Markov process where the latent process has an absorbing state \citep{Allen2011}. While there are only two state ``codes'' in a presence-absence matrix (i.e. 0/1), there are in fact three states in a birth-death model: not having originated yet, extant, and extinct. The last of these is the absorbing state, as once a species has gone extinct it cannot re-originate \citep{Allen2011}. Thus, in the transition matrices the probability of an extinct species changing states is 0 (Table \ref{tab:transition}). See below for parameter explanations (Tables \ref{tab:obs_param}, and \ref{tab:bd_param}).
 
 \begin{table}
-  \begin{subtable}[t]{0.45\linewidth}
-    \begin{tabular}[c]{ c c | c | c | c | }
-      \cline{3-5} 
-      & & \multicolumn{3}{ c |}{ State at \(t + 1\)} \\ \cline{3-5}
-      & & \(0_{never}\) & 1 & \(0_{extinct}\) \\ \hline
-      \multicolumn{1}{| c |}{\multirow{3}{*}{State at \(t\)}}
-      & \(0_{never}\) & \(1 - \theta\)  & \(\theta\) & 0 \\ \cline{2-5}
-      \multicolumn{1}{| c |}{} & 1 & 0 & \(\theta\) & \(1 - \theta\) \\ \cline{2-5}
-      \multicolumn{1}{| c |}{} & \(0_{extinct}\) & 0 & 0 & 1 \\
-      \hline
-    \end{tabular}
-    \caption{Pure-presence}
-    \label{tab:pp}
-  \end{subtable}
-  \begin{subtable}[t]{0.45\linewidth}
-    \begin{tabular}[c]{ c c | c | c | c | }
-      \cline{3-5} 
+  \begin{tabular}[c]{ c c | c | c | c | }
+    \cline{3-5} 
       & & \multicolumn{3}{ c |}{ State at \(t + 1\)} \\ \cline{3-5}
       & & \(0_{never}\) & 1 & \(0_{extinct}\) \\ \hline
       \multicolumn{1}{| c |}{\multirow{3}{*}{State at \(t\)}}
@@ -131,26 +115,14 @@ Two different models were used in this study: a pure-presence model and a birth-
       \multicolumn{1}{| c |}{} & 1 & 0 & \(\phi\) & \(1 - \phi\) \\ \cline{2-5}
       \multicolumn{1}{| c |}{} & \(0_{extinct}\) & 0 & 0 & 1 \\
       \hline
-    \end{tabular}
-    \caption{Birth-death}
-    \label{tab:bd}
-  \end{subtable}
-  \caption{Transition matrices for the pure-presence (\ref{tab:pp}) and birth-death (\ref{tab:bd}) models. Both of these models share the core machinery of discrete-time birth-death processes but make distinct assumptions about the equality of originating and surviving (Eq. \ref{eq:pure_presence}, and \ref{eq:birth_death}). Note also that while there are only two state ``codes'' (0, 1), there are in fact three states: never having originated \(0_{never}\), present 1, extinct \(0_{extinct}\) \citep{Allen2011}.}
+  \end{tabular}
+  \caption{Transition matrix for the birth-death model (Eq. \ref{eq:birth_death}). Note that while there are only two state ``codes'' (0, 1), there are in fact three states: never having originated \(0_{never}\), present 1, extinct \(0_{extinct}\) \citep{Allen2011}.}
   \label{tab:transition}
 \end{table}
 
 
-%\subsubsection*{Data augmentation}
-%All empirical presence/absence observations are potentially incomplete or observed with error. The hidden Markov model at the core of this analysis allows for observed absences to be used meaningfully to estimate the number of unobserved species. Of concern in this analysis is the unknown ``true'' size of the dataset; how many species could have actually been observed? While many species have been observed, the natural incompleteness of all observations, especially in the case of paleontological data, there are obviously many species which were never sampled \citep{Royle2008,Royle2007a}. The inclusion of these augmented species helps with estimation of the total diversity of the system summed over all bins as well as estimation of preservation parameters. % this needs to be checked
-%
-%Let \(N\) by the total number of observed species, \(M\) be the upper limit of possible species that could have existed in total given some model of species occurrence, and \(N^{\ast}\) is the number of all-zero histories added to the presence absence matrix \(y\) where \(N^{\ast} = M - N\). This approach assumes that \(\hat{N} \sim \text{Binomial}(M, \psi)\) where \(\hat{N}\) is the estimated ``true'' number of species and \(\psi\) is the probability that any augmented species should actually be ``present.'' Because \(M\) is user defined, this approach effectively gives \(\psi\) a uniform prior over \(N\) to \(M\) \citep{Royle2008}. For this study, \(M = \lfloor{1.25 \times N\rfloor}\); this was chosen because experimentation with larger values had little effect on the posterior predictive distributions while dramatically increasing computational time.
-%
-%Data imputation is the process of estimating missing data for partially observed covariates given the other fully-observed observations and some model \citep{Gelman2007,Rubin1996}, this is simple in a Bayesian context because data are also parameters \citep{Gelman2013d}. Augmented species are fully imputed species and thus have no known mass so a mass estimate must be imputed for each possible species \citep{Royle2012b}. Assuming that mass values for augmented species are from the same distribution as observed species, the distribution of observed mass values are estimated as part of the model and new mass values are then generated from this distribution. This approach is an example of imputing covariate information that is missing completely at random \citep{Gelman2007,Royle2012b}. Because log mass values are rescaled as a part of this study, the body mass distribution is already known (\(\mathcal{N}(0, 0.5)\)) the body mass of the augmented species are generated by simple random draws from this distribution. In addition to body mass information, the augmented species need an ecotype classification. Because these species are completely unknown, they were all classified as ``augmented'' to indicate their unknown biology; it has no biological interpretation. Augmented species were given this classification instead of imputing an ecotype because of the computational cost of estimating the probability of a species being present for each of the 18 possible ecotypes; marginalizing over all possible ecotypes in addition to all possible occurrence histories would dramatically slowdown an already slow posterior inference program (see below for information on what marginalization of species occurrence history means analytically).
-
-
-
 \subsubsection*{Observation process}
-The type of hidden Markov model used in this study has three characteristic probabilities: probability \(p\) of observing a species given that it is present, probability \(\phi\) of a species surviving from one time to another, and probability \(\pi\) of a species first appearing \citep{Royle2008}. In this formulation, the probability of a species becoming extinct is \(1 - \phi\). For the pure-presence model \(\phi = \pi\), while for the birth-death model \(\phi \neq \pi\).
+The type of hidden Markov model used in this study has three characteristic probabilities: probability \(p\) of observing a species given that it is present, probability \(\phi\) of a species surviving from one time to another, and probability \(\pi\) of a species first appearing \citep{Royle2008}. In this formulation, the probability of a species becoming extinct is \(1 - \phi\).
 
 \begin{table}
   \centering
@@ -161,109 +133,68 @@ The type of hidden Markov model used in this study has three characteristic prob
     \(y\) & \(N \times T\) & observed species presence/absence \\
     \(z\) & \(N \times T\) & ``true'' species presence/absence \\
     \(p\) & \(T\) & probability of observing a species that is present at time \(t\) \\
+    \(a^{p}\) & \(T - 1 \times D\) & ecotype-varying intercept; mean value of log-odds of \(\theta\) \\
     \(m\) & \(N\) & species log mass, rescaled \\
-    \(\alpha_{0}\) & 1 & average log-odds of \(p\) \\ % when mass = 0
-    \(\alpha_{1}\) & 1 & change in average log-odds of \(p\) per change mass \\
-    \(r\) & \(T\) & difference from \(\alpha_{0}\) associated with time \(t\) \\
-    \(\sigma\) & 1 & standard deviation of \(r\) \\
+    \(b^{p}_{1}\) & 1 & change in average log-odds of \(p\) per change mass \\
+    \(b^{p}_{2}\) & 1 & change in average log-odds of \(p\) per change mass, squared \\
+    \(o^{p}_{k}\) & O & effect of species order on log-odds of preservation \\
+    \(\sigma^{p}_{o}\) & 1 & standard deviation of the effect of order on log-odds of preservation \\
   \end{tabular}
   \label{tab:obs_param}
 \end{table}
 
-The probability \(p\) of observing a species that is present is modeled as a logistic regression with a time-varying intercept and species mass as a covariate. The effect of species mass on \(p\) was assumed linear and constant over time. These assumptions are reflected in the structure of this part of the model being presented here: 
+The probability \(p\) of observing a species that is present is modeled as a logistic regression with an intercept varying both by time and ecotype. Additionally, the effect of mass on the log-odds of preservation is modeled as a quadratic function. This is identical to how \(\phi\) and \(\pi\) are modeled in the birth-death process.
 \begin{equation}
   \begin{aligned}
     y_{i, t} &\sim \text{Bernoulli}(p_{i, t} z_{i, t}) \\
-    p_{i, t} &= \text{logit}^{-1}(\alpha_{0} + \alpha_{1} m_{i} + r_{t}) \\ 
-    r_{t} &\sim \mathcal{N}(0, \sigma). \\
+    p_{i, t} &= \text{logit}^{-1}(a^{p}_{t, j[i]} + b^{p}_{1} m_{i} + b^{p}_{2} m_{i}^{2} + o^{p}_{k}) \\
+    b^{p}_{1} &\sim \mathcal{N}(0, 1) \\
+    b^{p}_{2} &\sim \mathcal{N}(0, 1) \\
+    a^{p} &\sim \text{MVN}(U \gamma^{p}, \Sigma^{p}) \\
+    \Sigma^{p} &= \text{diag}(\tau^{p}) \Omega^{p} \text{diag}(\tau^{p}) \\
+    o^{p}_{k} &\sim \mathcal{N}(0, \sigma^{p}_{o}) \\ 
+    \sigma^{p}_{o} &\sim \mathcal{N^{+}}(1) \\
   \end{aligned}
   \label{eq:obs_model}
 \end{equation}
 The parameters associated with Equation \ref{eq:obs_model} are described in Table \ref{tab:obs_param}.
 
 
-\subsubsection*{Pure-presence process}
-For the pure-presence model there is only a single probability dealing with the presence of a species \(\theta\) (Table \ref{tab:pp}). This probability was modeled as multi-level logistic regression with both species-level and group-level covariates \citep{Gelman2007,Gelman2013d}. The parameters associated with the pure-presence model are presented in Table \ref{tab:pres_param}, and the full sampling statement in Equation \ref{eq:pure_presence}.
-
-\begin{table}
-  \centering
-  \caption{Parameters for the model of presence in the pure-presence model}
-  \begin{tabular}{c l l}
-    Parameter & dimensions & explanation \\
-    \hline
-    \(z\) & \(N \times T\) & ``true'' species presence/absence \\
-    \(\theta\) & \(N \times T - 1\) & probability of \(z = 1\) \\
-    \(a\) & \(T - 1 \times D\) & ecotype-varying intercept; mean value of log-odds of \(\theta\) \\
-    \(m\) & \(N\) & species log mass, rescaled \\
-    \(b_{1}\) & 1 & effect of species mass on log-odds of \(\theta\) \\
-    \(b_{2}\) & 1 & effect of species mass, squared, on log-odds of \(\theta\) \\
-    \(U\) & \(T \times D\) & matrix of group-level covariates \\
-    \(\gamma\) & \(U \times D\) & matrix of group-level regression coefficients \\
-    \(\Sigma\) & \(D \times D\) & covariance matrix of \(a\) \\
-    \(\Omega\) & \(D \times D\) & correlation matrix of \(a\) \\
-    \(\tau\) & \(D\) & vector of standard deviations for each ecotype \(a_{d}\) \\
-  \end{tabular}
-  \label{tab:pres_param}
-\end{table}
-
-Species mass was included as a covariate with two regression coefficients allowing for a quadratic relationship with log-odds of occurrence. Because the distribution of mammal species body mass is unimodal and approximately normal \citep{Smith2004}, I assume that species of intermediate body size will be more common than species of very large or very small mass. These assumptions are also reflected in the choice of priors for \(b_{1}\) and \(b_{2}\) where the latter is given a weakly informative prior with most of its density below 0 (Eq. \ref{eq:pure_presence}).
-
-The values of each ecotype's intercept are themselves modeled as regressions using the group-level covariates associated with environmental context. Each of these regressions has an associated variance of possible values of each ecotype's intercept \citep{Gelman2007}. In addition, the covariances between ecotype intercepts, given this group-level regression, are modeled \citep{Gelman2007}. The prior choice for the covariance matrix separates it into a vector of scales \(\tau\) and a correlation matrix \(\Omega\). The elements of the former are given weakly informative, independent half-Normal priors while the latter was given a weakly informative LKJ prior as recommended in the Stan manual \citep{StanDevelopmentTeam2016}.
-
-All parameters not modeled elsewhere were given weakly informative priors \citep{Gelman2013d,McElreath2016,StanDevelopmentTeam2016}. Weakly informative means that priors do not necessarily encode actual prior information but instead help regularize or weakly constrain posterior estimates. These priors have a concentrated probability density around and near zero; this has the effect of tempering our estimates and help prevent overfitting the model to the data \citep{Gelman2013d,McElreath2016,StanDevelopmentTeam2016}. The general line of thinking behind this approach is that a result of 0 or ``no effect'' is more preferable to a wrong or extremely weak result.
-
-\begin{equation}
-  \begin{split}
-    y_{i, t} &\sim \text{Bernoulli}(p_{i, t} z_{i, t}) \\
-    p_{i, t} &= \text{logit}^{-1}(\alpha_{0} + \alpha_{1} m_{i} + r_{t}) \\ 
-    r_{t} &\sim \mathcal{N}(0, \sigma) \\
-    z_{i, 1} &\sim \text{Bernoulli}(\rho) \\
-    z_{i, t} &\sim \text{Bernoulli}(\theta_{i, t}) \\
-    \theta_{i, t} &= \text{logit}^{-1}(a_{t, j[i]} + b_{1} m_{i} + b_{2} m_{i}^{2}) \\
-    a &\sim \text{MVN}(u \gamma, \Sigma) \\
-    \Sigma &= \text{diag}(\tau) \Omega \text{diag}(\tau) \\
-  \end{split}
-  \begin{split}
-    \alpha_{0} &\sim \mathcal{N}(0, 1) \\
-    \alpha_{1} &\sim \mathcal{N}(1, 1) \\
-    \sigma &\sim \mathcal{N}^{+}(1) \\
-    b_{1} &\sim \mathcal{N}(0, 1) \\
-    b_{2} &\sim \mathcal{N}(-1, 1) \\
-    \gamma &\sim \mathcal{N}(0, 1) \\
-    \tau &\sim \mathcal{N}^{+}(1) \\
-    \Omega &\sim \text{LKJ}(2) \\
-  \end{split}
-  \label{eq:pure_presence}
-\end{equation}
-
-
 \subsubsection*{Birth-death process}
-In the birth-death version of the model, \(\phi \neq \pi\) and so each of these probabilities is modeled separately but each is handled in a similar manner to how \(\theta\) is modeled in the pure-presence model (Eq. \ref{eq:pure_presence}, Table \ref{tab:bd}). The parameters associated with the birth-death presence model are presented in Table \ref{tab:bd_param} and the full sampling statement, including observation (Eq. \ref{eq:obs_model}), is described in Equation \ref{eq:birth_death}:
+In the birth-death process part of the model, the transition probabilities \(\phi\) and \(\pi\) are modeled separately but in a similar manner to how \(p\) is modeled in observation process part of the model (Eq. \ref{eq:obs_model}). The parameters associated with the birth-death presence model are presented in Table \ref{tab:bd_param} and the full sampling statement, including observation (Eq. \ref{eq:obs_model}), is described in Equation \ref{eq:birth_death}:
 \begin{equation}
   \begin{split}
     y_{i, t} &\sim \text{Bernoulli}(p_{i, t} z_{i, t}) \\
-    p_{i, t} &= \text{logit}^{-1}(\alpha_{0} + \alpha_{1} m_{i} + r_{t}) \\ 
-    r_{t} &\sim \mathcal{N}(0, \sigma) \\
-    \alpha_{0} &\sim \mathcal{N}(0, 1) \\
-    \alpha_{1} &\sim \mathcal{N}(1, 1) \\
-    \sigma &\sim \mathcal{N}^{+}(1) \\
+    p_{i, t} &= \text{logit}^{-1}(a^{p}_{t, j[i]} + b^{p}_{1} m_{i} + b^{p}_{2} m_{i}^{2} + o^{p}_{k}) \\
+    a^{p} &\sim \text{MVN}(U \gamma^{p}, \Sigma^{p}) \\
     z_{i, 1} &\sim \text{Bernoulli}(\phi_{i, 1}) \\
     z_{i, t} &\sim \text{Bernoulli}\left(z_{i, t - 1} \pi_{i,t} + \sum_{x = 1}^{t}(1 - z_{i, x}) \phi_{i,t}\right) \\
-    \phi_{i, t} &= \text{logit}^{-1}(a^{\phi}_{t, j[i]} + b^{\phi}_{1} m_{i} + b^{\phi}_{2} m_{i}^{2}) \\
-    \pi_{i, t} &= \text{logit}^{-1}(a^{\pi}_{t, j[i]} + b^{\pi}_{1} m_{i} + b^{\pi}_{2} m_{i}^{2}) \\
+    \phi_{i, t} &= \text{logit}^{-1}(a^{\phi}_{t, j[i]} + b^{\phi}_{1} m_{i} + b^{\phi}_{2} m_{i}^{2} + o^{\phi}_{k}) \\
+    \pi_{i, t} &= \text{logit}^{-1}(a^{\pi}_{t, j[i]} + b^{\pi}_{1} m_{i} + b^{\pi}_{2} m_{i}^{2} + o^{\pi}_{k}) \\
     a^{\phi} &\sim \text{MVN}(U \gamma^{\phi}, \Sigma^{\phi}) \\
     a^{\pi} &\sim \text{MVN}(U \gamma^{\pi}, \Sigma^{\pi}) \\
-  \end{split}
-  \begin{split}
+    \Sigma^{p} &= \text{diag}(\tau^{p}) \Omega^{p} \text{diag}(\tau^{p}) \\
     \Sigma^{\phi} &= \text{diag}(\tau^{\phi}) \Omega^{\phi} \text{diag}(\tau^{\phi}) \\
     \Sigma^{\pi} &= \text{diag}(\tau^{\pi}) \Omega^{\pi} \text{diag}(\tau^{\pi}) \\
+  \end{split}
+  \begin{split}
     \rho &\sim \text{U}(0, 1) \\
+    b^{p}_{1} &\sim \mathcal{N}(0, 1) \\
     b^{\phi}_{1} &\sim \mathcal{N}(0, 1) \\
     b^{\pi}_{1} &\sim \mathcal{N}(0, 1) \\
-    b^{\phi}_{2} &\sim \mathcal{N}(-1, 1) \\
-    b^{\pi}_{2} &\sim \mathcal{N}(-1, 1) \\
+    b^{p}_{2} &\sim \mathcal{N}(0, 1) \\
+    b^{\phi}_{2} &\sim \mathcal{N}(0, 1) \\
+    b^{\pi}_{2} &\sim \mathcal{N}(0, 1) \\
+    o^{p}_{k} &\sim \mathcal{N}(0, \sigma^{p}_{o}) \\ 
+    o^{\phi}_{k} &\sim \mathcal{N}(0, \sigma^{\phi}_{o}) \\ 
+    o^{\pi}_{k} &\sim \mathcal{N}(0, \sigma^{\pi}_{o}) \\ 
+    \sigma^{p}_{o} &\sim \mathcal{N^{+}}(1) \\
+    \sigma^{\phi}_{o} &\sim \mathcal{N^{+}}(1) \\
+    \sigma^{\pi}_{o} &\sim \mathcal{N^{+}}(1) \\
+    \gamma^{p} &\sim \mathcal{N}(0, 1) \\
     \gamma^{\phi} &\sim \mathcal{N}(0, 1) \\
     \gamma^{\pi} &\sim \mathcal{N}(0, 1) \\
+    \tau^{p} &\sim \mathcal{N}^{+}(1) \\
     \tau^{\phi} &\sim \mathcal{N}^{+}(1) \\
     \tau^{\pi} &\sim \mathcal{N}^{+}(1) \\
     \Omega^{\phi} &\sim \text{LKJ}(2) \\
@@ -275,15 +206,15 @@ In the birth-death version of the model, \(\phi \neq \pi\) and so each of these 
 
 \begin{table}
   \centering
-  \caption{Parameters for the model of presence in the pure-presence model}
+  \caption{Parameters for the model of presence in the birth-death process}
   \begin{tabular}{c l l}
     Parameter & dimensions & explanation \\
     \hline
     \(z\) & \(N \times T\) & ``true'' species presence/absence \\
     \(\phi\) & \(N \times T\) & probability of \(z_{\textunderscore, t} = 1 | z_{\textunderscore, t - 1} = 0 \); origination \\
     \(\pi\) & \(N \times T - 1\) & probability of \(z_{\textunderscore, t} = 1 | z_{\textunderscore, t - 1} = 1 \); survival \\
-    \(a^{\phi}\) & \(T - 1 \times D\) & ecotype-varying intercept; mean value of log-odds of \(\theta\) \\
-    \(a^{\pi}\) & \(T - 1 \times D\) & ecotype-varying intercept; mean value of log-odds of \(\theta\) \\
+    \(a^{\phi}\) & \(T - 1 \times D\) & ecotype-varying intercept of log-odds of originating \(\phi\) \\
+    \(a^{\pi}\) & \(T - 1 \times D\) & ecotype-varying intercept of log-odds of surviving \(\pi\) \\
     \(m\) & \(N\) & species log mass, rescaled \\
     \(b^{\phi}_{1}\) & 1 & effect of species mass on log-odds of \(\phi\) \\
     \(b^{\pi}_{1}\) & 1 & effect of species mass on log-odds of \(\pi\) \\
@@ -298,17 +229,21 @@ In the birth-death version of the model, \(\phi \neq \pi\) and so each of these 
     \(\Omega^{\pi}\) & \(D \times D\) & correlation matrix of \(a^{\pi}\) \\
     \(\tau^{\phi}\) & \(D\) & vector of standard deviations for each ecotype \(a^{\phi}_{d}\) \\
     \(\tau^{\pi}\) & \(D\) & vector of standard deviations for each ecotype \(a^{\pi}_{d}\) \\
+    \(o^{\phi}_{k}\) & O & effect of species order on log-odds of originating \(\phi\) \\
+    \(o^{\pi}_{k}\) & O & effect of species order on log-odds of surviving \(\pi\) \\
+    \(\sigma^{\phi}_{o}\) & 1 & standard deviation of the effect of order on log-odds of originating \(\phi\) \\
+    \(\sigma^{\pi}_{o}\) & 1 & standard deviation of the effect of order on log-odds of surviving \(\pi\) \\
   \end{tabular}
   \label{tab:bd_param}
 \end{table}
 
-Similar to the pure-presence model, both \(\phi\) and \(\pi\) are modeled as logistic regressions with varying intercept and one covariate associated with two parameters. The possible relationships between mass and both \(\phi\) and \(\pi\) are reflected in the parameterization of the model and choice of priors (Eq. \ref{eq:birth_death}).
+The transition probabilities \(\phi\) and \(\pi\) are modeled as logistic regressions with varying intercept and one covariate associated with two parameters. The possible relationships between mass and both \(\phi\) and \(\pi\) are reflected in the parameterization of the model and choice of priors (Eq. \ref{eq:birth_death}).
 
 The intercepts of \(\phi\) and \(\pi\) both vary by species ecotype and those values are themselves the product of group-level regression using environmental factors as covariates (Eq. \ref{eq:birth_death}); this is identical to the pure presence model (Eq. \ref{eq:pure_presence}).
 
 
 \subsection*{Posterior inference and model adequacy}
-Computer programs that implement joint posterior inference for the above models (Eqs. \ref{eq:pure_presence}, \ref{eq:birth_death}) were written in the probabilistic programming language Stan \citep{StanDevelopmentTeam2016}. Both models feature a large matrix of latent discrete parameters \(z\) (Tables \ref{tab:obs_param}, \ref{tab:pres_param}, \ref{tab:bd_param}; Eqs. \ref{eq:obs_model}, \ref{eq:pure_presence}, \ref{eq:birth_death}). All methods for posterior inference implemented in Stan are derivative-based; this causes complications for actually implementing the above models, because integers do not have derivatives. Instead of implementing a latent discrete parameterization, the log posterior probabilities of all possible states of the latent parameters \(z\) were calculated and summed (i.e. marginalized). 
+Computer programs that implement joint posterior inference for the above model (Eqs. \ref{eq:birth_death}) were written in the probabilistic programming language Stan \citep{StanDevelopmentTeam2016}. Both models feature a large matrix of latent discrete parameters \(z\) (Tables \ref{tab:obs_param}, \ref{tab:bd_param}; Eqs. \ref{eq:obs_model}, \ref{eq:birth_death}). All methods for posterior inference implemented in Stan are derivative-based; this causes complications for actually implementing the above models, because integers do not have derivatives. Instead of implementing a latent discrete parameterization, the log posterior probabilities of all possible states of the latent parameters \(z\) were calculated and summed (i.e. marginalized). 
 
 Species durations at minimum range through from a species first appearance to their last appearance in the fossil record, but the incompleteness of all observations means that the actual times of origination and extinction are unknown. The marginalization approach used here means that the probabilities of all possible histories for a species are calculated, from the end members of the species having existed for the entire study interval and the species having only existed between the directly observed first and last appearances to all possible intermediaries (Fig \ref{fig:margin_concept}) \citep{StanDevelopmentTeam2016}. This process is identical, language-wise, to assuming range-through and then estimating the possibility of all possible range extension due to incomplete sampling. % this probably needs a figure to explain.
 
