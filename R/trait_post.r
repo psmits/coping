@@ -62,7 +62,7 @@ if(bin == '2My') {
 
 ############
 ## advi
-post <- list.files('../data/mcmc_out', pattern = 'revamp_[0-9]_advi_NALMA',
+post <- list.files('../data/mcmc_out', pattern = 'sensible_advi_NALMA',
                    full.names = TRUE)
 
 # full birth-death
