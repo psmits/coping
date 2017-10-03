@@ -58,7 +58,7 @@ coro.number <- coro.test
 coro.test <- melt(coro.test > 0.95)
 coro.test <- coro.test[coro.test[, 3] == TRUE, 1:2]
 coro.test <- coro.test[coro.test[, 1] > coro.test[, 2], ]
-if(nrow(cors.test) != 0) {
+if(nrow(coro.test) != 0) {
   coro.row <- apply(ecotran[coro.test[, 1], ], 1, paste0, collapse = ' ')
   coro.col <- apply(ecotran[coro.test[, 2], ], 1, paste0, collapse = ' ')
   coro.frame <- data.frame(coro.row, coro.col)

@@ -305,7 +305,7 @@ ggsave(filename = '../doc/figure/relative_diversity.png', plot = emgg,
 # faceted diversity plot
 degg <- ggplot(div.eco, aes(x = time, y = diversity, group = sim))
 degg <- degg + geom_hline(data = div.eco.mean,
-                          mapping = aes(yintercept = diversity, sim = NULL),
+                          mapping = aes(yintercept = diversity, group = NULL),
                           colour = 'blue', size = 1.1, alpha = 0.5)
 degg <- degg + geom_line(alpha = 0.1)
 degg <- degg + facet_grid(eco_1 ~ eco_2)
@@ -389,7 +389,7 @@ gain.eco.mean$eco_1 <- mapvalues(gain.eco.mean$eco_1,
 # make the plot
 gbegg <- ggplot(gbe, aes(x = time, y = gains, group = sim))
 gbegg <- gbegg + geom_hline(data = gain.eco.mean,
-                            mapping = aes(yintercept = gains, sim = NULL),
+                            mapping = aes(yintercept = gains, group = NULL),
                             colour = 'blue', size = 1.1, alpha = 0.5)
 gbegg <- gbegg + geom_line(alpha = 0.1)
 gbegg <- gbegg + facet_grid(eco_1 ~ eco_2)
@@ -435,7 +435,7 @@ loss.eco.mean$eco_1 <- mapvalues(loss.eco.mean$eco_1,
 
 lbegg <- ggplot(lbe, aes(x = time, y = loss, group = sim))
 lbegg <- lbegg + geom_hline(data = loss.eco.mean,
-                            mapping = aes(yintercept = loss, sim = NULL),
+                            mapping = aes(yintercept = loss, group = NULL),
                             colour = 'blue', size = 1.1, alpha = 0.5)
 lbegg <- lbegg + geom_line(alpha = 0.1)
 lbegg <- lbegg + facet_grid(eco_1 ~ eco_2)

@@ -185,9 +185,10 @@ temp.time.range <- sort.climate(cram.temp, val = 'range',
 #u <- cbind(mean.o18, range.o18)
 #U <- ncol(u)
 # WARNING to include need to remove oldest bin!!!!
-u <- cbind(temp.time.mean, temp.time.range)  # young to old
-u <- u[-c(1, nrow(u)), ]
-u <- apply(u, 2, rev)  # old to young
+#u <- cbind(temp.time.mean, temp.time.range)  # young to old
+u <- temp.time.mean  # young to old
+u <- u[-c(1, length(u))]
+#u <- apply(u, 2, rev)  # old to young
 
 
 # make the plant phase indicator
@@ -212,7 +213,8 @@ P <- 3
 # fixed the reversed order
 sight <- sight[, rev(seq(ncol(sight)))]  # from older to younger
 phase <- factor(rev(phase)) # from older to younger
-u <- model.matrix( ~ u + phase)
+u <- model.matrix( ~ phase + u)
+#u <- u[, -1]
 U <- ncol(u)
 
 N <- nrow(sight)

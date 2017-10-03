@@ -100,7 +100,8 @@ parameters {
   cholesky_factor_corr[D] o_L_Omega;
   vector<lower=0>[D] o_tau;
 
-  matrix[U, D] o_gamma; // effect of group level covariates
+  matrix[T, D] o_inter;
+  matrix[U - 1, D] o_gamma; // effect of group level covariates
 
   //// effect of order
   vector[O] o_ordeff;
@@ -114,7 +115,8 @@ parameters {
   cholesky_factor_corr[D] s_L_Omega;
   vector<lower=0>[D] s_tau;
 
-  matrix[U, D] s_gamma; // effect of group level covariates
+  matrix[T - 1, D] s_inter;
+  matrix[U - 1, D] s_gamma; // effect of group level covariates
 
   //// effect of order
   vector[O] s_ordeff;
@@ -122,9 +124,7 @@ parameters {
 
   ////
   // preservation
-  real p_inter;
   vector[T] p_timeeff; // time eff
-  real<lower=0> p_timescale;
   real p_b_1;  // mass coef
   vector[D] p_funceff; // ecology eff
   real<lower=0> p_funcscale;
@@ -138,14 +138,24 @@ transformed parameters {
   matrix[N, T] p;  // sampling probability
 
   // vectorized, non-centered, chol-decom group-level predictors
-  o_a = ufull * o_gamma + (diag_pre_multiply(o_tau, o_L_Omega) * o_a_z)'; // or
-  s_a = u * s_gamma + (diag_pre_multiply(s_tau, s_L_Omega) * s_a_z)'; // ext
+  o_a = (diag_pre_multiply(o_tau, o_L_Omega) * o_a_z)'; // or
+  s_a = (diag_pre_multiply(s_tau, s_L_Omega) * s_a_z)'; // ext
+  for(d in 1:D) {
+    for(t in 1:T) {
+      o_a[t, d] = o_inter[t, d] + o_gamma[1, d] * ufull[t, 2] + 
+        o_gamma[2, d] * ufull[t, 3] + o_gamma[3, d] * ufull[t, 4];
+    }
+    for(t in 1:(T - 1)) {
+      s_a[t, d] = s_inter[t, d] + s_gamma[1, d] * u[t, 2] + 
+        s_gamma[2, d] * u[t, 3] + s_gamma[3, d] * u[t, 4];
+    }
+  }
 
   // probability of occurring and sampling
   for(t in 1:T) {
     for(n in 1:N) {
       origin[n, t] = inv_logit(o_a[t, state[n]] + o_b_1 * mass[n] + o_ordeff[ords[n]]);
-      p[n, t] = inv_logit(p_inter + p_timeeff[t] + p_b_1 * mass[n] + p_funceff[state[n]]);
+      p[n, t] = inv_logit(p_timeeff[t] + p_b_1 * mass[n] + p_funceff[state[n]]);
     }
   }
   for(t in 1:(T-1)) {
@@ -157,12 +167,14 @@ transformed parameters {
 model {
   ////
   // origination
-  // by functional group at time w/ random walk prior
   to_vector(o_a_z) ~ normal(0, 1);
   o_L_Omega ~ lkj_corr_cholesky(4);  // really strong!
   o_tau ~ normal(0, 1);
   to_vector(o_gamma) ~ normal(0, 0.5);  // really strong for no eff!
-  //to_vector(o_time_sigma) ~ normal(0, 1);
+  o_inter[1] ~ normal(0, 1);
+  for(ii in 2:T) {
+    o_inter[ii] ~ normal(o_inter[ii - 1], 1);
+  }
 
   // priors for order effect on origination
   o_ordeff ~ normal(0, o_ordscale);
@@ -179,6 +191,10 @@ model {
   s_L_Omega ~ lkj_corr_cholesky(4);  // really strong for no corr!
   s_tau ~ normal(0, 1);
   to_vector(s_gamma) ~ normal(0, 0.5);  // really strong for no eff!
+  s_inter[1] ~ normal(0, 1);
+  for(ii in 2:(T - 1)) {
+    s_inter[ii] ~ normal(s_inter[ii - 1], 1);
+  }
 
   // priors for order effect on origination
   s_ordeff ~ normal(0, s_ordscale);
@@ -191,9 +207,10 @@ model {
   ////
   // observation
   // by time w/ random walk prior
-  p_inter ~ normal(0, 1);
-  p_timeeff ~ normal(0, p_timescale);
-  p_timescale ~ normal(0, 1);
+  p_timeeff[1] ~ normal(0, 1);
+  for(ii in 2:T) {
+    p_timeeff[ii] ~ normal(p_timeeff[ii - 1], 1);
+  }
 
   // 
   p_funceff ~ normal(0, p_funcscale);
@@ -213,3 +230,4 @@ generated quantities {
   o_Omega = multiply_lower_tri_self_transpose(o_L_Omega);
   s_Omega = multiply_lower_tri_self_transpose(s_L_Omega);
 }
+

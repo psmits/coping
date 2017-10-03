@@ -9,17 +9,13 @@ library(xtable)
 
 # probability that group-level on origin is greater than 0
 # order is phase 3, temp mean, temp range, phase 2, phase 1
-od <- c(5, 4, 1, 2, 3)
-out.occur <- out.origin <- out.surv <- list()
+out.origin <- out.surv <- list()
 for(ii in seq(nrow(ecotrans))) {
-  out.occur[[ii]] <- apply(ext1$gamma[, 2:3, ii], 2, function(x) 
-                           sum(x > 0) / length(x))
   out.origin[[ii]] <- apply(ext2$o_gamma[, 2:3, ii], 2, function(x) 
                             sum(x > 0) / length(x))
   out.surv[[ii]] <- apply(ext2$s_gamma[, 2:3, ii], 2, function(x) 
                           sum(x > 0) / length(x))
 }
-out.occur <- Reduce(rbind, out.occur)
 out.origin <- Reduce(rbind, out.origin)
 out.surv <- Reduce(rbind, out.surv)
 
@@ -30,14 +26,11 @@ ecotrans[, 1] <- mapvalues(ecotrans[, 1],
                              'insectivore', 'omnivore'))
 rown <- apply(ecotrans, 1, function(x) Reduce(paste, rev(x)))
 
-rownames(out.occur) <- rownames(out.origin) <- rownames(out.surv) <- rown
-colnames(out.occur) <- colnames(out.origin) <- colnames(out.surv) <- 
+rownames(out.origin) <- rownames(out.surv) <- rown
+colnames(out.origin) <- colnames(out.surv) <- 
   c('P(gamma_{temp mean} > 0)', 'P(gamma_{temp range} > 0)')
 
 # make/print tables
-out.occur.tab <- xtable(out.occur, label = 'tab:occur_temp', digits = 3)
-print.xtable(x = out.occur.tab, file = '../doc/occur_temp_raw.tex')
-
 out.origin.tab <- xtable(out.origin, label = 'tab:origin_temp', digits = 3)
 print.xtable(x = out.origin.tab, file = '../doc/origin_temp_raw.tex')
 
@@ -47,18 +40,9 @@ print.xtable(x = out.surv.tab, file = '../doc/surv_temp_raw.tex')
 
 
 # calculate differences amoungst plant phases
-plant.oc <- plant.or <- plant.su <- list()
+plant.or <- plant.su <- list()
 for(ii in seq(nrow(ecotrans))) {
-  tt <- ext1$gamma[, c(5, 4, 1), ii]
-  tt[, 2] <- tt[, 2] + tt[, 1]
-  tt[, 3] <- tt[, 3] + tt[, 1]
-  plantp <- c()
-  plantp[1] <- sum(tt[, 1] - tt[, 2] > 0) / nrow(tt)
-  plantp[2] <- sum(tt[, 2] - tt[, 3] > 0) / nrow(tt)
-  plantp[3] <- sum(tt[, 1] - tt[, 3] > 0) / nrow(tt)
-  plant.oc[[ii]] <- plantp
-
-  tt <- ext2$o_gamma[, c(5, 4, 1), ii]
+  tt <- ext2$o_gamma[, c(1, 2, 3), ii]
   tt[, 2] <- tt[, 2] + tt[, 1]
   tt[, 3] <- tt[, 3] + tt[, 1]
   plantp <- c()
@@ -67,7 +51,7 @@ for(ii in seq(nrow(ecotrans))) {
   plantp[3] <- sum(tt[, 1] - tt[, 3] > 0) / nrow(tt)
   plant.or[[ii]] <- plantp
 
-  tt <- ext2$s_gamma[, c(5, 4, 1), ii]
+  tt <- ext2$s_gamma[, c(1, 2, 3), ii]
   tt[, 2] <- tt[, 2] + tt[, 1]
   tt[, 3] <- tt[, 3] + tt[, 1]
   plantp <- c()
@@ -76,16 +60,12 @@ for(ii in seq(nrow(ecotrans))) {
   plantp[3] <- sum(tt[, 1] - tt[, 3] > 0) / nrow(tt)
   plant.su[[ii]] <- plantp
 }
-plant.oc <- Reduce(rbind, plant.oc)
 plant.or <- Reduce(rbind, plant.or)
 plant.su <- Reduce(rbind, plant.su)
 
-rownames(plant.oc) <- rownames(plant.or) <- rownames(plant.su) <- rown
-colnames(plant.oc) <- colnames(plant.or) <- colnames(plant.su) <- 
+rownames(plant.or) <- rownames(plant.su) <- rown
+colnames(plant.or) <- colnames(plant.su) <- 
   c('P(Phase 1 > Phase 2)', 'P(Phase 2 > Phase 3)', 'P(Phase 1 > Phase 3)')
-
-plant.oc.tab <- xtable(plant.oc, label = 'tab:occur_plant', digits = 3)
-print.xtable(x = plant.oc.tab, file = '../doc/occur_plant_raw.tex')
 
 plant.or.tab <- xtable(plant.or, label = 'tab:origin_plant', digits = 3)
 print.xtable(x = plant.or.tab, file = '../doc/origin_plant_raw.tex')
@@ -154,7 +134,8 @@ for(ii in seq(ncol(growth.rate))) {
   prate[ii] <- sum(growth.rate[, ii] > avg.grow) / nrow(growth.rate)
 }
 
-rat.peaks <- data.frame(time = rev(sort(unique(diversity$time))[-31]), prob = prate)
+dl <- length(unique(diversity$time))
+rat.peaks <- data.frame(time = rev(sort(unique(diversity$time))[-dl]), prob = prate)
 names(rat.peaks) <- c('Time (Mya)', 'P(D^{rate}_{t} > bar{D^{rate}})')
 rat.peaks.tab <- xtable(rat.peaks, label = 'tab:rate_peak')
 print.xtable(x = rat.peaks.tab, file = '../doc/rate_peak_raw.tex')
