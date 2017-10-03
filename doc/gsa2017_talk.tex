@@ -95,7 +95,7 @@
 
 
 \begin{frame}
-  \frametitle{Structured, messy data in biology}
+  \frametitle{Structured, multi-level data in biology}
   \begin{center}
     \includegraphics[width = \textwidth,height = 0.8\textheight,keepaspectratio = true]{figure/ovaskainen_data}
   \end{center}
@@ -172,20 +172,20 @@
   \frametitle{Modeling the probabilities; group-level}
   \begin{block}{Multivariate regression of time/FG-varying intercept}
     \begin{align*}
-      f^{\phi}_{j, t} &\sim \text{MVN}\left(
+      f^{\phi} &\sim \text{MVN}\left(
       \begin{matrix}
-        U_{t, \_} \gamma^{\phi}_{j = 1} \\
+        U \gamma^{\phi}_{j = 1} \\
         %U_{t, \_} \gamma^{\phi}_{j = 2} \\
         \vdots \\
-        U_{t, \_} \gamma^{\phi}_{j = J}
+        U \gamma^{\phi}_{j = J}
       \end{matrix}, 
       \text{diag}(\tau_{f^{\phi}}) \Omega_{f^{\phi}} \text{diag}(\tau_{f^{\phi}}) \right) \\
-      f^{\pi}_{j, t} &\sim \text{MVN}\left(
+      f^{\pi} &\sim \text{MVN}\left(
       \begin{matrix}
-        U_{t, \_} \gamma^{\pi}_{j = 1} \\
+        U \gamma^{\pi}_{j = 1} \\
         %U_{t, \_} \gamma^{\pi}_{j = 2} \\
         \vdots \\
-        U_{t, \_} \gamma^{\pi}_{j = J}
+        U \gamma^{\pi}_{j = J}
       \end{matrix}, 
       \text{diag}(\tau_{f^{\pi}}) \Omega_{f^{\pi}} \text{diag}(\tau_{f^{\pi}}) \right)
     \end{align*}
