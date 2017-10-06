@@ -286,9 +286,9 @@ em$eco_1 <- mapvalues(em$eco_1,
                       from = unique(em$eco_1), 
                       to = c('carnivore', 'herbivore', 
                              'insectivore', 'omnivore'))
-em$et <- paste(em$eco_1, em$eco_2)
+em$et <- paste(em$eco_2, em$eco_1)
 em$et <- factor(em$et)
-em$et <- factor(em$et, levels = rev(levels(em$et)))
+em$et <- factor(em$et, levels = levels(em$et))
 
 emgg <- ggplot(em, aes(x = time, y = diversity, fill = et))
 emgg <- emgg + geom_area(position = 'fill')

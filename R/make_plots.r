@@ -14,6 +14,7 @@ vis.bdpost <- function(ext2,
                        time.start.stop,
                        order.cypher,
                        ecoprob = TRUE) {
+  source('../R/visual_mass.r')
 
   # log-odds of occurrence associated with ecotype
   #   controlling for mass
@@ -21,21 +22,41 @@ vis.bdpost <- function(ext2,
 
   ecotype.plot <- function(am, ecotrans, time.start.stop, survival = FALSE) {
     # logodds group with line for lod_odds based only climate 
-    
+
     # calculate intercept
     # 18 possible ecotypes
     # 18 time points
     # time are rows, ecotypes are columns
     #ecotrans1 <- apply(ecotrans, 2, rev)
     comboname <- apply(ecotrans, 1, function(x) paste(x, collapse = '_'))
+
+
+    # to do: have this convert into plot-able mean line
+    #  mean line is what is expected from group-level mean
+    #  deviations are time specific and not "explained" by group-level
     if(!survival) {
-      med <- ufull %*% apply(ext2$o_gamma, 2:3, median)
+      meds <- matrix(nrow = nrow(time.start.stop), ncol = nrow(ecotrans))
+      cept <- apply(ext2$o_inter, 2:3, median)
+      coof <- apply(ext2$o_gamma, 2:3, median)
+      for(jj in seq(nrow(meds))) {
+        for(ii in seq(nrow(meds))) {
+          meds[jj, ii] <- cept[jj, ii] + coof[1, ii] * ufull[jj, 2] + 
+            coof[2, ii] * ufull[jj, 3] + coof[3, ii] * ufull[jj, 4]
+        }
+      }
     } else if(survival) {
-      med <- u %*% apply(ext2$s_gamma, 2:3, median)
+      meds <- matrix(nrow = nrow(time.start.stop) - 1, ncol = nrow(ecotrans))
+      cept <- apply(ext2$s_inter, 2:3, median)
+      coof <- apply(ext2$s_gamma, 2:3, median)
+      for(jj in seq(nrow(meds))) {
+        for(ii in seq(nrow(meds))) {
+          meds[jj, ii] <- cept[jj, ii] + coof[1, ii] * ufull[jj, 2] + 
+            coof[2, ii] * ufull[jj, 3] + coof[3, ii] * ufull[jj, 4]
+        }
+      }
     }
-    colnames(med) <- comboname
-    med <- melt(med)
-    names(med) <- c('time', 'state', 'value')
+
+    #names(med) <- c('time', 'state', 'value')
 
     suppressWarnings(am <- cbind(am, ecotrans[am$Var3, ]))
     names(am) <- c('sim', 'time', 'state', 'value', 'state_1', 'state_2')
@@ -52,9 +73,9 @@ vis.bdpost <- function(ext2,
     am$time <- mapvalues(x = am$time, 
                          from = unique(am$time), 
                          to = rev(orig.time[, 2]))
-    med$time <- mapvalues(x = med$time,
-                          from = unique(med$time),
-                          to = rev(orig.time[, 2]))
+    #med$time <- mapvalues(x = med$time,
+    #                      from = unique(med$time),
+    #                      to = rev(orig.time[, 2]))
 
     am$state_1 <- as.character(am$state_1)
     am$state_1 <- mapvalues(am$state_1, 
@@ -62,21 +83,21 @@ vis.bdpost <- function(ext2,
                             to = c('carnivore', 'herbivore', 'insectivore', 
                                    'omnivore'))
 
-    med$state <- as.character(med$state)
-    med <- cbind(med, Reduce(rbind, str_split(med$state, '\\_')))
-    names(med) <- c('time', 'state', 'value', 'state_1', 'state_2')
-    med$state_1 <- as.character(med$state_1)
-    med$state_1 <- mapvalues(med$state_1, 
-                             from = unique(med$state_1), 
-                             to = c('carnivore', 'herbivore', 'insectivore', 
-                                    'omnivore'))
-
-    if(ecoprob) med$value <- invlogit(med$value)
+    #med$state <- as.character(med$state)
+    #med <- cbind(med, Reduce(rbind, str_split(med$state, '\\_')))
+    #names(med) <- c('time', 'state', 'value', 'state_1', 'state_2')
+    #med$state_1 <- as.character(med$state_1)
+    #med$state_1 <- mapvalues(med$state_1, 
+    #                         from = unique(med$state_1), 
+    #                         to = c('carnivore', 'herbivore', 'insectivore', 
+    #                                'omnivore'))
+    #
+    #if(ecoprob) med$value <- invlogit(med$value)
 
     amplot <- ggplot(am, aes(x = time, y = value, group = sim))
-    amplot <- amplot + geom_line(data = med, 
-                                 mapping = aes(x = time, y = value, group = NULL), 
-                                 colour = 'blue', size = 1)
+    #amplot <- amplot + geom_line(data = med, 
+    #                             mapping = aes(x = time, y = value, group = NULL), 
+    #                             colour = 'blue', size = 1)
     amplot <- amplot + geom_line(alpha = 0.01)
     amplot <- amplot + facet_grid(state_1 ~ state_2)
     amplot <- amplot + scale_x_reverse()
@@ -133,10 +154,10 @@ vis.bdpost <- function(ext2,
   # effect of group-level on individual-level
   groupeff.plot <- function(tt, ecotrans) {
     # origination
-    for(ii in seq(18)) {
-      tt[, 2, ii] <- tt[, 1, ii] + tt[, 2, ii]
-      tt[, 3, ii] <- tt[, 1, ii] + tt[, 3, ii]
-    }
+    #for(ii in seq(18)) {
+    #  tt[, 2, ii] <- tt[, 1, ii] + tt[, 2, ii]
+    #  tt[, 3, ii] <- tt[, 1, ii] + tt[, 3, ii]
+    #}
     gm <- melt(tt)  # sim, pred, ecotype, value
 
     # translate the ecotype code into words
@@ -145,8 +166,7 @@ vis.bdpost <- function(ext2,
 
     gm$predictor <- mapvalues(gm$predictor, 
                               from = unique(gm$predictor), 
-                              to = c('phase 1', 'phase 2', 
-                                     'phase 3', 'mean temp.'))
+                              to = c('eo.mi', 'pa.eo', 'mean temp.'))
 
     gm$state_1 <- as.character(gm$state_1)
     gm$state_1 <- mapvalues(gm$state_1, 
@@ -204,96 +224,6 @@ vis.bdpost <- function(ext2,
   ggsave(filename = '../doc/figure/stdev_ecotype_survival_bd.png', plot = tmplot,
          width = 6, height = 4)
 
-  # effect of mass on observation
-  # the idea is
-  #   grid based on ecotype
-  #   each panel has three counter-factuals
-  #     one for each phase
-  #   TODO rug for observed mass value
-  mass.obs <- function(m, state, phase, type, ext2) {
-    # intercept
-    if(phase == 1) {
-      if(type == 'origin') {
-        cept <- median(ext2$o_gamma[, 1, state])
-      } else if(type == 'survival') {
-        cept <- median(ext2$s_gamma[, 1, state])
-      } else if(type == 'preserve') {
-        cept <- median(ext2$p_gamma[, 1, state])
-      }
-    } else if (phase == 2) {
-      if(type == 'origin') {
-        cept <- median(ext2$o_gamma[, 1, state]) + 
-          median(ext2$o_gamma[, 2, state])
-      } else if(type == 'survival') {
-        cept <- median(ext2$s_gamma[, 1, state]) + 
-          median(ext2$s_gamma[, 2, state])
-      } else if(type == 'preserve') {
-        cept <- median(ext2$p_gamma[, 1, state]) + 
-          median(ext2$p_gamma[, 2, state])
-      }
-    } else if (phase == 3) {
-      if(type == 'origin') {
-        cept <- median(ext2$o_gamma[, 1, state]) + 
-          median(ext2$o_gamma[, 3, state])
-      } else if(type == 'survival') {
-        cept <- median(ext2$s_gamma[, 1, state]) + 
-          median(ext2$s_gamma[, 3, state])
-      } else if(type == 'preserve') {
-        cept <- median(ext2$p_gamma[, 1, state]) + 
-          median(ext2$p_gamma[, 3, state])
-      }
-    }
-
-    # bring it all together
-    if(type == 'origin') {
-      hold <- invlogit(cept + median(ext2$o_b_1) * m)
-    } else if(type == 'survival') {
-      hold <- invlogit(cept + median(ext2$s_b_1) * m)
-    } else if(type == 'preserve') {
-      hold <- invlogit(cept + median(ext2$p_b_1) * m)
-    }
-    hold
-  }
-
-  # origin
-  massorigin.plot <- function(mass, ecotrans, type = 'origin', ext2) {
-    mass.counter <- seq(from = min(mass), to = max(mass), by = 0.001)
-    out <- list()
-    for(ii in seq(3)) {
-      oo <- list()
-      for(jj in seq(18)) {
-        oo[[jj]] <- cbind(mass = mass.counter, 
-                          est = mass.obs(mass.counter, state = jj, phase = ii, 
-                                         type = type, ext2 = ext2))
-      }
-      out[[ii]] <- oo
-    }
-
-
-    out <- llply(out, function(a) 
-                 Reduce(rbind, Map(function(x, y) cbind(x, y), 
-                                   a, seq(length(a)))))
-
-    out <- Reduce(rbind, Map(function(x, y) cbind(x, y), out, seq(3)))
-    suppressWarnings(out <- data.frame(out, ecotrans[out[, 3], ]))
-    names(out) <- c('mass', 'est', 'state', 'phase', 'state_1', 'state_2')
-
-    out$state_1 <- as.character(out$state_1)
-    out$state_1 <- mapvalues(out$state_1, 
-                             from = unique(out$state_1), 
-                             to = c('carnivore', 'herbivore', 'insectivore', 
-                                    'omnivore'))
-
-    mass_on_pres <- ggplot(out, aes(x = mass, y = est, colour = factor(phase)))
-    mass_on_pres <- mass_on_pres + geom_line(size = 1.25)
-    mass_on_pres <- mass_on_pres + facet_grid(state_1 ~ state_2)
-    mass_on_pres <- mass_on_pres + theme(axis.title = element_text(size = 10),
-                                         axis.text = element_text(size = 8))
-    mass_on_pres <- mass_on_pres + 
-      scale_x_continuous(breaks = round(seq(min(out$mass), max(out$mass), 
-                                            by = 1), 1))
-    mass_on_pres
-  }
 
   mass_on_pres <- massorigin.plot(mass, ecotrans, type = 'origin', ext2 = ext2)
   mass_on_pres <- mass_on_pres + labs(x = 'Rescaled log mass (g)',
@@ -307,31 +237,38 @@ vis.bdpost <- function(ext2,
                                       y = 'Probability of survival')
   ggsave(filename = '../doc/figure/mass_on_surv_bd.png', plot = mass_on_pres,
          width = 6, height = 4)
-  
-  ## observation
-  # this has a slightly different graph now
-  #mass_on_pres <- massorigin.plot(mass, ecotrans, type = 'preserve', ext2)
-  #mass_on_pres <- mass_on_pres + labs(x = 'Rescaled log mass (g)',
-  #                                    y = 'Probability of survival')
-  #ggsave(filename = '../doc/figure/mass_on_pres_bd.png', plot = mass_on_pres,
-  #       width = 6, height = 4)
 
-  mass.counter <- data.frame(x = seq(from = min(mass), to = max(mass), by = 0.001))
-  mass.obs.foo <- function(x) 
-    invlogit(median(ext2$p_inter) + median(ext2$p_b_1) * x)
-  massobs <- ggplot(mass.counter, aes(x = x))
-  massobs <- massobs + stat_function(fun = mass.obs.foo, size = 2)
-  massobs <- massobs + labs(x = 'Std. from mean mass (g)',
-                            y = 'Probability of observting is present')
-  ggsave(filename = '../doc/figure/mass_on_pres_bd.png', plot = massobs,
+
+  # mass on observation
+  mass.counter <- data.frame(x = seq(from = min(mass), 
+                                     to = max(mass), by = 0.001))
+  tm <- apply(ext2$p_timeeff, 2, median)
+  mt <- median(ext2$p_b_1) * mass.counter
+  massobs <- llply(tm, function(x) invlogit(x + mt))
+  massobs <- Map(function(x, y) 
+                 data.frame(mass = mass.counter, value = x, time = y),
+                 x = massobs, y = seq(length(massobs)))
+  massobs <- Reduce(rbind, massobs)
+  names(massobs) <- c('mass', 'value', 'time')
+  massobs$time <- time.start.stop[massobs$time, 2]
+  massobs$time <- mapvalues(massobs$time, 
+                            from = nalma$ma, 
+                            to = rev(nalma$interval))
+  massobs$time <- factor(massobs$time, levels = unique(massobs$time))
+  mobs <- ggplot(massobs, aes(x = mass, y = value))
+  mobs <- mobs + geom_line()
+  mobs <- mobs + facet_wrap(~ time)
+  mobs <- mobs + labs(x = 'Std. from mean mass (g)',
+                      y = 'Probability of observation if present')
+  ggsave(filename = '../doc/figure/mass_on_pres_bd.png', plot = mobs,
          width = 6, height = 4)
 
 
 
   # effects of various single factors on preservation
   # and their relative variances (possible size of effects)
-  ext2$p_0  # constant intercept
-  ext2$p_b_1  # mass slope
+  #ext2$p_0  # constant intercept
+  #ext2$p_b_1  # mass slope
 
   # functional group effect
   ecotrans1 <- ecotrans
@@ -353,26 +290,14 @@ vis.bdpost <- function(ext2,
                       y = 'Functional group')
   ggsave(filename = '../doc/figure/ecotype_observation.png', plot = fegg,
          width = 6, height = 4)
- 
-  ## order effect
-  #oe <- melt(ext2$p_ordeff)[, -1]
-  #names(oe) <- c('state', 'value')
-  #oe$state <- order.cypher[oe$state]
-  #oegg <- ggplot(oe, aes(x = value, y = state))
-  #oegg <- oegg + geom_joy(rel_min_height = 0.01)
-  #oegg <- oegg + theme_joy()
-  #oegg <- oegg + scale_x_continuous(expand = c(0.01, 0))
-  #oegg <- oegg + scale_y_discrete(expand = c(0.01, 0))
-  #oegg <- oegg + labs(x = 'Effect on log-odds of observation',
-  #                    y = 'Taxonomic Order')
-  #ggsave(filename = '../doc/figure/order_observation.png', plot = oegg,
-  #       width = 6, height = 4)
 
   # time effect
   te <- melt(ext2$p_timeeff)[, -1]
   names(te) <- c('time', 'value')
   te$time <- time.start.stop[te$time, 2]
-  te$time <- mapvalues(te$time, from = nalma$ma, to = nalma$interval)
+  te$time <- mapvalues(te$time, 
+                       from = nalma$ma, 
+                       to = rev(nalma$interval))
   te$time <- factor(te$time, levels = unique(te$time))
   tegg <- ggplot(te, aes(x = value, y = time))
   tegg <- tegg + geom_joy(rel_min_height = 0.01)
@@ -384,19 +309,19 @@ vis.bdpost <- function(ext2,
   ggsave(filename = '../doc/figure/time_observation.png', plot = tegg,
          width = 6, height = 4)
 
-  # relative variance
-  effscale <- melt(data.frame(functional = ext2$p_funcscale, 
-                              #order = ext2$p_ordscale, 
-                              time = ext2$p_timescale))
-  names(effscale) <- c('source', 'value')
-  scgg <- ggplot(effscale, aes(x = value, y = source))
-  scgg <- scgg + geom_joy(rel_min_height = 0.01)
-  scgg <- scgg + theme_joy()
-  scgg <- scgg + scale_x_continuous(expand = c(0.01, 0))
-  scgg <- scgg + scale_y_discrete(expand = c(0.01, 0))
-  scgg <- scgg + labs(x = 'Standard deviation of effect',
-                      y = 'Effect source')
-  ggsave(filename = '../doc/figure/scales_observation.png', plot = scgg,
-         width = 6, height = 4)
+  ## relative variance
+  #effscale <- melt(data.frame(functional = ext2$p_funcscale, 
+  #                            #order = ext2$p_ordscale, 
+  #                            time = ext2$p_timescale))
+  #names(effscale) <- c('source', 'value')
+  #scgg <- ggplot(effscale, aes(x = value, y = source))
+  #scgg <- scgg + geom_joy(rel_min_height = 0.01)
+  #scgg <- scgg + theme_joy()
+  #scgg <- scgg + scale_x_continuous(expand = c(0.01, 0))
+  #scgg <- scgg + scale_y_discrete(expand = c(0.01, 0))
+  #scgg <- scgg + labs(x = 'Standard deviation of effect',
+  #                    y = 'Effect source')
+  #ggsave(filename = '../doc/figure/scales_observation.png', plot = scgg,
+  #       width = 6, height = 4)
 
 }

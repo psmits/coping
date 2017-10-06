@@ -35,9 +35,9 @@
 \author{Peter D Smits}
 \institute{Department of Integrative Biology, University of California -- Berkeley}
 \titlegraphic{
-  \includegraphics[width=2.75cm,height=2.75cm,keepaspectratio=true]{figure/paleodb}
-  \hspace*{0.35\paperwidth}
-  \includegraphics[width=2cm,height=2cm,keepaspectratio=true]{figure/iblogo3}
+  \includegraphics[width=3cm,height=3cm,keepaspectratio=true]{figure/paleodb}
+  \hspace*{0.3\paperwidth}
+  \includegraphics[width=4cm,height=4cm,keepaspectratio=true]{figure/iblogo3}
 }
 \date{}
 
@@ -51,8 +51,25 @@
 \begin{frame}
   \begin{alertblock}{Question}
     When and why are certain ecologies or functional groups enriched or depleted in a species pool?
+    \begin{itemize}
+      \item relative abundance
+      \item species traits
+      \item environmental context
+    \end{itemize}
   \end{alertblock}
 \end{frame}
+
+
+\begin{frame}
+  \frametitle{Eco-cube and functional groups}
+
+  \begin{center}
+    \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio=true]{figure/ecocube}
+  \end{center}
+
+  \attrib{\footnotesize{Bambach \em{et al.}, 2007, \em{Palaeontology}}}
+\end{frame}
+
 
 \begin{frame}
   \frametitle{Species pool concept}
@@ -64,15 +81,6 @@
   \attrib{\footnotesize{Mittelbach and Schemske, 2015, \em{TREE}}}
 \end{frame}
 
-\begin{frame}
-  \frametitle{Eco-cube and ecotypes}
-
-  \begin{center}
-    \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio=true]{figure/ecocube}
-  \end{center}
-
-  \attrib{\footnotesize{Bambach \em{et al.}, 2007, \em{Palaeontology}}}
-\end{frame}
 
 
 
@@ -83,16 +91,15 @@
   \end{center}
 \end{frame}
 
-\begin{frame}
-  \frametitle{Differences in extinction risk}
-
-  \begin{center}
-    \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio=true]{figure/smits_2015_results}
-  \end{center}
-
-  \attrib{\footnotesize{Smits, 2015, \em{PNAS}}}
-\end{frame}
-
+%\begin{frame}
+%  \frametitle{Differences in extinction risk}
+%
+%  \begin{center}
+%    \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio=true]{figure/smits_2015_results}
+%  \end{center}
+%
+%  \attrib{\footnotesize{Smits, 2015, \em{PNAS}}}
+%\end{frame}
 
 \begin{frame}
   \frametitle{Structured, multi-level data in biology}
@@ -104,30 +111,17 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Conceptualizing the question}
-  % want (relative) abundance of functional groups
-  % need to estimate diversity
-  % what controls diversification process?
-  %   functional group
-  %   order
-  %   mass
-  %   environment (temp, plants)
-  % what controls observation process?
-  %   functional group
-  %   size
+  \frametitle{Conceptualizing the question and data}
+  \begin{center}
+    \includegraphics[width=\textwidth,height=\textheight,keepaspectratio=true]{figure/problem_concept}
+  \end{center}
 \end{frame}
 
 \begin{frame}
   \frametitle{Conceptualizing the analysis}
-  % observed occurrences
-  % ``true'' occurrences
-  %   birth-death process
-  % individual level
-  %   functional groups
-  %   individual covariate (mass)
-  %   order effect
-  % group level 
-  %   temporal covariates
+  \begin{center}
+    \includegraphics[width=\textwidth,height=\textheight,keepaspectratio=true]{figure/paleo_fourth_corner}
+  \end{center}
 \end{frame}
 
 
@@ -266,12 +260,12 @@
   \end{center}
 \end{frame}
 
-\begin{frame}
-  \frametitle{Origination probability; correlation between FG}
-  \begin{center}
-    \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio=true]{figure/origin_sig_corr}
-  \end{center}
-\end{frame}
+%\begin{frame}
+%  \frametitle{Origination probability; correlation between FG}
+%  \begin{center}
+%    \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio=true]{figure/origin_sig_corr}
+%  \end{center}
+%\end{frame}
 
 \begin{frame}
   \frametitle{Survival probability; individual-level}
@@ -303,18 +297,26 @@
 
 
 \begin{frame}
+  \frametitle{Summary and conclusions}
+  \begin{itemize}
+    \item 
+  \end{itemize}
+\end{frame}
+
+
+
+\begin{frame}
   \frametitle{Acknowledgements}
   \begin{columns}
     \begin{column}{0.5\textwidth}
       \begin{itemize}
         \item UC Berkeley
           \begin{itemize}
-            \item Seth Finnegan, \\Adiel Klompmaker, \\Emily Orzechowski, \\Larry Taylor, \\Sara Kahanamoku, \\Josh Zimmt
+            \item \textbf{Seth Finnegan}, \\Adiel Klompmaker, \\Emily Orzechowski, \\Larry Taylor, \\Sara Kahanamoku, \\Josh Zimmt
           \end{itemize}
         \item UChicago
           \begin{itemize}
-            \item Kenneth D. Angielczyk, \\Michael J. Foote, \\P. David Polly, \\Richard H. Ree, \\Graham Slater
-            \item UChicago CEB Hinds Fund
+            \item \textbf{Kenneth D. Angielczyk}, \\\textbf{Michael J. Foote}, \\P. David Polly, \\Richard H. Ree, \\Graham Slater
           \end{itemize}
       \end{itemize}
     \end{column}
@@ -333,4 +335,3 @@
 \end{frame}
 
 \end{document}
-

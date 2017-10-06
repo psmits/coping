@@ -17,6 +17,7 @@ source('../R/multiclass_roc.r')
 source('../R/sim_from_model.r')
 source('../R/estimate_div.r')
 source('../R/advi_post.r')
+source('../R/visual_mass.r')
 source('../R/make_plots.r')
 source('../data/data_dump/trait_w_gaps_NALMA.data.R')
 #source('../data/data_dump/trait_w_gaps_revamp.data.R')
@@ -62,7 +63,9 @@ if(bin == '2My') {
 
 ############
 ## advi
-post <- list.files('../data/mcmc_out', pattern = 'sensible_advi_NALMA',
+#post <- list.files('../data/mcmc_out', pattern = 'sensible_advi_NALMA',
+#                   full.names = TRUE)
+post <- list.files('../data/mcmc_out', pattern = 'rwprior_advi_NALMA',
                    full.names = TRUE)
 
 # full birth-death
@@ -73,6 +76,7 @@ ext2 <- post.advi(fit2)
 #   need to develop more
 post.pred(ext2, ntax = N, ntime = T, sight.obs = sight, nsim, samp, bd = TRUE)
 # visualize posterior estimates
+# this is a side-effects function
 vis.bdpost(ext2 = ext2, ecotype = ecotype, ecotrans = ecotrans, 
            mass = mass, cbp.long = cbp.long, 
            time.start.stop = time.start.stop, ecoprob = ecoprob, 

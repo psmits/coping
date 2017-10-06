@@ -107,7 +107,6 @@ occur$mass <- na.mass[match(occur$name.bi, na.mass$name), 2]
 #spt <- ape::drop.tip(spt, hot.fix$tree_not_data)
 #occur <- occur[keep[[1]], ]
 
-
 if(bin == '2My') {
   occur <- occur[occur$bins != 66, ]
 
@@ -187,8 +186,7 @@ temp.time.range <- sort.climate(cram.temp, val = 'range',
 # WARNING to include need to remove oldest bin!!!!
 #u <- cbind(temp.time.mean, temp.time.range)  # young to old
 u <- temp.time.mean  # young to old
-u <- u[-c(1, length(u))]
-#u <- apply(u, 2, rev)  # old to young
+u <- u[-c(1, length(u))] # old to young
 
 
 # make the plant phase indicator
@@ -209,10 +207,10 @@ for(ii in seq(length(co.h))){
 P <- 3
 
 
-
 # fixed the reversed order
 sight <- sight[, rev(seq(ncol(sight)))]  # from older to younger
 phase <- factor(rev(phase)) # from older to younger
+u <- rev(u)
 u <- model.matrix( ~ phase + u)
 #u <- u[, -1]
 U <- ncol(u)

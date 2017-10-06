@@ -142,11 +142,11 @@ transformed parameters {
   s_a = (diag_pre_multiply(s_tau, s_L_Omega) * s_a_z)'; // ext
   for(d in 1:D) {
     for(t in 1:T) {
-      o_a[t, d] = o_inter[t, d] + o_gamma[1, d] * ufull[t, 2] + 
+      o_a[t, d] = o_a[t, d] + o_inter[t, d] + o_gamma[1, d] * ufull[t, 2] + 
         o_gamma[2, d] * ufull[t, 3] + o_gamma[3, d] * ufull[t, 4];
     }
     for(t in 1:(T - 1)) {
-      s_a[t, d] = s_inter[t, d] + s_gamma[1, d] * u[t, 2] + 
+      s_a[t, d] = s_a[t, d] + s_inter[t, d] + s_gamma[1, d] * u[t, 2] + 
         s_gamma[2, d] * u[t, 3] + s_gamma[3, d] * u[t, 4];
     }
   }
@@ -209,6 +209,7 @@ model {
   // by time w/ random walk prior
   p_timeeff[1] ~ normal(0, 1);
   for(ii in 2:T) {
+    //p_timeeff[ii] - p_timeeff[ii-1] ~ normal(0, 1);
     p_timeeff[ii] ~ normal(p_timeeff[ii - 1], 1);
   }
 
