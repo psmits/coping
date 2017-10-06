@@ -154,15 +154,34 @@ vis.bdpost <- function(ext2,
     #  tt[, 2, ii] <- tt[, 1, ii] + tt[, 2, ii]
     #  tt[, 3, ii] <- tt[, 1, ii] + tt[, 3, ii]
     #}
+    prob.big <- apply(tt, 2:3, function(x) sum(x > 0)/length(x))
+    pb <- melt(prob.big)
+    
     gm <- melt(tt)  # sim, pred, ecotype, value
 
     # translate the ecotype code into words
     suppressWarnings(gm <- cbind(gm, ecotrans[gm$Var3, ]))
     names(gm) <- c('sim', 'predictor', 'ecotype', 'value', 'state_1', 'state_2')
+    
+    # match probs to row
+    gm$prob <- 0
+    for(ii in seq(3)) {  # predictor
+      for(jj in seq(18)) {  # ecotype
+        group.match <- gm$predictor == ii & gm$ecotype == jj
+        prob.match <- pb[, 1] == ii & pb[, 2] == jj
+        gm$prob[group.match] <- pb[prob.match, 3]
+      }
+    }
 
     gm$predictor <- mapvalues(gm$predictor, 
                               from = unique(gm$predictor), 
-                              to = c('eo.mi', 'pa.eo', 'mean temp.'))
+                              to = c('eo.mi vs mi.pl', 
+                                     'pa.eo vs mi.pl', 
+                                     'mean temp.'))
+    gm$predictor <- factor(gm$predictor, 
+                           levels = c('mean temp.', 
+                                      'pa.eo vs mi.pl', 
+                                      'eo.mi vs mi.pl'))
 
     gm$state_1 <- as.character(gm$state_1)
     gm$state_1 <- mapvalues(gm$state_1, 
@@ -170,15 +189,21 @@ vis.bdpost <- function(ext2,
                             to = c('carnivore', 'herbivore', 'insectivore', 
                                    'omnivore'))
 
-    gmplot <- ggplot(gm, aes(x = predictor, y = value, group = predictor))
+    gmplot <- ggplot(gm, aes(x = predictor, y = value, group = predictor, 
+                             fill = prob, colour = prob))
     gmplot <- gmplot + geom_hline(yintercept = 0)
     gmplot <- gmplot + geom_violin()
     gmplot <- gmplot + facet_grid(state_1 ~ state_2)
+    gmplot <- gmplot + scale_fill_distiller(name = 'Probability > 0',
+                                            palette = 'RdBu', limits = c(0, 1))
+    gmplot <- gmplot + scale_colour_distiller(name = 'Probability > 0',
+                                              palette = 'RdBu', limits = c(0, 1))
     gmplot <- gmplot + theme(axis.text.x = element_text(angle = 90, vjust = 0.5))
     gmplot
   }
 
   tt <- ext2$o_gamma
+
   gmplot <- groupeff.plot(tt, ecotrans)
   gmplot <- gmplot + labs(x = 'Predictor variable', 
                           y = 'Change to log-odds of originating')
