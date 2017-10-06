@@ -168,7 +168,7 @@ model {
   ////
   // origination
   to_vector(o_a_z) ~ normal(0, 1);
-  o_L_Omega ~ lkj_corr_cholesky(4);  // really strong!
+  o_L_Omega ~ lkj_corr_cholesky(2);  // really strong!
   o_tau ~ normal(0, 1);
   to_vector(o_gamma) ~ normal(0, 0.5);  // really strong for no eff!
   o_inter[1] ~ normal(0, 1);
@@ -181,14 +181,14 @@ model {
   o_ordscale ~ normal(0, 0.5);  // really strong!
 
   // priors for effects of mass on orignation
-  o_b_1 ~ normal(0, 1);
+  o_b_1 ~ normal(0, 0.5);
 
 
   ////
   // survival 
   // by functional group at time w/ random walk prior
   to_vector(s_a_z) ~ normal(0, 1);
-  s_L_Omega ~ lkj_corr_cholesky(4);  // really strong for no corr!
+  s_L_Omega ~ lkj_corr_cholesky(2);  // really strong for no corr!
   s_tau ~ normal(0, 1);
   to_vector(s_gamma) ~ normal(0, 0.5);  // really strong for no eff!
   s_inter[1] ~ normal(0, 1);

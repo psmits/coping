@@ -38,25 +38,21 @@ vis.bdpost <- function(ext2,
       meds <- matrix(nrow = nrow(time.start.stop), ncol = nrow(ecotrans))
       cept <- apply(ext2$o_inter, 2:3, median)
       coof <- apply(ext2$o_gamma, 2:3, median)
-      for(jj in seq(nrow(meds))) {
-        for(ii in seq(nrow(meds))) {
-          meds[jj, ii] <- cept[jj, ii] + coof[1, ii] * ufull[jj, 2] + 
-            coof[2, ii] * ufull[jj, 3] + coof[3, ii] * ufull[jj, 4]
-        }
-      }
     } else if(survival) {
       meds <- matrix(nrow = nrow(time.start.stop) - 1, ncol = nrow(ecotrans))
       cept <- apply(ext2$s_inter, 2:3, median)
       coof <- apply(ext2$s_gamma, 2:3, median)
-      for(jj in seq(nrow(meds))) {
-        for(ii in seq(nrow(meds))) {
-          meds[jj, ii] <- cept[jj, ii] + coof[1, ii] * ufull[jj, 2] + 
-            coof[2, ii] * ufull[jj, 3] + coof[3, ii] * ufull[jj, 4]
-        }
+    }
+    for(jj in seq(nrow(meds))) {
+      for(ii in seq(ncol(meds))) {
+        meds[jj, ii] <- cept[jj, ii] + coof[1, ii] * ufull[jj, 2] + 
+          coof[2, ii] * ufull[jj, 3] + coof[3, ii] * ufull[jj, 4]
       }
     }
 
-    #names(med) <- c('time', 'state', 'value')
+    med <- melt(meds)
+    names(med) <- c('time', 'state', 'value')
+    med <- cbind(med, ecotrans[as.numeric(med$state), ])
 
     suppressWarnings(am <- cbind(am, ecotrans[am$Var3, ]))
     names(am) <- c('sim', 'time', 'state', 'value', 'state_1', 'state_2')
@@ -73,9 +69,9 @@ vis.bdpost <- function(ext2,
     am$time <- mapvalues(x = am$time, 
                          from = unique(am$time), 
                          to = rev(orig.time[, 2]))
-    #med$time <- mapvalues(x = med$time,
-    #                      from = unique(med$time),
-    #                      to = rev(orig.time[, 2]))
+    med$time <- mapvalues(x = med$time,
+                          from = unique(med$time),
+                          to = rev(orig.time[, 2]))
 
     am$state_1 <- as.character(am$state_1)
     am$state_1 <- mapvalues(am$state_1, 
@@ -83,22 +79,22 @@ vis.bdpost <- function(ext2,
                             to = c('carnivore', 'herbivore', 'insectivore', 
                                    'omnivore'))
 
-    #med$state <- as.character(med$state)
-    #med <- cbind(med, Reduce(rbind, str_split(med$state, '\\_')))
-    #names(med) <- c('time', 'state', 'value', 'state_1', 'state_2')
-    #med$state_1 <- as.character(med$state_1)
-    #med$state_1 <- mapvalues(med$state_1, 
-    #                         from = unique(med$state_1), 
-    #                         to = c('carnivore', 'herbivore', 'insectivore', 
-    #                                'omnivore'))
-    #
-    #if(ecoprob) med$value <- invlogit(med$value)
+    names(med) <- c('time', 'state', 'value', 'state_1', 'state_2')
+    med$state_1 <- as.character(med$state_1)
+    med$state_1 <- mapvalues(med$state_1, 
+                             from = unique(med$state_1), 
+                             to = c('carnivore', 'herbivore', 'insectivore', 
+                                    'omnivore'))
+    
+    if(ecoprob) med$value <- invlogit(med$value)
 
     amplot <- ggplot(am, aes(x = time, y = value, group = sim))
-    #amplot <- amplot + geom_line(data = med, 
-    #                             mapping = aes(x = time, y = value, group = NULL), 
-    #                             colour = 'blue', size = 1)
+    amplot <- amplot + geom_hline(yintercept = 0.5, linetype = 'dashed', 
+                                  colour = 'grey', alpha = 0.5)
     amplot <- amplot + geom_line(alpha = 0.01)
+    amplot <- amplot + geom_line(data = med, 
+                                 mapping = aes(x = time, y = value, group = NULL), 
+                                 colour = 'blue', size = 0.75)
     amplot <- amplot + facet_grid(state_1 ~ state_2)
     amplot <- amplot + scale_x_reverse()
     amplot
