@@ -125,9 +125,10 @@ parameters {
   ////
   // preservation
   vector[T] p_timeeff; // time eff
-  real p_b_1;  // mass coef
+  real<lower=0> p_timescale;
   vector[D] p_funceff; // ecology eff
   real<lower=0> p_funcscale;
+  real p_b_1;  // mass coef
 }
 transformed parameters {
   matrix[T, D] o_a;  // origin: effect associated with ecology
@@ -210,8 +211,9 @@ model {
   p_timeeff[1] ~ normal(0, 1);
   for(ii in 2:T) {
     //p_timeeff[ii] - p_timeeff[ii-1] ~ normal(0, 1);
-    p_timeeff[ii] ~ normal(p_timeeff[ii - 1], 1);
+    p_timeeff[ii] ~ normal(p_timeeff[ii - 1], p_timescale);
   }
+  p_timescale ~ normal(0, 1);
 
   // 
   p_funceff ~ normal(0, p_funcscale);

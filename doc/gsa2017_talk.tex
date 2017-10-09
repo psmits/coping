@@ -25,9 +25,9 @@
   \setlength{\belowdisplayskip}{0pt}%
   \setlength{\abovedisplayshortskip}{0pt}%
   \setlength{\belowdisplayshortskip}{0pt}}
-%\appto{\normalsize}{\zerodisplayskips}
-%\appto{\small}{\zerodisplayskips}
-%\appto{\footnotesize}{\zerodisplayskips}
+  %\appto{\normalsize}{\zerodisplayskips}
+  %\appto{\small}{\zerodisplayskips}
+  %\appto{\footnotesize}{\zerodisplayskips}
 
 
 \title{Modeling changes to the functional composition of North American mammal diveristy}
@@ -152,9 +152,9 @@
     \end{align*}
     \begin{scriptsize}
       observation: \(b_{t}\) time-varying intercept; \(e_{j[i]}\) functional group eff; \(\beta^{p}\) mass eff.
-      
+
       origination: \(f^{\phi}_{j[i], t}\) time/FG-varying intercept; \(o^{\phi}_{j[i]}\) order eff; \(\beta^{\phi}\) mass eff.
-      
+
       survival: \(f^{\pi}_{j[i], t}\) time/FG-varying intercept; \(o^{\pi}_{j[i]}\) order eff; \(\beta^{\pi}\) mass eff.
     \end{scriptsize}
   \end{block}
@@ -184,7 +184,7 @@
     \end{align*}
     \begin{scriptsize}
       \(U\) matrix group-level covariates; \(\gamma^{\phi}\), \(\gamma^{\pi}\) vectors group-level reg coefs.
-      
+
       \(\Omega_{\phi}\), \(\Omega_{\pi}\) corr matrix of FG by time; \(\tau_{\phi}\), \(\tau^{\pi}\) scale of FG by time.
     \end{scriptsize}
   \end{block}
@@ -197,22 +197,26 @@
     \item Random-walk priors for time-varying intercepts to control.
     \item Strong priors against effects of mass on observation, origination, survival (e.g. \(\mathcal{N}(0, 0.5)\)).
     \item Strong priors against effects of group-level covariates on observation, origination, survival (e.g. \(\mathcal{N}(0, 0.5)\)).
-    \item Strong prior against correlations between functional groups over time (e.g. LKJ\((4)\)).
+    \item Priors weakly favor no correlation between functional groups over time (e.g. LKJ\((2)\)).
     \item Programmed as marginalization problem b/c gradient based estimation.
   \end{itemize}
 \end{frame}
-
 
 \begin{frame}
   \frametitle{Parameter estimation and inference}
   \begin{columns}
     \begin{column}{0.45\textwidth}
       \begin{itemize}
-        \item full HMC/MCMC slow
+        \item Bayesian inference
+          \begin{itemize}
+            \item intuitive and expressive
+            \item regularization/partial pooling
+            \item external information
+          \end{itemize}
         \item \textbf{Automatic Differentiation Variational Inference (ADVI)}
           \begin{itemize}
-            \item approximate Bayesian inference
-            \item assumes posterior is Gaussian, no correlation between parameters
+            \item when full HMC/MCMC slow
+            \item approximate Bayesian inference \\assumes posterior is Gaussian
             \item true Bayesian posterior
           \end{itemize}
       \end{itemize}
@@ -232,29 +236,33 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Observation probability; NALMA}
+  \frametitle{Observation; NALMA}
   \begin{center}
+    log-odds of observing a species, given that it is present
     \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio=true]{figure/time_observation}
   \end{center}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Observation probability; functional group}
+  \frametitle{Observation; functional group}
   \begin{center}
+    log-odds of observing a species, given that it is present
     \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio=true]{figure/ecotype_observation}
   \end{center}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Origination probability; individual-level}
+  \frametitle{Origination; individual-level}
   \begin{center}
+    probability of species originating, given it hasn't originated yet
     \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio=true]{figure/ecotype_origin_bd}
   \end{center}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Origination probability; group-level}
+  \frametitle{Origination; group-level}
   \begin{center}
+    log-odds of species originating, given it hasn't originated yet
     \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio=true]{figure/group_on_origin_bd}
   \end{center}
 \end{frame}
@@ -267,15 +275,17 @@
 %\end{frame}
 
 \begin{frame}
-  \frametitle{Survival probability; individual-level}
+  \frametitle{Survival; individual-level}
   \begin{center}
+    probability of species surviving, given it was present
     \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio=true]{figure/ecotype_survival_bd}
   \end{center}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Survival probability; group-level}
+  \frametitle{Survival; group-level}
   \begin{center}
+    log-odds of species surviving, given it was present
     \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio=true]{figure/group_on_survival_bd}
   \end{center}
 \end{frame}
@@ -290,7 +300,7 @@
 \begin{frame}
   \frametitle{Relative diversity of functional groups through time}
   \begin{center}
-    \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio=true]{figure/relative_diversity}
+    \includegraphics[height=0.9\textheight,width=\textwidth,keepaspectratio=true]{figure/relative_diversity}
   \end{center}
 \end{frame}
 
