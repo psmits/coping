@@ -66,7 +66,7 @@ if(bin == '2My') {
 #post <- list.files('../data/mcmc_out', pattern = 'sensible_advi_NALMA',
 #                   full.names = TRUE)
 post <- list.files('../data/mcmc_out', pattern = 'rwprior_advi_NALMA',
-                   full.names = TRUE)
+                    full.names = TRUE)
 
 # full birth-death
 fit2 <- read_one_stan_csv(post)
@@ -90,6 +90,7 @@ source('../R/div_plot.r')  # update this to work as functions, not just source
 source('../R/prob_calc.r')  # important posterior probabilities and related
 
 source('../R/cor_plot.r')  # plot and inspect correlation matrix from b+d
+
 
 
 ##############

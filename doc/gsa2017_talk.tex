@@ -50,9 +50,9 @@
 
 \begin{frame}
   \begin{alertblock}{Question}
-    When and why are certain ecologies or functional groups enriched or depleted in a species pool?
+    \alert{When}, \alert{why}, and \alert{how} do the relative diversities of functional groups change within a species pool?
     \begin{itemize}
-      \item relative abundance as function of
+      \item function of
         \begin{itemize}
           \item species traits
           \item environmental context
@@ -192,14 +192,20 @@
 
 
 \begin{frame}
-  \frametitle{Final details (priors, implementation)}
-  \begin{itemize}
-    \item Random-walk priors for time-varying intercepts to control for auto-correlation.
-    \item Priors predict very weak/no effects of mass on observation, origination, survival (e.g. \(\mathcal{N}(0, 0.5)\)).
-    \item Priors predict very weak/no effect of group-level covariates on observation, origination, survival (e.g. \(\mathcal{N}(0, 0.5)\)).
-    \item Priors favor no correlation between functional groups over time (e.g. LKJ\((2)\)).
-    \item Programmed as marginalization problem b/c gradient based estimation.
-  \end{itemize}
+  \frametitle{Modeling the probabilities; final details}
+  
+  \begin{block}{Comments on priors, implementation}
+    \begin{itemize}
+      \item Random-walk priors for time-varying intercepts
+      \item Regularizing priors predict
+        \begin{itemize}
+          \item very weak/no effect of mass e.g. \(\mathcal{N}(0, 0.5)\)
+          \item very weak/no effect of group-level covariates e.g. \(\mathcal{N}(0, 0.5)\)
+          \item very weak/no correlation b/w functional groups e.g. LKJ\((2)\)
+        \end{itemize}
+      \item Marginalization problem b/c gradient based estimation
+    \end{itemize}
+  \end{block}
 \end{frame}
 
 \begin{frame}
@@ -216,13 +222,19 @@
         \item \textbf{Automatic Differentiation Variational Inference (ADVI)}
           \begin{itemize}
             \item when full HMC/MCMC slow
-            \item approximate Bayesian inference \\assumes posterior is Gaussian
+            \item approx Bayesian inference; assumes posterior is Gaussian
             \item true Bayesian posterior
           \end{itemize}
       \end{itemize}
     \end{column}
     \begin{column}{0.55\textwidth}
-      \includegraphics[height=0.9\textheight,width=\textwidth,keepaspectratio=true]{figure/stan_logo}
+      \begin{center}
+        \includegraphics[height=0.7\textheight,width=\textwidth,keepaspectratio=true]{figure/stan_logo}
+
+        \vspace*{0.05\textheight}
+        
+        \LARGE{\textbf{Stan}}
+      \end{center}
     \end{column}
   \end{columns}
 \end{frame}
@@ -318,8 +330,18 @@
 \end{frame}
 
 \begin{frame}
-  \begin{block}{Conclusions}
-  \end{block}
+  \begin{alertblock}{Conclusions}
+    \begin{itemize}
+      \item temporal differences in P(observation) much larger than effects of functional group
+      \item increases in P(origination) often met with decreases in P(survival), but not 1-to-1
+      \item environment estimated to effect origination of functional groups more often than survival
+      \item no correlation between functional group origination, survival not accounted for by RW prior
+        \begin{itemize}
+          \item does not preclude short similarity, just no long term correlation
+          \item HMC/MCMC might tweak these results b/c ADVI assumptions
+        \end{itemize}
+    \end{itemize}
+  \end{alertblock}
 \end{frame}
 
 
