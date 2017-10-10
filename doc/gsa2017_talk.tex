@@ -194,10 +194,10 @@
 \begin{frame}
   \frametitle{Final details (priors, implementation)}
   \begin{itemize}
-    \item Random-walk priors for time-varying intercepts to control.
-    \item Strong priors against effects of mass on observation, origination, survival (e.g. \(\mathcal{N}(0, 0.5)\)).
-    \item Strong priors against effects of group-level covariates on observation, origination, survival (e.g. \(\mathcal{N}(0, 0.5)\)).
-    \item Priors weakly favor no correlation between functional groups over time (e.g. LKJ\((2)\)).
+    \item Random-walk priors for time-varying intercepts to control for auto-correlation.
+    \item Priors predict very weak/no effects of mass on observation, origination, survival (e.g. \(\mathcal{N}(0, 0.5)\)).
+    \item Priors predict very weak/no effect of group-level covariates on observation, origination, survival (e.g. \(\mathcal{N}(0, 0.5)\)).
+    \item Priors favor no correlation between functional groups over time (e.g. LKJ\((2)\)).
     \item Programmed as marginalization problem b/c gradient based estimation.
   \end{itemize}
 \end{frame}
@@ -207,7 +207,7 @@
   \begin{columns}
     \begin{column}{0.45\textwidth}
       \begin{itemize}
-        \item Bayesian inference
+        \item \textbf{Bayesian inference}
           \begin{itemize}
             \item intuitive and expressive
             \item regularization/partial pooling
@@ -266,13 +266,6 @@
     \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio=true]{figure/group_on_origin_bd}
   \end{center}
 \end{frame}
-
-%\begin{frame}
-%  \frametitle{Origination probability; correlation between FG}
-%  \begin{center}
-%    \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio=true]{figure/origin_sig_corr}
-%  \end{center}
-%\end{frame}
 
 \begin{frame}
   \frametitle{Survival; individual-level}
