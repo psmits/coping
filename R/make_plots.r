@@ -122,8 +122,8 @@ vis.bdpost <- function(ext2,
     names(ord.eff) <- c('state', 'value')
     ord.eff$state <- order.cypher[ord.eff$state]
     ordgg <- ggplot(ord.eff, aes(x = value, y = state))
-    ordgg <- ordgg + geom_joy(rel_min_height = 0.01)
-    ordgg <- ordgg + theme_joy()
+    ordgg <- ordgg + geom_density_ridges(rel_min_height = 0.01, scale = 2)
+    ordgg <- ordgg + theme_ridges()
     ordgg <- ordgg + scale_x_continuous(expand = c(0.01, 0))
     ordgg <- ordgg + scale_y_discrete(expand = c(0.01, 0))
     ordgg
@@ -303,8 +303,8 @@ vis.bdpost <- function(ext2,
   names(fe) <- c('state', 'value')
   fe$state <- comboname[fe$state]
   fegg <- ggplot(fe, aes(x = value, y = state))
-  fegg <- fegg + geom_joy(rel_min_height = 0.01)
-  fegg <- fegg + theme_joy()
+  fegg <- fegg + geom_density_ridges(rel_min_height = 0.01, scale = 2)
+  fegg <- fegg + theme_ridges()
   fegg <- fegg + scale_x_continuous(expand = c(0.01, 0))
   fegg <- fegg + scale_y_discrete(expand = c(0.01, 0))
   fegg <- fegg + labs(x = 'Effect on log-odds observation',
@@ -321,8 +321,8 @@ vis.bdpost <- function(ext2,
                        to = rev(nalma$interval))
   te$time <- factor(te$time, levels = unique(te$time))
   tegg <- ggplot(te, aes(x = value, y = time))
-  tegg <- tegg + geom_joy(rel_min_height = 0.01)
-  tegg <- tegg + theme_joy()
+  tegg <- tegg + geom_density_ridges(rel_min_height = 0.01, scale = 2)
+  tegg <- tegg + theme_ridges()
   tegg <- tegg + scale_x_continuous(expand = c(0.01, 0))
   tegg <- tegg + scale_y_discrete(expand = c(0.01, 0))
   tegg <- tegg + labs(x = 'Effect on log-odds of observation',
