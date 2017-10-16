@@ -1,0 +1,348 @@
+
+R version 3.3.2 (2016-10-31) -- "Sincere Pumpkin Patch"
+Copyright (C) 2016 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(parallel)
+> library(plyr)
+> library(coda)
+> library(arm)
+Loading required package: MASS
+Loading required package: Matrix
+Loading required package: lme4
+
+arm (Version 1.9-1, built: 2016-8-21)
+
+Working directory is /home/peter/Documents/projects/coping/R
+
+
+Attaching package: ‘arm’
+
+The following object is masked from ‘package:coda’:
+
+    traceplot
+
+> library(stringr)
+> library(reshape2)
+> library(ggplot2)
+> library(rstan)
+Loading required package: StanHeaders
+rstan (Version 2.12.1, packaged: 2016-09-11 13:07:50 UTC, GitRev: 85f7a56811da)
+For execution on a local, multicore CPU with excess RAM we recommend calling
+rstan_options(auto_write = TRUE)
+options(mc.cores = parallel::detectCores())
+
+Attaching package: ‘rstan’
+
+The following object is masked from ‘package:arm’:
+
+    traceplot
+
+The following object is masked from ‘package:coda’:
+
+    traceplot
+
+> library(grid)
+> library(scales)
+
+Attaching package: ‘scales’
+
+The following object is masked from ‘package:arm’:
+
+    rescale
+
+> library(pROC)
+Type 'citation("pROC")' for a citation.
+
+Attaching package: ‘pROC’
+
+The following objects are masked from ‘package:stats’:
+
+    cov, smooth, var
+
+> library(Metrics)
+
+Attaching package: ‘Metrics’
+
+The following object is masked from ‘package:pROC’:
+
+    auc
+
+> source('../R/borrow_plotcorr.r')
+> source('../R/multiclass_roc.r')
+> source('../R/trait_setup.r')
+
+Attaching package: ‘ape’
+
+The following object is masked from ‘package:arm’:
+
+    balance
+
+
+Attaching package: ‘geiger’
+
+The following object is masked from ‘package:scales’:
+
+    rescale
+
+The following object is masked from ‘package:arm’:
+
+    rescale
+
+Loading required package: lattice
+> source('../R/sim_from_model.r')
+> source('../R/estimate_div.r')
+> source('../R/advi_post.r')
+> source('../R/make_plots.r')
+> source('../data/data_dump/trait_w_gaps.data.R')
+> #source('../data/data_dump/trait_w_gaps_revamp.data.R')
+> sight.obs <- sight
+> 
+> 
+> #
+> theme_set(theme_bw())
+> theme_update(axis.text = element_text(size = 10),
++              axis.title = element_text(size = 12),
++              legend.text = element_text(size = 5),
++              legend.title = element_text(size = 8),
++              legend.key.size = unit(0.75, 'cm'),
++              strip.text = element_text(size = 8))
+> 
+> cbp.long <- c('#000000', '#004949', '#009292', '#FF7DB6', '#FFB6DB', 
++               '#490092', '#006DDB', '#B66DFF', '#6DB6FF', '#B6DBFF', 
++               '#920000', '#924900', '#DBD100', '#24FF24', '#FFFF6D',
++               '#000000', '#004949', '#009292', '#FF7DB6', '#FFB6DB')
+> 
+> grab <- laply(seq(5), function(x) seq(from = x, to = length(cbp.long), by = 5))
+> cbp.long <- cbp.long[t(grab)][-1]
+> #
+> nsim <- 100
+> samp <- sample(1001, nsim)
+> ecoprob <- TRUE
+> 
+> rms <- which(inter == names(which(table(inter) == 1)))
+> inter <- inter[-rms]
+> break.inter <- str_split(inter, '\\.')
+> ecotype <- Reduce(rbind, break.inter)
+> #ecotype <- rbind(ecotype, t(replicate(M - N, c('augment', 'augment'))))
+> 
+> ecotrans <- Reduce(rbind, str_split(levels(as.factor(inter)), '\\.'))
+> #ecotrans <- rbind(ecotrans, c('augment', 'augment'))
+> 
+> ntax <- N
+> ntime <- T
+> 
+> # observed time bins
+> time.stop <- unique(occur$true.bin)
+> b <- range(time.stop)
+> b <- seq(b[1], b[2], by = 2)
+> time.start.stop <- as.matrix(cbind(b - 2, b))
+> 
+> 
+> 
+> ############
+> ## advi
+> post <- list.files('../data/mcmc_out', pattern = 'revamp_[0-9]_advi',
++                    full.names = TRUE)
+> 
+> # just presence
+> fit1 <- read_one_stan_csv(post[1])
+> ext1 <- post.advi(fit1)
+> 
+> # analysis of model fit
+> post.pred(ext1, ntax = N, ntime = T, sight.obs = sight, nsim, samp)
+`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+> # analysis of the posterior
+> vis.post(ext1, ecotype, ecotrans, mass, 
++          cbp.long, time.start.stop, ecoprob = ecoprob)
+`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+> 
+> 
+> # full birth-death
+> fit2 <- read_one_stan_csv(post[2])
+> ext2 <- post.advi(fit2)
+> 
+> # posterior predictive checks
+> #   need to develop more
+> post.pred(ext2, ntax = N, ntime = T, sight.obs = sight, nsim, samp, bd = TRUE)
+`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+> # visualize posterior estimates
+> vis.bdpost(ext2, ecotype, ecotrans, mass, cbp.long, ecoprob = ecoprob)
+`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+> # estimate standing diversity given posterior
+> post.div <- diversity.distribution(sight, ext2, nsim) # 
+> 
+> source('../R/div_plot.r')  # update this to work as functions, not just source
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+Using et as id variables
+> 
+> source('../R/prob_calc.r')  # important posterior probabilities and related
+
+Attaching package: ‘xtable’
+
+The following object is masked from ‘package:arm’:
+
+    display
+
+> 
+> source('../R/cor_plot.r')  # plot and inspect correlation matrix from b+d
+
+Attaching package: ‘corrplot’
+
+The following object is masked from ‘package:arm’:
+
+    corrplot
+
+
+Attaching package: ‘igraph’
+
+The following objects are masked from ‘package:ape’:
+
+    edges, mst, ring
+
+The following object is masked from ‘package:stringr’:
+
+    %>%
+
+The following objects are masked from ‘package:stats’:
+
+    decompose, spectrum
+
+The following object is masked from ‘package:base’:
+
+    union
+
+> 
+> 
+> #############
+> ## full Bayes
+> #post <- list.files('../data/mcmc_out', pattern = '[0-9]', full.names = TRUE)
+> #fit <- read_stan_csv(post)
+> ##stan_rhat(fit)
+> #ext <- rstan::extract(fit, permuted = TRUE)
+> ##x <- model.simulation(ntax, ntime, 
+> ##                      ext$phi[1], 
+> ##                      ext$pred[1, , ], 
+> ##                      ext$p[1, , ], 
+> ##                      death = TRUE) 
+> ## the issue is that everything needs to occur min 1
+> ##   need data augmentation to make occurs "bigger"
+> #post.pred(ext, ntax, ntime, sight.obs, nsim, samp)  # posterior pred check
+> #vis.post(ext, ecotype, ecotrans, mass, cbp.long)    # make some plots
+> 
+> proc.time()
+   user  system elapsed 
+627.947   7.755 578.777 
