@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Debian) (preloaded format=pdflatex 2017.10.16)  16 OCT 2017 16:34
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/Debian) (preloaded format=pdflatex 2017.10.16)  17 OCT 2017 11:08
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -971,44 +971,56 @@ Package pdftex.def Info: figure/schemske_pool.png used on input line 80.
  [4
 
  <./figure/schemske_pool.png>]
-<figure/ovaskainen_data.png, id=44, 569.4876pt x 328.1058pt>
-File: figure/ovaskainen_data.png Graphic file (type png)
+<figure/ovaskainen_data_sm.png, id=44, 341.8371pt x 259.4493pt>
+File: figure/ovaskainen_data_sm.png Graphic file (type png)
 
-<use figure/ovaskainen_data.png>
-Package pdftex.def Info: figure/ovaskainen_data.png used on input line 89.
-(pdftex.def)             Requested size: 339.08829pt x 195.36305pt.
- [5
+<use figure/ovaskainen_data_sm.png>
+Package pdftex.def Info: figure/ovaskainen_data_sm.png used on input line 91.
+(pdftex.def)             Requested size: 179.2533pt x 136.05058pt.
 
- <./figure/ovaskainen_data.png>]
-<figure/aom.jpg, id=51, 759.83875pt x 505.89pt>
+<figure/ovaskainen_dag_sm.png, id=45, 339.669pt x 273.9033pt>
+File: figure/ovaskainen_dag_sm.png Graphic file (type png)
+
+<use figure/ovaskainen_dag_sm.png>
+Package pdftex.def Info: figure/ovaskainen_dag_sm.png used on input line 91.
+(pdftex.def)             Requested size: 179.25664pt x 144.54948pt.
+
+Overfull \hbox (2.44096pt too wide) in paragraph at lines 91--91
+ []|  [] 
+ []
+
+[5
+
+ <./figure/ovaskainen_data_sm.png> <./figure/ovaskainen_dag_sm.png>]
+<figure/aom.jpg, id=53, 759.83875pt x 505.89pt>
 File: figure/aom.jpg Graphic file (type jpg)
  <use figure/aom.jpg>
-Package pdftex.def Info: figure/aom.jpg used on input line 98.
+Package pdftex.def Info: figure/aom.jpg used on input line 100.
 (pdftex.def)             Requested size: 293.42577pt x 195.35876pt.
  [6
 
- <./figure/aom.jpg>] <figure/problem_concept.pdf, id=57, 614.295pt x 433.62pt>
+ <./figure/aom.jpg>] <figure/problem_concept.pdf, id=59, 614.295pt x 433.62pt>
 File: figure/problem_concept.pdf Graphic file (type pdf)
 
 <use figure/problem_concept.pdf>
-Package pdftex.def Info: figure/problem_concept.pdf used on input line 115.
+Package pdftex.def Info: figure/problem_concept.pdf used on input line 117.
 (pdftex.def)             Requested size: 318.67598pt x 224.94775pt.
 
-Overfull \vbox (4.28236pt too high) detected at line 115
+Overfull \vbox (4.28236pt too high) detected at line 117
  []
 
 [7
 
  <./figure/problem_concept.pdf>]
-<figure/paleo_fourth_corner.pdf, id=79, 614.295pt x 433.62pt>
+<figure/paleo_fourth_corner.pdf, id=81, 614.295pt x 433.62pt>
 File: figure/paleo_fourth_corner.pdf Graphic file (type pdf)
 
 <use figure/paleo_fourth_corner.pdf>
-Package pdftex.def Info: figure/paleo_fourth_corner.pdf used on input line 122.
+Package pdftex.def Info: figure/paleo_fourth_corner.pdf used on input line 124.
 
 (pdftex.def)             Requested size: 318.67598pt x 224.94775pt.
 
-Overfull \vbox (4.28236pt too high) detected at line 122
+Overfull \vbox (4.28236pt too high) detected at line 124
  []
 
 [8
@@ -1022,95 +1034,95 @@ Overfull \vbox (4.28236pt too high) detected at line 122
 ] [12
 
 ]
-<figure/stan_logo.png, id=135, 267.66667pt x 267.66667pt>
+<figure/stan_logo.png, id=137, 267.66667pt x 267.66667pt>
 File: figure/stan_logo.png Graphic file (type png)
 
 <use figure/stan_logo.png>
-Package pdftex.def Info: figure/stan_logo.png used on input line 238.
+Package pdftex.def Info: figure/stan_logo.png used on input line 240.
 (pdftex.def)             Requested size: 163.8523pt x 163.8523pt.
  [13
 
  <./figure/stan_logo.png>]
-<figure/pred_occ_bd.png, id=144, 216.81pt x 180.675pt>
+<figure/pred_occ_bd.png, id=146, 216.81pt x 180.675pt>
 File: figure/pred_occ_bd.png Graphic file (type png)
 
 <use figure/pred_occ_bd.png>
-Package pdftex.def Info: figure/pred_occ_bd.png used on input line 246.
+Package pdftex.def Info: figure/pred_occ_bd.png used on input line 248.
 (pdftex.def)             Requested size: 241.99516pt x 201.66263pt.
  [14
 
  <./figure/pred_occ_bd.png (PNG copy)>]
-<figure/time_observation.png, id=150, 433.62pt x 289.08pt>
+<figure/time_observation.png, id=152, 433.62pt x 289.08pt>
 File: figure/time_observation.png Graphic file (type png)
 
 <use figure/time_observation.png>
-Package pdftex.def Info: figure/time_observation.png used on input line 254.
+Package pdftex.def Info: figure/time_observation.png used on input line 256.
 (pdftex.def)             Requested size: 293.03154pt x 195.35435pt.
  [15
 
  <./figure/time_observation.png>]
-<figure/ecotype_observation.png, id=157, 433.62pt x 289.08pt>
+<figure/ecotype_observation.png, id=159, 433.62pt x 289.08pt>
 File: figure/ecotype_observation.png Graphic file (type png)
 
 <use figure/ecotype_observation.png>
-Package pdftex.def Info: figure/ecotype_observation.png used on input line 262.
+Package pdftex.def Info: figure/ecotype_observation.png used on input line 264.
 
 (pdftex.def)             Requested size: 293.03154pt x 195.35435pt.
  [16
 
  <./figure/ecotype_observation.png>]
-<figure/ecotype_origin_bd.png, id=164, 433.62pt x 289.08pt>
+<figure/ecotype_origin_bd.png, id=166, 433.62pt x 289.08pt>
 File: figure/ecotype_origin_bd.png Graphic file (type png)
 
 <use figure/ecotype_origin_bd.png>
-Package pdftex.def Info: figure/ecotype_origin_bd.png used on input line 270.
+Package pdftex.def Info: figure/ecotype_origin_bd.png used on input line 272.
 (pdftex.def)             Requested size: 293.03154pt x 195.35435pt.
  [17
 
  <./figure/ecotype_origin_bd.png (PNG copy)>] <figure/group_on_origin_bd.png, i
-d=170, 433.62pt x 289.08pt>
+d=172, 433.62pt x 289.08pt>
 File: figure/group_on_origin_bd.png Graphic file (type png)
 
 <use figure/group_on_origin_bd.png>
-Package pdftex.def Info: figure/group_on_origin_bd.png used on input line 278.
+Package pdftex.def Info: figure/group_on_origin_bd.png used on input line 280.
 (pdftex.def)             Requested size: 293.03154pt x 195.35435pt.
  [18
 
  <./figure/group_on_origin_bd.png (PNG copy)>] <figure/ecotype_survival_bd.png,
- id=176, 433.62pt x 289.08pt>
+ id=178, 433.62pt x 289.08pt>
 File: figure/ecotype_survival_bd.png Graphic file (type png)
 
 <use figure/ecotype_survival_bd.png>
-Package pdftex.def Info: figure/ecotype_survival_bd.png used on input line 286.
+Package pdftex.def Info: figure/ecotype_survival_bd.png used on input line 288.
 
 (pdftex.def)             Requested size: 293.03154pt x 195.35435pt.
  [19
 
  <./figure/ecotype_survival_bd.png (PNG copy)>] <figure/group_on_survival_bd.pn
-g, id=183, 433.62pt x 289.08pt>
+g, id=185, 433.62pt x 289.08pt>
 File: figure/group_on_survival_bd.png Graphic file (type png)
 
 <use figure/group_on_survival_bd.png>
-Package pdftex.def Info: figure/group_on_survival_bd.png used on input line 294
+Package pdftex.def Info: figure/group_on_survival_bd.png used on input line 296
 .
 (pdftex.def)             Requested size: 293.03154pt x 195.35435pt.
  [20
 
  <./figure/group_on_survival_bd.png (PNG copy)>] <figure/ecotype_diversity.png,
- id=190, 433.62pt x 289.08pt>
+ id=192, 433.62pt x 289.08pt>
 File: figure/ecotype_diversity.png Graphic file (type png)
 
 <use figure/ecotype_diversity.png>
-Package pdftex.def Info: figure/ecotype_diversity.png used on input line 301.
+Package pdftex.def Info: figure/ecotype_diversity.png used on input line 303.
 (pdftex.def)             Requested size: 302.48653pt x 201.65767pt.
  [21
 
  <./figure/ecotype_diversity.png (PNG copy)>] <figure/relative_diversity.png, i
-d=196, 578.16pt x 289.08pt>
+d=198, 578.16pt x 289.08pt>
 File: figure/relative_diversity.png Graphic file (type png)
 
 <use figure/relative_diversity.png>
-Package pdftex.def Info: figure/relative_diversity.png used on input line 308.
+Package pdftex.def Info: figure/relative_diversity.png used on input line 310.
 (pdftex.def)             Requested size: 398.33975pt x 199.16986pt.
  [22
 
@@ -1118,18 +1130,18 @@ Package pdftex.def Info: figure/relative_diversity.png used on input line 308.
 
 ] [24
 
-] <figure/twitter.png, id=212, 582.175pt x 471.7625pt>
+] <figure/twitter.png, id=214, 582.175pt x 471.7625pt>
 File: figure/twitter.png Graphic file (type png)
 
 <use figure/twitter.png>
-Package pdftex.def Info: figure/twitter.png used on input line 373.
+Package pdftex.def Info: figure/twitter.png used on input line 375.
 (pdftex.def)             Requested size: 62.20949pt x 50.41113pt.
 
-<figure/paleodb.png, id=213, 1015.795pt x 761.84625pt>
+<figure/paleodb.png, id=215, 1015.795pt x 761.84625pt>
 File: figure/paleodb.png Graphic file (type png)
 
 <use figure/paleodb.png>
-Package pdftex.def Info: figure/paleodb.png used on input line 373.
+Package pdftex.def Info: figure/paleodb.png used on input line 375.
 (pdftex.def)             Requested size: 134.42944pt x 100.82208pt.
  [25
 
@@ -1143,12 +1155,12 @@ Package pdftex.def Info: figure/paleodb.png used on input line 373.
 \tf@snm=\write8
 \openout8 = `gsa2017_talk.snm'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 375.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 375.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 377.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 377.
 
 (./gsa2017_talk.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 375.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 375.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 377.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 377.
 Package rerunfilecheck Info: File `gsa2017_talk.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
 
@@ -1158,10 +1170,10 @@ LaTeX Font Warning: Size substitutions with differences
 
  ) 
 Here is how much of TeX's memory you used:
- 19904 strings out of 493013
- 375515 string characters out of 6135681
+ 19909 strings out of 493013
+ 375682 string characters out of 6135681
  477649 words of memory out of 5000000
- 22929 multiletter control sequences out of 15000+600000
+ 22933 multiletter control sequences out of 15000+600000
  16189 words of font info for 64 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  56i,18n,55p,805b,667s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1179,10 +1191,10 @@ sfonts/cm/cmssi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
 sy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msam
 10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msam7
 .pfb>
-Output written on gsa2017_talk.pdf (25 pages, 3487907 bytes).
+Output written on gsa2017_talk.pdf (25 pages, 3525920 bytes).
 PDF statistics:
- 281 PDF objects out of 1000 (max. 8388607)
+ 283 PDF objects out of 1000 (max. 8388607)
  191 compressed objects within 2 object streams
  51 named destinations out of 1000 (max. 500000)
- 14469 words of extra memory for PDF output out of 17280 (max. 10000000)
+ 14474 words of extra memory for PDF output out of 17280 (max. 10000000)
 
