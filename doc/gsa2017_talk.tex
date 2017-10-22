@@ -57,7 +57,6 @@
   \end{alertblock}
 \end{frame}
 
-
 \begin{frame}
   \frametitle{Eco-cube and functional groups}
 
@@ -67,7 +66,6 @@
 
   \tiny{\attrib{Bambach \em{et al.}, 2007, \em{Palaeontology}}}
 \end{frame}
-
 
 \begin{frame}
   \frametitle{Species pool concept}
@@ -99,9 +97,8 @@
   \tiny{\attrib{Rudolph Zallinger}}
 \end{frame}
 
-
 \begin{frame}
-  \frametitle{Conceptualizing the knowns and unknows}
+  \frametitle{Conceptualizing the knowns and unknowns}
   \begin{center}
     \includegraphics[width=0.8\textwidth,height=\textheight,keepaspectratio=true]{figure/problem_concept}
   \end{center}
@@ -130,7 +127,7 @@
 
       \textbf{observation}
       \begin{itemize}
-        \item individual-level: species
+        \item indiv-level: species
           \begin{itemize}
             \small{
             \item functional group
@@ -143,7 +140,7 @@
     \begin{column}[T]{0.3\textwidth}
       \textbf{origination}
       \begin{itemize}
-        \item individual-level: species
+        \item indiv-level: species
           \begin{itemize}
             \small{
             \item functional group
@@ -151,7 +148,7 @@
             \item mean mass
             }
           \end{itemize}
-        \item group-level: time
+        \item group-level: FG/time
           \begin{itemize}
             \small{
             \item temperature est Mg/Ca
@@ -163,7 +160,7 @@
     \begin{column}[T]{0.3\textwidth}
       \textbf{survival}
       \begin{itemize}
-        \item individual-level: species
+        \item indiv-level: species
           \begin{itemize}
             \small{
             \item functional group
@@ -171,7 +168,7 @@
             \item mean mass
             }
           \end{itemize}
-        \item group-level: time
+        \item group-level: FG/time
           \begin{itemize}
             \small{
             \item temperature est Mg/Ca
@@ -181,7 +178,6 @@
       \end{itemize}
     \end{column}
   \end{columns}
-
 \end{frame}
 
 \begin{frame}
@@ -191,21 +187,21 @@
   \end{center}
 \end{frame}
 
-
 \begin{frame}
   \frametitle{Hidden Markov Model with absorbing state}
   \begin{block}{Jolly-Seber CMR/Restricted occupancy model}
+    \setlength\abovedisplayskip{-0.3cm}
     \begin{align*}
       y_{i, t} &\sim \text{Bernoulli}(z_{i, t} p_{i, t}) \\
       z_{i, t = 1} &\sim \text{Bernoulli}(\phi_{i, t = 1}) \\
       z_{i, t} &\sim \text{Bernoulli}\left(z_{i, t - 1} \pi_{i,t} + \sum_{x = 1}^{t}(1 - z_{i, x}) \phi_{i, t}\right)
     \end{align*}
     \begin{scriptsize}
-      \(y\) observed state; \(z\) estimated state.
+      \(y\) observed state; \(z\) estimated state
 
-      \(p\) observation; \(\phi\) origination; \(\pi\) survival.
+      \(p\) observation; \(\phi\) origination; \(\pi\) survival
 
-      \(i\) in \(N\); \(t\) in \(T\).
+      \(i\) in \(N\); \(t\) in \(T\)
     \end{scriptsize}
   \end{block}
 \end{frame}
@@ -213,17 +209,18 @@
 \begin{frame}
   \frametitle{Modeling the probabilities; individual-level}
   \begin{block}{Multi-level logistic regression}
+    \setlength\abovedisplayskip{-0.3cm}
     \begin{align*}
       p_{i, t} &\sim \text{logit}^{-1}(b_{t} + e_{j[i]} + \beta^{p} mass_{i}) \\
       \phi_{i, t} &\sim \text{logit}^{-1}(f^{\phi}_{j[i], t} + o^{\phi}_{k[i]} + \beta^{\phi} mass_{i}) \\
       \pi_{i, t} &\sim \text{logit}^{-1}(f^{\pi}_{j[i], t} + o^{\pi}_{k[i]} + \beta^{\pi} mass_{i})
     \end{align*}
     \begin{scriptsize}
-      observation: \(b_{t}\) time-varying intercept; \(e_{j[i]}\) functional group eff; \(\beta^{p}\) mass eff.
+      observation: \(b_{t}\) time-varying intercept; \(e_{j[i]}\) functional group eff; \(\beta^{p}\) mass eff
 
-      origination: \(f^{\phi}_{j[i], t}\) time/FG-varying intercept; \(o^{\phi}_{j[i]}\) order eff; \(\beta^{\phi}\) mass eff.
+      origination: \(f^{\phi}_{j[i], t}\) time/FG-varying intercept; \(o^{\phi}_{j[i]}\) order eff; \(\beta^{\phi}\) mass eff
 
-      survival: \(f^{\pi}_{j[i], t}\) time/FG-varying intercept; \(o^{\pi}_{j[i]}\) order eff; \(\beta^{\pi}\) mass eff.
+      survival: \(f^{\pi}_{j[i], t}\) time/FG-varying intercept; \(o^{\pi}_{j[i]}\) order eff; \(\beta^{\pi}\) mass eff
     \end{scriptsize}
   \end{block}
 \end{frame}
@@ -232,6 +229,7 @@
 \begin{frame}
   \frametitle{Modeling the probabilities; group-level}
   \begin{block}{Multivariate regression of time/FG-varying intercept}
+    \setlength\abovedisplayskip{-0.3cm}
     \begin{align*}
       f^{\phi} &\sim \text{MVN}\left(
       \begin{matrix}
@@ -251,27 +249,27 @@
       \text{diag}(\tau_{f^{\pi}}) \Omega_{f^{\pi}} \text{diag}(\tau_{f^{\pi}}) \right)
     \end{align*}
     \begin{scriptsize}
-      \(U\) matrix group-level covariates; \(\gamma^{\phi}\), \(\gamma^{\pi}\) vectors group-level reg coefs.
+      \(U\) matrix group-level covariates; \(\gamma^{\phi}\), \(\gamma^{\pi}\) vectors group-level reg coefs
 
-      \(\Omega_{\phi}\), \(\Omega_{\pi}\) corr matrix of FG by time; \(\tau_{\phi}\), \(\tau^{\pi}\) scale of FG by time.
+      \(\Omega_{\phi}\), \(\Omega_{\pi}\) corr matrix of FG by time; \(\tau_{\phi}\), \(\tau^{\pi}\) scale of FG by time
     \end{scriptsize}
   \end{block}
 \end{frame}
-
 
 \begin{frame}
   \frametitle{Modeling the probabilities; final details}
 
   \begin{block}{Comments on priors, implementation}
+    \setlength\abovedisplayskip{-0.1cm}
     \begin{itemize}
-      \item Random-walk priors for time-varying intercepts
-      \item Regularizing priors predict
+      \item random-walk priors on time-varying intercepts
+      \item regularizing priors with some specific predictions
         \begin{itemize}
           \item very weak/no effect of mass e.g. \(\mathcal{N}(0, 0.5)\)
           \item very weak/no effect of group-level covariates e.g. \(\mathcal{N}(0, 0.5)\)
           \item very weak/no correlation b/w functional groups e.g. LKJ\((2)\)
         \end{itemize}
-      \item Marginalization problem b/c gradient based estimation
+      \item marginalization problem b/c gradient based estimation
     \end{itemize}
   \end{block}
 \end{frame}
@@ -307,11 +305,11 @@
   \end{columns}
 \end{frame}
 
-
 \begin{frame}
   \frametitle{Model adequate? Posterior predictive check}
   \begin{center}
-    \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio=true]{figure/pred_occ_bd}
+    mean \# occurrences per species from datasets simulated from posterior
+    \includegraphics[height=0.775\textheight,width=\textwidth,keepaspectratio=true]{figure/pred_occ_bd}
   \end{center}
 \end{frame}
 
@@ -342,7 +340,7 @@
 \begin{frame}
   \frametitle{Origination; group-level}
   \begin{center}
-    log-odds of species originating, given it hasn't originated yet
+    change to log-odds of species originating, given it hasn't originated yet
     \includegraphics[height=0.775\textheight,width=\textwidth,keepaspectratio=true]{figure/group_on_origin_bd}
   \end{center}
 \end{frame}
@@ -358,7 +356,7 @@
 \begin{frame}
   \frametitle{Survival; group-level}
   \begin{center}
-    log-odds of species surviving, given it was present
+    change to log-odds of species surviving, given it was present
     \includegraphics[height=0.775\textheight,width=\textwidth,keepaspectratio=true]{figure/group_on_survival_bd}
   \end{center}
 \end{frame}
@@ -376,7 +374,6 @@
     \includegraphics[height=0.9\textheight,width=\textwidth,keepaspectratio=true]{figure/relative_diversity}
   \end{center}
 \end{frame}
-
 
 \begin{frame}
   \begin{block}{Changes to relative diversity between Neogene/Paleogene}
@@ -400,18 +397,17 @@
 \begin{frame}
   \begin{alertblock}{Conclusions}
     \begin{itemize}
-      \item temporal differences in P(observation) much larger than effects of functional group
-      \item increases in P(origination) often met with decreases in P(survival), but not 1-to-1
-      \item environment estimated to effect origination of functional groups more often than survival
-      \item no correlation between functional group origination, survival not accounted for by RW prior
+      \item temporal differences have larger effect on P(observation) than effect of FG 
+      \item increase in P(origination) often met with decrease in P(survival), but not 1-to-1
+      \item environmental covariates effect origination within FG more often than survival
+      \item no evidence for correlation in origination or survival of functional groups over time that is not accounted for by RW prior
         \begin{itemize}
-          \item does not preclude short similarity, just no long term correlation
-          \item HMC/MCMC might tweak these results b/c ADVI assumptions
+          \item potential for short-term similarity, just no long-term correlation
+          \item HMC/MCMC might tweak these results b/c ADVI assumptions (Gaussian posterior)
         \end{itemize}
     \end{itemize}
   \end{alertblock}
 \end{frame}
-
 
 \begin{frame}
   \frametitle{Acknowledgements}
@@ -430,13 +426,19 @@
     \end{column}
     \begin{column}{0.5\textwidth}
       \begin{center}
-        \includegraphics[height=0.2\textheight,width=0.5\textwidth,keepaspectratio=true]{figure/twitter} 
+        \includegraphics[height=0.2\textheight,width=\textwidth,keepaspectratio=true]{figure/github-logo}
+
+        psmits.github.io/ \hspace*{0.05\textwidth} coping
+      \end{center}
+      \vspace*{0.02\textheight}
+      \begin{center}
+        \includegraphics[height=0.125\textheight,width=0.5\textwidth,keepaspectratio=true]{figure/twitter} 
 
         @PeterDSmits
       \end{center}
-      \vspace*{0.05\textheight}
+      \vspace*{0.02\textheight}
       \begin{center}
-        \includegraphics[height=0.4\textheight,width=\textwidth,keepaspectratio=true]{figure/paleodb}
+        \includegraphics[height=0.25\textheight,width=\textwidth,keepaspectratio=true]{figure/paleodb}
       \end{center}
     \end{column}
   \end{columns}
