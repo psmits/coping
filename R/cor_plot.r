@@ -24,7 +24,7 @@ png(file = '../doc/figure/origination_correlation.png',
 corrplot::corrplot.mixed(ocorr.mean, 
                          lower = 'ellipse', upper = 'number', 
                          diag = 'n',
-                         col = col1(200),
+                         #col = col1(200),
                          tl.pos = 'lt',
                          tl.col = 'black',
                          tl.cex = 2,
@@ -42,7 +42,7 @@ png(file = '../doc/figure/survival_correlation.png',
 corrplot::corrplot.mixed(scorr.mean, 
                          lower = 'ellipse', upper = 'number', 
                          diag = 'n',
-                         col = col1(200),
+                         #col = col1(200),
                          tl.pos = 'lt',
                          tl.col = 'black',
                          tl.cex = 2,
@@ -55,7 +55,7 @@ dev.off()
 # names and numbers of correlation in ecotype origination
 coro.test <- Reduce('+', llply(oo, function(x) x > 0)) / length(oo)
 coro.number <- coro.test
-coro.test <- melt(coro.test > 0.95)
+coro.test <- melt(coro.test > 0.8)
 coro.test <- coro.test[coro.test[, 3] == TRUE, 1:2]
 coro.test <- coro.test[coro.test[, 1] > coro.test[, 2], ]
 if(nrow(coro.test) != 0) {
@@ -90,7 +90,7 @@ if(nrow(coro.test) != 0) {
 # names and numbers of correlation in ecotype survival
 cors.test <- Reduce('+', llply(ss, function(x) x > 0)) / length(oo)
 cors.number <- cors.test
-cors.test <- melt(cors.test > 0.95)
+cors.test <- melt(cors.test > 0.8)
 cors.test <- cors.test[cors.test[, 3] == TRUE, 1:2]
 cors.test <- cors.test[cors.test[, 1] > cors.test[, 2], ]
 if(nrow(cors.test) != 0) {

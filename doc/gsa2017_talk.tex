@@ -99,21 +99,69 @@
   \tiny{\attrib{Rudolph Zallinger}}
 \end{frame}
 
-%\begin{frame}
-%  \frametitle{Differences in extinction risk}
-%
-%  \begin{center}
-%    \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio=true]{figure/smits_2015_results}
-%  \end{center}
-%
-%  \attrib{\footnotesize{Smits, 2015, \em{PNAS}}}
-%\end{frame}
 
 \begin{frame}
   \frametitle{Conceptualizing the knowns and unknows}
   \begin{center}
     \includegraphics[width=0.8\textwidth,height=\textheight,keepaspectratio=true]{figure/problem_concept}
   \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Covariates of interest, temporal structure}
+
+  \begin{center}
+    \large{species occurrence (\(\sim\)1400 species) per NALMA}
+  \end{center}
+
+  \vspace*{0.05\textheight}
+
+  \begin{columns}
+    \begin{column}[T]{0.3\textwidth}
+      \textbf{observation}
+      \begin{itemize}
+        \item individual-level: species
+          \begin{itemize}
+            \item functional group
+            \item mean mass
+          \end{itemize}
+        \item time of observation
+      \end{itemize}
+    \end{column}
+    \begin{column}[T]{0.3\textwidth}
+      \textbf{origination}
+      \begin{itemize}
+        \item individual-level: species
+          \begin{itemize}
+            \item functional group
+            \item taxon order
+            \item mean mass
+          \end{itemize}
+        \item group-level: time
+          \begin{itemize}
+            \item temperature est Mg/Ca
+            \item plant phase \\(Pa-Eo, Eo-Mi, Mi-Pl)
+          \end{itemize}
+      \end{itemize}
+    \end{column}
+    \begin{column}[T]{0.3\textwidth}
+      \textbf{survival}
+      \begin{itemize}
+        \item individual-level: species
+          \begin{itemize}
+            \item functional group
+            \item taxon order
+            \item mean mass
+          \end{itemize}
+        \item group-level: time
+          \begin{itemize}
+            \item temperature est Mg/Ca
+            \item plant phase \\(Pa-Eo, Eo-Mi, Mi-Pl)
+          \end{itemize}
+      \end{itemize}
+    \end{column}
+  \end{columns}
+
 \end{frame}
 
 \begin{frame}
@@ -193,7 +241,7 @@
 
 \begin{frame}
   \frametitle{Modeling the probabilities; final details}
-  
+
   \begin{block}{Comments on priors, implementation}
     \begin{itemize}
       \item Random-walk priors for time-varying intercepts
@@ -232,7 +280,7 @@
         \includegraphics[height=0.65\textheight,width=\textwidth,keepaspectratio=true]{figure/stan_logo}
 
         \vspace*{0.05\textheight}
-        
+
         \LARGE{\textbf{Stan}}
       \end{center}
     \end{column}
