@@ -21,7 +21,7 @@ All fossil occurrence information used in this analysis was downloaded from the 
 
 After being downloaded, the raw occurrence data was then sorted, cleaned, and manipulated programmatically before analysis. Occurrences were restricted to those occurring between 64 and 2 million years ago (Mya); this age restriction was to insure that observation time series lines up with the temperature time series \citep{Cramer2011}. All taxa whose life habit was classified as either volant (i.e. Chiroptera) or aquatic (e.g. Cetacea) were excluded from this analysis because of their lack of direct applicability to the study of terrestrial species pools.
 
-Many species taxonomic assignments as present in the raw PBDB data were updated for accuracy and consistency. Species present in the PBDB have some taxonomic information, including possible Family and Order assignments. In order to increase consistency between species and reflect more recent taxonomic assignments, each species taxonomic assignments updated as follows: 1) species family and order assignemnts as present in the Encyclopedia of life (\url{http://eol.org}) was downloaded using the \tt{taxize} package for R; 2) for species not present in the EoL or not assigned order, their taxonomic inforation was further updated based on whatever family information was recorded in the PBDB or EoL; 3) for species still missing order assignemnts, their genus information was used to assign either an order or family, which was then used to assign an order. This procedure is similar to that used in \citet{Smits2015b}.
+Many species taxonomic assignments as present in the raw PBDB data were updated for accuracy and consistency. Species present in the PBDB have some taxonomic information, including possible Family and Order assignments. In order to increase consistency between species and reflect more recent taxonomic assignments, each species taxonomic assignments updated as follows: 1) species family and order assignemnts as present in the Encyclopedia of life (\url{http://eol.org}) was downloaded using the \tt{taxize} package for R; 2) for species not present in the EoL or not assigned order, their taxonomic inforation was further updated based on whatever family information was recorded in the PBDB or EoL; 3) for species still missing order assignemnts, their genus information was used to assign either an order or family, which was then used to assign an order. This procedure is similar to that used in \citet{Smits2015b} and is detailed in the code repository associated with this study.
 % i actually do a lot of swapping and fixing in this step. might want to better explain it
 % PBDB forms basis
 % grab from EoL
@@ -107,11 +107,11 @@ Global temperature across most of the Cenozoic was calculated from Mg/Ca isotope
   \label{tab:plant_def}
   \begin{tabular}{l c c c}
     \hline
-    Plant phase & Phase number & Start & Stop \\
+    Plant phase & Phase code & Start & Stop \\
     \hline
-    Paleocene-Eocene & 1 & 66 & 50 \\
-    Eocene-Miocene & 2 & 50 & 16 \\
-    Miocene-Pleistocene & 3 & 16 & 2 \\
+    Paleocene-Eocene & Pa-Eo & 66 & 50 \\
+    Eocene-Miocene & Eo-Mi & 50 & 16 \\
+    Miocene-Pleistocene & Mi-Pl & 16 & 2 \\
   \end{tabular}
 \end{table}
 
@@ -119,7 +119,7 @@ The second set of environmental factors included in this study are the Cenozoic 
 
 
 \subsection*{Modelling species occurrence}
-At the core of the model used in this study is hidden Markov process where the latent process has an absorbing state \citep{Allen2011}. While there are only two state ``codes'' in a presence-absence matrix (i.e. 0/1), there are in fact three states in a birth-death model: not having originated yet, extant, and extinct. The last of these is the absorbing state, as once a species has gone extinct it cannot re-originate \citep{Allen2011}. Thus, in the transition matrices the probability of an extinct species changing states is 0 (Table \ref{tab:transition}). See below for parameter explanations (Tables \ref{tab:obs_param}, and \ref{tab:bd_param}).
+At the core of the model used in this study is hidden Markov process where the latent process has an absorbing state; this can also be refered to as a discrete-time birth-death model \citep{Allen2011}. While there are only two state ``codes'' in a presence-absence matrix (i.e. 0/1), there are in fact three states in a birth-death model: not having originated yet, extant, and extinct. The last of these is the absorbing state, as once a species has gone extinct it cannot re-originate \citep{Allen2011}. Thus, in the transition matrices the probability of an extinct species changing states is 0 (Table \ref{tab:transition}). See below for parameter explanations (Tables \ref{tab:obs_param}, and \ref{tab:bd_param}).
 
 \begin{table}
   \begin{tabular}[c]{ c c | c | c | c | }
@@ -137,8 +137,10 @@ At the core of the model used in this study is hidden Markov process where the l
 \end{table}
 
 
-\subsubsection*{Observation process}
-The type of hidden Markov model used in this study has three characteristic probabilities: probability \(p\) of observing a species given that it is present, probability \(\phi\) of a species surviving from one time to another, and probability \(\pi\) of a species first appearing \citep{Royle2008}. In this formulation, the probability of a species becoming extinct is \(1 - \phi\).
+\subsubsection*{Basic model}
+I will begin defining the model used in this study by focusing on the basic machinery of the hidden Markov process at the model's core. This basic model is similar to the Jolly-Seber capture-mark-recapture model CITATION.
+The basic model has three characteristic probabilities: probability \(p\) of observing a species given that it is present, probability \(\phi\) of a species surviving from one time to another, and probability \(\pi\) of a species first appearing \citep{Royle2008} (Table \ref{tab:bd_param}). In this formulation, the probability of a species becoming extinct is \(1 - \phi\). The inclusion of species and temporal information means that all three of these probabilities are defined for every species at every time point (Table \ref{tab:obs_param}; how this is accomplished is described below. Importantly, only origination can occur during the first time step as nothing is present in order to survive.
+
 
 \begin{table}
   \centering
@@ -148,35 +150,29 @@ The type of hidden Markov model used in this study has three characteristic prob
     \hline
     \(y\) & \(N \times T\) & observed species presence/absence \\
     \(z\) & \(N \times T\) & ``true'' species presence/absence \\
-    \(p\) & \(T\) & probability of observing a species that is present at time \(t\) \\
-    \(a^{p}\) & \(T - 1 \times D\) & ecotype-varying intercept; mean value of log-odds of \(\theta\) \\
-    \(m\) & \(N\) & species log mass, rescaled \\
-    \(b^{p}_{1}\) & 1 & change in average log-odds of \(p\) per change mass \\
-    \(b^{p}_{2}\) & 1 & change in average log-odds of \(p\) per change mass, squared \\
-    \(o^{p}_{k}\) & O & effect of species order on log-odds of preservation \\
-    \(\sigma^{p}_{o}\) & 1 & standard deviation of the effect of order on log-odds of preservation \\
+    \(p\) & \(N \times T\) & probability of observing a species at time \(t\) if it is present \\
+    \(\phi\) & \(N \times T - 1\) & probability of species surviving from time \(t\) to \(t + 1\) if it is already present \\
+    \(\pi\) & \(N \times T\) & probability of species origination at time \(t\), given that it has not already originated \\
   \end{tabular}
   \label{tab:obs_param}
 \end{table}
 
-The probability \(p\) of observing a species that is present is modeled as a logistic regression with an intercept varying both by time and ecotype. Additionally, the effect of mass on the log-odds of preservation is modeled as a quadratic function. This is identical to how \(\phi\) and \(\pi\) are modeled in the birth-death process.
 \begin{equation}
   \begin{aligned}
     y_{i, t} &\sim \text{Bernoulli}(p_{i, t} z_{i, t}) \\
-    p_{i, t} &= \text{logit}^{-1}(a^{p}_{t, j[i]} + b^{p}_{1} m_{i} + b^{p}_{2} m_{i}^{2} + o^{p}_{k}) \\
-    b^{p}_{1} &\sim \mathcal{N}(0, 1) \\
-    b^{p}_{2} &\sim \mathcal{N}(0, 1) \\
-    a^{p} &\sim \text{MVN}(U \gamma^{p}, \Sigma^{p}) \\
-    \Sigma^{p} &= \text{diag}(\tau^{p}) \Omega^{p} \text{diag}(\tau^{p}) \\
-    o^{p}_{k} &\sim \mathcal{N}(0, \sigma^{p}_{o}) \\ 
-    \sigma^{p}_{o} &\sim \mathcal{N^{+}}(1) \\
+    z_{i, 1} &\sim \text{Bernoulli}(\phi_{i, 1}) \\
+    z_{i, t} &\sim \text{Bernoulli}\left(z_{i, t - 1} \pi_{i,t} + \sum_{x = 1}^{t}(1 - z_{i, x}) \phi_{i,t}\right) \\
   \end{aligned}
   \label{eq:obs_model}
 \end{equation}
-The parameters associated with Equation \ref{eq:obs_model} are described in Table \ref{tab:obs_param}.
+The parameters associated with Equation \ref{eq:obs_model} are described in Table \ref{tab:obs_param}; this formulation is identical to that described in where individual covariates are included for all parameters \citep{Royle2008}.
 
 
-\subsubsection*{Birth-death process}
+\subsubsection*{Expanding on the basics}
+Expanding on the basic model involves modeling the observation, origination and survival as independent multi-level logistic regressions. The model of observation probability follows a different % HERE
+
+The probability \(p\) of observing a species that is present is modeled as a logistic regression with an intercept varying both by time and ecotype. Additionally, the effect of mass on the log-odds of preservation is modeled as a quadratic function. This is identical to how \(\phi\) and \(\pi\) are modeled in the birth-death process.
+
 In the birth-death process part of the model, the transition probabilities \(\phi\) and \(\pi\) are modeled separately but in a similar manner to how \(p\) is modeled in observation process part of the model (Eq. \ref{eq:obs_model}). The parameters associated with the birth-death presence model are presented in Table \ref{tab:bd_param} and the full sampling statement, including observation (Eq. \ref{eq:obs_model}), is described in Equation \ref{eq:birth_death}:
 \begin{equation}
   \begin{split}
@@ -226,6 +222,12 @@ In the birth-death process part of the model, the transition probabilities \(\ph
   \begin{tabular}{c l l}
     Parameter & dimensions & explanation \\
     \hline
+    \(a^{p}\) & \(T - 1 \times D\) & ecotype-varying intercept; mean value of log-odds of \(\theta\) \\
+    \(m\) & \(N\) & species log mass, rescaled \\
+    \(b^{p}_{1}\) & 1 & change in average log-odds of \(p\) per change mass \\
+    \(b^{p}_{2}\) & 1 & change in average log-odds of \(p\) per change mass, squared \\
+    \(o^{p}_{k}\) & O & effect of species order on log-odds of preservation \\
+    \(\sigma^{p}_{o}\) & 1 & standard deviation of the effect of order on log-odds of preservation \\
     \(z\) & \(N \times T\) & ``true'' species presence/absence \\
     \(\phi\) & \(N \times T\) & probability of \(z_{\textunderscore, t} = 1 | z_{\textunderscore, t - 1} = 0 \); origination \\
     \(\pi\) & \(N \times T - 1\) & probability of \(z_{\textunderscore, t} = 1 | z_{\textunderscore, t - 1} = 1 \); survival \\
