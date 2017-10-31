@@ -169,7 +169,14 @@ The parameters associated with Equation \ref{eq:obs_model} are described in Tabl
 
 
 \subsubsection*{Expanding on the basics}
-Expanding on the basic model involves modeling the observation, origination and survival as independent multi-level logistic regressions. The model of observation probability follows a different % HERE
+Expanding on the basic model involves modeling the observation, origination and survival as independent multi-level logistic regressions. Origination and surivival probabilities share the same covariates and model structure, but observation probability is modeled as a function of a smaller selection of covariates.
+
+The log-odds of observing a species given that it is present (logit \(p\)) is modeled as a regression with an intercept with two zero-centered varying effects BETTER WAY TO WRITE
+
+The log-odds of a species orginating (logit \(pi\)) or surviving (logit \(\phi\)) are modeled independently but take the same form: a regression with an intercept that varies by both time and functional group, an additional taxonomic order varying-intercept term, and the slope term for species mass. Importantly, the time and functional group varying-intercept is itself modeled such that each the intercept for each functional group is a time series with it's own group-level covariates (described below). 
+
+
+% HERE
 
 The probability \(p\) of observing a species that is present is modeled as a logistic regression with an intercept varying both by time and ecotype. Additionally, the effect of mass on the log-odds of preservation is modeled as a quadratic function. This is identical to how \(\phi\) and \(\pi\) are modeled in the birth-death process.
 
