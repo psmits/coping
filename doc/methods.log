@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2017.10.27)  2 NOV 2017 16:05
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2017.10.27)  3 NOV 2017 14:07
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -535,7 +535,7 @@ Package natbib Warning: Citation `Carrano1999' on page 2 undefined on input lin
 e 4.
 
 
-Overfull \hbox (34.99641pt too wide) in alignment at lines 3--8
+Overfull \hbox (12.0pt too wide) in alignment at lines 3--8
  [] [] [] 
  []
 
@@ -565,16 +565,21 @@ Overfull \hbox (12.0pt too wide) in alignment at lines 40--60
  []
 
 [2]
-Overfull \hbox (2.0516pt too wide) in alignment at lines 60--80
+Overfull \hbox (12.0pt too wide) in alignment at lines 60--80
  [] [] [] 
  []
 
-[3] [4]
+[3]
+Overfull \hbox (12.0pt too wide) in alignment at lines 80--100
+ [] [] [] 
+ []
 
-Package longtable Warning: Column widths have changed
-(longtable)                in table 2 on input line 112.
 
-)
+Overfull \hbox (12.0pt too wide) in alignment at lines 100--112
+ [] [] [] 
+ []
+
+[4])
 
 Package natbib Warning: Citation `Tomiya2013' on page 5 undefined on input line
  64.
@@ -790,138 +795,135 @@ Package natbib Warning: Citation `Royle2008' on page 9 undefined on input line
 
 LaTeX Warning: Reference `ea:basic' on page 9 undefined on input line 167.
 
-[9] [10]
-! Missing } inserted.
-<inserted text> 
-                }
-l.213 ...ion and survival are modeled. \(f^{\phi\)
-                                                   and \(f^{\pi}\) are model...
+[9]
+Overfull \hbox (62.80545pt too wide) in paragraph at lines 194--207
+ [][] 
+ []
 
-? 
+[10]
+Overfull \hbox (247.13683pt too wide) in paragraph at lines 238--254
+ [][] 
+ []
 
-LaTeX Warning: Reference `eq:birth_death' on page 11 undefined on input line 24
-0.
+[11]
+
+LaTeX Warning: Reference `eq:birth_death' on page 12 undefined on input line 27
+9.
 
 
-Package natbib Warning: Citation `StanDevelopmentTeam2016' on page 11 undefined
- on input line 240.
+Package natbib Warning: Citation `StanDevelopmentTeam2016' on page 12 undefined
+ on input line 279.
 
 
-LaTeX Warning: Reference `tab:obs_param' on page 11 undefined on input line 240
+LaTeX Warning: Reference `tab:obs_param' on page 12 undefined on input line 279
 .
 
 
-LaTeX Warning: Reference `tab:bd_param' on page 11 undefined on input line 240.
+LaTeX Warning: Reference `tab:bd_param' on page 12 undefined on input line 279.
 
 
 
-LaTeX Warning: Reference `eq:obs_model' on page 11 undefined on input line 240.
+LaTeX Warning: Reference `eq:obs_model' on page 12 undefined on input line 279.
 
 
 
-LaTeX Warning: Reference `eq:birth_death' on page 11 undefined on input line 24
+LaTeX Warning: Reference `eq:birth_death' on page 12 undefined on input line 27
+9.
+
+[12]
+
+Package natbib Warning: Citation `StanDevelopmentTeam2016' on page 13 undefined
+ on input line 281.
+
+<figure/margin.pdf, id=102, pagebox=cropbox, 597.23125pt x 845.1575pt>
+File: figure/margin.pdf Graphic file (type pdf)
+<use figure/margin.pdf>
+Package pdftex.def Info: figure/margin.pdf  used on input line 285. on input li
+ne 285.
+Package pdftex.def Info: Requested size: 155.03952pt x 219.40047pt on input lin
+e 285.
+
+LaTeX Warning: Reference `eq:pure_presence' on page 13 undefined on input line 
+300.
+
+
+LaTeX Warning: Reference `eq:birth_death' on page 13 undefined on input line 30
 0.
 
 
-Package natbib Warning: Citation `StanDevelopmentTeam2016' on page 11 undefined
- on input line 242.
-
-[11]
-<figure/margin.pdf, id=89, pagebox=cropbox, 597.23125pt x 845.1575pt>
-File: figure/margin.pdf Graphic file (type pdf)
-<use figure/margin.pdf>
-Package pdftex.def Info: figure/margin.pdf  used on input line 246. on input li
-ne 246.
-Package pdftex.def Info: Requested size: 155.03952pt x 219.40047pt on input lin
-e 246.
+Package natbib Warning: Citation `StanDevelopmentTeam2016' on page 13 undefined
+ on input line 300.
 
 
-LaTeX Warning: Reference `eq:pure_presence' on page 12 undefined on input line 
-261.
+Package natbib Warning: Citation `Kucukelbir2015' on page 13 undefined on input
+ line 300.
 
 
-LaTeX Warning: Reference `eq:birth_death' on page 12 undefined on input line 26
-1.
+Package natbib Warning: Citation `StanDevelopmentTeam2016' on page 13 undefined
+ on input line 300.
 
 
-Package natbib Warning: Citation `StanDevelopmentTeam2016' on page 12 undefined
- on input line 261.
-
-
-Package natbib Warning: Citation `Kucukelbir2015' on page 12 undefined on input
- line 261.
-
-
-Package natbib Warning: Citation `StanDevelopmentTeam2016' on page 12 undefined
- on input line 261.
-
-
-Package natbib Warning: Citation `McElreath2016' on page 12 undefined on input 
-line 261.
-
-[12 <./figure/margin.pdf>]
-
-Package natbib Warning: Citation `Royle2008' on page 13 undefined on input line
- 263.
+Package natbib Warning: Citation `McElreath2016' on page 13 undefined on input 
+line 300.
 
 
 Package natbib Warning: Citation `Royle2008' on page 13 undefined on input line
- 263.
-
-
-Package natbib Warning: Citation `Gelman2013d' on page 13 undefined on input li
-ne 263.
+ 302.
 
 
 Package natbib Warning: Citation `Royle2008' on page 13 undefined on input line
- 263.
-
-
-LaTeX Warning: Reference `eq:pure_presence' on page 13 undefined on input line 
-266.
-
-
-LaTeX Warning: Reference `eq:birth_death' on page 13 undefined on input line 26
-6.
+ 302.
 
 
 Package natbib Warning: Citation `Gelman2013d' on page 13 undefined on input li
-ne 266.
+ne 302.
 
 
-Package natbib Warning: Citation `Gelman2013d' on page 13 undefined on input li
-ne 268.
+Package natbib Warning: Citation `Royle2008' on page 13 undefined on input line
+ 302.
 
 [13]
 
+LaTeX Warning: Reference `eq:pure_presence' on page 14 undefined on input line 
+305.
+
+
+LaTeX Warning: Reference `eq:birth_death' on page 14 undefined on input line 30
+5.
+
+
+Package natbib Warning: Citation `Gelman2013d' on page 14 undefined on input li
+ne 305.
+
+[14 <./figure/margin.pdf>]
+
+Package natbib Warning: Citation `Gelman2013d' on page 15 undefined on input li
+ne 307.
+
+[15]
+
 Package natbib Warning: There were undefined citations.
 
-
-Package longtable Warning: Table widths have changed. Rerun LaTeX.
-
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 302.
-[14]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 302.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 341.
+[16]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 341.
  (./methods.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 302.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 302.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 341.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 341.
 Package rerunfilecheck Info: File `methods.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
 
 
 LaTeX Warning: There were undefined references.
 
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 302.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 341.
  ) 
 Here is how much of TeX's memory you used:
- 9668 strings out of 492990
- 147363 string characters out of 6135004
- 277025 words of memory out of 5000000
- 12967 multiletter control sequences out of 15000+600000
- 12557 words of font info for 81 fonts, out of 8000000 for 9000
+ 9677 strings out of 492990
+ 147452 string characters out of 6135004
+ 277182 words of memory out of 5000000
+ 12970 multiletter control sequences out of 15000+600000
+ 12606 words of font info for 82 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  37i,15n,57p,1504b,516s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></us
@@ -934,10 +936,10 @@ ype1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
 ublic/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
 msfonts/cm/cmti12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
 s/cm/cmtt12.pfb>
-Output written on methods.pdf (14 pages, 149443 bytes).
+Output written on methods.pdf (16 pages, 152884 bytes).
 PDF statistics:
- 163 PDF objects out of 1000 (max. 8388607)
- 131 compressed objects within 2 object streams
- 38 named destinations out of 1000 (max. 500000)
+ 180 PDF objects out of 1000 (max. 8388607)
+ 146 compressed objects within 2 object streams
+ 42 named destinations out of 1000 (max. 500000)
  9734 words of extra memory for PDF output out of 10000 (max. 10000000)
 

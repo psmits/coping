@@ -210,7 +210,7 @@ How the priors for the varying-effects and coefficients in this expanded model a
 \subsubsection*{Complete model}
 The expanded model (Eq. \ref{eq:expanded}) is still incomplete as it is missing the group-level covariates such as global temperature, and it is missing all of the necessary priors. 
 
-Here I describe how the effects of mammal functional group on origination and survival are modeled. \(f^{\phi\) and \(f^{\pi}\) are modeled as the responses from a multivariate normal distribution, the means of which are modeled as independent regressions. The time-series structure of these regressions is represented as a random-walk prior for the time-varying intercept of these group-level regression. The effects of group-level covariates are included for each functional group as a vector regression coefficients. The expansion to include this group-level regression is decribed in Equation \ref{eq:group}. The parameters for these group-level regressions are described in Table \ref{tab:group}. 
+Here I describe how the effects of mammal functional group on origination and survival are modeled. \(f^{\phi}\) and \(f^{\pi}\) are modeled as the responses from a multivariate normal distribution, the means of which are modeled as independent regressions. The time-series structure of these regressions is represented as a random-walk prior for the time-varying intercept of these group-level regression. The effects of group-level covariates are included for each functional group as a vector regression coefficients. The expansion to include this group-level regression is decribed in Equation \ref{eq:group}. The parameters for these group-level regressions are described in Table \ref{tab:group}. 
 
 \begin{equation}
   \begin{aligned}
@@ -241,8 +241,8 @@ Here I describe how the effects of mammal functional group on origination and su
     \(\mu^{\pi}\) & \(J \times T\) & group-level time-series of the mean log-odds of \(\pi\) for each functional group \\ 
     \(\Sigma^{\phi}\) & \(J \times J\) & covariance matrix of group-level time-series of the mean log-odds of \(\phi\) for each functional group \\
     \(\Sigma^{\pi}\) & \(J \times J\) & covariance matrix of group-level time-series of the mean log-odds of \(\phi\) for each functional group \\
-    \(\alpha^{\phi}\) & \(J \times T\) & time-varying intercept of \(\mu^{\phi}]) \\
-    \(\alpha^{\pi}\) & \(J \times T\) & time-varying intercept of \(\mu^{\pi}]) \\
+    \(\alpha^{\phi}\) & \(J \times T\) & time-varying intercept of \(\mu^{\phi}\) \\
+    \(\alpha^{\pi}\) & \(J \times T\) & time-varying intercept of \(\mu^{\pi}\) \\
     \(\sigma^{\phi}\) & J & scale of random-walk prior for \(\alpha^{\phi}\) \\
     \(\sigma^{\pi}\) & J & scale of random-walk prior for \(\alpha^{\pi}\) \\
     \(\gamma^{\phi}\) & D & group-level regression coefficients for \(\mu^{\phi}\) \\
@@ -252,6 +252,30 @@ Here I describe how the effects of mammal functional group on origination and su
   \end{tabular}
   \label{tab:group}
 \end{table}
+
+In hierarchical models like the one developed here (Eq. \ref{eq:expanded}, \ref{eq:group}) there is very little difference between the likelihood and prior as data can enter the model through many different parameters CITATION. For example, in Equation \ref{eq:expanded} the model of \(z\) can be considered a prior and the parameterizations in Equation \ref{eq:group} are priors on many of the parameters which predict \(\phi\) and \(\pi\). The remaining priors, however, are not based on parameter expansion but are prior estimates for the remaining unmodeled parameters. These prior choices are expressed in Equation \ref{eq:prior} and are explained below.
+
+For the regression coefficients, such as \(\beta^{\phi}\) and \(\gamma^{\phi}\), these priors are weakly informative and concentrate most of their probability density between -2 and 2. Similarly, for the scale parameters, such as \(\tau^{\phi}\) and \(\sigma^{\phi}\), are given weakly informative priors which concentrate of their probability density between 0 and -2. The covariance matrices such as \(\Sigma^{\phi}\) decomposed into a vector of scale terms (e.g. \(\tau^{\phi}\)) and correlation matrices (e.g. \(\Omega^{\phi}\) which were then given weakly informative priors. This approach and choice of LKJ priors for the correlation matrices follows the Stan User Manual CITATION.
+% HERE
+
+
+\begin{equation}
+  \begin{aligned}
+    \beta^{\phi} &\sim \mathcal{N}(0, 1) \\
+    \beta^{\pi} &\sim \mathcal{N}(0, 1) \\
+    \Sigma^{\phi} &= \text{diag}(\tau^{\phi}) \Omega^{\phi} \text{diag}(\tau^{\phi}) \\
+    \Sigma^{\pi} &= \text{diag}(\tau^{\pi}) \Omega^{\pi} \text{diag}(\tau^{\pi}) \\
+    \tau^{\phi} &\sim \mathcal{N}^{+}(1) \\
+    \tau^{\pi} &\sim \mathcal{N}^{+}(1) \\
+    \Omega^{\phi} &\sim \text{LKJ}(2) \\
+    \Omega^{\pi} &\sim \text{LKJ}(2) \\
+    \sigma^{\phi} &\sim \mathcal{N}^{+}(1) \\
+    \sigma^{\pi} &\sim \mathcal{N}^{+}(1) \\
+    \gamma^{\phi} &\sim \mathcal{N}(0, 1) \\
+    \gamma^{\pi} &\sim \mathcal{N}(0, 1) \\
+  \end{aligned}
+  \label{eq:prior}
+\end{equation}
 
 
 
