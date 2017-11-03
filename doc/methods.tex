@@ -21,7 +21,7 @@ All fossil occurrence information used in this analysis was downloaded from the 
 
 After being downloaded, the raw occurrence data was then sorted, cleaned, and manipulated programmatically before analysis. Occurrences were restricted to those occurring between 64 and 2 million years ago (Mya); this age restriction was to insure that observation time series lines up with the temperature time series \citep{Cramer2011}. All taxa whose life habit was classified as either volant (i.e. Chiroptera) or aquatic (e.g. Cetacea) were excluded from this analysis because of their lack of direct applicability to the study of terrestrial species pools.
 
-Many species taxonomic assignments as present in the raw PBDB data were updated for accuracy and consistency. Species present in the PBDB have some taxonomic information, including possible Family and Order assignments. In order to increase consistency between species and reflect more recent taxonomic assignments, each species taxonomic assignments updated as follows: 1) species family and order assignemnts as present in the Encyclopedia of life (\url{http://eol.org}) was downloaded using the \tt{taxize} package for R; 2) for species not present in the EoL or not assigned order, their taxonomic inforation was further updated based on whatever family information was recorded in the PBDB or EoL; 3) for species still missing order assignemnts, their genus information was used to assign either an order or family, which was then used to assign an order. This procedure is similar to that used in \citet{Smits2015b} and is detailed in the code repository associated with this study.
+Many species taxonomic assignments as present in the raw PBDB data were updated for accuracy and consistency. Species present in the PBDB have some taxonomic information, including possible Family and Order assignments. In order to increase consistency between species and reflect more recent taxonomic assignments, each species taxonomic assignments updated as follows: 1) species family and order assignemnts as present in the Encyclopedia of life (\url{http://eol.org}) was downloaded using the \textit{taxize} package for R; 2) for species not present in the EoL or not assigned order, their taxonomic inforation was further updated based on whatever family information was recorded in the PBDB or EoL; 3) for species still missing order assignemnts, their genus information was used to assign either an order or family, which was then used to assign an order. This procedure is similar to that used in \citet{Smits2015b} and is detailed in the code repository associated with this study.
 % i actually do a lot of swapping and fixing in this step. might want to better explain it
 % PBDB forms basis
 % grab from EoL
@@ -139,8 +139,7 @@ At the core of the model used in this study is hidden Markov process where the l
 
 \subsubsection*{Basic model}
 I will begin defining the model used in this study by focusing on the basic machinery of the hidden Markov process at the model's core. This basic model is similar to the Jolly-Seber capture-mark-recapture model CITATION.
-The basic model has three characteristic probabilities: probability \(p\) of observing a species given that it is present, probability \(\phi\) of a species surviving from one time to another, and probability \(\pi\) of a species first appearing \citep{Royle2008} (Table \ref{tab:bd_param}). In this formulation, the probability of a species becoming extinct is \(1 - \phi\). The inclusion of species and temporal information means that all three of these probabilities are defined for every species at every time point (Table \ref{tab:obs_param}; how this is accomplished is described below. Importantly, only origination can occur during the first time step as nothing is present in order to survive.
-
+The basic model has three characteristic probabilities: probability \(p\) of observing a species given that it is present, probability \(\pi\) of a species surviving from one time to another, and probability \(\phi\) of a species first appearing \citep{Royle2008} (Table \ref{tab:bd_param}). In this formulation, the probability of a species becoming extinct is \(1 - \pi\). The inclusion of species and temporal information means that all three of these probabilities are defined for every species at every time point (Table \ref{tab:obs_param}; how this is accomplished is described below. Importantly, only origination can occur during the first time step as nothing is present in order to survive.
 
 \begin{table}
   \centering
@@ -151,10 +150,10 @@ The basic model has three characteristic probabilities: probability \(p\) of obs
     \(y\) & \(N \times T\) & observed species presence/absence \\
     \(z\) & \(N \times T\) & ``true'' species presence/absence \\
     \(p\) & \(N \times T\) & probability of observing a species at time \(t\) if it is present \\
-    \(\phi\) & \(N \times T - 1\) & probability of species surviving from time \(t\) to \(t + 1\) if it is already present \\
-    \(\pi\) & \(N \times T\) & probability of species origination at time \(t\), given that it has not already originated \\
+    \(\phi\) & \(N \times T\) & probability of species originating from time \(t\) to \(t + 1\) if it is not present \\
+    \(\pi\) & \(N \times T - 1\) & probability of species surviving at time \(t\), given that it is already originated \\
   \end{tabular}
-  \label{tab:obs_param}
+  \label{tab:basic}
 \end{table}
 
 \begin{equation}
@@ -163,108 +162,98 @@ The basic model has three characteristic probabilities: probability \(p\) of obs
     z_{i, 1} &\sim \text{Bernoulli}(\phi_{i, 1}) \\
     z_{i, t} &\sim \text{Bernoulli}\left(z_{i, t - 1} \pi_{i,t} + \sum_{x = 1}^{t}(1 - z_{i, x}) \phi_{i,t}\right) \\
   \end{aligned}
-  \label{eq:obs_model}
+  \label{eq:basic}
 \end{equation}
-The parameters associated with Equation \ref{eq:obs_model} are described in Table \ref{tab:obs_param}; this formulation is identical to that described in where individual covariates are included for all parameters \citep{Royle2008}.
+The parameters associated with Equation \ref{eq:basic} are described in Table \ref{tab:basic}; this formulation is identical to that described in where individual covariates are included for all parameters \citep{Royle2008}. The product term that appears when calculating values of \(z\) not at \(t = 1\) ensures that once a species goes extinct it does not re-originate. The basic model described here (Eq. \ref{ea:basic}) does not include the additional, necessary prior information. 
 
 
 \subsubsection*{Expanding on the basics}
 Expanding on the basic model involves modeling the observation, origination and survival as independent multi-level logistic regressions. Origination and surivival probabilities share the same covariates and model structure, but observation probability is modeled as a function of a smaller selection of covariates.
 
-The log-odds of observing a species given that it is present (logit \(p\)) is modeled as a regression with an intercept with two zero-centered varying effects BETTER WAY TO WRITE
+The probability of observing a species given that it is present (logit \(p\)) is modeled as a logistic regression with a time-varying intercept with an additional zero-centered varying effect for species' functional group, respectively. The effect of species mass was also included through a slope term.
 
 The log-odds of a species orginating (logit \(pi\)) or surviving (logit \(\phi\)) are modeled independently but take the same form: a regression with an intercept that varies by both time and functional group, an additional taxonomic order varying-intercept term, and the slope term for species mass. Importantly, the time and functional group varying-intercept is itself modeled such that each the intercept for each functional group is a time series with it's own group-level covariates (described below). 
 
-
-% HERE
-
-The probability \(p\) of observing a species that is present is modeled as a logistic regression with an intercept varying both by time and ecotype. Additionally, the effect of mass on the log-odds of preservation is modeled as a quadratic function. This is identical to how \(\phi\) and \(\pi\) are modeled in the birth-death process.
-
-In the birth-death process part of the model, the transition probabilities \(\phi\) and \(\pi\) are modeled separately but in a similar manner to how \(p\) is modeled in observation process part of the model (Eq. \ref{eq:obs_model}). The parameters associated with the birth-death presence model are presented in Table \ref{tab:bd_param} and the full sampling statement, including observation (Eq. \ref{eq:obs_model}), is described in Equation \ref{eq:birth_death}:
+The expanded model incorporating these regression models is written as
 \begin{equation}
-  \begin{split}
+  \begin{aligned}
     y_{i, t} &\sim \text{Bernoulli}(p_{i, t} z_{i, t}) \\
-    p_{i, t} &= \text{logit}^{-1}(a^{p}_{t, j[i]} + b^{p}_{1} m_{i} + b^{p}_{2} m_{i}^{2} + o^{p}_{k}) \\
-    a^{p} &\sim \text{MVN}(U \gamma^{p}, \Sigma^{p}) \\
+    p_{i, t} &= \text{logit}^{-1}(u_{t} + f_{j[i]}) \\
     z_{i, 1} &\sim \text{Bernoulli}(\phi_{i, 1}) \\
     z_{i, t} &\sim \text{Bernoulli}\left(z_{i, t - 1} \pi_{i,t} + \sum_{x = 1}^{t}(1 - z_{i, x}) \phi_{i,t}\right) \\
-    \phi_{i, t} &= \text{logit}^{-1}(a^{\phi}_{t, j[i]} + b^{\phi}_{1} m_{i} + b^{\phi}_{2} m_{i}^{2} + o^{\phi}_{k}) \\
-    \pi_{i, t} &= \text{logit}^{-1}(a^{\pi}_{t, j[i]} + b^{\pi}_{1} m_{i} + b^{\pi}_{2} m_{i}^{2} + o^{\pi}_{k}) \\
-    a^{\phi} &\sim \text{MVN}(U \gamma^{\phi}, \Sigma^{\phi}) \\
-    a^{\pi} &\sim \text{MVN}(U \gamma^{\pi}, \Sigma^{\pi}) \\
-    \Sigma^{p} &= \text{diag}(\tau^{p}) \Omega^{p} \text{diag}(\tau^{p}) \\
-    \Sigma^{\phi} &= \text{diag}(\tau^{\phi}) \Omega^{\phi} \text{diag}(\tau^{\phi}) \\
-    \Sigma^{\pi} &= \text{diag}(\tau^{\pi}) \Omega^{\pi} \text{diag}(\tau^{\pi}) \\
-  \end{split}
-  \begin{split}
-    \rho &\sim \text{U}(0, 1) \\
-    b^{p}_{1} &\sim \mathcal{N}(0, 1) \\
-    b^{\phi}_{1} &\sim \mathcal{N}(0, 1) \\
-    b^{\pi}_{1} &\sim \mathcal{N}(0, 1) \\
-    b^{p}_{2} &\sim \mathcal{N}(0, 1) \\
-    b^{\phi}_{2} &\sim \mathcal{N}(0, 1) \\
-    b^{\pi}_{2} &\sim \mathcal{N}(0, 1) \\
-    o^{p}_{k} &\sim \mathcal{N}(0, \sigma^{p}_{o}) \\ 
-    o^{\phi}_{k} &\sim \mathcal{N}(0, \sigma^{\phi}_{o}) \\ 
-    o^{\pi}_{k} &\sim \mathcal{N}(0, \sigma^{\pi}_{o}) \\ 
-    \sigma^{p}_{o} &\sim \mathcal{N^{+}}(1) \\
-    \sigma^{\phi}_{o} &\sim \mathcal{N^{+}}(1) \\
-    \sigma^{\pi}_{o} &\sim \mathcal{N^{+}}(1) \\
-    \gamma^{p} &\sim \mathcal{N}(0, 1) \\
-    \gamma^{\phi} &\sim \mathcal{N}(0, 1) \\
-    \gamma^{\pi} &\sim \mathcal{N}(0, 1) \\
-    \tau^{p} &\sim \mathcal{N}^{+}(1) \\
-    \tau^{\phi} &\sim \mathcal{N}^{+}(1) \\
-    \tau^{\pi} &\sim \mathcal{N}^{+}(1) \\
-    \Omega^{\phi} &\sim \text{LKJ}(2) \\
-    \Omega^{\pi} &\sim \text{LKJ}(2). \\
-  \end{split}
-  \label{eq:birth_death}
+    \phi_{i, t} &= \text{logit}^{-1}(f^{\phi}_{j[i], t} + o^{\phi}_{k[i]} + \beta^{\phi} m_{i}). \\
+    \pi_{i, t} &= \text{logit}^{-1}(f^{\pi}_{j[i], t} + o^{\pi}_{k[i]} + \beta^{\pi} m_{i}) \\
+  \end{aligned}
+  \label{eq:expanded}
 \end{equation}
-
+How the priors for the varying-effects and coefficients in this expanded model are described below along with the complete model.
 
 \begin{table}
   \centering
-  \caption{Parameters for the model of presence in the birth-death process}
+  \caption{Parameters for the first expansions}
   \begin{tabular}{c l l}
     Parameter & dimensions & explanation \\
     \hline
-    \(a^{p}\) & \(T - 1 \times D\) & ecotype-varying intercept; mean value of log-odds of \(\theta\) \\
-    \(m\) & \(N\) & species log mass, rescaled \\
-    \(b^{p}_{1}\) & 1 & change in average log-odds of \(p\) per change mass \\
-    \(b^{p}_{2}\) & 1 & change in average log-odds of \(p\) per change mass, squared \\
-    \(o^{p}_{k}\) & O & effect of species order on log-odds of preservation \\
-    \(\sigma^{p}_{o}\) & 1 & standard deviation of the effect of order on log-odds of preservation \\
-    \(z\) & \(N \times T\) & ``true'' species presence/absence \\
-    \(\phi\) & \(N \times T\) & probability of \(z_{\textunderscore, t} = 1 | z_{\textunderscore, t - 1} = 0 \); origination \\
-    \(\pi\) & \(N \times T - 1\) & probability of \(z_{\textunderscore, t} = 1 | z_{\textunderscore, t - 1} = 1 \); survival \\
-    \(a^{\phi}\) & \(T - 1 \times D\) & ecotype-varying intercept of log-odds of originating \(\phi\) \\
-    \(a^{\pi}\) & \(T - 1 \times D\) & ecotype-varying intercept of log-odds of surviving \(\pi\) \\
-    \(m\) & \(N\) & species log mass, rescaled \\
-    \(b^{\phi}_{1}\) & 1 & effect of species mass on log-odds of \(\phi\) \\
-    \(b^{\pi}_{1}\) & 1 & effect of species mass on log-odds of \(\pi\) \\
-    \(b^{\phi}_{2}\) & 1 & effect of species mass, squared, on log-odds of \(\phi\) \\
-    \(b^{\pi}_{2}\) & 1 & effect of species mass, squared, on log-odds of \(\pi\) \\
-    \(U\) & \(T \times D\) & matrix of group-level covariates \\
-    \(\gamma^{\phi}\) & \(U \times D\) & matrix of group-level regression coefficients \\
-    \(\gamma^{\pi}\) & \(U \times D\) & matrix of group-level regression coefficients \\
-    \(\Sigma^{\phi}\) & \(D \times D\) & covariance matrix of \(a^{\phi}\) \\
-    \(\Sigma^{\pi}\) & \(D \times D\) & covariance matrix of \(a^{\pi}\) \\
-    \(\Omega^{\phi}\) & \(D \times D\) & correlation matrix of \(a^{\phi}\) \\
-    \(\Omega^{\pi}\) & \(D \times D\) & correlation matrix of \(a^{\pi}\) \\
-    \(\tau^{\phi}\) & \(D\) & vector of standard deviations for each ecotype \(a^{\phi}_{d}\) \\
-    \(\tau^{\pi}\) & \(D\) & vector of standard deviations for each ecotype \(a^{\pi}_{d}\) \\
-    \(o^{\phi}_{k}\) & O & effect of species order on log-odds of originating \(\phi\) \\
-    \(o^{\pi}_{k}\) & O & effect of species order on log-odds of surviving \(\pi\) \\
-    \(\sigma^{\phi}_{o}\) & 1 & standard deviation of the effect of order on log-odds of originating \(\phi\) \\
-    \(\sigma^{\pi}_{o}\) & 1 & standard deviation of the effect of order on log-odds of surviving \(\pi\) \\
+    \(u\) & \(T\) & time-varying intercept \\
+    \(f\) & \(J\) & effect of functional group on observation \\
+    \(f^{\phi}\) & \(J \times T - 1\) & intercept of log-odds \(\phi\), varies by time and functional group\\
+    \(f^{\pi}\) & \(J \times T\) & intercept of log-odds \(\pi\), varies by time and functional group \\
+    \(o^{\phi}\) & \(K\) & effect of species' order on log-odds of \(\phi\) \\
+    \(o^{\pi}\) & \(K\) & effect of species' order on log-odds of \(\pi\) \\
+    \(\beta^{\phi}\) & 1 & effect of species' mass on log-odds of \(\phi\) \\
+    \(\beta^{\pi}\) & 1 & effect of species' mass on log-odds of \(\pi\) \\
   \end{tabular}
-  \label{tab:bd_param}
+  \label{tab:expanded}
 \end{table}
 
-The transition probabilities \(\phi\) and \(\pi\) are modeled as logistic regressions with varying intercept and one covariate associated with two parameters. The possible relationships between mass and both \(\phi\) and \(\pi\) are reflected in the parameterization of the model and choice of priors (Eq. \ref{eq:birth_death}).
 
-The intercepts of \(\phi\) and \(\pi\) both vary by species ecotype and those values are themselves the product of group-level regression using environmental factors as covariates (Eq. \ref{eq:birth_death}); this is identical to the pure presence model (Eq. \ref{eq:pure_presence}).
+\subsubsection*{Complete model}
+The expanded model (Eq. \ref{eq:expanded}) is still incomplete as it is missing the group-level covariates such as global temperature, and it is missing all of the necessary priors. 
+
+Here I describe how the effects of mammal functional group on origination and survival are modeled. \(f^{\phi\) and \(f^{\pi}\) are modeled as the responses from a multivariate normal distribution, the means of which are modeled as independent regressions. The time-series structure of these regressions is represented as a random-walk prior for the time-varying intercept of these group-level regression. The effects of group-level covariates are included for each functional group as a vector regression coefficients. The expansion to include this group-level regression is decribed in Equation \ref{eq:group}. The parameters for these group-level regressions are described in Table \ref{tab:group}. 
+
+\begin{equation}
+  \begin{aligned}
+    f^{\phi} &\sim \text{MVN}(\mu^{\phi}, \Sigma^{\phi}) \\
+    f^{\pi} &\sim \text{MVN}(\mu^{\pi}, \Sigma^{\pi}) \\
+    \mu^{\phi}_{j, t} &= \alpha^{\phi}_{j, t} + U * \gamma^{\phi}_{j} \\
+    \mu^{\pi}_{j, t} &= \alpha^{\pi}_{j, t} + U * \gamma^{\pi}_{j} \\
+    \alpha^{\phi}_{j, t} &\sim 
+      \begin{cases}
+        \mathcal{N}(0, \sigma^{\phi}_{j}) & \text{if } t = 1 \\
+        \mathcal{N}(\alpha^{\phi}_{j, t - 1}, \sigma^{\phi}_{j}) & \text{if } t > 1 \\
+      \end{cases} \\
+    \alpha^{\pi}_{j, t} &\sim 
+      \begin{cases}
+        \mathcal{N}(0, 1) & \text{if } t = 1 \\
+        \mathcal{N}(\alpha^{\pi}_{j, t - 1}, \sigma^{\pi}_{j}) & \text{if } t > 1 \\
+      \end{cases} \\
+  \end{aligned}
+  \label{eq:group}
+\end{equation}
+
+\begin{table}
+  \centering
+  \caption{Parameters for the group-level regressions.}
+  \begin{tabular}{c l l}
+    Parameter & dimensions & explanation \\
+    \(\mu^{\phi}\) & \(J \times T\) & group-level time-series of the mean log-odds of \(\phi\) for each functional group \\
+    \(\mu^{\pi}\) & \(J \times T\) & group-level time-series of the mean log-odds of \(\pi\) for each functional group \\ 
+    \(\Sigma^{\phi}\) & \(J \times J\) & covariance matrix of group-level time-series of the mean log-odds of \(\phi\) for each functional group \\
+    \(\Sigma^{\pi}\) & \(J \times J\) & covariance matrix of group-level time-series of the mean log-odds of \(\phi\) for each functional group \\
+    \(\alpha^{\phi}\) & \(J \times T\) & time-varying intercept of \(\mu^{\phi}]) \\
+    \(\alpha^{\pi}\) & \(J \times T\) & time-varying intercept of \(\mu^{\pi}]) \\
+    \(\sigma^{\phi}\) & J & scale of random-walk prior for \(\alpha^{\phi}\) \\
+    \(\sigma^{\pi}\) & J & scale of random-walk prior for \(\alpha^{\pi}\) \\
+    \(\gamma^{\phi}\) & D & group-level regression coefficients for \(\mu^{\phi}\) \\
+    \(\gamma^{\pi}\) & D & group-level regression coefficients for \(\mu^{\pi}\) \\
+    \(U\) & \(U \times J\) & group-level covariates \\
+    \hline
+  \end{tabular}
+  \label{tab:group}
+\end{table}
+
+
 
 
 \subsection*{Posterior inference and model adequacy}
