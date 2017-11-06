@@ -39,13 +39,6 @@ Estimates of occurrence probability estimated from the pure-presence model and e
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/ecotype_occurrence}
-  \caption[Ecotype occurrence probability estimated from the pure-presence model]{Probability of a mammal ecotype occurring over time as estimated from the pure-presence model. Each panel depicts 100 random samples from the model's posterior. The columns are by locomotor category and rows by dietary category; their intersections are the observed and analyzed ecotypes. Panels with no lines are ecotypes not observed in the dataset.}
-  \label{fig:eco_occur}
-\end{figure}
-
-\begin{figure}[ht]
-  \centering
   \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/ecotype_origin_bd}
   \caption[Ecotype origination probability estimated from the birth-death model]{Probability of a mammal ecotype origination probabliities at each time point as estimated from the birth-death model. Each panel depicts 100 random samples from the model's posterior. The columns are by locomotor category and rows by dietary category; their intersections are the observed and analyzed ecotypes. Panels with no lines are ecotypes not observed in the dataset.}
   \label{fig:eco_origin}
@@ -62,16 +55,7 @@ Estimates of occurrence probability estimated from the pure-presence model and e
 The pure-presence and birth-death models have similar estimates of the relationship between species mass and the probability of sampling a species that is present (Fig. \ref{fig:mass_preserve}). For both models this relationship is at least weakly positive, which means that as species body mass increases it is expected that they are more likely to be sampled if present. The estimated relationship from the pure-presence model is with greater uncertainty than that from the birth-death model (Fig. \ref{fig:mass_preserve}). These results are consistent with the intuition that larger fossils are easier to sample because they are more visible to the eye. In turn, this means that observed occurrence histories small bodied species are more likely to have gaps, where \(y = 0\) for that species the true state \(z\) is 1. 
 
 \begin{figure}[ht]
-  \begin{subfigure}[b]{0.45\textwidth}
-    \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/mass_on_samp}
-    \caption{Pure-presence model}
-    \label{fig:mass_preserve_pure_pres}
-  \end{subfigure}
-  \begin{subfigure}[b]{0.45\textwidth}
-    \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/mass_on_samp_bd}
-    \caption{Birth-death model}
-    \label{fig:mass_preserve_bd}
-  \end{subfigure}
+  \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/mass_on_samp_bd}
   \caption[Estimates of the effect of mass on observation probability]{Estimates of the effect of species mass on probability of sampling a present species (\(p\)). Mass has been log-transformed, centered, and rescaled; this means that a mass of 0 corresponds to the mean of log-mass of all observed species and that mass is in standard deviation units. Estimates are from both the pure-presence and birth-death models.}
   \label{fig:mass_preserve}
 \end{figure}
@@ -79,13 +63,6 @@ The pure-presence and birth-death models have similar estimates of the relations
 %For the pure-presence model, species mass is found to have either no relationship with occurrence or a negative one (Fig. \ref{fig:mass_occur}). A negative relationship between body size and occurrence is interpreted to mean that large bodied species are likely to occur less frequently than smaller bodied species. Note that all variation in estimates between ecotypes (Fig. \ref{fig:mass_occur}) is due to differences in ecotype-specific occurrence probability and the associated effects of plant phase; the effect of mass was considered constant for all ecotypes.
 
 There is broad congruence between the estimated effect of body mass on occurrence proability (Fig. \ref{fig:mass_occur}) and the effect of species mass on body mass on origination probaiblity (Fig. \ref{fig:mass_origin}). The striking pattern is higher probability of origination for species with body sizes closer to the mean than either extremes. This result is consistent with the canonically normal distribution of mammal body sizes \citep{Smith2004}; it is then expected that the most likely to occur species would be those from the middle of the distribution, and that species originating will on average be of average mass, especially considering species shared common ancestry \citep{Felsenstein1985b}. All variation in estimates between ecotypes (Fig. \ref{fig:mass_occur}, \ref{fig:mass_origin}) is due to differences in ecotype-specific origination probabilities and the associated effects of plant phase; the effect of mass was considered constant for all ecotypes.
-
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/mass_on_pres}
-  \caption[Effect of mass on probability of species occurrence as estimated from the pure-presence model]{Mean estimate of the effect of species mass on the probability of a species occurrence for each of the three plant phases. The effect of mass is considered constant over time and that the only aspect of the model that changes with plant phase is the intercept of the relationship between mass and occurrence. The three plant phases are indicated by the color of the line. Mass has been log-transformed, centered, and rescaled; this means that a mass of 0 corresponds to the mean of log-mass of all observed species and that mass is in standard deviation units. For clarity, only the mean estimates of the effects of mass and plant phase are plotted.}
-  \label{fig:mass_occur}
-\end{figure}
 
 \begin{figure}[ht]
   \centering
@@ -106,13 +83,6 @@ In contrast, the effect of species mass on probability of survival as estimated 
 
 Similarities in parameter estimates between ecotypes may be due to a similar response to environmental factors (Fig. \ref{fig:group_pure_presence}, \ref{fig:group_origin_bd}, and \ref{fig:group_surv_bd}). The estimated group-level effects on ecotype occurrence, origination, or survival are all very different from each other. At best, the effects of temperature on occurrence and origination can be considered congruent (Fig. \ref{fig:group_pure_presence}, \ref{fig:group_origin_bd}). As demonstrated in the comparisons of the effect of body mass on occurrence from the pure-presence model (Fig. \ref{fig:mass_occur}) with the effect of body mass on origination and survival from the birth-death model (Fig. \ref{fig:mass_origin}, and \ref{fig:mass_survival}), there is considerable variation in the effect of plant phases on ecotype-specific estimates.
 
-
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/group_on_ecotype}
-  \caption[Effects of group-level covariates on log-odds of ecotype occurrence as estimated from the pure-presence model]{Estimated effects of the group-level covariates describing environmental context on log-odds of species occurrence. These estimates are from the pure-presence model. What is plotted is a violin of the distribution of 1000 samples from the approximate posterior. The effect of plant phase graphed here is calculated as Phase 1\( = \gamma_{phase\ 1}\), Phase 2\( = \gamma_{phase\ 1} + \gamma_{phase\ 2}\), and so on.} 
-  \label{fig:group_pure_presence}
-\end{figure}
 
 \begin{figure}[ht]
   \centering
@@ -141,60 +111,30 @@ The effects of plant phase on occurrence and origination probabilities are broad
 
 \begin{table}[ht]
   \centering
-  \caption[Posterior probablity estimates of differences in occurrence by plant phase]{Posterior probability of the differences in the log-odds of an ecotype occurring based on plant phase. These probabilities are calculated as P(Phase 1 \(>\) 2) = \( (\sum \gamma_{phase 1} > \gamma_{phase 1} + \gamma_{phase 2}) / 100\) and similarly for the other comparisons. These estimates are from the pure-presence model.}
-  \label{tab:occur_plant}
-  \begin{tabular}{ l r r r }
-    \hline
-    & P(Phase 1 $>$ Phase 2) & P(Phase 2 $>$ Phase 3) & P(Phase 1 $>$ Phase 3) \\ 
-    \hline
-    arboreal carnivore & 0.323 & 0.874 & 0.926 \\ 
-    digitigrade carnivore & 1.000 & 0.000 & 1.000 \\ 
-    plantigrade carnivore & 1.000 & 0.040 & 1.000 \\ 
-    scansorial carnivore & 1.000 & 0.015 & 1.000 \\ 
-    arboreal herbivore & 1.000 & 0.515 & 1.000 \\ 
-    digitigrade herbivore & 1.000 & 0.995 & 1.000 \\ 
-    fossorial herbivore & 1.000 & 0.923 & 1.000 \\ 
-    plantigrade herbivore & 1.000 & 0.995 & 1.000 \\ 
-    scansorial herbivore & 1.000 & 0.717 & 1.000 \\ 
-    unguligrade herbivore & 1.000 & 0.000 & 1.000 \\ 
-    arboreal insectivore & 0.024 & 0.999 & 0.997 \\ 
-    fossorial insectivore & 1.000 & 0.000 & 1.000 \\ 
-    plantigrade insectivore & 0.923 & 0.558 & 0.985 \\ 
-    scansorial insectivore & 0.982 & 0.483 & 0.992 \\ 
-    arboreal omnivore & 0.959 & 0.837 & 1.000 \\ 
-    plantigrade omnivore & 1.000 & 0.247 & 1.000 \\ 
-    scansorial omnivore & 0.983 & 0.861 & 1.000 \\ 
-    unguligrade omnivore & 1.000 & 0.189 & 0.998 \\ 
-    \hline
-  \end{tabular}
-\end{table}
-
-\begin{table}[ht]
-  \centering
-  \caption[Posterior probablity estimates of differences in origination by plant phase]{Posterior probability of the differences in the log-odds of an ecotype originating based on plant phase. These probabilities are calculated as P(Phase 1 \(>\) 2) = \( (\sum \gamma_{phase 1} > \gamma_{phase 1} + \gamma_{phase 2}) / 100\) and similarly for the other comparisons. These estimates are from the birth-death model.}
+  \caption[Posterior probablity estimates of differences in origination by plant phase]{Posterior probability of the differences in the log-odds of an ecotype originating based on plant phase.} 
   \label{tab:origin_plant}
   \begin{tabular}{ l r r r }
     \hline
-    & P(Phase 1 $>$ Phase 2) & P(Phase 2 $>$ Phase 3) & P(Phase 1 $>$ Phase 3) \\ 
+    & P(Eo.Mi $>$ 0) & P(Pa.Eo $>$ 0) & P(Eo.Mi $>$ Pa.Eo) \\ 
     \hline
-    arboreal carnivore & 0.405 & 0.777 & 0.905 \\ 
-    digitigrade carnivore & 1.000 & 0.043 & 1.000 \\ 
-    plantigrade carnivore & 1.000 & 0.053 & 1.000 \\ 
-    scansorial carnivore & 1.000 & 0.035 & 1.000 \\ 
-    arboreal herbivore & 1.000 & 0.163 & 1.000 \\ 
-    digitigrade herbivore & 1.000 & 0.998 & 1.000 \\ 
-    fossorial herbivore & 1.000 & 0.896 & 1.000 \\ 
-    plantigrade herbivore & 1.000 & 0.996 & 1.000 \\ 
-    scansorial herbivore & 1.000 & 0.884 & 1.000 \\ 
-    unguligrade herbivore & 1.000 & 0.003 & 1.000 \\ 
-    arboreal insectivore & 0.088 & 0.994 & 1.000 \\ 
-    fossorial insectivore & 1.000 & 0.020 & 1.000 \\ 
-    plantigrade insectivore & 0.995 & 0.419 & 1.000 \\ 
-    scansorial insectivore & 0.999 & 0.360 & 1.000 \\ 
-    arboreal omnivore & 0.999 & 0.317 & 1.000 \\ 
-    plantigrade omnivore & 1.000 & 0.308 & 1.000 \\ 
-    scansorial omnivore & 0.999 & 0.418 & 1.000 \\ 
-    unguligrade omnivore & 1.000 & 0.219 & 1.000 \\ 
+    arboreal carnivore & 0.575 & 0.447 & 0.598 \\ 
+    digitigrade carnivore & 0.976 & 0.017 & 0.998 \\ 
+    plantigrade carnivore & 0.857 & 0.780 & 0.578 \\ 
+    scansorial carnivore & 0.768 & 0.154 & 0.889 \\ 
+    arboreal herbivore & 0.318 & 0.357 & 0.428 \\ 
+    digitigrade herbivore & 1.000 & 0.161 & 0.995 \\ 
+    fossorial herbivore & 0.999 & 0.353 & 0.926 \\ 
+    plantigrade herbivore & 1.000 & 0.304 & 0.998 \\ 
+    scansorial herbivore & 0.999 & 0.108 & 0.998 \\ 
+    unguligrade herbivore & 0.000 & 0.000 & 0.100 \\ 
+    arboreal insectivore & 0.364 & 0.003 & 0.857 \\ 
+    fossorial insectivore & 0.645 & 0.341 & 0.708 \\ 
+    plantigrade insectivore & 0.794 & 0.148 & 0.881 \\ 
+    scansorial insectivore & 0.916 & 0.235 & 0.940 \\ 
+    arboreal omnivore & 0.590 & 0.006 & 0.882 \\ 
+    plantigrade omnivore & 0.524 & 0.209 & 0.762 \\ 
+    scansorial omnivore & 0.713 & 0.027 & 0.938 \\ 
+    unguligrade omnivore & 0.888 & 0.127 & 0.960 \\ 
     \hline
   \end{tabular}
 \end{table}
@@ -202,30 +142,30 @@ The effects of plant phase on occurrence and origination probabilities are broad
 
 \begin{table}[ht]
   \centering
-  \caption[Posterior probablity estimates of differences in survival by plant phase]{Posterior probability of the differences in the log-odds of an ecotype surviving based on plant phase. These probabilities are calculated as P(Phase 1 \(>\) 2) = \( (\sum \gamma_{phase 1} > \gamma_{phase 1} + \gamma_{phase 2}) / 100\) and similarly for the other comparisons. These estimates are from the birth-death model.}
+  \caption[Posterior probablity estimates of differences in survival by plant phase]{Posterior probability of the differences in the log-odds of an ecotype surviving based on plant phase.} 
   \label{tab:surv_plant}
   \begin{tabular}{ l r r r }
     \hline
-    & P(Phase 1 $>$ Phase 2) & P(Phase 2 $>$ Phase 3) & P(Phase 1 $>$ Phase 3) \\ 
+    & P(Eo.Mi $>$ 0) & P(Pa.Eo $>$ 0) & P(Eo.Mi $>$ Pa.Eo) \\ 
     \hline
-    arboreal carnivore & 0.849 & 0.127 & 0.313 \\ 
-    digitigrade carnivore & 0.292 & 0.411 & 0.162 \\ 
-    plantigrade carnivore & 0.926 & 0.243 & 0.790 \\ 
-    scansorial carnivore & 0.409 & 0.544 & 0.453 \\ 
-    arboreal herbivore & 0.250 & 0.733 & 0.480 \\ 
-    digitigrade herbivore & 0.000 & 0.990 & 0.246 \\ 
-    fossorial herbivore & 0.547 & 0.680 & 0.812 \\ 
-    plantigrade herbivore & 0.404 & 0.555 & 0.480 \\ 
-    scansorial herbivore & 0.534 & 0.277 & 0.204 \\ 
-    unguligrade herbivore & 0.600 & 0.046 & 0.003 \\ 
-    arboreal insectivore & 0.673 & 0.379 & 0.539 \\ 
-    fossorial insectivore & 0.464 & 0.442 & 0.308 \\ 
-    plantigrade insectivore & 0.216 & 0.714 & 0.446 \\ 
-    scansorial insectivore & 0.019 & 0.923 & 0.382 \\ 
-    arboreal omnivore & 0.394 & 0.440 & 0.242 \\ 
-    plantigrade omnivore & 0.582 & 0.542 & 0.677 \\ 
-    scansorial omnivore & 0.292 & 0.590 & 0.289 \\ 
-    unguligrade omnivore & 0.212 & 0.555 & 0.183 \\ 
+    arboreal carnivore & 0.297 & 0.560 & 0.328 \\ 
+    digitigrade carnivore & 0.786 & 0.367 & 0.743 \\ 
+    plantigrade carnivore & 0.411 & 0.744 & 0.273 \\ 
+    scansorial carnivore & 0.428 & 0.445 & 0.486 \\ 
+    arboreal herbivore & 0.256 & 0.768 & 0.174 \\ 
+    digitigrade herbivore & 1.000 & 0.400 & 0.942 \\ 
+    fossorial herbivore & 0.696 & 0.563 & 0.565 \\ 
+    plantigrade herbivore & 0.659 & 0.508 & 0.596 \\ 
+    scansorial herbivore & 0.616 & 0.539 & 0.531 \\ 
+    unguligrade herbivore & 0.000 & 0.102 & 0.012 \\ 
+    arboreal insectivore & 0.289 & 0.483 & 0.368 \\ 
+    fossorial insectivore & 0.532 & 0.420 & 0.592 \\ 
+    plantigrade insectivore & 0.499 & 0.361 & 0.605 \\ 
+    scansorial insectivore & 0.443 & 0.252 & 0.634 \\ 
+    arboreal omnivore & 0.651 & 0.597 & 0.591 \\ 
+    plantigrade omnivore & 0.417 & 0.549 & 0.393 \\ 
+    scansorial omnivore & 0.486 & 0.525 & 0.487 \\ 
+    unguligrade omnivore & 0.929 & 0.521 & 0.844 \\ 
     \hline
   \end{tabular}
 \end{table}
@@ -233,64 +173,34 @@ The effects of plant phase on occurrence and origination probabilities are broad
 
 Both aspects of global temperature analyzed here are estimated to have strong effects on species occurrence and origination for most mammal ecotypes (Tables \ref{tab:occur_temp}, \ref{tab:origin_temp}). Similarity, the probability that temperature has a large effect on species extinction is very low for all ecotypes (Table \ref{tab:surv_temp}). The effects of the temperature covariates on ecotype occurrence and origination are estimated to be negative, which which means that as temperature decreases, occurrence or origination are expected to increase. In the case of survival, the only strong ecotype association for either of the temperature covariates is a positive relationship between temperature range and occurrence probabilities of with plantigrade herbivores (Tab. \ref{tab:surv_temp}).
 
-\begin{table}[ht]
-  \centering
-  \caption[Posterior probablity of effects of temperature on occurrence]{Posterior probabilities that the effects of the two temperature covariates on the log-odds of an ecotype occurring are greater than 0. What is estimated is the probability that these estimates are greater than 0; high or low probabilities indicate the ``strength'' of the covariate in that direction (positive and negative, respectively). These estimates are from the pure-presence model.}
-  \label{tab:occur_temp}
-  \begin{tabular}{ l r r }
-    \hline
-    & \(P(\gamma_{temp\ mean} > 0)\) & \(P(\gamma_{temp\ range} > 0)\) \\ 
-    \hline
-    arboreal carnivore & 0.067 & 0.043 \\ 
-    digitigrade carnivore & 0.000 & 0.000 \\ 
-    plantigrade carnivore & 0.012 & 0.054 \\ 
-    scansorial carnivore & 0.007 & 0.086 \\ 
-    arboreal herbivore & 0.762 & 0.852 \\ 
-    digitigrade herbivore & 0.000 & 0.000 \\ 
-    fossorial herbivore & 0.000 & 0.002 \\ 
-    plantigrade herbivore & 0.000 & 0.364 \\ 
-    scansorial herbivore & 0.141 & 0.004 \\ 
-    unguligrade herbivore & 0.001 & 0.000 \\ 
-    arboreal insectivore & 0.031 & 0.251 \\ 
-    fossorial insectivore & 0.014 & 0.002 \\ 
-    plantigrade insectivore & 0.164 & 0.058 \\ 
-    scansorial insectivore & 0.197 & 0.250 \\ 
-    arboreal omnivore & 0.711 & 0.449 \\ 
-    plantigrade omnivore & 0.009 & 0.103 \\ 
-    scansorial omnivore & 0.754 & 0.732 \\ 
-    unguligrade omnivore & 0.015 & 0.022 \\ 
-    \hline
-  \end{tabular}
-\end{table}
-
 
 
 \begin{table}[ht]
   \centering
   \caption[Posterior probablity of effects of temperature on origination]{Posterior probability that the effects of the two temperature covariates on the log-odds of an ecotype origination are greater than 0. What is estimated is the probability that these estimates are greater than 0; high or low probabilities indicate the ``strength'' of the covariate in that direction (positive and negative, respectively). These estimates are from the birth-death model.}
   \label{tab:origin_temp}
-  \begin{tabular}{ l r r }
+  \begin{tabular}{ l r }
     \hline
-    & \(P(\gamma_{temp\ mean} > 0)\) & \(P(\gamma_{temp\ range} > 0)\) \\ 
+    & \(P(\gamma_{temp\ mean} > 0)\) \\
     \hline
-    arboreal carnivore & 0.072 & 0.031 \\ 
-    digitigrade carnivore & 0.000 & 0.001 \\ 
-    plantigrade carnivore & 0.010 & 0.094 \\ 
-    scansorial carnivore & 0.006 & 0.104 \\ 
-    arboreal herbivore & 0.785 & 0.881 \\ 
-    digitigrade herbivore & 0.000 & 0.000 \\ 
-    fossorial herbivore & 0.001 & 0.007 \\ 
-    plantigrade herbivore & 0.000 & 0.626 \\ 
-    scansorial herbivore & 0.097 & 0.002 \\ 
-    unguligrade herbivore & 0.010 & 0.000 \\ 
-    arboreal insectivore & 0.018 & 0.319 \\ 
-    fossorial insectivore & 0.008 & 0.003 \\ 
-    plantigrade insectivore & 0.223 & 0.084 \\ 
-    scansorial insectivore & 0.139 & 0.202 \\ 
-    arboreal omnivore & 0.646 & 0.628 \\ 
-    plantigrade omnivore & 0.013 & 0.120 \\ 
-    scansorial omnivore & 0.688 & 0.735 \\ 
-    unguligrade omnivore & 0.016 & 0.027 \\ 
+    arboreal carnivore & 0.355 \\ 
+    digitigrade carnivore & 0.001 \\ 
+    plantigrade carnivore & 0.358 \\ 
+    scansorial carnivore & 0.121 \\ 
+    arboreal herbivore & 0.219 \\ 
+    digitigrade herbivore & 0.045 \\ 
+    fossorial herbivore & 0.067 \\ 
+    plantigrade herbivore & 0.000 \\ 
+    scansorial herbivore & 0.221 \\ 
+    unguligrade herbivore & 0.339 \\ 
+    arboreal insectivore & 0.027 \\ 
+    fossorial insectivore & 0.219 \\ 
+    plantigrade insectivore & 0.224 \\ 
+    scansorial insectivore & 0.192 \\ 
+    arboreal omnivore & 0.009 \\ 
+    plantigrade omnivore & 0.087 \\ 
+    scansorial omnivore & 0.035 \\ 
+    unguligrade omnivore & 0.129 \\ 
     \hline
   \end{tabular}
 \end{table}
@@ -301,26 +211,26 @@ Both aspects of global temperature analyzed here are estimated to have strong ef
   \label{tab:surv_temp}
   \begin{tabular}{ l r r }
     \hline
-    & \(P(\gamma_{temp\ mean} > 0)\) & \(P(\gamma_{temp\ range} > 0)\) \\ 
+    & \(P(\gamma_{temp\ mean} > 0)\) \\
     \hline
-    arboreal carnivore & 0.751 & 0.752 \\ 
-    digitigrade carnivore & 0.161 & 0.110 \\ 
-    plantigrade carnivore & 0.851 & 0.878 \\ 
-    scansorial carnivore & 0.598 & 0.510 \\ 
-    arboreal herbivore & 0.281 & 0.819 \\ 
-    digitigrade herbivore & 0.546 & 0.721 \\ 
-    fossorial herbivore & 0.751 & 0.766 \\ 
-    plantigrade herbivore & 0.316 & 0.960 \\ 
-    scansorial herbivore & 0.342 & 0.429 \\ 
-    unguligrade herbivore & 0.750 & 0.418 \\ 
-    arboreal insectivore & 0.572 & 0.579 \\ 
-    fossorial insectivore & 0.648 & 0.279 \\ 
-    plantigrade insectivore & 0.477 & 0.786 \\ 
-    scansorial insectivore & 0.303 & 0.845 \\ 
-    arboreal omnivore & 0.536 & 0.611 \\ 
-    plantigrade omnivore & 0.499 & 0.507 \\ 
-    scansorial omnivore & 0.544 & 0.488 \\ 
-    unguligrade omnivore & 0.520 & 0.688 \\ 
+    arboreal carnivore & 0.665 \\ 
+    digitigrade carnivore & 0.453 \\ 
+    plantigrade carnivore & 0.618 \\ 
+    scansorial carnivore & 0.380 \\ 
+    arboreal herbivore & 0.761 \\ 
+    digitigrade herbivore & 0.395 \\ 
+    fossorial herbivore & 0.429 \\ 
+    plantigrade herbivore & 0.279 \\ 
+    scansorial herbivore & 0.345 \\ 
+    unguligrade herbivore & 0.818 \\ 
+    arboreal insectivore & 0.489 \\ 
+    fossorial insectivore & 0.452 \\ 
+    plantigrade insectivore & 0.435 \\ 
+    scansorial insectivore & 0.384 \\ 
+    arboreal omnivore & 0.600 \\ 
+    plantigrade omnivore & 0.639 \\ 
+    scansorial omnivore & 0.512 \\ 
+    unguligrade omnivore & 0.396 \\ 
     \hline
   \end{tabular}
 \end{table}
@@ -340,14 +250,6 @@ Consistent with visual inspection of the ecotype origination probability time se
   \label{fig:origin_corr}
 \end{figure}
 
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=\textwidth,height=\textheight,keepaspectratio=true]{figure/origin_sig_corr}
-  \caption[Ecotypes with strong correlations in origination probability]{Ecotypes that have a strong correlation in origination probability. These ecotypes have a greater than 95\% posterior probability of being positively correlated. The number plotted at the midpoint of each edge corresponds to the mean estimated correlation between those two ecotypes.}
-  \label{fig:origin_corr_graph}
-\end{figure}
-
-
 In contrast to the visually obvious correlations in ecotype origination probability, visual inspection of the ecotype-specific survival probabilities (Fig. \ref{fig:eco_survival}) does not indicate that many strong correlations between ecotype survival probabilities. This conclusion is supported by the estimated correlations in ecotype survival probability (Fig. \ref{fig:survival_corr}). There are very few large magnitude estimates of correlation between any of the ecotypes. This result is further supported by the fact that only a single correlation, survival probability of digitigrade carnivores and unguligrade herbivores, has a greater than 95\% posterior probability of being positive (Fig. \ref{fig:surv_corr_graph}). This single correlation, however, adds more nuance to the interpretations from the origination probability correlations. In addition to correlation in enrichment, these ecotypes are correlated in their depletions. This result supports the conclusion that the diversity history of digitigrade carnivores and unguligrade herbivores are strongly related to each other both in terms of origination and survival, which stands in contrast to those ecotypes which are only correlated for origination.
 
 
@@ -357,14 +259,6 @@ In contrast to the visually obvious correlations in ecotype origination probabil
   \caption[Estimated correlations in survival probability between ecotypes]{Posterior mean estimates of the correlations in survival probability between the mammal ecotypes. The lower triangle of the matrix is populated with ellipses corresponding to the level of correlation between the two ecotypes, while the upper triangle of the matrix corresponds to the mean estimated correlation between ecotypes. Darker values correspond to a greater magnitude of correlation with blue values corresponding to a positive correlation and red values a negative correlation.}
   \label{fig:survival_corr}
 \end{figure}
-
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/surv_sig_corr}
-  \caption[Ecotypes with strong correlations in survival probability]{Ecotypes that have a strong correlation in survival probability. These ecotypes have a greater than 95\% posterior probability of being positively correlated. The number plotted at the midpoint of each edge corresponds to the mean estimated correlation between those two ecotypes.}
-  \label{fig:surv_corr_graph}
-\end{figure}
-
 
 
 
@@ -422,39 +316,26 @@ The comparison between per capita origination and extinction rate estimates reve
   \label{tab:div_peak}
   \begin{tabular}{ r r r }
     \hline
-    Time (Mya) & \(P(N^{stand}_{t} > \overline{N^{stand}})\) & \(P(D^{rate}_{t} > \overline{D^{rate}})\) \\ 
+    NALMA & \(P(N^{stand}_{t} > \overline{N^{stand}})\) & \(P(D^{rate}_{t} > \overline{D^{rate}})\) \\ 
     \hline
-    64.00 & 0.07 & 0.63 \\ 
-    62.00 & 0.28 & 0.94 \\ 
-    60.00 & 0.86 & 0.13 \\ 
-    58.00 & 0.68 & 0.18 \\ 
-    56.00 & 0.62 & 0.99 \\ 
-    54.00 & 1.00 & 0.00 \\ 
-    52.00 & 0.68 & 0.41 \\ 
-    50.00 & 0.80 & 0.00 \\ 
-    48.00 & 0.12 & 0.04 \\ 
-    46.00 & 0.01 & 0.98 \\ 
-    44.00 & 0.64 & 0.00 \\ 
-    42.00 & 0.02 & 0.47 \\ 
-    40.00 & 0.03 & 0.08 \\ 
-    38.00 & 0.00 & 0.89 \\ 
-    36.00 & 0.40 & 0.46 \\ 
-    34.00 & 0.52 & 0.00 \\ 
-    32.00 & 0.02 & 0.27 \\ 
-    30.00 & 0.06 & 0.09 \\ 
-    28.00 & 0.02 & 0.88 \\ 
-    26.00 & 0.22 & 0.39 \\ 
-    24.00 & 0.38 & 0.03 \\ 
-    22.00 & 0.09 & 0.96 \\ 
-    20.00 & 0.81 & 0.00 \\ 
-    18.00 & 0.29 & 1.00 \\ 
-    16.00 & 1.00 & 0.00 \\ 
-    14.00 & 0.95 & 0.02 \\ 
-    12.00 & 0.80 & 0.01 \\ 
-    10.00 & 0.13 & 0.83 \\ 
-    8.00 & 0.67 & 0.00 \\ 
-    6.00 & 0.02 & 1.00 \\ 
-    4.00 & 0.91 &  \\ 
+    Torrejonian & 0.79 & \\ 
+    Tiffanian & 0.95 & 0.67 \\ 
+    Clarkforkian & 0.50 & 0.03 \\ 
+    Wasatchian & 1.00 & 0.99 \\ 
+    Bridgerian & 0.69 & 0.00 \\ 
+    Uintan & 0.75 & 0.45 \\ 
+    Duchesnean & 0.00 & 0.00 \\ 
+    Chadronian & 0.01 & 0.70 \\ 
+    Orellan & 0.00 & 0.01 \\ 
+    Whitneyan & 0.00 & 0.09 \\ 
+    Geringian & 0.00 & 0.57 \\ 
+    Monroecreekian & 0.01 & 1.00 \\ 
+    Harrisonian & 0.11 & 0.67 \\ 
+    Hemingfordian & 0.96 & 0.99 \\ 
+    Barstovian & 1.00 & 1.00 \\ 
+    Clarendonian & 0.93 & 0.00 \\ 
+    Hemphillian & 0.63 & 0.10 \\ 
+    Blancan & 0.73 & 0.43 \\ 
     \hline
   \end{tabular}
 \end{table}
