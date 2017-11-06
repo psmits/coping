@@ -14,9 +14,9 @@
 
 \section*{Results}
 
-The results of the analyses described above take one of two forms: direct inspection of parameter posterior estimates from both models, and downstream estimates of diversity and diversification rates based on posterior predictive simulations from the birth-death model because this model has a better fit to the observed occurrence information.
+The results of the analyses described above take one of two forms: direct inspection of posterior parameter estimates, and downstream estimates of diversity and diversification rates based on posterior predictive simulations.
 
-\subsection*{Comparing parameter estimates from the pure-presence and birth-death models}
+\subsection*{Posterior parameter estimates}
 
 % look at the posterior predictive checks
 %   which model has better fit
@@ -24,16 +24,7 @@ The results of the analyses described above take one of two forms: direct inspec
 
 
 \begin{figure}[ht]
-  \begin{subfigure}[b]{0.45\textwidth}
-    \includegraphics[width=\textwidth,height=0.3\textheight,keepaspectratio=true]{figure/pred_occ}
-    \caption{Pure-presence model}
-    \label{fig:ppc_pure_presence}
-  \end{subfigure}
-  \begin{subfigure}[b]{0.45\textwidth}
-    \includegraphics[width=\textwidth,height=0.3\textheight,keepaspectratio=true]{figure/pred_occ_bd}
-    \caption{Birth-death model}
-    \label{fig:ppc_birth_death}
-  \end{subfigure}
+  \includegraphics[width=\textwidth,height=0.3\textheight,keepaspectratio=true]{figure/pred_occ_bd}
   \caption[Posterior predictive check of average occurrence]{Comparison of the average observed number of occurrences per species (blue line) to the average number of occurrences from 100 posterior predictive datasets using the posterior estimates from the pure-presence and birth-death models.}
   \label{fig:ppc}
 \end{figure}

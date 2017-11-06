@@ -27,6 +27,9 @@ posture$order[!(posture[, 1] %in% unique(na.tax$order_name))] <- NA
 posture <- posture[order(posture$taxon), ]
 posture <- posture[, c(4, 3, 2)]
 
+posture[is.na(posture[, 2]), 2] <- posture[is.na(posture[, 2]), 1]
+
+posture <- posture[, -1]
 post.tab <- xtable(posture)
 print.xtable(x = post.tab, 
              file = '../doc/posture_raw.tex', 
