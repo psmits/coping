@@ -22,7 +22,7 @@ The results of the analyses described above take one of two forms: direct inspec
 %   which model has better fit
 %   what does that mean?
 
-
+The model used here in this study appears to have approximately adequate fit to the data based on the results of the posterior predictive check (Fig. \ref{fig:ppc}). Simulated datasets as estimated from the models' posterior appears similar in terms of average number of occurrences per species to the observed number of occurrences in the empirical mammal dataset.
 \begin{figure}[ht]
   \includegraphics[width=\textwidth,height=0.3\textheight,keepaspectratio=true]{figure/pred_occ_bd}
   \caption[Posterior predictive check of average occurrence]{Comparison of the average observed number of occurrences per species (blue line) to the average number of occurrences from 100 posterior predictive datasets using the posterior estimates from the pure-presence and birth-death models.}
@@ -32,6 +32,7 @@ The results of the analyses described above take one of two forms: direct inspec
 
 % observation process
 %   time
+Log-odds of observing a species given that it is present varies greatly with time (Fig. \ref{fig:time_observe}) with lowest log-odds of observation being during the Gerigian and Harrisonian land-mammal ages. It is important to note, however, that all land-mammal ages with log-odds of observation greater than 2 have very high probabilities of observation, which means that while there may be large differences in log-odds of observation between land-mammal ages this may not translate to substantial difference in the probability of observation.
 \begin{figure}[ht]
   \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/time_observation}
   \caption{}
@@ -39,12 +40,14 @@ The results of the analyses described above take one of two forms: direct inspec
 \end{figure}
 
 %   functional group
+There is little variance in the effect of functional group on the log-odds of observing a species that is present (Fig. \ref{fig:fg_observe}). The only functional group with substantially less than expected log-odds of observation is scansorial insectivores, indicating that the fossil record of this group is the least complete of all the functional groups studied. Few functional groups have marginally better than expected log-odds of observation, the other insectivorous functional groups have marginally greater than average log-odds of observation; this is also the case for plantigrade omnivores. These results indicate that the observation histories of these functional groups are expected to be complete than most other functional groups. However, it is important to note that for many functional groups, their estimated log-odds of observation are poorly constrained with great uncertainty indicating little structure in how log-odds of observation varies between functional groups (Fig. \ref{fig:fg_observe}).
 \begin{figure}[ht]
   \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/ecotype_observation}
   \caption{}
   \label{fig:fg_observe}
 \end{figure}
 
+Species mass is found to have a positive effect on probability of observing a species that is present (Fig. \ref{fig:mass_observe}). This result indicates that species with greater than average mass are expected to have more complete observation histories than species with less than average mass. However, this estimate does not translate to substantial differences in the estimated probability of observation because observation probability is so high for most of the Cenozoic (Fig. \ref{fig:time_observe}). In fact, it is only when land-mammal age observation probability is low that the effect of mass is observable. It is important to remember the effect of mass on observation was considered constant over time and that all differences observation probability between land-mammal ages is driven by variation over time. When log-odds of observation is high, differences due to covariate effects translate to very small differences in actual probability.
 %   mass
 \begin{figure}[ht]
   \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/mass_on_pres_bd}
