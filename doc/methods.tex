@@ -97,7 +97,7 @@ All fossil occurrences from 64 to 2 million years ago (Mya) were binned into the
 
 
 \subsection*{Environmental and temporal covariates}
-The environmental covariates used in this study are collectively referred to as group-level covariates because they predict the response of a ``group'' of individual-level observations (i.e. species occurrences of an ecotype). Additionally, these covariates are defined for temporal bins and not the species themselves; as such they predict individual the parts of each species occurrence history. The group-level covariates in this study are two global temperature estimates and the Cenozoic ``plant phases'' defined by \citet{Graham2011a}. 
+The environmental covariates used in this study are collectively referred to as group-level covariates because they predict the response of a ``group'' of individual-level observations (i.e. species occurrences of an ecotype). Additionally, these covariates are defined for temporal bins and not the species themselves; as such they predict the individual parts of each species occurrence history. The group-level covariates in this study are two global temperature estimates and the Cenozoic ``plant phases'' defined by \citet{Graham2011a}. 
 
 Global temperature across most of the Cenozoic was calculated from Mg/Ca isotope record from deep sea carbonates \citep{Cramer2011}. Mg/Ca based temperature estimates are preferable to the frequently used \(\delta^{18}\)O temperature proxy \citep{Zachos2001,Zachos2008,Alroy2000g,Figueirido2012} because Mg/Ca estimates do not conflate temperature with ice sheet volume and depth/stratification changes. The former is particularly important to this analysis as the current polar ice-caps appeared and grew during the second half of the Cenozoic. These properties make Mg/Ca based temperature estimates preferable for macroevolutionary and macroecological studies \citep{Ezard2016a}. Temperature was calculated as the mean of all respective estimates for each of the NALMA units. The distributions of temperature was then rescaled by subtracting its mean from all values and then dividing by twice its standard deviation.
 
@@ -116,11 +116,11 @@ Global temperature across most of the Cenozoic was calculated from Mg/Ca isotope
   \end{tabular}
 \end{table}
 
-The second set of environmental factors included in this study are the Cenozoic plant phases defined in \citet{Graham2011a}. Graham's plant phases are holistic descriptors of the taxonomic composition of 12 ecosystem types, which plants are present at a given time, and the relative modernity of those plant groups with younger phases representing increasingly modern taxa \citep{Graham2011a}. \citet{Graham2011a} defines four intervals from the Cretaceous to the Pliocene, though only three of these intervals take place during the time frame being analyzed. Graham's plant phases was included as a series of ``dummy variables'' encoding the three phases included in this analysis \citep{Gelman2007}; this means that the first phase is synonymous with the intercept and subsequent phases are defined by their differences from the first phase. The temporal boundaries of these plant phases are defined in Table \ref{tab:plant_def}.
+The second set of environmental factors included in this study are the Cenozoic plant phases defined in \citet{Graham2011a}. Graham's plant phases are holistic descriptors of the taxonomic composition of 12 ecosystem types, which plants are present at a given time, and the relative modernity of those plant groups with younger phases representing increasingly modern taxa \citep{Graham2011a}. \citet{Graham2011a} defines four intervals from the Cretaceous to the Pliocene, though only three of these intervals take place during the time frame being analyzed. Graham's plant phases was included as a series of ``dummy variables'' encoding the three phases included in this analysis \citep{Gelman2007}; this means that the Miocene-Pleistocene phase is synonymous with the intercept and other phases are defined by their differences from this baseline. The temporal boundaries of these plant phases, their durations, and abreviations are defined in Table \ref{tab:plant_def}.
 
 
 \subsection*{Modelling species occurrence}
-At the core of the model used in this study is hidden Markov process where the latent process has an absorbing state; this can also be refered to as a discrete-time birth-death model \citep{Allen2011}. While there are only two state ``codes'' in a presence-absence matrix (i.e. 0/1), there are in fact three states in a birth-death model: not having originated yet, extant, and extinct. The last of these is the absorbing state, as once a species has gone extinct it cannot re-originate \citep{Allen2011}. Thus, in the transition matrices the probability of an extinct species changing states is 0 (Table \ref{tab:transition}). See below for parameter explanations (Tables \ref{tab:basic}, \ref{tab:expanded}, and \ref{tab:group}).
+At the core of the model used in this study is hidden Markov process where the latent process has an absorbing state; also refered to as a discrete-time birth-death model \citep{Allen2011} or a capture-mark-recapture model CITATION. While there are only two state ``codes'' in a presence-absence matrix (i.e. 0/1), there are in fact three states in a birth-death model: not having originated yet, extant, and extinct. The last of these is the absorbing state, as once a species has gone extinct it cannot re-originate \citep{Allen2011}. Thus, in the transition matrices the probability of an extinct species changing states is 0 (Table \ref{tab:transition}). See below for parameter explanations (Tables \ref{tab:basic}, \ref{tab:expanded}, and \ref{tab:group}).
 
 \begin{table}
   \begin{tabular}[c]{ c c | c | c | c | }
@@ -133,18 +133,17 @@ At the core of the model used in this study is hidden Markov process where the l
       \multicolumn{1}{| c |}{} & \(0_{extinct}\) & 0 & 0 & 1 \\
       \hline
   \end{tabular}
-  \caption{Transition matrix for the birth-death model (Eq. \ref{eq:basic}). Note that while there are only two state ``codes'' (0, 1), there are in fact three states: never having originated \(0_{never}\), present 1, extinct \(0_{extinct}\) \citep{Allen2011}.}
+  \caption{Transition matrix for the birth-death model (Eq. \ref{eq:basic}). Note that while there are only two state ``codes'' (0, 1), there are in fact three states: never having originated \(0_{never}\), present 1, extinct \(0_{extinct}\) \citep{Allen2011}. The two modeled transition probabilities are origination \(\pi\) and survival \(\phi\).}
   \label{tab:transition}
 \end{table}
 
 
 \subsubsection*{Basic model}
-I will begin defining the model used in this study by focusing on the basic machinery of the hidden Markov process at the model's core. This basic model is similar to the Jolly-Seber capture-mark-recapture model CITATION.
-The basic model has three characteristic probabilities: probability \(p\) of observing a species given that it is present, probability \(\pi\) of a species surviving from one time to another, and probability \(\phi\) of a species first appearing \citep{Royle2008} (Table \ref{tab:basic}). In this formulation, the probability of a species becoming extinct is \(1 - \pi\). The inclusion of species and temporal information means that all three of these probabilities are defined for every species at every time point (Table \ref{tab:basic}; how this is accomplished is described below. Importantly, only origination can occur during the first time step as nothing is present in order to survive.
+I will begin defining the model used in this study by focusing on the basic machinery of the hidden Markov process at the model's core. This basic model is similar to the Jolly-Seber capture-mark-recapture model CITATION which has three characteristic probabilities: probability \(p\) of observing a species given that it is present, probability \(\pi\) of a species surviving from one time to another, and probability \(\phi\) of a species first appearing \citep{Royle2008} (Table \ref{tab:basic}). In this formulation, the probability of a species becoming extinct is \(1 - \pi\). The inclusion of species and temporal information means that all three of these probabilities are defined for every species at every time point (Table \ref{tab:basic}); how this is accomplished is described below. Importantly, only origination can occur during the first time step as nothing is already present to survive.
 
 \begin{table}
   \centering
-  \caption{Parameters associated with the observation process part of the hidden Markov model.}
+  \caption{Parameters associated with the hidden Markov Model at core of this model (Eq. \ref{eq:basic}). \(N\) is the number of species tracked in this study, and \(T\) is the number of time units (NALMAs) covered by this study.}
   \begin{tabular}{c l l}
     Parameter & dimensions & explanation \\
     \hline
@@ -152,7 +151,8 @@ The basic model has three characteristic probabilities: probability \(p\) of obs
     \(z\) & \(N \times T\) & ``true'' species presence/absence \\
     \(p\) & \(N \times T\) & probability of observing a species at time \(t\) if it is present \\
     \(\phi\) & \(N \times T\) & probability of species originating from time \(t\) to \(t + 1\) if it is not present \\
-    \(\pi\) & \(N \times T - 1\) & probability of species surviving at time \(t\), given that it is already originated \\
+    \(\pi\) & \(N \times (T - 1)\) & probability of species surviving at time \(t\), given that it is already originated \\
+    \hline
   \end{tabular}
   \label{tab:basic}
 \end{table}
@@ -165,21 +165,21 @@ The basic model has three characteristic probabilities: probability \(p\) of obs
   \end{aligned}
   \label{eq:basic}
 \end{equation}
-The parameters associated with Equation \ref{eq:basic} are described in Table \ref{tab:basic}; this formulation is identical to that described in where individual covariates are included for all parameters \citep{Royle2008}. The product term that appears when calculating values of \(z\) not at \(t = 1\) ensures that once a species goes extinct it does not re-originate. The basic model described here (Eq. \ref{eq:basic}) does not include the additional, necessary prior information. 
+The parameters associated with Equation \ref{eq:basic} are described in Table \ref{tab:basic}; this formulation is identical to that described in \citet{Royle2008}. The product term that appears when calculating values of \(z\) not at \(t = 1\) ensures that once a species goes extinct it does not re-originate. The basic model described here (Eq. \ref{eq:basic}) does not include the additional, necessary prior information which is described below.
 
 
 \subsubsection*{Expanding on the basics}
-Expanding on the basic model involves modeling the observation, origination and survival as independent multi-level logistic regressions. Origination and surivival probabilities share the same covariates and model structure, but observation probability is modeled as a function of a smaller selection of covariates.
+Expanding on the basic model involves modeling the observation, origination and survival probability as independent multi-level logistic regressions. Origination and surivival probabilities share the same covariates and model structure, but observation probability is modeled as a function of a smaller selection of covariates.
 
-The probability of observing a species given that it is present (logit \(p\)) is modeled as a logistic regression with a time-varying intercept with an additional zero-centered varying effect for species' functional group, respectively. The effect of species mass was also included through a slope term.
+The probability of observing a species given that it is present \(p\) is modeled as a logistic regression with a time-varying intercept with an additional zero-centered varying effect for species' functional group, respectively. The effect of species mass was also included through a slope term \(\beta^{p}\).
 
-The log-odds of a species orginating (logit \(pi\)) or surviving (logit \(\phi\)) are modeled independently but take the same form: a regression with an intercept that varies by both time and functional group, an additional taxonomic order varying-intercept term, and the slope term for species mass. Importantly, the time and functional group varying-intercept is itself modeled such that each the intercept for each functional group is a time series with it's own group-level covariates (described below). 
+The log-odds of a species orginating (logit \(\pi\)) or surviving (logit \(\phi\)) are modeled independently but take the same form: a regression with an intercept that varies by both time and functional group, an additional taxonomic order varying-intercept term, and the slope term for species mass. Importantly, the time and functional group varying-intercept is itself modeled such that the intercept for each functional group is a time series with group-level covariates (described below). 
 
 The expanded model incorporating these regression models is written as
 \begin{equation}
   \begin{aligned}
     y_{i, t} &\sim \text{Bernoulli}(p_{i, t} z_{i, t}) \\
-    p_{i, t} &= \text{logit}^{-1}(u_{t} + f_{j[i]}) \\
+    p_{i, t} &= \text{logit}^{-1}(u_{t} + e_{j[i]} + \beta^{p} m_{i}) \\
     z_{i, 1} &\sim \text{Bernoulli}(\phi_{i, 1}) \\
     z_{i, t} &\sim \text{Bernoulli}\left(z_{i, t - 1} \pi_{i,t} + \sum_{x = 1}^{t}(1 - z_{i, x}) \phi_{i,t}\right) \\
     \phi_{i, t} &= \text{logit}^{-1}(f^{\phi}_{j[i], t} + o^{\phi}_{k[i]} + \beta^{\phi} m_{i}). \\
@@ -196,7 +196,7 @@ How the priors for the varying-effects and coefficients in this expanded model a
     Parameter & dimensions & explanation \\
     \hline
     \(u\) & \(T\) & time-varying intercept \\
-    \(f\) & \(J\) & effect of functional group on observation \\
+    \(e\) & \(J\) & effect of functional group on observation \\
     \(f^{\phi}\) & \(J \times T - 1\) & intercept of log-odds \(\phi\), varies by time and functional group\\
     \(f^{\pi}\) & \(J \times T\) & intercept of log-odds \(\pi\), varies by time and functional group \\
     \(o^{\phi}\) & \(K\) & effect of species' order on log-odds of \(\phi\) \\
@@ -209,9 +209,9 @@ How the priors for the varying-effects and coefficients in this expanded model a
 
 
 \subsubsection*{Complete model}
-The expanded model (Eq. \ref{eq:expanded}) is still incomplete as it is missing the group-level covariates such as global temperature, and it is missing all of the necessary priors. 
+The expanded model (Eq. \ref{eq:expanded}) is still incomplete as it is missing the group-level covariates of interest such as global temperature, and it is missing all of the necessary priors. 
 
-Here I describe how the effects of mammal functional group on origination and survival are modeled. \(f^{\phi}\) and \(f^{\pi}\) are modeled as the responses from a multivariate normal distribution, the means of which are modeled as independent regressions. The time-series structure of these regressions is represented as a random-walk prior for the time-varying intercept of these group-level regression. The effects of group-level covariates are included for each functional group as a vector regression coefficients. The expansion to include this group-level regression is decribed in Equation \ref{eq:group}. The parameters for these group-level regressions are described in Table \ref{tab:group}. 
+Here I describe how the effects of mammal functional group on origination and survival are modeled. \(f^{\phi}\) and \(f^{\pi}\) are modeled as the responses from a multivariate normal distribution, where each functional group's time series is modeled as a regression. The time-series structure of these regressions is represented as a random-walk prior for the varying intercept of the group-level regressions. The effects of these group-level covariates on origination and survival are included for each functional group as a vector regression coefficients. The expansion to include this group-level regression is decribed in Equation \ref{eq:group}, the parameters of which are described in Table \ref{tab:group}. 
 
 \begin{equation}
   \begin{aligned}
@@ -221,7 +221,7 @@ Here I describe how the effects of mammal functional group on origination and su
     \mu^{\pi}_{j, t} &= \alpha^{\pi}_{j, t} + U * \gamma^{\pi}_{j} \\
     \alpha^{\phi}_{j, t} &\sim 
       \begin{cases}
-        \mathcal{N}(0, \sigma^{\phi}_{j}) & \text{if } t = 1 \\
+        \mathcal{N}(0, 1) & \text{if } t = 1 \\
         \mathcal{N}(\alpha^{\phi}_{j, t - 1}, \sigma^{\phi}_{j}) & \text{if } t > 1 \\
       \end{cases} \\
     \alpha^{\pi}_{j, t} &\sim 
@@ -235,32 +235,38 @@ Here I describe how the effects of mammal functional group on origination and su
 
 \begin{table}
   \centering
-  \caption{Parameters for the group-level regressions.}
+  \caption{Parameters for the group-level regressions. \(J\) is the number of functional groups, and \(D\) is the number of group-level covariates. }
   \begin{tabular}{c l l}
     Parameter & dimensions & explanation \\
-    \(\mu^{\phi}\) & \(J \times T\) & group-level time-series of the mean log-odds of \(\phi\) for each functional group \\
-    \(\mu^{\pi}\) & \(J \times T\) & group-level time-series of the mean log-odds of \(\pi\) for each functional group \\ 
-    \(\Sigma^{\phi}\) & \(J \times J\) & covariance matrix of group-level time-series of the mean log-odds of \(\phi\) for each functional group \\
-    \(\Sigma^{\pi}\) & \(J \times J\) & covariance matrix of group-level time-series of the mean log-odds of \(\phi\) for each functional group \\
+    \(\mu^{\phi}\) & \(J \times T\) & time-series of the mean log-odds of \(\phi\) for each functional group \\
+    \(\mu^{\pi}\) & \(J \times T\) & time-series of the mean log-odds of \(\pi\) for each functional group \\ 
+    \(\Sigma^{\phi}\) & \(J \times J\) & covariance matrix between functional groups for \(\phi\) \\
+    \(\Sigma^{\pi}\) & \(J \times J\) & covariance matrix between functional groups for \(\phi\) \\
     \(\alpha^{\phi}\) & \(J \times T\) & time-varying intercept of \(\mu^{\phi}\) \\
     \(\alpha^{\pi}\) & \(J \times T\) & time-varying intercept of \(\mu^{\pi}\) \\
     \(\sigma^{\phi}\) & J & scale of random-walk prior for \(\alpha^{\phi}\) \\
     \(\sigma^{\pi}\) & J & scale of random-walk prior for \(\alpha^{\pi}\) \\
     \(\gamma^{\phi}\) & D & group-level regression coefficients for \(\mu^{\phi}\) \\
     \(\gamma^{\pi}\) & D & group-level regression coefficients for \(\mu^{\pi}\) \\
-    \(U\) & \(U \times J\) & group-level covariates \\
     \hline
   \end{tabular}
   \label{tab:group}
 \end{table}
 
-In hierarchical models like the one developed here (Eq. \ref{eq:expanded}, \ref{eq:group}) there is very little difference between the likelihood and prior as data can enter the model through many different parameters CITATION. For example, in Equation \ref{eq:expanded} the model of \(z\) can be considered a prior and the parameterizations in Equation \ref{eq:group} are priors on many of the parameters which predict \(\phi\) and \(\pi\). The remaining priors, however, are not based on parameter expansion but are prior estimates for the remaining unmodeled parameters. These prior choices are expressed in Equation \ref{eq:prior} and are explained below.
+In hierarchical models like the one descibed here (Eq. \ref{eq:expanded}, \ref{eq:group}) it can be hard to distinguish between the likelihood and prior as data can enter the model through many different parameters CITATION. For example, in Equation \ref{eq:expanded} the model of \(z\) can be considered a prior and statements in Equation \ref{eq:group} can be considered priors for the parameters which predict \(\phi\) and \(\pi\). The remaining priors necessary to this model, however, are not based on parameter expansion but are prior estimates for the remaining unmodeled parameters and are sampling statements where no new data enters the model. These prior choices are expressed in Equation \ref{eq:prior} and are explained below.
 
-For the regression coefficients, such as \(\beta^{\phi}\) and \(\gamma^{\phi}\), these priors are weakly informative and concentrate most of their probability density between -2 and 2. Similarly, for the scale parameters, such as \(\tau^{\phi}\) and \(\sigma^{\phi}\), are given weakly informative priors which concentrate of their probability density between 0 and -2. The covariance matrices such as \(\Sigma^{\phi}\) decomposed into a vector of scale terms (e.g. \(\tau^{\phi}\)) and correlation matrices (e.g. \(\Omega^{\phi}\) which were then given weakly informative priors. This approach and choice of LKJ priors for the correlation matrices follows the Stan User Manual CITATION.
+For the regression coefficients, such as \(\beta^{\phi}\) and \(\gamma^{\phi}\), the chosen priors are considered weakly informative as they concentrate most of the probability density between -2 and 2. Similarly, the scale parameters, such as \(\tau^{\phi}\) and \(\sigma^{\phi}\), are also given weakly informative half-Normal priors which concentrate most of the probability density between 0 and -2. The covariance matrices, such as \(\Sigma^{\phi}\), are decomposed into a vector of scale terms (e.g. \(\tau^{\phi}\)) and correlation matrices (e.g. \(\Omega^{\phi}\)) which were then given weakly informative priors. This approach and choice of LKJ priors for the correlation matrices follows the Stan User Manual CITATION. For parameter vectors which are presented with only a single prior (e.g. \(\beta^{\phi}\)), that prior statement is for each of the elements of that vector.
 
 
 \begin{equation}
   \begin{aligned}
+    e &\sim \mathcal{N}(0, \sigma^{e}) \\
+    \sigma^{e} &\sim \mathcal{N}^{+}(1) \\
+    \beta^{p} &\sim \mathcal{N}(0, 1) \\
+    o^{\phi} &\sim \mathcal{N}(0, \upsilon^{\phi}) \\
+    o^{\pi} &\sim \mathcal{N}(0, \upsilon^{\pi}) \\
+    \upsilon^{\phi} &\sim \mathcal{N}^{+}(1) \\
+    \upsilon^{\pi} &\sim \mathcal{N}^{+}(1) \\
     \beta^{\phi} &\sim \mathcal{N}(0, 1) \\
     \beta^{\pi} &\sim \mathcal{N}(0, 1) \\
     \Sigma^{\phi} &= \text{diag}(\tau^{\phi}) \Omega^{\phi} \text{diag}(\tau^{\phi}) \\
@@ -277,14 +283,14 @@ For the regression coefficients, such as \(\beta^{\phi}\) and \(\gamma^{\phi}\),
   \label{eq:prior}
 \end{equation}
 
-The total model is the sampling statement is expressed as the combination of equations \ref{eq:expanded}, \ref{eq:group}, and \ref{eq:prior}. These statements form a complete generative model from which posterior inference of parameter values is possible.
+The model used in this study is the complete sampling statement expressed through the combination of equations \ref{eq:expanded}, \ref{eq:group}, and \ref{eq:prior}. These statements taken together form a complete generative model from which posterior inference of parameter values is possible.
 
 
 
 \subsection*{Posterior inference and model adequacy}
 A computer program that implements joint posterior inference the model described above (Eqs. \ref{eq:expanded}, \ref{eq:group}, and \ref{eq:prior}) was written in the probabilistic programming language Stan \citep{StanDevelopmentTeam2016}. All methods for posterior inference implemented in Stan are derivative-based; this causes complications for actually implementing the above models, because integers do not have derivatives. In order to infer the values of the matrix of latent discrete parameters \(z\) (Tables \ref{tab:basic}) the log posterior probabilities of all possible states of the unknown values of \(z\) were calculated and summed (i.e. marginalized) \citep{StanDevelopmentTeam2016}. 
 
-Species durations at minimum range through from a species first appearance to their last appearance in the fossil record, but the incompleteness of all observations means that the actual times of origination and extinction are unknown. The marginalization approach used here means that the probabilities of all possible histories for a species are calculated, from the end members of the species having existed for the entire study interval and the species having only existed between the directly observed first and last appearances to all possible intermediaries (Fig \ref{fig:margin_concept}) \citep{StanDevelopmentTeam2016}. This process is identical, language-wise, to assuming range-through and then estimating the possibility of all possible range extension due to incomplete sampling. % this probably needs a figure to explain.
+Species durations at minimum range through from a species first appearance to their last appearance in the fossil record, but the incompleteness of all observations means that the actual times of origination and extinction are unknown. The marginalization approach used here means that the (log) probabilities of all possible histories for a species are calculated, from the end members of the species having existed for the entire study interval and the species having only existed between the directly observed first and last appearances to all possible intermediaries (Fig \ref{fig:margin_concept}) \citep{StanDevelopmentTeam2016}. Marginalization is identical, language-wise, to assuming range-through and then estimating the (log) probability of all possible range extension due to incomplete sampling. % this probably needs a figure to explain.
 
 \begin{figure}[ht]
   \centering
@@ -303,7 +309,7 @@ Species durations at minimum range through from a species first appearance to th
 %     see code for implementation? 
 %       it is kind of an annoying amount of math to write up
 
-The combined size of the dataset and large number of parameters (Eqs. \ref{eq:expanded}, \ref{eq:group}, and \ref{eq:prior}), specifically the total number of latent parameters that are the matrix \(z\), means that stochastic approximate posterior inference is computationally slow even using NUTS based HMC as implemented in Stan \citep{StanDevelopmentTeam2016}. Instead, an approximate Bayesian approach was used: variational inference. A recently developed automatic variational inference algorithm called ``automatic differention variational inference'' (ADVI) is implemented in Stan and was used here \citep{Kucukelbir2015,StanDevelopmentTeam2016}. ADVI assumes that the posterior is Gaussian but still yields a true Bayesian posterior; this assumption is similar to quadratic approximation of the likelihood function commonly used in maximum likelihood based inference \citep{McElreath2016}. The principal limitation of assuming the joint posterior is Gaussian is that the true topology of the log-posterior isn't estimated; this is a particular burden for scale parameters which are bounded to be positive (e.g. standard deviation).
+The combined size of the dataset and large number of parameters (Eqs. \ref{eq:expanded}, \ref{eq:group}, and \ref{eq:prior}), in specific the total number of latent parameters that are the matrix \(z\), means that MCMC based posterior inference is computationally slow. Instead, an approximate Bayesian approach was used: variational inference. A recently developed automatic variational inference algorithm called ``automatic differention variational inference'' (ADVI) is implemented in Stan and is used here \citep{Kucukelbir2015,StanDevelopmentTeam2016}. ADVI assumes that the posterior is Gaussian but still yields a true Bayesian posterior; this assumption is similar to quadratic approximation of the likelihood function commonly used in maximum likelihood based inference \citep{McElreath2016}. The principal limitation of assuming the joint posterior is Gaussian is that the true topology of the log-posterior isn't estimated; this is a particular burden for scale parameters which are bounded to be positive (e.g. standard deviation).
 
 Of additional concern for posterior inference is the partial identifiability of observation parameters \(p_{t = 1}\) and \(p_{t = T}\) \citep{Royle2008}. This issue means that the estimates of sampling probabilities at the ``edges'' of the time series cannot fully be estimated because there are no known ``gaps'' in species occurrence histories that are guaranteed to be filled. Instead, the values of the first and final columns of the ``true'' presence-absence matrix \(z\) for thos observations that do not already have presences in the observed presence-absence matrix \(y\) cannot be estimated \citep{Royle2008}. The hierarchical modeling approach used here helps mitigate this problem by pulling the values of \(p_{t = 1}\) and \(p_{t = T}\) towards the overall mean of \(p\) \citep{Gelman2013d}, and in fact this approach might be more analytically sound than the more ad-hoc approaches that are occasionally used to overcome this hurdle \citep{Royle2008}. Additionally, because \(p_{t = 1}\) and \(p_{t = T}\) are only partially identifiable, estimates of occurrence \(\theta\) and origination \(\phi\) at \(t = 1\) and estimates of \(\theta\), \(\phi\) and survival \(\pi\) at \(t = T\) may suffer from similar edge effects. Again, the hierarchical modeling approach used here may help correct for this reality by drawing these estimates towards the overall means of those parameters.
 
@@ -320,25 +326,26 @@ The posterior distribution of \(z\) gives the estimate of standing diversity \(N
   N^{stand}_{t} = \sum_{i = 1}^{M} z_{i, t}.
   \label{eq:stand_est}
 \end{equation}
-Given estimates of \(N^{stand}\) for all time points, the estimated number of originations \(O_{t}\) is estimated as 
-\begin{equation}
-  O_t = \sum_{i = 1}^{M} z_{i, t} = 1 | z_{i, t - 1} = 0
-  \label{eq:orig_est}
-\end{equation}
-and number of extinctions \(E_{t}\) estimated as
-\begin{equation}
-  E_{t} = \sum_{i = 1}^{M} z_{i, t} = 0 | z_{i, t - 1} = 1.
-  \label{eq:death_est}
-\end{equation}
-Per-capita growth \(D^{rate}\), origination \(O^{rate}\) and extinction \(E^{rate}\) rates are then calculated as
-\begin{equation}
-  \begin{aligned}
-    O^{rate}_{t} &= \frac{O_t}{N^{stand}_{t - 1}} \\
-    E^{rate}_{t} &= \frac{E_t}{N^{stand}_{t - 1}} \\
-    D^{rate}_{t} &= O^{rate}_{t} - E^{rate}_{t}. \\
-  \end{aligned}
-  \label{eq:per_capita_est}
-\end{equation}
+Total regional standing diversity can also be partitioned into the standing diversity of each of the functional groups.
+%Given estimates of \(N^{stand}\) for all time points, the estimated number of originations \(O_{t}\) is estimated as 
+%\begin{equation}
+%  O_t = \sum_{i = 1}^{M} z_{i, t} = 1 | z_{i, t - 1} = 0
+%  \label{eq:orig_est}
+%\end{equation}
+%and number of extinctions \(E_{t}\) estimated as
+%\begin{equation}
+%  E_{t} = \sum_{i = 1}^{M} z_{i, t} = 0 | z_{i, t - 1} = 1.
+%  \label{eq:death_est}
+%\end{equation}
+%Per-capita growth \(D^{rate}\), origination \(O^{rate}\) and extinction \(E^{rate}\) rates are then calculated as
+%\begin{equation}
+%  \begin{aligned}
+%    O^{rate}_{t} &= \frac{O_t}{N^{stand}_{t - 1}} \\
+%    E^{rate}_{t} &= \frac{E_t}{N^{stand}_{t - 1}} \\
+%    D^{rate}_{t} &= O^{rate}_{t} - E^{rate}_{t}. \\
+%  \end{aligned}
+%  \label{eq:per_capita_est}
+%\end{equation}
 
 % silly transforms using the poisson distribution aren't necessary if you just do the posterior simulations.
 % discuss this in the discussion and not this section?
