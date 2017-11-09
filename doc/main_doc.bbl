@@ -1,4 +1,4 @@
-\begin{thebibliography}{96}
+\begin{thebibliography}{110}
 \providecommand{\natexlab}[1]{#1}
 
 \bibitem[{Allen(2011)}]{Allen2011}
@@ -20,6 +20,13 @@ Alroy, J. 1996.
 \newblock Pages 302--323 \emph{in} R.~K. Butlin, J.~R. Bridle, and D.~Schluter,
   eds. Speciation and patterns of diversity. Cambridge University Press,
   Cambridge.
+
+\bibitem[{Alroy(2010)}]{Alroy2010c}
+---{}---{}---. 2010.
+\newblock {Fair sampling of taxonomic richness and unbiased estimation of
+  origination and extinction rates}.
+\newblock Pages 55--80 \emph{in} J.~Alroy and G.~Hunt, eds. Quantitative
+  Methods in Paleobiology. The Paleontological Society.
 
 \bibitem[{Alroy et~al.(2000)Alroy, Koch, and Zachos}]{Alroy2000g}
 Alroy, J., P.~L. Koch, and J.~C. Zachos. 2000.
@@ -142,6 +149,13 @@ Cramer, B.~S., K.~Miller, P.~Barrett, and J.~Wright. 2011.
   geochemistry ($\delta$18O and Mg/Ca) with sea level history}.
 \newblock Journal of Geophysical Research: Oceans 116:1--23.
 
+\bibitem[{Crampton et~al.(2016)Crampton, Cooper, Sadler, and
+  Foote}]{Crampton2016a}
+Crampton, J.~S., R.~A. Cooper, P.~M. Sadler, and M.~Foote. 2016.
+\newblock {Greenhouse-icehouse transition in the Late Ordovician marks a step
+  change in extinction regime in the marine plankton}.
+\newblock Proceedings of the National Academy of Sciences 113:1498--1503.
+
 \bibitem[{Damuth and Janis(2011)}]{Damuth2011}
 Damuth, J., and C.~M. Janis. 2011.
 \newblock {On the relationship between hypsodonty and feeding ecology in
@@ -174,6 +188,11 @@ Ezard, T. H.~G., A.~Purvis, and H.~Morlon. 2016.
   and reveal the mode of macroevolutionary competition}.
 \newblock Ecology Letters 19:899--906.
 
+\bibitem[{Felsenstein(1985)}]{Felsenstein1985b}
+Felsenstein, J. 1985.
+\newblock {Phylogenies and the comparative method}.
+\newblock The American Naturalist 125:1--15.
+
 \bibitem[{Figueirido et~al.(2012)Figueirido, Janis, P{\'{e}}rez-Claros, {De
   Renzi}, and Palmqvist}]{Figueirido2012}
 Figueirido, B., C.~M. Janis, J.~A. P{\'{e}}rez-Claros, M.~{De Renzi}, and
@@ -181,11 +200,36 @@ Figueirido, B., C.~M. Janis, J.~A. P{\'{e}}rez-Claros, M.~{De Renzi}, and
 \newblock {Cenozoic climate change influences mammalian evolutionary dynamics.}
 \newblock Proceedings of the National Academy of Sciences 109:722--727.
 
+\bibitem[{Foote(2000{\natexlab{\emph{a}}})}]{Foote2000}
+Foote, M. 2000{\natexlab{\emph{a}}}.
+\newblock {Origination and extinction components of taxonomic diversity:
+  general problems}.
+\newblock Paleobiology 26:74--102.
+
+\bibitem[{Foote(2000{\natexlab{\emph{b}}})}]{Foote2000a}
+---{}---{}---. 2000{\natexlab{\emph{b}}}.
+\newblock {Origination and extinction components of taxonomic diversity:
+  Paleozoic and post-Paleozoic dynamics}.
+\newblock Paleobiology 26:578--605.
+
 \bibitem[{Foote(2001)}]{Foote2001}
-Foote, M. 2001.
+---{}---{}---. 2001.
 \newblock {Inferring temporal patterns of preservation, origination, and
   extinction from taxonomic survivorship analysis}.
 \newblock Paleobiology 27:602--630.
+
+\bibitem[{Foote(2006)}]{Foote2006}
+---{}---{}---. 2006.
+\newblock {Substrate affinity and diversity dynamics of Paleozoic marine
+  animals}.
+\newblock Paleobiology 32:345--366.
+
+\bibitem[{Foote(2010)}]{Foote2010}
+---{}---{}---. 2010.
+\newblock {The geologic history of biodiversity}.
+\newblock Pages 479--510 \emph{in} M.~A. Bell, D.~J. Futuyma, W.~F. Eanes, and
+  J.~S. Levinton, eds. Evolution since Darwin: the first 150 years. Sinauer
+  Associates, Sunderland, MA.
 
 \bibitem[{Foote and Sepkoski(1999)}]{Foote1999a}
 Foote, M., and J.~J. Sepkoski. 1999.
@@ -208,6 +252,13 @@ Fraser, D., R.~Gorelick, and N.~Rybczynski. 2015.
 Freudenthal, M., and E.~Mart{\'{i}}n-Su{\'{a}}rez. 2013.
 \newblock {Estimating body mass of fossil rodents}.
 \newblock Scripta Geologica 145:1--130.
+
+\bibitem[{Fritz et~al.(2013)Fritz, Schnitzler, Eronen, Hof,
+  B{\"{o}}hning-Gaese, and Graham}]{Fritz2013a}
+Fritz, S.~A., J.~Schnitzler, J.~T. Eronen, C.~Hof, K.~B{\"{o}}hning-Gaese, and
+  C.~H. Graham. 2013.
+\newblock {Diversity in time and space: wanted dead and alive.}
+\newblock Trends in Ecology {\&} Evolution 28:509--16.
 
 \bibitem[{Gelman(2008)}]{Gelman2008}
 Gelman, A. 2008.
@@ -351,6 +402,20 @@ Loeuille, N., and M.~a. Leibold. 2008.
   sorting and monopolization in structuring communities.}
 \newblock The American naturalist 171:788--99.
 
+\bibitem[{Losos(2010)}]{Losos2010}
+Losos, J.~B. 2010.
+\newblock {Adaptive radiation, ecological opportunity, and evolutionary
+  determinism}.
+\newblock The American naturalist 175:623--39.
+
+\bibitem[{Losos and Mahler(2010)}]{Losos2010a}
+Losos, J.~B., and D.~L. Mahler. 2010.
+\newblock {Adaptive radiation: the interaction of ecological opportunity,
+  adaptation, and speciation}.
+\newblock Chap.~15, pages 381--420 \emph{in} M.~A. Bell, D.~J. Futuyma, W.~F.
+  Eanes, and J.~S. Levinton, eds. Evolution since Darwin: the first 150 years.
+  Sinauer Associates, Sunderland, MA.
+
 \bibitem[{Luo et~al.(2001)Luo, Crompton, and Sun}]{Luo2001}
 Luo, Z.-X., A.~W. Crompton, and A.-L. Sun. 2001.
 \newblock {A New Mammaliaform from the Early Jurassic and Evolution of
@@ -419,6 +484,13 @@ Polly, P.~D., A.~M. Lawing, J.~T. Eronen, and J.~Schnitzler. 2015.
   environments, and clade dynamics in deep time}.
 \newblock Biological Journal of the Linnean Society pages n/a--n/a.
 
+\bibitem[{Price and Schmitz(2016)}]{Price2016b}
+Price, S.~A., and L.~Schmitz. 2016.
+\newblock {A promising future for integrative biodiversity research: an
+  increased role of scale-dependency and functional biology}.
+\newblock Philosophical Transactions of the Royal Society B: Biological
+  Sciences 371:20150228.
+
 \bibitem[{Quental and Marshall(2013)}]{Quental2013}
 Quental, T.~B., and C.~R. Marshall. 2013.
 \newblock {How the Red Queen Drives Terrestrial Mammals to Extinction}.
@@ -454,6 +526,12 @@ Royle, J.~A., J.~D. Nichols, and M.~K{\'{e}}ry. 2005.
   imperfect}.
 \newblock Oikos 110:353--359.
 
+\bibitem[{Scheffer and van Nes(2006)}]{Scheffer2006a}
+Scheffer, M., and E.~H. van Nes. 2006.
+\newblock {Self-organized similarity, the evolutionary emergence of groups of
+  similar species}.
+\newblock Proceedings of the National Academy of Sciences 103:6230--6235.
+
 \bibitem[{Shipley et~al.(2006)Shipley, Vile, and Garnier}]{Shipley2006}
 Shipley, B., D.~Vile, and E.~Garnier. 2006.
 \newblock {From plant traits to plant communities: a statistical mechanistic
@@ -467,6 +545,13 @@ Silvestro, D., A.~Antonelli, N.~Salamin, and T.~B. Quental. 2015.
   American canids.}
 \newblock Proceedings of the National Academy of Sciences of the United States
   of America 112:8684--9.
+
+\bibitem[{Silvestro et~al.(2014)Silvestro, Schnitzler, Liow, Antonelli, and
+  Salamin}]{Silvestro2014a}
+Silvestro, D., J.~Schnitzler, L.~H. Liow, A.~Antonelli, and N.~Salamin. 2014.
+\newblock {Bayesian estimation of speciation and extinction from incomplete
+  fossil occurrence data.}
+\newblock Systematic biology 63:349--67.
 
 \bibitem[{Simberloff and Dayan(1991)}]{Simberloff1991a}
 Simberloff, D., and T.~Dayan. 1991.
@@ -577,6 +662,15 @@ Weber, M.~G., C.~E. Wagner, R.~J. Best, L.~J. Harmon, and B.~Matthews. 2017.
 Wilson, J.~B. 1999.
 \newblock {Guilds, functional types and ecological groups}.
 \newblock Oikos 86:507--522.
+
+\bibitem[{Yoder et~al.(2010)Yoder, Clancey, {Des Riches}, Eastman, Gentry,
+  Godsoe, Hagey, Jochimsen, Oswald, Robertson, Sarver, Schenk, Spear, and
+  Harmon}]{Yoder2010}
+Yoder, J.~B., E.~Clancey, S.~{Des Riches}, J.~M. Eastman, L.~Gentry, W.~Godsoe,
+  T.~J. Hagey, D.~Jochimsen, B.~P. Oswald, J.~Robertson, B.~A.~J. Sarver, J.~J.
+  Schenk, S.~F. Spear, and L.~J. Harmon. 2010.
+\newblock {Ecological opportunity and the origin of adaptive radiations}.
+\newblock Journal of Evolutionary Biology 23:1581--1596.
 
 \bibitem[{Zachos et~al.(2008)Zachos, Dickens, and Zeebe}]{Zachos2008}
 Zachos, J.~C., G.~R. Dickens, and R.~E. Zeebe. 2008.
