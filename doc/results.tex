@@ -25,7 +25,7 @@ The results of the analyses described above take one of two forms: direct inspec
 The model used here in this study appears to have approximately adequate fit to the data based on the results of the posterior predictive check (Fig. \ref{fig:ppc}). Simulated datasets as estimated from the models' posterior appears similar in terms of average number of occurrences per species to the observed number of occurrences in the empirical mammal dataset.
 \begin{figure}[ht]
   \includegraphics[width=\textwidth,height=0.3\textheight,keepaspectratio=true]{figure/pred_occ_bd}
-  \caption[Posterior predictive check of average occurrence]{Comparison of the average observed number of occurrences per species (blue line) to the average number of occurrences from 100 posterior predictive datasets using the posterior estimates from the pure-presence and birth-death models.}
+  \caption[Posterior predictive check of average occurrence]{Comparison of the average observed number of occurrences per species (blue line) to the average number of occurrences from 100 posterior predictive datasets using the posterior estimates from the model used in this study. Adequate fit is indicated by the observed value of the test statistic being in the middle of the distribution of those calculated from the simulations.}
   \label{fig:ppc}
 \end{figure}
 
@@ -35,7 +35,7 @@ The model used here in this study appears to have approximately adequate fit to 
 Log-odds of observing a species given that it is present varies greatly with time (Fig. \ref{fig:time_observe}) with lowest log-odds of observation being during the Gerigian and Harrisonian land-mammal ages. It is important to note, however, that all land-mammal ages with log-odds of observation greater than 2 have very high probabilities of observation, which means that while there may be large differences in log-odds of observation between land-mammal ages this may not translate to substantial difference in the probability of observation.
 \begin{figure}[ht]
   \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/time_observation}
-  \caption{}
+  \caption{Ridgeline density plots of the estimates for the log-odds of observation from the time-varying intercept term. Each of the named time units are North American land-mammal ages. The oldest land-mammal age is at the bottom of the stack and the youngest is at the top.}
   \label{fig:time_observe}
 \end{figure}
 
@@ -43,7 +43,7 @@ Log-odds of observing a species given that it is present varies greatly with tim
 There is little variance in the effect of functional group on the log-odds of observing a species that is present (Fig. \ref{fig:fg_observe}). The only functional group with substantially less than expected log-odds of observation is scansorial insectivores, indicating that the fossil record of this group is the least complete of all the functional groups studied. Few functional groups have marginally better than expected log-odds of observation, the other insectivorous functional groups have marginally greater than average log-odds of observation; this is also the case for plantigrade omnivores. These results indicate that the observation histories of these functional groups are expected to be complete than most other functional groups. However, it is important to note that for many functional groups, their estimated log-odds of observation are poorly constrained with great uncertainty indicating little structure in how log-odds of observation varies between functional groups (Fig. \ref{fig:fg_observe}).
 \begin{figure}[ht]
   \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/ecotype_observation}
-  \caption{}
+  \caption{Ridgeline density plots of the estimates of the effect of functional group on log-odds of observation. Each of the rows correspond to a different functional group as indicated by the dietary and locomotor category combination.}
   \label{fig:fg_observe}
 \end{figure}
 
@@ -51,7 +51,7 @@ Species mass is found to have a positive effect on probability of observing a sp
 %   mass
 \begin{figure}[ht]
   \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/mass_on_pres_bd}
-  \caption[Estimates of the effect of mass on observation probability]{Estimates of the effect of species mass on probability of sampling a present species (\(p\)). Mass has been log-transformed, centered, and rescaled; this means that a mass of 0 corresponds to the mean of log-mass of all observed species and that mass is in standard deviation units. Estimates are from both the pure-presence and birth-death models.}
+  \caption[Estimates of the effect of mass on observation probability]{Estimates of the effect of species mass on probability of sampling a present species (\(p\)). Mass has been log-transformed, centered, and rescaled; this means that a mass of 0 corresponds to the mean of log-mass of all observed species and that mass is in standard deviation units. Probability of observation is presented for each of the NALMAs where the differences in mean probability of observation are due to variation between the time units (Fig. \ref{fig:time_observe}).}
   \label{fig:mass_observe}
 \end{figure}
 
