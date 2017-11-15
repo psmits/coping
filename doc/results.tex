@@ -91,13 +91,15 @@ Species mass is estimated to have a negative relationship with origination proba
 
 %   group-level
 %     temperature and plant phase
+
 \begin{figure}[ht]
   \centering
   \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/group_on_origin_bd}
-  \caption[Effects of group-level covariates on log-odds of ecotype origination as estimated from the birth-death model]{Estimated effects of the group-level covariates describing environmental context on log-odds of species origination. These estimates are from the birth-death model. What is plotted is a violin of the distribution of 1000 samples from the approximate posterior. The effect of plant phase graphed here is calculated as Phase 1\( = \gamma_{phase\ 1}\), Phase 2\( = \gamma_{phase\ 1} + \gamma_{phase\ 2}\), and so on.} 
+  \caption[Effects of group-level covariates on log-odds of ecotype origination as estimated from the birth-death model]{Estimated effects of the group-level covariates describing environmental context on log-odds of species origination. These estimates are from the birth-death model. What is plotted is a violin of the distribution of 1000 samples from the approximate posterior.} 
   \label{fig:group_origin_bd}
 \end{figure}
 
+% make these tables appendix
 \begin{table}[ht]
   \centering
   \caption[Posterior probablity estimates of differences in origination by plant phase]{Posterior probability of the differences in the log-odds of an ecotype originating based on plant phase.} 
@@ -207,15 +209,20 @@ Species mass is estimated to have no relationship or at best a weakly positive r
 
 %   group-level
 %     temperature and plant phase
+In contrast to the origination probability, there is little evidence that the group-level covariates have large effects on functional group survival probabilities (Fig. \ref{fig:group_surv_bd}). In fact, only the plant phases are associated with differences in survival probability and only for a relatively small number of functional groups. These results combined with those from the individual-level covariates (Fig. \ref{fig:eco_survival}, \ref{fig:order_surv}, \ref{fig:mass_survival}) imply that direct interactions (e.g. species--species) are potentially more important to long term species survival than ambient environemnt (e.g. temperature tolerance). However, because this estimate of temperature is global in nature, this interpretation is inherently speculative.
+
+Functional group survival probability is rarely associated with differences between the three plant phases (Table \ref{tab:surv_plant}) with only five pair-wise comparisons having greater than 89\% probability of differences in survival between phases. Unuligrade herbivores have an approximately 89\% probability of having lower survival probability during the Paleocene-Eocene than the Miocene-Pleistocene. For digitgrade herbivores, and unguligrade ominvores, the Eocene-Miocene phase have an approximately 90\% probability of having greater survival probability than during the Micocene-Pleistocene phase. In contrast, unguligrade herbivores are estimated to have lower survival probability in the Eocene-Miocene phase than the Miocene-Pleistocene phase. Finally, unguligrade herbivores have an approximately 99\% probability of having a lower survival probability during the Paleocene-Eocene than the Eocene-Miocene.
+
+As stated earlier, temperature is estimated to have no effect on functional group survival probability (Table \ref{tab:surv_temp}). This is congruent with previous studies which found no association between extinction and global temperature CITATION ALROY or no consistent, unidirectional relationship between extinction and global temperature CITATION. 
+
 \begin{figure}[ht]
   \centering
   \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/group_on_survival_bd}
-  \caption[Effects of group-level covariates on log-odds of ecotype survival as estimated from the birth-death model]{Estimated effects of the group-level covariates describing environmental context on log-odds of species survival. These estimates are from the birth-death model. What is plotted is a violin of the distribution of 1000 samples from the approximate posterior. The effect of plant phase graphed here is calculated as Phase 1\( = \gamma_{phase\ 1}\), Phase 2\( = \gamma_{phase\ 1} + \gamma_{phase\ 2}\), and so on.} 
+  \caption[Effects of group-level covariates on log-odds of ecotype survival as estimated from the birth-death model]{Estimated effects of the group-level covariates describing environmental context on log-odds of species survival. These estimates are from the birth-death model. What is plotted is a violin of the distribution of 1000 samples from the approximate posterior.}
   \label{fig:group_surv_bd}
 \end{figure}
 
-
-Functional group survival probability is rarely associated with differences between the three plant phases (Table \ref{tab:surv_plant}) with only five pair-wise comparisons having greater than 89\% probability of differences in survival between phases. Unuligrade herbivores have an approximately 89\% probability of having lower survival probability during the Paleocene-Eocene than the Miocene-Pleistocene. For digitgrade herbivores, and unguligrade ominvores, the Eocene-Miocene phase have an approximately 90\% probability of having greater survival probability than during the Micocene-Pleistocene phase. In contrast, unguligrade herbivores are estimated to have lower survival probability in the Eocene-Miocene phase than the Miocene-Pleistocene phase. Finally, unguligrade herbivores have an approximately 99\% probability of having a lower survival probability during the Paleocene-Eocene than the Eocene-Miocene.
+% make these tables appendix
 \begin{table}[ht]
   \centering
   \caption[Posterior probablity estimates of differences in survival by plant phase]{Posterior probability of the differences in the log-odds of an ecotype surviving based on plant phase.} 
@@ -246,7 +253,6 @@ Functional group survival probability is rarely associated with differences betw
   \end{tabular}
 \end{table}
 
-Temperature is estimated to have no effect on functional group survival probability (Table \ref{tab:surv_temp}). 
 \begin{table}[ht]
   \centering
   \caption[Posterior probablity of effects of temperature on survival]{Posterior probability that the effects of the two temperature covariates on the log-odds of an ecotype survival are greater than 0. What is estimated is the probability that these estimates are greater than 0; high or low probabilities indicate the ``strength'' of the covariate in that direction (positive and negative, respectively). These estimates are from the birth-death model.}
