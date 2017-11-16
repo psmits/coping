@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2017.10.27)  16 NOV 2017 14:26
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2017.10.27)  16 NOV 2017 15:12
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -385,115 +385,90 @@ Package pdftex.def Info: figure/mass_on_origin_bd.png  used on input line 87. o
 n input line 87.
 Package pdftex.def Info: Requested size: 329.09146pt x 219.3943pt on input line
  87.
- [5]
-<figure/group_on_origin_bd.png, id=31, 433.62pt x 289.08pt>
+ [5] [6 <./figure/ecotype_origin_bd.png (PNG copy)>]
+<figure/group_on_origin_bd.png, id=34, 433.62pt x 289.08pt>
 File: figure/group_on_origin_bd.png Graphic file (type png)
 <use figure/group_on_origin_bd.png>
-Package pdftex.def Info: figure/group_on_origin_bd.png  used on input line 97. 
-on input line 97.
+Package pdftex.def Info: figure/group_on_origin_bd.png  used on input line 101.
+ on input line 101.
 Package pdftex.def Info: Requested size: 329.09146pt x 219.3943pt on input line
- 97.
-
-Overfull \hbox (11.67702pt too wide) in paragraph at lines 107--131
+ 101.
+ [7 <./figure/order_origin_bd.png>]
+Overfull \hbox (11.67702pt too wide) in paragraph at lines 111--135
  [][] 
  []
 
-<figure/origination_correlation.png, id=32, 1505.625pt x 1505.625pt>
+<figure/origination_correlation.png, id=40, 1505.625pt x 1505.625pt>
 File: figure/origination_correlation.png Graphic file (type png)
 <use figure/origination_correlation.png>
 Package pdftex.def Info: figure/origination_correlation.png  used on input line
- 167. on input line 167.
+ 171. on input line 171.
 Package pdftex.def Info: Requested size: 390.0059pt x 390.0059pt on input line 
-167.
-[6 <./figure/ecotype_origin_bd.png (PNG copy)>] [7 <./figure/order_origin_bd.pn
-g>] [8 <./figure/mass_on_origin_bd.png (PNG copy)>]
+171.
+[8 <./figure/mass_on_origin_bd.png (PNG copy)>] [9 <./figure/group_on_origin_bd
+.png (PNG copy)>] [10]
 
-LaTeX Warning: Reference `tab:plant_def' on page 9 undefined on input line 185.
+LaTeX Warning: Reference `tab:plant_def' on page 11 undefined on input line 189
+.
 
-
-<figure/ecotype_survival_bd.png, id=44, 433.62pt x 289.08pt>
+<figure/ecotype_survival_bd.png, id=50, 433.62pt x 289.08pt>
 File: figure/ecotype_survival_bd.png Graphic file (type png)
 <use figure/ecotype_survival_bd.png>
-Package pdftex.def Info: figure/ecotype_survival_bd.png  used on input line 188
-. on input line 188.
+Package pdftex.def Info: figure/ecotype_survival_bd.png  used on input line 192
+. on input line 192.
 Package pdftex.def Info: Requested size: 329.09146pt x 219.3943pt on input line
- 188.
-[9 <./figure/group_on_origin_bd.png (PNG copy)>]
-<figure/order_survival_bd.png, id=48, 433.62pt x 289.08pt>
+ 192.
+[11]
+<figure/order_survival_bd.png, id=55, 433.62pt x 289.08pt>
 File: figure/order_survival_bd.png Graphic file (type png)
 <use figure/order_survival_bd.png>
-Package pdftex.def Info: figure/order_survival_bd.png  used on input line 197. 
-on input line 197.
+Package pdftex.def Info: figure/order_survival_bd.png  used on input line 201. 
+on input line 201.
 Package pdftex.def Info: Requested size: 329.09146pt x 219.3943pt on input line
- 197.
-<figure/mass_on_surv_bd.png, id=49, 433.62pt x 289.08pt>
+ 201.
+<figure/mass_on_surv_bd.png, id=56, 433.62pt x 289.08pt>
 File: figure/mass_on_surv_bd.png Graphic file (type png)
 <use figure/mass_on_surv_bd.png>
-Package pdftex.def Info: figure/mass_on_surv_bd.png  used on input line 206. on
- input line 206.
+Package pdftex.def Info: figure/mass_on_surv_bd.png  used on input line 210. on
+ input line 210.
 Package pdftex.def Info: Requested size: 329.09146pt x 219.3943pt on input line
- 206.
- [10] [11]
-<figure/group_on_survival_bd.png, id=57, 433.62pt x 289.08pt>
+ 210.
+ [12]
+<figure/group_on_survival_bd.png, id=60, 433.62pt x 289.08pt>
 File: figure/group_on_survival_bd.png Graphic file (type png)
 <use figure/group_on_survival_bd.png>
 Package pdftex.def Info: figure/group_on_survival_bd.png  used on input line 22
-1. on input line 221.
+5. on input line 225.
 Package pdftex.def Info: Requested size: 329.09146pt x 219.3943pt on input line
- 221.
+ 225.
 
-Overfull \hbox (11.67702pt too wide) in paragraph at lines 231--255
+Overfull \hbox (11.67702pt too wide) in paragraph at lines 235--259
  [][] 
  []
 
-<figure/survival_correlation.png, id=58, 1505.625pt x 1505.625pt>
+<figure/survival_correlation.png, id=61, 1505.625pt x 1505.625pt>
 File: figure/survival_correlation.png Graphic file (type png)
 <use figure/survival_correlation.png>
 Package pdftex.def Info: figure/survival_correlation.png  used on input line 29
-1. on input line 291.
+5. on input line 295.
 Package pdftex.def Info: Requested size: 390.0059pt x 390.0059pt on input line 
-291.
-[12] [13]
+295.
+[13] [14]
 
-Package natbib Warning: Citation `Alroy2009' on page 14 undefined on input line
- 309.
-
-
-Package natbib Warning: Citation `Alroy2010c' on page 14 undefined on input lin
-e 309.
+Package natbib Warning: Citation `Alroy2009' on page 15 undefined on input line
+ 313.
 
 
-Package natbib Warning: Citation `Gelman2013d' on page 14 undefined on input li
-ne 309.
+Package natbib Warning: Citation `Alroy2010c' on page 15 undefined on input lin
+e 313.
 
 
-Package natbib Warning: Citation `Gelman2013d' on page 14 undefined on input li
-ne 309.
+Package natbib Warning: Citation `Gelman2013d' on page 15 undefined on input li
+ne 313.
 
 
-Package natbib Warning: Citation `Alroy2009' on page 14 undefined on input line
- 309.
-
-
-Package natbib Warning: Citation `Alroy2009' on page 14 undefined on input line
- 309.
-
-[14]
-
-LaTeX Warning: Reference `fig:origin_rate' on page 15 undefined on input line 3
-11.
-
-
-LaTeX Warning: Reference `fig:extinct_rate' on page 15 undefined on input line 
-311.
-
-
-LaTeX Warning: Reference `fig:origin_rate' on page 15 undefined on input line 3
-13.
-
-
-LaTeX Warning: Reference `fig:extinct_rate' on page 15 undefined on input line 
-313.
+Package natbib Warning: Citation `Gelman2013d' on page 15 undefined on input li
+ne 313.
 
 
 Package natbib Warning: Citation `Alroy2009' on page 15 undefined on input line
@@ -511,114 +486,138 @@ LaTeX Warning: Reference `fig:origin_rate' on page 15 undefined on input line 3
 LaTeX Warning: Reference `fig:extinct_rate' on page 15 undefined on input line 
 315.
 
-
-LaTeX Warning: Reference `fig:extinct_rate' on page 15 undefined on input line 
-315.
-
-
-Package natbib Warning: Citation `Alroy1996a' on page 15 undefined on input lin
-e 315.
-
-
-Package natbib Warning: Citation `Alroy2000g' on page 15 undefined on input lin
-e 315.
-
-
-Package natbib Warning: Citation `Alroy2009' on page 15 undefined on input line
- 315.
-
 [15]
-<figure/log_diversity.png, id=73, 433.62pt x 289.08pt>
+
+LaTeX Warning: Reference `fig:origin_rate' on page 16 undefined on input line 3
+17.
+
+
+LaTeX Warning: Reference `fig:extinct_rate' on page 16 undefined on input line 
+317.
+
+
+Package natbib Warning: Citation `Alroy2009' on page 16 undefined on input line
+ 317.
+
+
+Package natbib Warning: Citation `Alroy2009' on page 16 undefined on input line
+ 317.
+
+
+LaTeX Warning: Reference `fig:origin_rate' on page 16 undefined on input line 3
+19.
+
+
+LaTeX Warning: Reference `fig:extinct_rate' on page 16 undefined on input line 
+319.
+
+
+LaTeX Warning: Reference `fig:extinct_rate' on page 16 undefined on input line 
+319.
+
+
+Package natbib Warning: Citation `Alroy1996a' on page 16 undefined on input lin
+e 319.
+
+
+Package natbib Warning: Citation `Alroy2000g' on page 16 undefined on input lin
+e 319.
+
+
+Package natbib Warning: Citation `Alroy2009' on page 16 undefined on input line
+ 319.
+
+<figure/log_diversity.png, id=72, 433.62pt x 289.08pt>
 File: figure/log_diversity.png Graphic file (type png)
 <use figure/log_diversity.png>
-Package pdftex.def Info: figure/log_diversity.png  used on input line 320. on i
-nput line 320.
+Package pdftex.def Info: figure/log_diversity.png  used on input line 324. on i
+nput line 324.
 Package pdftex.def Info: Requested size: 175.50266pt x 117.00177pt on input lin
-e 320.
-<figure/div_rate.png, id=74, 433.62pt x 289.08pt>
+e 324.
+<figure/div_rate.png, id=73, 433.62pt x 289.08pt>
 File: figure/div_rate.png Graphic file (type png)
 <use figure/div_rate.png>
-Package pdftex.def Info: figure/div_rate.png  used on input line 325. on input 
-line 325.
+Package pdftex.def Info: figure/div_rate.png  used on input line 329. on input 
+line 329.
 Package pdftex.def Info: Requested size: 175.50266pt x 117.00177pt on input lin
-e 325.
-
+e 329.
 
 Package natbib Warning: Citation `Royle2008' on page 16 undefined on input line
- 329.
+ 333.
 
 
 Package natbib Warning: Citation `Gelman2013d' on page 16 undefined on input li
-ne 329.
+ne 333.
 
 
 Package natbib Warning: Citation `Royle2008' on page 16 undefined on input line
- 329.
+ 333.
 
 
 Package natbib Warning: Citation `Royle2008' on page 16 undefined on input line
- 329.
+ 333.
 
 
 Package natbib Warning: Citation `Gelman2013d' on page 16 undefined on input li
-ne 329.
+ne 333.
 
 
 Package natbib Warning: Citation `Royle2008' on page 16 undefined on input line
- 329.
+ 333.
 
-<figure/ecotype_diversity.png, id=75, 433.62pt x 289.08pt>
+<figure/ecotype_diversity.png, id=74, 433.62pt x 289.08pt>
 File: figure/ecotype_diversity.png Graphic file (type png)
 <use figure/ecotype_diversity.png>
-Package pdftex.def Info: figure/ecotype_diversity.png  used on input line 368. 
-on input line 368.
+Package pdftex.def Info: figure/ecotype_diversity.png  used on input line 372. 
+on input line 372.
 Package pdftex.def Info: Requested size: 390.0162pt x 260.01079pt on input line
- 368.
+ 372.
 
 Package natbib Warning: Citation `Smits2015b' on page 16 undefined on input lin
-e 373.
+e 377.
 
 [16]
 
 Package natbib Warning: Citation `Blois2009' on page 17 undefined on input line
- 375.
+ 379.
 
 
 Package natbib Warning: Citation `Stromberg2005' on page 17 undefined on input 
-line 375.
+line 379.
 
 
 Package natbib Warning: Citation `Valkenburgh1999' on page 17 undefined on inpu
-t line 377.
+t line 381.
 
 
 Package natbib Warning: Citation `Silvestro2015b' on page 17 undefined on input
- line 377.
+ line 381.
 
 
 Package natbib Warning: Citation `Slater2015c' on page 17 undefined on input li
-ne 377.
+ne 381.
+
+
+Package natbib Warning: Citation `Valkenburgh1999' on page 17 undefined on inpu
+t line 386.
+
+
+Package natbib Warning: Citation `Silvestro2015b' on page 17 undefined on input
+ line 386.
+
+
+Package natbib Warning: Citation `Slater2015c' on page 17 undefined on input li
+ne 386.
 
 [17]
-
-Package natbib Warning: Citation `Valkenburgh1999' on page 18 undefined on inpu
-t line 382.
-
-
-Package natbib Warning: Citation `Silvestro2015b' on page 18 undefined on input
- line 382.
-
-
-Package natbib Warning: Citation `Slater2015c' on page 18 undefined on input li
-ne 382.
-
 <figure/relative_diversity.png, id=82, 578.16pt x 289.08pt>
 File: figure/relative_diversity.png Graphic file (type png)
 <use figure/relative_diversity.png>
-Package pdftex.def Info: figure/relative_diversity.png  used on input line 387.
- on input line 387.
+Package pdftex.def Info: figure/relative_diversity.png  used on input line 391.
+ on input line 391.
 Package pdftex.def Info: Requested size: 389.99414pt x 194.99706pt on input lin
-e 387.
+e 391.
+
 
 Package natbib Warning: There were undefined citations.
 
@@ -626,20 +625,17 @@ Package natbib Warning: There were undefined citations.
 pe_survival_bd.png (PNG copy)>] [21 <./figure/order_survival_bd.png>] [22 <./fi
 gure/mass_on_surv_bd.png (PNG copy)>] [23 <./figure/group_on_survival_bd.png (P
 NG copy)>] [24 <./figure/survival_correlation.png (PNG copy)>] [25 <./figure/lo
-g_diversity.png (PNG copy)> <./figure/div_rate.png (PNG copy)>] [26 <./figure/e
-cotype_diversity.png (PNG copy)>] [27 <./figure/relative_diversity.png (PNG cop
-y)>] (./results.aux)
+g_diversity.png (PNG copy)> <./figure/div_rate.png (PNG copy)>] [26] [27 <./fig
+ure/ecotype_diversity.png (PNG copy)>] [28 <./figure/relative_diversity.png (PN
+G copy)>] (./results.aux)
 
 LaTeX Warning: There were undefined references.
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
  ) 
 Here is how much of TeX's memory you used:
  5818 strings out of 492990
  91003 string characters out of 6135004
- 196339 words of memory out of 5000000
+ 198967 words of memory out of 5000000
  9203 multiletter control sequences out of 15000+600000
  10979 words of font info for 75 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -650,10 +646,10 @@ e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texli
 ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texm
 f-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/
 fonts/type1/public/amsfonts/cm/cmr8.pfb>
-Output written on results.pdf (27 pages, 5044205 bytes).
+Output written on results.pdf (28 pages, 5046058 bytes).
 PDF statistics:
- 138 PDF objects out of 1000 (max. 8388607)
- 79 compressed objects within 1 object stream
+ 141 PDF objects out of 1000 (max. 8388607)
+ 81 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  9307 words of extra memory for PDF output out of 10000 (max. 10000000)
 
