@@ -304,62 +304,41 @@ None of the time-series of functional group survival probability are estimated t
 
 
 \subsection*{Analysis of diversity}
-
-All of the analyses of diversification and macroevolutionary rates has been done using only the birth-death model because of the model's better posterior predictive check performance (Fig. \ref{fig:ppc}).
-
-
-The general pattern of the estimated North American total mammal diversity for the Cenozoic is ``stable'' in that diversity fluctuates around a constant mean standing diverisity, does not fluctuate wildly and rapidly over the Cenozoic, and demonstrates no sustained directional trends (Fig. \ref{fig:diversity_est}). In broad strokes, the first 15 or so million years of the Cenozoic are characterized by first an increase and then a decline in standing diversity at approximately 45-50 Mya (early-middle Eocene). Following this decline, standing diversity is broadly constant from 45 to 18 Mya (early Miocene). After this, there is a rapid spike in diversity followed by a slight decline in diversity up to the Recent. 
-
-The pattern exhibited by the diversity history estimated in this study (Fig. \ref{fig:diversity_est}) has some major similarities with previous mammal diversity curves \citep{Alroy2009}: both curves begin with an increase in diversity most of the major increases in diversity are retained including the large diversity spike during the Miocene. Unlike subsampling based approaches to estimating diversity \citep{Alroy2010c}, I'm able to interpolate over unsampled/poorly sampled time periods because of how the hierarchical model can share information across the different units \cite{Gelman2013d}; for cases like unsampled temporal bins, this may lead to estimates with high uncertainty, but that is preferable to no estimate at all. Finally, the Bayesian framework here gives a distribution of possible estimates of diversity allowing for direct inspection of the uncertainty of our inferences, something that is preferable to both traditional and resampling based confidence interval estimates \citep{Gelman2013d}. Note that my time series of estimated diversity begins at a slightly different point than that of \citet{Alroy2009} and that the time intervals used by \citet{Alroy2009} are slightly shorter than those used here, so this may cause some of the minor differences between the curves. Also, please note that the diversity values are plotted at the ``ceiling'' of each temporal interval and not at the midpoint (Fig. \ref{fig:diversity_est}).
-
-When viewed through the lens of diversification rate, some of the structure behind the estimated diversity history begins to take shape (Fig. \ref{fig:diversity_rate}). For most of the Cenozoic, the diversification rate hovers around zero, punctuated by both positive and negative spikes. The largest spike in diversification rate is at 16 Mya, which is early Oligocene (Fig. \ref{fig:diversity_rate}). Other notable increases in diversification rate occur 56, 46, 22, 18, and 6 Mya (Table \ref{tab:div_peak}), though the last of these may be due to edge effects surrounding the partial-identifiability of \(p_{t = T}\). Notable decreases in diversification rate occur at 54, 50, 48, 44, 40, 34, 30, 24, 20, 16, 12, and 8 Mya (Table \ref{tab:div_peak}), meaning that diversification rate has more major decreases than increases. While diversification rates significantly lower than average are more common than diversification rates greater than average, when diversification rate does increases it is with a greater magnitude than most decreases (Fig. \ref{fig:diversity_rate}). Given that diversification rate more closely resembles origination rate than extinction rate (Fig. \ref{fig:diversity_rate}, \ref{fig:origin_rate}, \ref{fig:extinct_rate}), these decreases in diversification rate may be indicative of ``depletions'' (failure to replace extinct taxa) rather than pulses of extinction. 
-
-The estimates from this study of per capita origination and extinction rates for the entire species pool (Fig. \ref{fig:origin_rate}, \ref{fig:extinct_rate}) are very different from the origination and extinction rates estimated by \citet{Alroy2009}. The two most striking difference are the very different estimates of extinction rate between the two studies and the very different scales of the origination rate estimates. This may be due to the fundamentally different way these rates are calculated, and how the diversification process was modeled. The per capita rates estimated in this study follow straight from the definition of a per capita rate (e.g. number of originations between time \(t\) and \(t + 1\) divided by the diversity at time \(t\)) while the rates calculated in \citet{Alroy2009} are based on log ratios of standing diversity.
-
-The comparison between per capita origination and extinction rate estimates reveals how diversification rate is formed (Fig. \ref{fig:origin_rate}, \ref{fig:extinct_rate}). As expected given previous inspection of the ecotype specific estimates of origination and survival probabilities from the birth-death model, diversification rate seems most driven by changes in origination rate as opposed to extinction rate. Extinction rate, on the other hand, demonstrates an almost saw-toothed pattern around a constant mean (Fig. \ref{fig:extinct_rate}). These results are broadly consistent with those from previous analyses of North American mammals diversity and diversification \citep{Alroy1996a,Alroy2000g,Alroy2009}.
-
-
+Standing diversity of the North American mammal species pool estimated from this model exhibits an initial increase in diversity followed by a slow decrease till approximately 30Mya, afterwhich there is a marked increase till approximately 15Mya after which it decreases slightly till it is equal to the overall mean diversity of the Cenozoic (Fig. \ref{fig:diversity_est}). Per-unit standing diveristy is found to be different from average standing diversity for 12 of 18 time-units (\(> 85\) probability; Table \ref{tab:div_peak}). Diversity is greater than average during the Tiffanian, Wasatchian, Hemingfordian, Barsotvian, and Clarendonian while diversity is lower than average during the Duchesnean, Chadronian, Orellan, Whitneyan, Geringian, Monroecreekian, and Harrisonian. The nadir of diversity is the Orellan while the apex is the Barstovian (Fig. \ref{fig:diversity_est}). Interstingly, the rise in diversity among the sampled species from the Orellan to the Barstovian is unidirectional and is not estimated to have any temporary dips in diversification for that entire approximately 15 million year period.
 \begin{figure}[ht]
-  \begin{subfigure}[b]{0.45\textwidth}
-    \includegraphics[width=\textwidth,height=0.5\textheight,keepaspectratio=true]{figure/log_diversity}
-    \caption{Log diversity}
-    \label{fig:diversity_est}
-  \end{subfigure}
-  \begin{subfigure}[b]{0.45\textwidth}
-    \includegraphics[width=\textwidth,height=0.5\textheight,keepaspectratio=true]{figure/div_rate}
-    \caption{Diversification rate}
-    \label{fig:diversity_rate}
-  \end{subfigure}
-  \caption[Estimated mammal log-diversity and macroevolutionary rates for the Cenozoic]{Posterior estimates of the time series of Cenozoic North American mammal diversity and it's characteristic macroevolutionary rates; all estimates are from the birth-death model and 100 posterior draws are plotted to indicate the uncertainty in these estimates. The blue horizontal strip corresponds to the 80\% credible interval of estimated mean standing diversity, diversification rate, origination rate, and extinction rate respectively; the median estimate is also indicated. What is also plotted is the  The dramatic differences between diversity estimates at the first and second time points and the penultimate and last time points in this series are caused by well known edge effects in discrete-time birth-death models caused by \(p_{\_, t = 1}\) and \(p_{\_, t = T}\) being partially unidentifiable \citep{Royle2008}; the hierarchical modeling strategy used here helps mitigate these effects but they are still present \citep{Gelman2013d,Royle2008}. Diversification rate is in units of species gained per species present per time unit (2 My), origination rate is in units of species originating per species present per time unit, and extinction rate is in units of species becoming extinct per species present per time unit.}
-  \label{fig:macro_values}
+  \centering
+  \includegraphics[width=\textwidth,height=0.5\textheight,keepaspectratio=true]{figure/log_diversity}
+  \caption{Log diversity}
+  \caption[Estimated mammal log-diversity for the Cenozoic]{Posterior estimates of the time series of Cenozoic North American mammal diversity; all estimates are from 100 posterior draws. The blue horizontal strip corresponds to the median and 80\% credible interval of estimated mean standing diversity.} 
+  \label{fig:diversity_est}
 \end{figure}
 
 \begin{table}[ht]
   \centering
-  \caption[Posterior probability estimates of a peak in diversity, diversification]{Posterior probabilities of diversity \(N^{stand}_{t}\) or diversification rate \(D^{rate}_{t}\) being greater than average standing diversity \(\overline{N^{stand}}\) or average diversification rate \(\overline{D^{rate}}\) for the whole Cenozoic. The ``Time'' column corresponds to the top of each of the temporal bins. Diversification rate can not be estimated for the last time point because it is unknown how many more species originated or went extinct following this temporal bin. The estimates are from the birth-death model.}
+  \caption[Posterior probability estimates of a peak in diversity]{Posterior probabilities of diversity \(N^{stand}_{t}\) greater than average standing diversity \(\overline{N^{stand}}\) for the whole Cenozoic. The NALMA column corresponds to North American Land Mammal age for that estimate.}
   \label{tab:div_peak}
-  \begin{tabular}{ r r r }
+  \begin{tabular}{ r r }
     \hline
-    NALMA & \(P(N^{stand}_{t} > \overline{N^{stand}})\) & \(P(D^{rate}_{t} > \overline{D^{rate}})\) \\ 
+    NALMA & \(P(N^{stand}_{t} > \overline{N^{stand}})\) \\
     \hline
-    Torrejonian & 0.79 & \\ 
-    Tiffanian & 0.95 & 0.67 \\ 
-    Clarkforkian & 0.50 & 0.03 \\ 
-    Wasatchian & 1.00 & 0.99 \\ 
-    Bridgerian & 0.69 & 0.00 \\ 
-    Uintan & 0.75 & 0.45 \\ 
-    Duchesnean & 0.00 & 0.00 \\ 
-    Chadronian & 0.01 & 0.70 \\ 
-    Orellan & 0.00 & 0.01 \\ 
-    Whitneyan & 0.00 & 0.09 \\ 
-    Geringian & 0.00 & 0.57 \\ 
-    Monroecreekian & 0.01 & 1.00 \\ 
-    Harrisonian & 0.11 & 0.67 \\ 
-    Hemingfordian & 0.96 & 0.99 \\ 
-    Barstovian & 1.00 & 1.00 \\ 
-    Clarendonian & 0.93 & 0.00 \\ 
-    Hemphillian & 0.63 & 0.10 \\ 
-    Blancan & 0.73 & 0.43 \\ 
+    Torrejonian & 0.79 \\ 
+    Tiffanian & 0.95 \\ 
+    Clarkforkian & 0.50 \\ 
+    Wasatchian & 1.00 \\ 
+    Bridgerian & 0.69 \\ 
+    Uintan & 0.75 \\ 
+    Duchesnean & 0.00 \\ 
+    Chadronian & 0.01 \\ 
+    Orellan & 0.00 \\ 
+    Whitneyan & 0.00 \\ 
+    Geringian & 0.00 \\ 
+    Monroecreekian & 0.01 \\ 
+    Harrisonian & 0.11 \\ 
+    Hemingfordian & 0.96 \\ 
+    Barstovian & 1.00 \\ 
+    Clarendonian & 0.93 \\ 
+    Hemphillian & 0.63 \\ 
+    Blancan & 0.73 \\ 
     \hline
   \end{tabular}
 \end{table}
