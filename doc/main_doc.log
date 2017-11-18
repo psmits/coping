@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2017.10.27)  17 NOV 2017 13:06
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2017.10.27)  17 NOV 2017 16:01
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -695,53 +695,53 @@ on input line 364.
 Package pdftex.def Info: Requested size: 465.34505pt x 310.23003pt on input lin
 e 364.
  [45]
-<figure/relative_diversity.png, id=1004, 578.16pt x 289.08pt>
+<figure/relative_diversity.png, id=1003, 578.16pt x 289.08pt>
 File: figure/relative_diversity.png Graphic file (type png)
 <use figure/relative_diversity.png>
-Package pdftex.def Info: figure/relative_diversity.png  used on input line 376.
- on input line 376.
+Package pdftex.def Info: figure/relative_diversity.png  used on input line 380.
+ on input line 380.
 Package pdftex.def Info: Requested size: 469.75385pt x 234.8769pt on input line
- 376.
+ 380.
 )
 (./disc.tex [46]
 
 LaTeX Warning: Reference `fig:macro_values' on page 47 undefined on input line 
 20.
 
+[47]
 
-LaTeX Warning: Reference `fig:ecotype_birth' on page 47 undefined on input line
+LaTeX Warning: Reference `fig:ecotype_birth' on page 48 undefined on input line
  24.
 
 
-LaTeX Warning: Reference `fig:ecotype_death' on page 47 undefined on input line
+LaTeX Warning: Reference `fig:ecotype_death' on page 48 undefined on input line
  24.
 
 
-LaTeX Warning: Reference `fig:ecotype_birth' on page 47 undefined on input line
+LaTeX Warning: Reference `fig:ecotype_birth' on page 48 undefined on input line
  24.
 
 
-LaTeX Warning: Reference `fig:ecotype_death' on page 47 undefined on input line
+LaTeX Warning: Reference `fig:ecotype_death' on page 48 undefined on input line
  24.
 
 
-LaTeX Warning: Reference `fig:macro_values' on page 47 undefined on input line 
+LaTeX Warning: Reference `fig:macro_values' on page 48 undefined on input line 
 26.
 
 
-LaTeX Warning: Reference `fig:ecotype_birth' on page 47 undefined on input line
+LaTeX Warning: Reference `fig:ecotype_birth' on page 48 undefined on input line
  26.
 
 
-LaTeX Warning: Reference `fig:origin_corr_graph' on page 47 undefined on input 
+LaTeX Warning: Reference `fig:origin_corr_graph' on page 48 undefined on input 
 line 26.
 
-[47]
+[48]
 
-LaTeX Warning: Reference `fig:ecotype_death' on page 48 undefined on input line
+LaTeX Warning: Reference `fig:ecotype_death' on page 49 undefined on input line
  32.
 
-[48]
 
 LaTeX Warning: Reference `fig:eco_occur' on page 49 undefined on input line 34.
 
@@ -750,11 +750,11 @@ LaTeX Warning: Reference `fig:eco_occur' on page 49 undefined on input line 34.
 LaTeX Warning: Reference `fig:macro_values' on page 49 undefined on input line 
 34.
 
+[49]
 
-LaTeX Warning: Reference `fig:ecotype_birth' on page 49 undefined on input line
+LaTeX Warning: Reference `fig:ecotype_birth' on page 50 undefined on input line
  36.
 
-[49]
 
 LaTeX Warning: Reference `fig:eco_occur' on page 50 undefined on input line 38.
 
@@ -763,35 +763,35 @@ LaTeX Warning: Reference `fig:eco_occur' on page 50 undefined on input line 38.
 LaTeX Warning: Reference `tab:occur_temp' on page 50 undefined on input line 40
 .
 
+[50]
 
-LaTeX Warning: Reference `fig:eco_occur' on page 50 undefined on input line 42.
+LaTeX Warning: Reference `fig:eco_occur' on page 51 undefined on input line 42.
 
 
 
-LaTeX Warning: Reference `fig:macro_values' on page 50 undefined on input line 
+LaTeX Warning: Reference `fig:macro_values' on page 51 undefined on input line 
 42.
 
 
-LaTeX Warning: Reference `fig:ecotype_birth' on page 50 undefined on input line
+LaTeX Warning: Reference `fig:ecotype_birth' on page 51 undefined on input line
  42.
 
 
-LaTeX Warning: Reference `fig:ecotype_death' on page 50 undefined on input line
+LaTeX Warning: Reference `fig:ecotype_death' on page 51 undefined on input line
  42.
 
-[50]
 
 LaTeX Warning: Reference `fig:group_pure_presence' on page 51 undefined on inpu
 t line 44.
 
-[51] [52]) (./main_doc.bbl [53] [54] [55] [56] [57] [58]
+[51] [52]) [53] (./main_doc.bbl [54] [55] [56] [57] [58] [59]
 Missing character: There is no ‚ in font cmr10!
 Missing character: There is no Ä in font cmr10!
 Missing character: There is no ê in font cmr10!
 Missing character: There is no ‚ in font cmr10!
 Missing character: There is no Ä in font cmr10!
 Missing character: There is no ê in font cmr10!
- [59] [60] [61]
+ [60] [61]
 [62] [63])
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 75.
  [64] [65 <./figure/origination_correlation.png (PNG copy)>] [66 <./figure/ecot
@@ -820,7 +820,7 @@ Here is how much of TeX's memory you used:
  13284 multiletter control sequences out of 15000+600000
  15377 words of font info for 94 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 37i,15n,53p,2271b,655s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 37i,15n,53p,2271b,643s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texl
@@ -837,10 +837,10 @@ are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/tex
 live/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/t
 exmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb></usr/share/texlive/texmf-di
 st/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on main_doc.pdf (72 pages, 4793374 bytes).
+Output written on main_doc.pdf (72 pages, 4793670 bytes).
 PDF statistics:
- 1340 PDF objects out of 1440 (max. 8388607)
- 1188 compressed objects within 12 object streams
+ 1339 PDF objects out of 1440 (max. 8388607)
+ 1187 compressed objects within 12 object streams
  238 named destinations out of 1000 (max. 500000)
  18016 words of extra memory for PDF output out of 20736 (max. 10000000)
 

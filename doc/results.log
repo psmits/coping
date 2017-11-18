@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2017.10.27)  17 NOV 2017 13:06
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2017.10.27)  17 NOV 2017 16:00
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -474,55 +474,43 @@ Package pdftex.def Info: figure/ecotype_diversity.png  used on input line 364.
 on input line 364.
 Package pdftex.def Info: Requested size: 390.0162pt x 260.01079pt on input line
  364.
-
-
-Package natbib Warning: Citation `Valkenburgh1999' on page 18 undefined on inpu
-t line 371.
-
-
-Package natbib Warning: Citation `Silvestro2015b' on page 18 undefined on input
- line 371.
-
-
-Package natbib Warning: Citation `Slater2015c' on page 18 undefined on input li
-ne 371.
-
 <figure/relative_diversity.png, id=80, 578.16pt x 289.08pt>
 File: figure/relative_diversity.png Graphic file (type png)
 <use figure/relative_diversity.png>
-Package pdftex.def Info: figure/relative_diversity.png  used on input line 376.
- on input line 376.
+Package pdftex.def Info: figure/relative_diversity.png  used on input line 380.
+ on input line 380.
 Package pdftex.def Info: Requested size: 389.99414pt x 194.99706pt on input lin
-e 376.
+e 380.
+ [18]
 
 Package natbib Warning: There were undefined citations.
 
-[18] [19 <./figure/origination_correlation.png (PNG copy)>] [20 <./figure/ecoty
-pe_survival_bd.png (PNG copy)>] [21 <./figure/order_survival_bd.png>] [22 <./fi
-gure/mass_on_surv_bd.png (PNG copy)>] [23 <./figure/group_on_survival_bd.png (P
-NG copy)>] [24 <./figure/survival_correlation.png (PNG copy)>] [25 <./figure/lo
-g_diversity.png (PNG copy)>] [26 <./figure/ecotype_diversity.png (PNG copy)>]
-[27 <./figure/relative_diversity.png (PNG copy)>] (./results.aux)
+[19] [20 <./figure/origination_correlation.png (PNG copy)>] [21 <./figure/ecoty
+pe_survival_bd.png (PNG copy)>] [22 <./figure/order_survival_bd.png>] [23 <./fi
+gure/mass_on_surv_bd.png (PNG copy)>] [24 <./figure/group_on_survival_bd.png (P
+NG copy)>] [25 <./figure/survival_correlation.png (PNG copy)>] [26 <./figure/lo
+g_diversity.png (PNG copy)>] [27 <./figure/ecotype_diversity.png (PNG copy)>]
+[28 <./figure/relative_diversity.png (PNG copy)>] (./results.aux)
 
 LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
- 5786 strings out of 492990
- 90465 string characters out of 6135004
+ 5785 strings out of 492990
+ 90433 string characters out of 6135004
  191534 words of memory out of 5000000
- 9176 multiletter control sequences out of 15000+600000
- 10577 words of font info for 72 fonts, out of 8000000 for 9000
+ 9173 multiletter control sequences out of 15000+600000
+ 10626 words of font info for 73 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 39i,11n,41p,1667b,325s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 39i,11n,41p,1347b,325s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texli
 ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb>
-Output written on results.pdf (27 pages, 4506126 bytes).
+Output written on results.pdf (28 pages, 4507248 bytes).
 PDF statistics:
- 129 PDF objects out of 1000 (max. 8388607)
- 73 compressed objects within 1 object stream
+ 132 PDF objects out of 1000 (max. 8388607)
+ 75 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  7254 words of extra memory for PDF output out of 10000 (max. 10000000)
 
