@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2017.10.27)  17 NOV 2017 16:00
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2017.10.27)  20 NOV 2017 12:07
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -355,15 +355,22 @@ Package pdftex.def Info: figure/ecotype_observation.png  used on input line 45.
  on input line 45.
 Package pdftex.def Info: Requested size: 329.09146pt x 219.3943pt on input line
  45.
-<figure/mass_on_pres_bd.png, id=11, 433.62pt x 289.08pt>
+ [2 <./figure/time_observation.png>]
+<figure/mass_on_pres_bd.png, id=15, 433.62pt x 289.08pt>
 File: figure/mass_on_pres_bd.png Graphic file (type png)
 <use figure/mass_on_pres_bd.png>
 Package pdftex.def Info: figure/mass_on_pres_bd.png  used on input line 53. on 
 input line 53.
 Package pdftex.def Info: Requested size: 329.09146pt x 219.3943pt on input line
  53.
- [2 <./figure/time_observation.png>] [3 <./figure/ecotype_observation.png>] [4 
-<./figure/mass_on_pres_bd.png>]
+
+
+LaTeX Warning: Reference `fig_observe' on page 3 undefined on input line 54.
+
+
+LaTeX Warning: Reference `fig_observe' on page 3 undefined on input line 54.
+
+[3 <./figure/ecotype_observation.png>] [4 <./figure/mass_on_pres_bd.png>]
 <figure/ecotype_origin_bd.png, id=25, 433.62pt x 289.08pt>
 File: figure/ecotype_origin_bd.png Graphic file (type png)
 <use figure/ecotype_origin_bd.png>
@@ -385,7 +392,8 @@ Package pdftex.def Info: figure/mass_on_origin_bd.png  used on input line 87. o
 n input line 87.
 Package pdftex.def Info: Requested size: 329.09146pt x 219.3943pt on input line
  87.
- [5] [6 <./figure/ecotype_origin_bd.png (PNG copy)>]
+
+[5] [6 <./figure/ecotype_origin_bd.png (PNG copy)>]
 <figure/group_on_origin_bd.png, id=34, 433.62pt x 289.08pt>
 File: figure/group_on_origin_bd.png Graphic file (type png)
 <use figure/group_on_origin_bd.png>
@@ -453,15 +461,20 @@ Package pdftex.def Info: figure/survival_correlation.png  used on input line 29
 5. on input line 295.
 Package pdftex.def Info: Requested size: 390.0059pt x 390.0059pt on input line 
 295.
-[13]
-<figure/log_diversity.png, id=66, 433.62pt x 289.08pt>
+<figure/log_diversity.png, id=62, 433.62pt x 289.08pt>
 File: figure/log_diversity.png Graphic file (type png)
 <use figure/log_diversity.png>
 Package pdftex.def Info: figure/log_diversity.png  used on input line 310. on i
 nput line 310.
 Package pdftex.def Info: Requested size: 390.0162pt x 260.01079pt on input line
  310.
- [14]
+
+LaTeX Warning: Reference `tab:basic' on page 13 undefined on input line 312.
+
+
+LaTeX Warning: Reference `tab:basic' on page 13 undefined on input line 312.
+
+[13] [14]
 
 Package natbib Warning: Citation `Smits2015b' on page 15 undefined on input lin
 e 349.
@@ -474,14 +487,21 @@ Package pdftex.def Info: figure/ecotype_diversity.png  used on input line 364.
 on input line 364.
 Package pdftex.def Info: Requested size: 390.0162pt x 260.01079pt on input line
  364.
-<figure/relative_diversity.png, id=80, 578.16pt x 289.08pt>
+ [18]
+<figure/relative_diversity.png, id=83, 578.16pt x 289.08pt>
 File: figure/relative_diversity.png Graphic file (type png)
 <use figure/relative_diversity.png>
 Package pdftex.def Info: figure/relative_diversity.png  used on input line 380.
  on input line 380.
 Package pdftex.def Info: Requested size: 389.99414pt x 194.99706pt on input lin
 e 380.
- [18]
+
+
+LaTeX Warning: Reference `tab:basic' on page 19 undefined on input line 381.
+
+
+LaTeX Warning: Reference `tab:basic' on page 19 undefined on input line 381.
+
 
 Package natbib Warning: There were undefined citations.
 
@@ -497,17 +517,17 @@ LaTeX Warning: There were undefined references.
  ) 
 Here is how much of TeX's memory you used:
  5785 strings out of 492990
- 90433 string characters out of 6135004
- 191534 words of memory out of 5000000
- 9173 multiletter control sequences out of 15000+600000
- 10626 words of font info for 73 fonts, out of 8000000 for 9000
+ 90443 string characters out of 6135004
+ 195829 words of memory out of 5000000
+ 9175 multiletter control sequences out of 15000+600000
+ 10577 words of font info for 72 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 39i,11n,41p,1347b,325s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 39i,11n,43p,1347b,325s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texli
 ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb>
-Output written on results.pdf (28 pages, 4507248 bytes).
+Output written on results.pdf (28 pages, 4508785 bytes).
 PDF statistics:
  132 PDF objects out of 1000 (max. 8388607)
  75 compressed objects within 1 object stream

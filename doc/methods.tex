@@ -16,12 +16,12 @@
 \section*{Materials and Methods}
 
 \subsection*{Taxon occurrences and species-level information}
-All fossil occurrence information used in this analysis was downloaded from the Paleobiology Database (PBDB). The initial download restricted occurrences to Mammalia observed in North America between the Maastrichtian (72-66 Mya) and Gelasian (2.58-1.8 Mya) stages \citep{Cohen2015}. Taxonomic, stratigraphic, and ecological metadata for each occurrence and species was also downloaded. A new download for a raw, unfiltered PBDB datafile following the same criterion used here is available at \url{http://goo.gl/2slgeU}. The raw datafile used as a part of this study, along with all code for filtering and manipulating this download is available at \url{http://github.com/psmits/coping}.
+All fossil occurrence information used in this analysis was downloaded from the Paleobiology Database (PBDB). The initial download restricted occurrences to Mammalia observed in North America between the Maastrichtian (72-66 Mya) and Gelasian (2.58-1.8 Mya) stages \citep{Cohen2015}. Taxonomic, stratigraphic, and ecological metadata for each occurrence and species was also downloaded. A new download for a raw, unfiltered PBDB datafile following the same criterion used here is available at \url{http://goo.gl/2slgeU}. The raw datafile used as a part of this study, along with all code for filtering, manipulating, and modeling is available at \url{http://github.com/psmits/coping}.
 %https://paleobiodb.org/data1.2/occs/list.csv?datainfo&rowcount&base_name=Mammalia&taxon_reso=species&interval=Maastrichtian,Gelasian&cc=NOA&show=class,genus,ecospace,loc,strat,stratext,lith,acconly. 
 
-After being downloaded, the raw occurrence data was then sorted, cleaned, and manipulated programmatically before analysis. Occurrences were restricted to those occurring between 64 and 2 million years ago (Mya); this age restriction was to insure that observation time series lines up with the temperature time series \citep{Cramer2011}. All taxa whose life habit was classified as either volant (i.e. Chiroptera) or aquatic (e.g. Cetacea) were excluded from this analysis because of their lack of direct applicability to the study of terrestrial species pools.
+After being downloaded, the raw occurrence data was then sorted, cleaned, and manipulated programmatically before analysis. Occurrences were restricted to those occurring between 64 and 2 million years ago (Mya); this age restriction was to insure that observation time series lines up with the temperature time series described below \citep{Cramer2011}. All taxa whose life habit was classified as either volant (e.g. Chiroptera) or aquatic (e.g. Cetacea) were excluded from this analysis because of their lack of direct applicability to the study of terrestrial species pools.
 
-Many species taxonomic assignments as present in the raw PBDB data were updated for accuracy and consistency. Species present in the PBDB have some taxonomic information, including possible Family and Order assignments. In order to increase consistency between species and reflect more recent taxonomic assignments, each species taxonomic assignments updated as follows: 1) species family and order assignemnts as present in the Encyclopedia of life (\url{http://eol.org}) was downloaded using the \textit{taxize} package for R; 2) for species not present in the EoL or not assigned order, their taxonomic inforation was further updated based on whatever family information was recorded in the PBDB or EoL; 3) for species still missing order assignemnts, their genus information was used to assign either an order or family, which was then used to assign an order. This procedure is similar to that used in \citet{Smits2015b} and is detailed in the code repository associated with this study.
+Many species taxonomic assignments as present in the raw PBDB data were updated for accuracy and consistency. Species present in the PBDB have some taxonomic information, including possible Family and Order assignments. In order to increase consistency between species and reflect more recent taxonomic assignments, each species taxonomic assignments updated as follows: 1) species family and order assignemnts as present in the Encyclopedia of life (\url{http://eol.org}) was downloaded using the \textit{taxize} package for R CITATION; 2) for species not present in the EoL or not assigned order, their taxonomic inforation was further updated based on whatever family information was recorded in the PBDB or EoL; 3) for species still missing order assignemnts, their genus information was used to assign either an order or family, which was then used to assign an order. This procedure is similar to that used in \citet{Smits2015b} and is detailed in the code repository associated with this study.
 % i actually do a lot of swapping and fixing in this step. might want to better explain it
 % PBDB forms basis
 % grab from EoL
@@ -41,7 +41,7 @@ Species functional group is defined as the combination of locomotor and diet cat
 
 \begin{table}[ht]
   \centering
-  \caption{Species trait assignments in this study are a coarser version of the information available in the PBDB. Information was coarsened to improve per category sample size.}
+  \caption{Species trait assignments in this study are a coarser version of the information available in the PBDB. Information was coarsened to improve per category sample size. Assignments are considered uniform within that taxonomic group unless there is a non-ground dwelling assignment for a species in the PBDB.}
   \begin{tabular}[ht]{ l | l | l }
     \hline
     \multicolumn{2}{ c |}{This study} & PBDB categories \\
@@ -61,7 +61,7 @@ Species functional group is defined as the combination of locomotor and diet cat
 
 \input{posture_edit.tex}
 
-Estimates of species mass used in this study were sourced from multiple databases and papers, especially those focusing on similar macroevolutionary or macrecological questions \citep{Tomiya2013,Brook2004a,Freudenthal2013,McKenna2011,Raia2012f,Smith2004}; this is similar to \citet{Smits2015b}. When a species' mass was not available, proxy measures were used to estimates their mass. For example, given a measurement of a mammal tooth size, it is possible and routine to estimate its mass given some regression equation. The PBDB has one or more body part measures for many species. These were used as body size proxies for many species, as was the case in \citet{Smits2015b}. Mass was log-transformed and then rescaled by first subtracting mean log-mass from all mass estimates, then dividing by two-times its standard deviation; this insures that the magnitude of effects for both continuous and discrete covariates are directly comparable \citep{Gelman2007,Gelman2008}.
+Estimates of species mass used in this study were sourced from multiple databases and papers, especially those focusing on similar macroevolutionary or macrecological questions \citep{Tomiya2013,Brook2004a,Freudenthal2013,McKenna2011,Raia2012f,Smith2004}; this is similar to \citet{Smits2015b}. When a species' mass was not available, proxy measures were used to estimates their mass. For example, given a measurement of a mammal tooth size, it is possible and routine to estimate its mass given some regression equation (Table \ref{tab:mass_est}). The PBDB has one or more body part measures for many species. These were used as body size proxies for many species, as was the case in \citet{Smits2015b}. Mass was log-transformed and then rescaled by first subtracting mean log-mass from all mass estimates, then dividing by two-times its standard deviation; this insures that the magnitude of effects for both continuous and discrete covariates are directly comparable \citep{Gelman2007,Gelman2008}.
 
 In total, 1400 mammal species occurrence histories were included in this study after applying all of the restrictions above.
 
@@ -93,13 +93,42 @@ In total, 1400 mammal species occurrence histories were included in this study a
 \end{table}
 
 
-All fossil occurrences from 64 to 2 million years ago (Mya) were binned into the 19 North American Land Mammal Ages (NALMA) covered by this interval CITATION. The choice of binning by NALMA reflects the belief that these represent distinct communities or periods of mammal evolution, something that is central to this study. Additionally, because of the inherently discrete nature of the fossil record it can be hard to re-bin fossils by temporal interval because of the inherent uncertainty in their ages CITATION.
+All fossil occurrences from 64 to 2 million years ago (Mya) were binned into the 18 North American Land Mammal Ages (NALMA) covered by this interval CITATION. The choice of binning by NALMA reflects the belief that these represent distinct communities or periods of mammal evolution, something that is central to this study. The NALMA units in this study are listed in Table \ref{tab:nalma}. %Additionally, because of the inherently discrete nature of the fossil record it can be hard to re-bin fossils by temporal interval because of the inherent uncertainty in their ages CITATION.
+
+\begin{table}[ht]
+  \centering
+  \caption{Listed in order from oldest to youngest NALMA.:}
+  \begin{tabular} { l l }
+    \hline
+    NALMA & Start Age (Mya) \\
+    Torrejonian & 63.3 \\
+    Tiffanian & 60.2 \\
+    Clarkforkian & 56.8 \\
+    Wasatchian & 55.4 \\
+    Bridgerian & 50.3 \\
+    Uintan & 46.2 \\
+    Duchesnean & 42 \\
+    Chadronian & 38 \\
+    Orellan & 33.9 \\
+    Whitneyan & 33.3 \\
+    Geringian & 30.8 \\
+    Monroecreekian & 26.3 \\
+    Harrisonian & 24.8 \\
+    Hemingfordian & 20.6 \\
+    Barstovian & 16.3 \\
+    Clarendonian & 13.6 \\
+    Hemphillian & 10.3 \\
+    Blancan & 4.9 \\
+    \hline
+  \end{tabular}
+  \label{tab:nalma}
+\end{table}
 
 
 \subsection*{Environmental and temporal covariates}
-The environmental covariates used in this study are collectively referred to as group-level covariates because they predict the response of a ``group'' of individual-level observations (i.e. species occurrences of an ecotype). Additionally, these covariates are defined for temporal bins and not the species themselves; as such they predict the individual parts of each species occurrence history. The group-level covariates in this study are two global temperature estimates and the Cenozoic ``plant phases'' defined by \citet{Graham2011a}. 
+The environmental covariates used in this study are collectively referred to as group-level covariates because they predict the response of a ``group'' of individual-level observations (i.e. species). These covariates are defined for temporal bins as they predict the individual parts of each species occurrence history. The group-level covariates in this study are an estimate of global temperature and the Cenozoic ``plant phases'' defined by \citet{Graham2011a}. 
 
-Global temperature across most of the Cenozoic was calculated from Mg/Ca isotope record from deep sea carbonates \citep{Cramer2011}. Mg/Ca based temperature estimates are preferable to the frequently used \(\delta^{18}\)O temperature proxy \citep{Zachos2001,Zachos2008,Alroy2000g,Figueirido2012} because Mg/Ca estimates do not conflate temperature with ice sheet volume and depth/stratification changes. The former is particularly important to this analysis as the current polar ice-caps appeared and grew during the second half of the Cenozoic. These properties make Mg/Ca based temperature estimates preferable for macroevolutionary and macroecological studies \citep{Ezard2016a}. Temperature was calculated as the mean of all respective estimates for each of the NALMA units. The distributions of temperature was then rescaled by subtracting its mean from all values and then dividing by twice its standard deviation.
+Global temperature across most of the Cenozoic was calculated from Mg/Ca isotope record from deep sea carbonates \citep{Cramer2011}. Mg/Ca based temperature estimates are preferable to the frequently used \(\delta^{18}\)O temperature proxy \citep{Zachos2001,Zachos2008,Alroy2000g,Figueirido2012} because Mg/Ca estimates do not conflate temperature with ice sheet volume and depth/stratification changes \citep{Cramer2011,Ezard2016a}. The former is particularly important to this analysis as the current polar ice-caps appeared and grew during the second half of the Cenozoic. These properties make Mg/Ca based temperature estimates preferable for macroevolutionary and macroecological studies \citep{Ezard2016a}. Temperature was calculated as the mean of all respective estimates for each of the NALMA units. The distributions of temperature was then rescaled by subtracting its mean from all values and then dividing by twice its standard deviation.
 
 \begin{table}
   \centering
@@ -120,7 +149,7 @@ The second set of environmental factors included in this study are the Cenozoic 
 
 
 \subsection*{Modelling species occurrence}
-At the core of the model used in this study is hidden Markov process where the latent process has an absorbing state; also refered to as a discrete-time birth-death model \citep{Allen2011} or a capture-mark-recapture model CITATION. While there are only two state ``codes'' in a presence-absence matrix (i.e. 0/1), there are in fact three states in a birth-death model: not having originated yet, extant, and extinct. The last of these is the absorbing state, as once a species has gone extinct it cannot re-originate \citep{Allen2011}. Thus, in the transition matrices the probability of an extinct species changing states is 0 (Table \ref{tab:transition}). See below for parameter explanations (Tables \ref{tab:basic}, \ref{tab:expanded}, and \ref{tab:group}).
+At the core of the model used in this study is hidden Markov process where the latent process has an absorbing state; also refered to as a discrete-time birth-death model \citep{Allen2011} or a capture-mark-recapture model CITATION. While there are only two state ``codes'' in a presence-absence matrix (i.e. 0/1), there are in fact three states in a birth-death model: not having originated yet, extant, and extinct. The last of these is the absorbing state, as once a species has gone extinct it cannot re-originate \citep{Allen2011}. Thus, in the transition matrices the probability of an extinct species changing states is 0 (Table \ref{tab:transition}); see below for extended parameter explanations (Tables \ref{tab:basic}, \ref{tab:expanded}, and \ref{tab:group}).
 
 \begin{table}
   \begin{tabular}[c]{ c c | c | c | c | }
@@ -139,7 +168,7 @@ At the core of the model used in this study is hidden Markov process where the l
 
 
 \subsubsection*{Basic model}
-I will begin defining the model used in this study by focusing on the basic machinery of the hidden Markov process at the model's core. This basic model is similar to the Jolly-Seber capture-mark-recapture model CITATION which has three characteristic probabilities: probability \(p\) of observing a species given that it is present, probability \(\pi\) of a species surviving from one time to another, and probability \(\phi\) of a species first appearing \citep{Royle2008} (Table \ref{tab:basic}). In this formulation, the probability of a species becoming extinct is \(1 - \pi\). The inclusion of species and temporal information means that all three of these probabilities are defined for every species at every time point (Table \ref{tab:basic}); how this is accomplished is described below. Importantly, only origination can occur during the first time step as nothing is already present to survive.
+I will begin defining the model used in this study by focusing on the basic machinery of the hidden Markov process at the model's core. This aspect of the model is similar to the well-known Jolly-Seber capture-mark-recapture model from ecology CITATION which has three characteristic probabilities: probability \(p\) of observing a species given that it is present, probability \(\pi\) of a species surviving from one time to another, and probability \(\phi\) of a species first appearing \citep{Royle2008} (Table \ref{tab:basic}). In this formulation, the probability of a species becoming extinct is \(1 - \pi\). The inclusion of species and temporal information means that all three of these probabilities are defined for every species at every time point (Table \ref{tab:basic}); how this is accomplished is described below. Importantly, only origination can occur during the first time step as nothing is already present to survive. This basic model is expressed as
 
 \begin{table}
   \centering
@@ -165,15 +194,15 @@ I will begin defining the model used in this study by focusing on the basic mach
   \end{aligned}
   \label{eq:basic}
 \end{equation}
-The parameters associated with Equation \ref{eq:basic} are described in Table \ref{tab:basic}; this formulation is identical to that described in \citet{Royle2008}. The product term that appears when calculating values of \(z\) not at \(t = 1\) ensures that once a species goes extinct it does not re-originate. The basic model described here (Eq. \ref{eq:basic}) does not include the additional, necessary prior information which is described below.
+The parameters in Equation \ref{eq:basic} are described in Table \ref{tab:basic}; this formulation is identical to that described in \citet{Royle2008}. The product term that appears when calculating values of \(z\) not at \(t = 1\) ensures that once a species goes extinct it does not re-originate. 
 
 
 \subsubsection*{Expanding on the basics}
-Expanding on the basic model involves modeling the observation, origination and survival probability as independent multi-level logistic regressions. Origination and surivival probabilities share the same covariates and model structure, but observation probability is modeled as a function of a smaller selection of covariates.
+Expanding on the basic model involves modeling the observation, origination and survival probability as independent multi-level logistic regressions. Origination and survival probabilities share the same covariates and model structure, while observation probability is modeled as a function of a smaller selection of covariates.
 
-The probability of observing a species given that it is present \(p\) is modeled as a logistic regression with a time-varying intercept with an additional zero-centered varying effect for species' functional group, respectively. The effect of species mass was also included through a slope term \(\beta^{p}\).
+The probability of observing a species given that it is present \(p\) is modeled as a logistic regression with a time-varying intercept with an additional varying-intercept for species' functional group, respectively. The effect of species mass was also included through a regression slope term \(\beta^{p}\).
 
-The log-odds of a species orginating (logit \(\pi\)) or surviving (logit \(\phi\)) are modeled independently but take the same form: a regression with an intercept that varies by both time and functional group, an additional taxonomic order varying-intercept term, and the slope term for species mass. Importantly, the time and functional group varying-intercept is itself modeled such that the intercept for each functional group is a time series with group-level covariates (described below). 
+The log-odds of a species orginating (logit \(\pi\)) or surviving (logit \(\phi\)) are modeled independently but take the same form: a regression with an intercept that varies by both time and functional group, an additional taxonomic order varying-intercept term, and the slope term for species mass. Importantly, the time and functional group varying-intercept is itself modeled such that the intercept for each functional group is a time series predicted by the group-level covariates (described below). 
 
 The expanded model incorporating these regression models is written as
 \begin{equation}
@@ -187,7 +216,7 @@ The expanded model incorporating these regression models is written as
   \end{aligned}
   \label{eq:expanded}
 \end{equation}
-How the priors for the varying-effects and coefficients in this expanded model are described below along with the complete model.
+How the group-level covariates are included in expanded model and the final choice of priors are described below.
 
 \begin{table}
   \centering
@@ -203,15 +232,16 @@ How the priors for the varying-effects and coefficients in this expanded model a
     \(o^{\pi}\) & \(K\) & effect of species' order on log-odds of \(\pi\) \\
     \(\beta^{\phi}\) & 1 & effect of species' mass on log-odds of \(\phi\) \\
     \(\beta^{\pi}\) & 1 & effect of species' mass on log-odds of \(\pi\) \\
+    \(m\) & \(N\) & species' mass estimates \\
   \end{tabular}
   \label{tab:expanded}
 \end{table}
 
 
 \subsubsection*{Complete model}
-The expanded model (Eq. \ref{eq:expanded}) is still incomplete as it is missing the group-level covariates of interest such as global temperature, and it is missing all of the necessary priors. 
+The expanded model (Eq. \ref{eq:expanded}) is still incomplete as it is missing the group-level covariates such as global temperature, and it is missing all of the necessary final generative priors. 
 
-Here I describe how the effects of mammal functional group on origination and survival are modeled. \(f^{\phi}\) and \(f^{\pi}\) are modeled as the responses from a multivariate normal distribution, where each functional group's time series is modeled as a regression. The time-series structure of these regressions is represented as a random-walk prior for the varying intercept of the group-level regressions. The effects of these group-level covariates on origination and survival are included for each functional group as a vector regression coefficients. The expansion to include this group-level regression is decribed in Equation \ref{eq:group}, the parameters of which are described in Table \ref{tab:group}. 
+Here I describe how the effects of mammal functional group on origination and survival are modeled. \(f^{\phi}\) and \(f^{\pi}\) are modeled as the responses from a multivariate normal distribution, where each functional group is modeled by a time-series regression. Temporal autocorrelation is modeled as a random-walk prior for the varying intercept of the group-level regressions. The effects of the group-level covariates on origination and survival are included for each functional group through regression coefficients. The expansion to include these group-level regression is described in Equation \ref{eq:group}, the parameters of which are described in Table \ref{tab:group}. 
 
 \begin{equation}
   \begin{aligned}
@@ -248,12 +278,13 @@ Here I describe how the effects of mammal functional group on origination and su
     \(\sigma^{\pi}\) & J & scale of random-walk prior for \(\alpha^{\pi}\) \\
     \(\gamma^{\phi}\) & D & group-level regression coefficients for \(\mu^{\phi}\) \\
     \(\gamma^{\pi}\) & D & group-level regression coefficients for \(\mu^{\pi}\) \\
+    \(U\) & \(T\) & matrix of group-level covariates \\
     \hline
   \end{tabular}
   \label{tab:group}
 \end{table}
 
-In hierarchical models like the one descibed here (Eq. \ref{eq:expanded}, \ref{eq:group}) it can be hard to distinguish between the likelihood and prior as data can enter the model through many different parameters CITATION. For example, in Equation \ref{eq:expanded} the model of \(z\) can be considered a prior and statements in Equation \ref{eq:group} can be considered priors for the parameters which predict \(\phi\) and \(\pi\). The remaining priors necessary to this model, however, are not based on parameter expansion but are prior estimates for the remaining unmodeled parameters and are sampling statements where no new data enters the model. These prior choices are expressed in Equation \ref{eq:prior} and are explained below.
+In hierarchical models like the one described here (Eq. \ref{eq:expanded}, \ref{eq:group}) it can be hard to distinguish between the likelihood and prior as data and structure can enter the model through many different parameters CITATION. For example, in Equation \ref{eq:expanded} the model of \(z\) can be considered a prior and statements in Equation \ref{eq:group} can be considered priors for the parameters which predict \(\phi\) and \(\pi\). The remaining priors necessary to this model, however, are not based on parameter expansion but are prior estimates for the remaining unmodeled parameters and are sampling statements where no new data enters the model. These prior choices are expressed in Equation \ref{eq:prior} and are explained below.
 
 For the regression coefficients, such as \(\beta^{\phi}\) and \(\gamma^{\phi}\), the chosen priors are considered weakly informative as they concentrate most of the probability density between -2 and 2. Similarly, the scale parameters, such as \(\tau^{\phi}\) and \(\sigma^{\phi}\), are also given weakly informative half-Normal priors which concentrate most of the probability density between 0 and -2. The covariance matrices, such as \(\Sigma^{\phi}\), are decomposed into a vector of scale terms (e.g. \(\tau^{\phi}\)) and correlation matrices (e.g. \(\Omega^{\phi}\)) which were then given weakly informative priors. This approach and choice of LKJ priors for the correlation matrices follows the Stan User Manual CITATION. For parameter vectors which are presented with only a single prior (e.g. \(\beta^{\phi}\)), that prior statement is for each of the elements of that vector.
 
@@ -283,7 +314,7 @@ For the regression coefficients, such as \(\beta^{\phi}\) and \(\gamma^{\phi}\),
   \label{eq:prior}
 \end{equation}
 
-The model used in this study is the complete sampling statement expressed through the combination of equations \ref{eq:expanded}, \ref{eq:group}, and \ref{eq:prior}. These statements taken together form a complete generative model from which posterior inference of parameter values is possible.
+The model used in this study is the complete sampling statement expressed through the combination of equations \ref{eq:expanded}, \ref{eq:group}, and \ref{eq:prior}. These statements taken together form a complete generative model posterior inference is possible.
 
 
 
@@ -314,7 +345,7 @@ The combined size of the dataset and large number of parameters (Eqs. \ref{eq:ex
 Of additional concern for posterior inference is the partial identifiability of observation parameters \(p_{t = 1}\) and \(p_{t = T}\) \citep{Royle2008}. This issue means that the estimates of sampling probabilities at the ``edges'' of the time series cannot fully be estimated because there are no known ``gaps'' in species occurrence histories that are guaranteed to be filled. Instead, the values of the first and final columns of the ``true'' presence-absence matrix \(z\) for thos observations that do not already have presences in the observed presence-absence matrix \(y\) cannot be estimated \citep{Royle2008}. The hierarchical modeling approach used here helps mitigate this problem by pulling the values of \(p_{t = 1}\) and \(p_{t = T}\) towards the overall mean of \(p\) \citep{Gelman2013d}, and in fact this approach might be more analytically sound than the more ad-hoc approaches that are occasionally used to overcome this hurdle \citep{Royle2008}. Additionally, because \(p_{t = 1}\) and \(p_{t = T}\) are only partially identifiable, estimates of occurrence \(\theta\) and origination \(\phi\) at \(t = 1\) and estimates of \(\theta\), \(\phi\) and survival \(\pi\) at \(t = T\) may suffer from similar edge effects. Again, the hierarchical modeling approach used here may help correct for this reality by drawing these estimates towards the overall means of those parameters.
 
 
-After obtaining approximate posterior inference using ADVI, model adequacy and quality of fit were assessed using a posterior predictive check \citep{Gelman2013d}. By simulating 100 theoretical data sets from the posterior estimates of the model parameters and the observed covariate information the congruence between predictions made by the model and the observed empirical data can be assessed. These datasets are simulated by starting with the observed states of the presence-absence matrix at \(t = 1\); from there, the time series roll forward as stochastic processes with covariate information given from the empirical observations. Importantly, this is fundamentally different from observing the posterior estimates of the ``true'' presence-absence matrix \(z\). The posterior predictive check used in this study is to compare the observed average number of observations per species to a distribution of simulated averages; if the empirically observed value sits in the middle of the distribution then the model can be considered adequate in reproducing the observed number of occurrences per species. 
+Finally, after obtaining approximate estimation of the model posterior using ADVI, model adequacy and quality of fit were assessed using a posterior predictive check \citep{Gelman2013d}. By simulating 100 theoretical data sets from the posterior estimates of the model parameters and the observed covariate information the congruence between predictions made by the model and the observed empirical data can be assessed. These datasets are simulated by starting with the observed states of the presence-absence matrix at \(t = 1\); from there, the time series roll forward as stochastic processes with covariate information given from the empirical observations. Importantly, this is fundamentally different from observing the posterior estimates of the ``true'' presence-absence matrix \(z\). The posterior predictive check used in this study is to compare the observed average number of observations per species to a distribution of simulated averages; if the empirically observed value sits in the middle of the distribution then the model can be considered adequate in reproducing the observed number of occurrences per species. 
 
 The ADVI assumption of a purely Gaussian posterior limits the utility and accuracy of the posterior predictive checks because parameter estimates do not reflect the true posterior distribution and are instead just an approximation \citep{Gelman2013d}. Because of this, posterior predictive estimates are themselves only approximate checks of model adequacy. The posterior predictive check that is used in this study focuses on mean occurrence and not to any scale parameters that might be most affected by the ADVI assumptions.
 

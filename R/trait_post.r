@@ -85,6 +85,7 @@ vis.bdpost(ext2 = ext2, ecotype = ecotype, ecotrans = ecotrans,
 ## estimate standing diversity given posterior
 post.div <- diversity.distribution(sight, ext2, nsim) # 
 
+testing <- FALSE
 source('../R/div_plot.r')  # update this to work as functions, not just source
 
 source('../R/prob_calc.r')  # important posterior probabilities and related

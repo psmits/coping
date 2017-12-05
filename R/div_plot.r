@@ -26,6 +26,11 @@ avg.div <- data.frame(rbind(c(avg.div, time = min(diversity$time)),
                             c(avg.div, time = max(diversity$time))))
 
 divgg <- ggplot(diversity, aes(x = time, y = div, group = sim))
+if(testing) {
+  divgg <- divgg + geom_vline(data = nalma,
+                              mapping = aes(xintercept = ma),
+                              alpha = 0.5)
+}
 divgg <- divgg + geom_line(data = avg.div,
                            mapping = aes(x = time, y = mid, group = NULL),
                            colour = 'blue',
@@ -290,6 +295,7 @@ em$et <- paste(em$eco_2, em$eco_1)
 em$et <- factor(em$et)
 em$et <- factor(em$et, levels = levels(em$et))
 
+
 emgg <- ggplot(em, aes(x = time, y = diversity, fill = et))
 emgg <- emgg + geom_area(position = 'fill')
 emgg <- emgg + scale_fill_manual(values = tol18rainbow,
@@ -304,6 +310,11 @@ ggsave(filename = '../doc/figure/relative_diversity.png', plot = emgg,
 
 # faceted diversity plot
 degg <- ggplot(div.eco, aes(x = time, y = diversity, group = sim))
+if(testing) {
+  degg <- degg + geom_vline(data = nalma,
+                            mapping = aes(xintercept = ma),
+                            alpha = 0.5)
+}
 degg <- degg + geom_hline(data = div.eco.mean,
                           mapping = aes(yintercept = diversity, group = NULL),
                           colour = 'blue', size = 1.1, alpha = 0.5)
