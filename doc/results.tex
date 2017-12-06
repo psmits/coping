@@ -24,6 +24,7 @@ The results of the analyses described above take one of two forms: direct inspec
 
 The model used here in this study appears to have approximately adequate fit to the data based on the results of the posterior predictive check (Fig. \ref{fig:ppc}). Simulated datasets as estimated from the models' posterior appears similar in terms of average number of occurrences per species to the observed number of occurrences in the empirical mammal dataset.
 \begin{figure}[ht]
+  \centering
   \includegraphics[width=\textwidth,height=0.3\textheight,keepaspectratio=true]{figure/pred_occ_bd}
   \caption[Posterior predictive check of average occurrence]{Comparison of the average observed number of occurrences per species (blue line) to the average number of occurrences from 100 posterior predictive datasets simulated from draws from the posterior parameter estimates from the model used in this study. The model is considered to have adequate fit to this aspect of the data if the observed value of the test statistic is approximately centered in the simulated distribution of test statistic values.}
   \label{fig:ppc}
@@ -34,6 +35,7 @@ The model used here in this study appears to have approximately adequate fit to 
 %   time
 Log-odds of observing a species given that it is present varies greatly with time (Fig. \ref{fig:time_observe}) with lowest log-odds of observation being during the Gerigian and Harrisonian land-mammal ages. It is important to note, however, that all land-mammal ages with log-odds of observation greater than 2 correspond to high probabilities of observation, which means that while there may be large differences in log-odds of observation between land-mammal ages this may not translate to substantial difference in the probability of observation.
 \begin{figure}[ht]
+  \centering
   \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/time_observation}
   \caption{Ridgeline density plots of the estimates for the log-odds of observation from the time-varying intercept term. Each of the named time units are North American land-mammal ages. The oldest land-mammal age is at the bottom of the stack and the youngest is at the top. Higher values correspond to an greater log-odds of observation than lower values.}
   \label{fig:time_observe}
@@ -42,6 +44,7 @@ Log-odds of observing a species given that it is present varies greatly with tim
 %   functional group
 There is little variance in the effect of functional group on the log-odds of observing a species that is present (Fig. \ref{fig:fg_observe}). The only functional group with substantially less than expected log-odds of observation is scansorial insectivores, indicating that the fossil record of this group is the least complete of all the functional groups studied. Few functional groups have marginally better than expected log-odds of observation, the other insectivorous functional groups have marginally greater than average log-odds of observation; this is also the case for plantigrade omnivores. These results indicate that the observation histories of these functional groups are expected to be complete than most other functional groups. However, it is important to note that for many functional groups, their estimated log-odds of observation are poorly constrained with great uncertainty indicating little structure in how log-odds of observation varies between functional groups (Fig. \ref{fig:fg_observe}).
 \begin{figure}[ht]
+  \centering
   \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/ecotype_observation}
   \caption{Ridgeline density plots of the estimated effects of species' functional group on log-odds of observing that species given that it is present. Each of the rows correspond to a different functional group as indicated by the dietary and locomotor category combination. Positive values correspond to greater than average log-odds of observation, while negative values indicate lower than average log-odds of observation.}
   \label{fig:fg_observe}
@@ -50,6 +53,7 @@ There is little variance in the effect of functional group on the log-odds of ob
 %   mass
 Species mass is found to have a positive effect on probability of observing a species that is present (Fig. \ref{fig:mass_observe}). This result indicates that species with greater than average mass are expected to have more complete observation histories than species with less than average mass. However, this estimate does not necessarily translate to substantial differences in the estimated probability of observation because observation probability is so high for most of the Cenozoic (Fig. \ref{fig:time_observe}). In fact, it is only when observation probability is low that the effect of mass is easily observable. It is important to remember the effect of mass on observation was considered constant over time and that all differences observation probability between land-mammal ages is driven by variation over time. When log-odds of observation is high, differences due to covariate effects translate to very small differences in actual probability. % change this to just a single response curve? i like that i can visualize how little mass matters depending on overall prob of observation
 \begin{figure}[ht]
+  \centering
   \includegraphics[width=\textwidth,height=0.4\textheight,keepaspectratio=true]{figure/mass_on_pres_bd}
   \caption[Estimates of the effect of mass on observation probability]{Estimates of the effect of species mass on probability of observing a species that is present (\(p\)). Mass has been log-transformed, centered, and rescaled; this means that a mass of 0 corresponds to the mean of log-mass of all observed species and that values are in units of standard deviations. The effect of mass on observation was considered constant over time, and variation in observation probability is due to the temporal effect (Fig. \ref{fig_observe}).} 
   \label{fig:mass_observe}
