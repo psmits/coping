@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2017.10.27)  5 DEC 2017 12:18
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2017.10.27)  6 DEC 2017 16:21
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -493,23 +493,45 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `cmss' (encoding: OT1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
-) (./intro.tex [2] [3] [4] [5] [6] [7] [8] [9]
-<figure/paleo_fourth_corner.pdf, id=431, pagebox=cropbox, 614.295pt x 433.62pt>
+) (./intro.tex [2]
+
+Package natbib Warning: Citation `Bambach1996' on page 3 undefined on input lin
+e 21.
+
+[3] [4] [5]
+
+Package natbib Warning: Citation `Badgley2014' on page 6 undefined on input lin
+e 37.
+
+
+Package natbib Warning: Citation `Badgley2014' on page 6 undefined on input lin
+e 37.
+
+
+Package natbib Warning: Citation `Badgley2010' on page 6 undefined on input lin
+e 37.
+
+[6]
+
+Package natbib Warning: Citation `Woodburne2009' on page 7 undefined on input l
+ine 39.
+
+[7] [8] [9]
+<figure/paleo_fourth_corner.pdf, id=440, pagebox=cropbox, 614.295pt x 433.62pt>
 
 File: figure/paleo_fourth_corner.pdf Graphic file (type pdf)
 <use figure/paleo_fourth_corner.pdf>
-Package pdftex.def Info: figure/paleo_fourth_corner.pdf  used on input line 64.
- on input line 64.
+Package pdftex.def Info: figure/paleo_fourth_corner.pdf  used on input line 65.
+ on input line 65.
 Package pdftex.def Info: Requested size: 351.57654pt x 248.17168pt on input lin
-e 64.
-
-[10 <./figure/paleo_fourth_corner.pdf>] [11]) (./methods.tex
+e 65.
+ [10] [11 <./figure/paleo_fourth_corner.pdf>]) (./methods.tex
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `cmtt' (encoding: OT1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
- [12]
-(./posture_edit.tex
+
+[12] (./posture_edit.tex
 Overfull \hbox (12.0pt too wide) in alignment at lines 3--8
  [] [] [] 
  []
@@ -534,17 +556,17 @@ Overfull \hbox (12.0pt too wide) in alignment at lines 18--39
  [] [] [] 
  []
 
-
+[13]
 Overfull \hbox (12.0pt too wide) in alignment at lines 39--59
  [] [] [] 
  []
 
-[13]
+[14]
 Overfull \hbox (12.0pt too wide) in alignment at lines 59--79
  [] [] [] 
  []
 
-[14]
+
 Overfull \hbox (12.0pt too wide) in alignment at lines 79--99
  [] [] [] 
  []
@@ -554,44 +576,44 @@ Overfull \hbox (12.0pt too wide) in alignment at lines 99--111
  [] [] [] 
  []
 
-[16]) [17] [18] [19] [20]
+[16] [17]) [18] [19] [20] [21]
 Overfull \hbox (37.03076pt too wide) in paragraph at lines 176--187
  [][] 
  []
 
-[21] [22] [23] [24] [25] [26]
-<figure/margin.pdf, id=784, pagebox=cropbox, 597.23125pt x 845.1575pt>
+[22] [23] [24] [25] [26]
+<figure/margin.pdf, id=793, pagebox=cropbox, 597.23125pt x 845.1575pt>
 File: figure/margin.pdf Graphic file (type pdf)
 <use figure/margin.pdf>
 Package pdftex.def Info: figure/margin.pdf  used on input line 328. on input li
 ne 328.
 Package pdftex.def Info: Requested size: 175.37062pt x 248.17155pt on input lin
 e 328.
- [27] [28 <./figure/margin.pdf>] [29])
-(./results.tex
-<figure/pred_occ_bd.png, id=837, 216.81pt x 180.675pt>
+ [27] [28 <./figure/margin.pdf>] [29]) (./results.tex
+<figure/pred_occ_bd.png, id=846, 216.81pt x 180.675pt>
 File: figure/pred_occ_bd.png Graphic file (type png)
 <use figure/pred_occ_bd.png>
 Package pdftex.def Info: figure/pred_occ_bd.png  used on input line 28. on inpu
 t line 28.
 Package pdftex.def Info: Requested size: 223.35979pt x 186.13315pt on input lin
 e 28.
-<figure/time_observation.png, id=839, 433.62pt x 289.08pt>
+<figure/time_observation.png, id=848, 433.62pt x 289.08pt>
 File: figure/time_observation.png Graphic file (type png)
 <use figure/time_observation.png>
 Package pdftex.def Info: figure/time_observation.png  used on input line 39. on
  input line 39.
 Package pdftex.def Info: Requested size: 372.2509pt x 248.16725pt on input line
  39.
-<figure/ecotype_observation.png, id=842, 433.62pt x 289.08pt>
+<figure/ecotype_observation.png, id=851, 433.62pt x 289.08pt>
 File: figure/ecotype_observation.png Graphic file (type png)
 <use figure/ecotype_observation.png>
 Package pdftex.def Info: figure/ecotype_observation.png  used on input line 48.
  on input line 48.
 Package pdftex.def Info: Requested size: 372.2509pt x 248.16725pt on input line
  48.
- [30]
-<figure/mass_on_pres_bd.png, id=855, 433.62pt x 289.08pt>
+
+[30]
+<figure/mass_on_pres_bd.png, id=864, 433.62pt x 289.08pt>
 File: figure/mass_on_pres_bd.png Graphic file (type png)
 <use figure/mass_on_pres_bd.png>
 Package pdftex.def Info: figure/mass_on_pres_bd.png  used on input line 57. on 
@@ -606,7 +628,7 @@ LaTeX Warning: Reference `fig_observe' on page 31 undefined on input line 58.
 LaTeX Warning: Reference `fig_observe' on page 31 undefined on input line 58.
 
 [31 <./figure/pred_occ_bd.png (PNG copy)>] [32 <./figure/time_observation.png>]
-<figure/ecotype_origin_bd.png, id=870, 433.62pt x 289.08pt>
+<figure/ecotype_origin_bd.png, id=879, 433.62pt x 289.08pt>
 File: figure/ecotype_origin_bd.png Graphic file (type png)
 <use figure/ecotype_origin_bd.png>
 Package pdftex.def Info: figure/ecotype_origin_bd.png  used on input line 73. o
@@ -614,7 +636,7 @@ n input line 73.
 Package pdftex.def Info: Requested size: 372.2509pt x 248.16725pt on input line
  73.
 [33 <./figure/ecotype_observation.png>]
-<figure/order_origin_bd.png, id=878, 433.62pt x 289.08pt>
+<figure/order_origin_bd.png, id=887, 433.62pt x 289.08pt>
 File: figure/order_origin_bd.png Graphic file (type png)
 <use figure/order_origin_bd.png>
 Package pdftex.def Info: figure/order_origin_bd.png  used on input line 82. on 
@@ -622,7 +644,7 @@ input line 82.
 Package pdftex.def Info: Requested size: 372.2509pt x 248.16725pt on input line
  82.
  [34 <./figure/mass_on_pres_bd.png>]
-<figure/mass_on_origin_bd.png, id=887, 433.62pt x 289.08pt>
+<figure/mass_on_origin_bd.png, id=896, 433.62pt x 289.08pt>
 File: figure/mass_on_origin_bd.png Graphic file (type png)
 <use figure/mass_on_origin_bd.png>
 Package pdftex.def Info: figure/mass_on_origin_bd.png  used on input line 91. o
@@ -632,14 +654,14 @@ Package pdftex.def Info: Requested size: 372.2509pt x 248.16725pt on input line
 
 [35 <./figure/ecotype_origin_bd.png (PNG copy)>] [36 <./figure/order_origin_bd.
 png>]
-<figure/group_on_origin_bd.png, id=906, 433.62pt x 289.08pt>
+<figure/group_on_origin_bd.png, id=916, 433.62pt x 289.08pt>
 File: figure/group_on_origin_bd.png Graphic file (type png)
 <use figure/group_on_origin_bd.png>
 Package pdftex.def Info: figure/group_on_origin_bd.png  used on input line 105.
  on input line 105.
 Package pdftex.def Info: Requested size: 372.2509pt x 248.16725pt on input line
  105.
-<figure/origination_correlation.png, id=908, 1505.625pt x 1505.625pt>
+<figure/origination_correlation.png, id=918, 1505.625pt x 1505.625pt>
 File: figure/origination_correlation.png Graphic file (type png)
 <use figure/origination_correlation.png>
 Package pdftex.def Info: figure/origination_correlation.png  used on input line
@@ -648,7 +670,7 @@ Package pdftex.def Info: Requested size: 469.74852pt x 469.74852pt on input lin
 e 175.
  [37 <./figure/mass_on_origin_bd.png (PNG copy)>] [38 <./figure/group_on_origin
 _bd.png (PNG copy)>] [39]
-<figure/ecotype_survival_bd.png, id=933, 433.62pt x 289.08pt>
+<figure/ecotype_survival_bd.png, id=942, 433.62pt x 289.08pt>
 File: figure/ecotype_survival_bd.png Graphic file (type png)
 <use figure/ecotype_survival_bd.png>
 Package pdftex.def Info: figure/ecotype_survival_bd.png  used on input line 196
@@ -656,14 +678,14 @@ Package pdftex.def Info: figure/ecotype_survival_bd.png  used on input line 196
 Package pdftex.def Info: Requested size: 372.2509pt x 248.16725pt on input line
  196.
  [40]
-<figure/order_survival_bd.png, id=940, 433.62pt x 289.08pt>
+<figure/order_survival_bd.png, id=949, 433.62pt x 289.08pt>
 File: figure/order_survival_bd.png Graphic file (type png)
 <use figure/order_survival_bd.png>
 Package pdftex.def Info: figure/order_survival_bd.png  used on input line 205. 
 on input line 205.
 Package pdftex.def Info: Requested size: 372.2509pt x 248.16725pt on input line
  205.
-<figure/mass_on_surv_bd.png, id=942, 433.62pt x 289.08pt>
+<figure/mass_on_surv_bd.png, id=951, 433.62pt x 289.08pt>
 File: figure/mass_on_surv_bd.png Graphic file (type png)
 <use figure/mass_on_surv_bd.png>
 Package pdftex.def Info: figure/mass_on_surv_bd.png  used on input line 214. on
@@ -671,14 +693,14 @@ Package pdftex.def Info: figure/mass_on_surv_bd.png  used on input line 214. on
 Package pdftex.def Info: Requested size: 372.2509pt x 248.16725pt on input line
  214.
  [41]
-<figure/group_on_survival_bd.png, id=957, 433.62pt x 289.08pt>
+<figure/group_on_survival_bd.png, id=966, 433.62pt x 289.08pt>
 File: figure/group_on_survival_bd.png Graphic file (type png)
 <use figure/group_on_survival_bd.png>
 Package pdftex.def Info: figure/group_on_survival_bd.png  used on input line 22
 9. on input line 229.
 Package pdftex.def Info: Requested size: 372.2509pt x 248.16725pt on input line
  229.
-<figure/survival_correlation.png, id=960, 1505.625pt x 1505.625pt>
+<figure/survival_correlation.png, id=969, 1505.625pt x 1505.625pt>
 File: figure/survival_correlation.png Graphic file (type png)
 <use figure/survival_correlation.png>
 Package pdftex.def Info: figure/survival_correlation.png  used on input line 29
@@ -686,7 +708,7 @@ Package pdftex.def Info: figure/survival_correlation.png  used on input line 29
 Package pdftex.def Info: Requested size: 469.74852pt x 469.74852pt on input lin
 e 299.
  [42]
-<figure/log_diversity.png, id=970, 433.62pt x 289.08pt>
+<figure/log_diversity.png, id=979, 433.62pt x 289.08pt>
 File: figure/log_diversity.png Graphic file (type png)
 <use figure/log_diversity.png>
 Package pdftex.def Info: figure/log_diversity.png  used on input line 314. on i
@@ -694,7 +716,7 @@ nput line 314.
 Package pdftex.def Info: Requested size: 465.34505pt x 310.23003pt on input lin
 e 314.
  [43] [44] [45] [46]
-<figure/ecotype_diversity.png, id=1006, 433.62pt x 289.08pt>
+<figure/ecotype_diversity.png, id=1015, 433.62pt x 289.08pt>
 File: figure/ecotype_diversity.png Graphic file (type png)
 <use figure/ecotype_diversity.png>
 Package pdftex.def Info: figure/ecotype_diversity.png  used on input line 371. 
@@ -702,7 +724,7 @@ on input line 371.
 Package pdftex.def Info: Requested size: 465.34505pt x 310.23003pt on input lin
 e 371.
  [47]
-<figure/relative_diversity.png, id=1019, 578.16pt x 289.08pt>
+<figure/relative_diversity.png, id=1028, 578.16pt x 289.08pt>
 File: figure/relative_diversity.png Graphic file (type png)
 <use figure/relative_diversity.png>
 Package pdftex.def Info: figure/relative_diversity.png  used on input line 387.
@@ -710,35 +732,27 @@ Package pdftex.def Info: figure/relative_diversity.png  used on input line 387.
 Package pdftex.def Info: Requested size: 469.75385pt x 234.8769pt on input line
  387.
 )
-(./disc.tex [48]
-
-LaTeX Warning: Reference `fig:eco_occur' on page 49 undefined on input line 35.
-
-
-[49]
-
-LaTeX Warning: Reference `fig:group_pure_presence' on page 50 undefined on inpu
-t line 37.
-
-[50]) (./main_doc.bbl [51] [52] [53] [54] [55] [56]
+(./disc.tex [48] [49] [50] [51]) [52] (./main_doc.bbl [53] [54] [55] [56]
+[57]
 Missing character: There is no ‚ in font cmr10!
 Missing character: There is no Ä in font cmr10!
 Missing character: There is no ê in font cmr10!
 Missing character: There is no ‚ in font cmr10!
 Missing character: There is no Ä in font cmr10!
 Missing character: There is no ê in font cmr10!
- [57] [58] [59] [60]
-[61])
+ [58] [59] [60] [61])
+
+Package natbib Warning: There were undefined citations.
+
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 75.
- [62] [63 <./figure/origination_correlation.png (PNG copy)>] [64 <./figure/ecot
-ype_survival_bd.png (PNG copy)>] [65 <./figure/order_survival_bd.png>]
-[66 <./figure/mass_on_surv_bd.png (PNG copy)>] [67 <./figure/group_on_survival_
-bd.png (PNG copy)>] [68 <./figure/survival_correlation.png (PNG copy)>]
-[69 <./figure/log_diversity.png (PNG copy)>] [70 <./figure/ecotype_diversity.pn
-g (PNG copy)>] [71 <./figure/relative_diversity.png (PNG copy)>]
+[62] [63 <./figure/origination_correlation.png (PNG copy)>] [64 <./figure/ecoty
+pe_survival_bd.png (PNG copy)>] [65 <./figure/order_survival_bd.png>] [66 <./fi
+gure/mass_on_surv_bd.png (PNG copy)>] [67 <./figure/group_on_survival_bd.png (P
+NG copy)>] [68 <./figure/survival_correlation.png (PNG copy)>] [69 <./figure/lo
+g_diversity.png (PNG copy)>] [70 <./figure/ecotype_diversity.png (PNG copy)>]
+[71 <./figure/relative_diversity.png (PNG copy)>]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 75.
-
-(./main_doc.aux)
+ (./main_doc.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 75.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 75.
 Package rerunfilecheck Info: File `main_doc.out' has not changed.
@@ -750,13 +764,13 @@ LaTeX Warning: There were undefined references.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 75.
  ) 
 Here is how much of TeX's memory you used:
- 10235 strings out of 492990
- 158887 string characters out of 6135004
- 296577 words of memory out of 5000000
- 13281 multiletter control sequences out of 15000+600000
- 15536 words of font info for 96 fonts, out of 8000000 for 9000
+ 10187 strings out of 492990
+ 158037 string characters out of 6135004
+ 295933 words of memory out of 5000000
+ 13247 multiletter control sequences out of 15000+600000
+ 15428 words of font info for 95 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 37i,15n,53p,2271b,651s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 37i,15n,53p,2271b,627s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texl
@@ -773,10 +787,10 @@ are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/tex
 live/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/t
 exmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb></usr/share/texlive/texmf-di
 st/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on main_doc.pdf (71 pages, 4773407 bytes).
+Output written on main_doc.pdf (71 pages, 4772693 bytes).
 PDF statistics:
- 1283 PDF objects out of 1440 (max. 8388607)
- 1130 compressed objects within 12 object streams
- 238 named destinations out of 1000 (max. 500000)
+ 1277 PDF objects out of 1440 (max. 8388607)
+ 1124 compressed objects within 12 object streams
+ 226 named destinations out of 1000 (max. 500000)
  18016 words of extra memory for PDF output out of 20736 (max. 10000000)
 
