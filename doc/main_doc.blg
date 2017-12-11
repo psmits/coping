@@ -4,49 +4,49 @@ The top-level auxiliary file: main_doc.aux
 The style file: amnatnat.bst
 Database file #1: bib.bib
 Warning--I didn't find a database entry for "Bambach1996"
+Warning--I didn't find a database entry for "Woodburne2009"
 Warning--I didn't find a database entry for "Badgley2014"
 Warning--I didn't find a database entry for "Badgley2010"
-Warning--I didn't find a database entry for "Woodburne2009"
 Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
-You've used 98 entries,
+You've used 95 entries,
             3251 wiz_defined-function locations,
-            1312 strings with 23278 characters,
-and the built_in function-call counts, 60848 in all, are:
-= -- 5230
-> -- 2869
-< -- 65
-+ -- 963
-- -- 865
-* -- 4265
-:= -- 9891
-add.period$ -- 397
-call.type$ -- 98
-change.case$ -- 784
-chr.to.int$ -- 104
-cite$ -- 98
-duplicate$ -- 4308
-empty$ -- 4323
-format.name$ -- 1158
-if$ -- 12122
+            1297 strings with 22860 characters,
+and the built_in function-call counts, 59220 in all, are:
+= -- 5078
+> -- 2816
+< -- 62
++ -- 945
+- -- 850
+* -- 4160
+:= -- 9624
+add.period$ -- 385
+call.type$ -- 95
+change.case$ -- 764
+chr.to.int$ -- 101
+cite$ -- 95
+duplicate$ -- 4190
+empty$ -- 4198
+format.name$ -- 1132
+if$ -- 11796
 int.to.chr$ -- 1
 int.to.str$ -- 1
-missing$ -- 876
-newline$ -- 494
-num.names$ -- 398
-pop$ -- 1674
+missing$ -- 853
+newline$ -- 479
+num.names$ -- 386
+pop$ -- 1633
 preamble$ -- 1
-purify$ -- 678
+purify$ -- 661
 quote$ -- 0
-skip$ -- 1335
+skip$ -- 1296
 stack$ -- 0
-substring$ -- 3266
-swap$ -- 1965
+substring$ -- 3167
+swap$ -- 1913
 text.length$ -- 9
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 861
+type$ -- 834
 warning$ -- 0
-while$ -- 477
+while$ -- 462
 width$ -- 0
-write$ -- 1272
+write$ -- 1233
 (There were 4 warnings)
