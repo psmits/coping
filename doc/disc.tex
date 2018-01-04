@@ -45,40 +45,77 @@ The results of my model suggest that there are three moments of exceptionally hi
 
 The Wasatchian brackets the PETM and the EECO. In terms of standing diversity, the Wasatchian marks peak diversity of all arboreal functional groups; peak diversity of digitigrade carnivores, plantigrade carnivores, plantigrade herbivores; high diversity of plantigrade insectivores and scansorial carnivores; and the subsequent expansion of diveristy of digitigrade herbivores following this time point. In terms of relative diversity, the Wasatchian marks peak arboreal carnivore, a low amount of fossorial herbivores, and the expansion of scansorial herbivores after this time point. \uppercase{meaning? compare to hypotheses from intro}
 In general, these findings are consistent with many of the hypothesized changes to mammal diversity described in \citet{Woodburne2009}.
-% increase creodons, primates, artiodacyla, perisodacyla. peak browse. drop insectivores. replace phenocodonids and plesiafapids with terrestrial herbivores and frugivores. 
-% turnover rodents, primates, pholidotans. euprimates, hypercarnivores, artio, persio.
-% decrease functional diversity after.
+
+
+predict: increase creodons, primates, artiodacyla, perisodacyla. peak browse. drop insectivores. replace phenocodonids and plesiafapids with terrestrial herbivores and frugivores. turnover rodents, primates, pholidotans. euprimates, hypercarnivores, artio, persio. decrease functional diversity after.
 
 
 
 Orellan and Whitneyan is lowest diversity, and is a major moment in changes to functional diversity. Marks the loss of some, marks the expansion of others. This also marks a peak in survival probability for six functional groups WHICH. These time units also mark the Eocene/Oligocene boundary. In terms of standing diversity, these time units mark the complete loss or the nadir in diversity of all the arboreal functional groups; a dip in diversity of unguligrade herbivores, a drop off in diversity of plantigrade insectivres, scansorial insetivores, and scansorial omnivores; and marks the expansion fossorial functional groups as well as plantigrade omnivores. In terms of relative diveristy, the Orellan and Whitneyan are associated with an increase in digitigrade carnivores, digitigrade herbivores, fossorial herbivores and fossorial insectivores; the beginning of an increase in scansorial omnivores; a decrease in diveristy of scansorial insectivores; and the loss of arboreal insectivores as a meaningful component of relative diversity. \uppercase{meaning? compare to hypotheses from intro}
 
 The near complete loss of arboreal functional groups from the regional species pool is not specifically hypothesized in previous studies of the Eocene-Oligocene transition, but is none the less predictable given the long standing narrative describing the loss of closed, forested environments from North America. What is remarkable, however, is the simultaneous near complete loss of these groups which is one of the most obvious shared changes to functional diversity. This pattern implies a single, shared mechanism underlying the loss of arboreal diversity.
-% loss ungulate
-% tectonism
+
+predict: loss ungulate. tectonism
 
 
 
 
 The third moment of particular interest is the Barstovian which marks the second peak in mammal standing diversity as estimated from my model. This time unit also marks the Mid-Miocene Climatic Optimum, a period of relative warm-th and stability in global temperature compared to the rest of the Neogene. In terms of standing diversity, the Barstovian marks peak diveristy of unguligrade herbivores, digitigrade carnivores, digitigrade herbivores, and fossorial insectivores. In contrast, relative diversity is much more varied in terms of changes to functional diversity. The Barstovian marks an increase in relative diversity of arboreal insetivores, plantigrade omnivores; a decrease in relative diversity of digitigrade herbivores; and the loss of the contribution of unguligrade ominvores and plantigrade insectivores to the species pool. \uppercase{meaning? compare to hypotheses from intro}
-% increase ungulates, rodents
-% i hypothesize fossorial, unguligrade, and digitigrade increase
-% tectonism
+
+predict: increase ungulates, rodents. i hypothesize fossorial, unguligrade, and digitigrade increase. tectonism
 
 
 
 % observation
 Mammal species are short lived with average duration being only slightly more than one NALMA. This short a duration means that observation probability is very high for most of the Cenozoic, with it being greater than 0.50 for the entire Cenozoic while also being greater than 0.80 for most of the Cenozoic. Time is associated with greater variation in observation probability than functional group. Scansorial insectivores are estimated to have a substantially lower observation probability than the other functional groups.
 
+importantly i'm not estimating the missing diversity, just the range extensions. these are fundamentally different. i think people have a lot of confusion about what preservation rate is versus observation probability. i also only need presence at time, not the amount of presences at that time.
+
+
+
 % other species level traits
-Mass is estimated with XX percent probability of having a TYPE effect on species observation, XX percent probability of having a TYPE effect on species origination, and an XX percent probability of having a TYPE effect on species survival.
+Mass is estimated with XX percent probability of having a TYPE effect on species observation, XX percent probability of having a TYPE effect on species origination, and an XX percent probability of having a TYPE effect on species survival. This marginal result may point to heterogeneity both in time and across diversity wrt when and to whom mass matters wrt survival. remember that liow used only large bodied mammals; this biases results! tomiya used a restricted subset too. i use ``everything'' which means i might be revealing the complexity in response. Heterogeneity is biology. future analysis might consider heterogeneity over time and across taxa, however that is beyond the scope of this study specifically. again, remember this study is about functional groups not survival per se. i'm smoothing over that.
 
 
 
+
+
+
+Things I could have done better: 
+
+allow taxon effect to vary with time; adds a weird amount of complexity and potential unidentifiable moments which make this super fucking hard. also, not central to this study. 
+
+my data is PBDB and apparently I need to apologize about that at every fucking turn; that's ok, just get a fucking life or help improve the data or provide cyphers to improve the data programatically. but what about all these errors and missing taxa, you say. fuck you, if it isn't published and in the PBDB i didn't use it. fight me.
+
+the issue of biggest complaint is the actual functional categories and the ``fear'' that they are all based on taxonomy; of course they are! the ankle posture stuff is and i chose to do that; the fact that diet is that way seems super natural to me. including the taxon category as a independent effect is for the hope to help control for that. 
+
+why didn't i just use pyrate? because fossils aren't in continuous time. pyrate makes too many assumptions and this approach trades assumptions for flexibility. also, i'm like one of 10 people in the world who can actually read the pyrate papers, so give up.
+
+better environmental covarites. show me them. if they don't exist, i can't use them.
+
+species average mass assumed constant with time. one) many species only exist one time unit. two) that type of data does not exist for many species. also unnecessary complication.
+
+what about other continents? while the data is ``out there'' it also isn't. also scrappier than NA for Paleogene which is kind critical for this study.
+
+your orders are paraphyletic. shut up. virtually all species were at one point paraphyletic, if not still are. additionally, these orders were at one point monophyletic, especially at the times of their start. this argument means so little to me.
+
+
+
+things I wish i could have done:
+
+spatial context would make this amazing. because then i could be talking about changes to average community and its associated spatial heterogeneity
+
+
+
+
+
+
+
+The biggest story of macroecology and changes to functional diversity is that the macroevolutionary processes underpinning these changes are heterogeneous over time and across species. 
 
 What do all these results mean? This is the nuance we've needed to actually understand species response to changes in environmental context. Is origination driven by ecological opportunity while survival is driven by differences in species-level fitness?
 
-
+how does the regional species pool reorganize? no two functional groups are identical in their patterning, instead there are unique events that may be shared across them. this means that many of our questions have been invalid or unanswerable: you can't test for correlation with n=1. it also doesn't mean that environmental events can't effect evolution; it just means it is heterogeneous and partially random. this is most strongly evinced by the fact that similar changes to environments don't involve changes to the same functional groups each time.
 
 
 
