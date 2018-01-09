@@ -72,7 +72,11 @@ estimate.diversity <- function(data, posterior) {
 #' @param nsim integer, number of posterior simulations to do
 diversity.distribution <- function(data, posterior, nsim) {
   out <- vector(mode = 'list', length = nsim)
-  out <- mcMap(function(x) estimate.diversity(data, posterior), 
-               out, mc.cores = detectCores())
+  if(is.na(detectCores())) {
+    out <- Map(function(x) estimate.diversity(data, posterior), out)
+  } else {
+    out <- mcMap(function(x) estimate.diversity(data, posterior), 
+                 out, mc.cores = detectCores())
+  }
   out
 }
