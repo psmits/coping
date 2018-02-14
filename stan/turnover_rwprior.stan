@@ -101,6 +101,7 @@ parameters {
   vector<lower=0>[D] o_tau;
 
   matrix[T, D] o_inter;
+  real<lower=0> o_timescale;
   matrix[U - 1, D] o_gamma; // effect of group level covariates
 
   //// effect of order
@@ -116,6 +117,7 @@ parameters {
   vector<lower=0>[D] s_tau;
 
   matrix[T - 1, D] s_inter;
+  real<lower=0> s_timescale;
   matrix[U - 1, D] s_gamma; // effect of group level covariates
 
   //// effect of order
@@ -126,8 +128,8 @@ parameters {
   // preservation
   vector[T] p_timeeff; // time eff
   real<lower=0> p_timescale;
-  vector[D] p_funceff; // ecology eff
-  real<lower=0> p_funcscale;
+  //vector[D] p_funceff; // ecology eff
+  //real<lower=0> p_funcscale;
   real p_b_1;  // mass coef
 }
 transformed parameters {
@@ -156,7 +158,7 @@ transformed parameters {
   for(t in 1:T) {
     for(n in 1:N) {
       origin[n, t] = inv_logit(o_a[t, state[n]] + o_b_1 * mass[n] + o_ordeff[ords[n]]);
-      p[n, t] = inv_logit(p_timeeff[t] + p_b_1 * mass[n] + p_funceff[state[n]]);
+      p[n, t] = inv_logit(p_timeeff[t] + p_b_1 * mass[n]);// + p_funceff[state[n]]);
     }
   }
   for(t in 1:(T-1)) {
@@ -171,18 +173,19 @@ model {
   to_vector(o_a_z) ~ normal(0, 1);
   o_L_Omega ~ lkj_corr_cholesky(2);  // really strong!
   o_tau ~ normal(0, 1);
-  to_vector(o_gamma) ~ normal(0, 0.5);  // really strong for no eff!
+  to_vector(o_gamma) ~ normal(0, 1);  // really strong for no eff!
   o_inter[1] ~ normal(0, 1);
   for(ii in 2:T) {
-    o_inter[ii] ~ normal(o_inter[ii - 1], 1);
+    o_inter[ii] ~ normal(o_inter[ii - 1], o_timescale);
   }
+  o_timescale ~ normal(0, 1);
 
   // priors for order effect on origination
   o_ordeff ~ normal(0, o_ordscale);
-  o_ordscale ~ normal(0, 0.5);  // really strong!
+  o_ordscale ~ normal(0, 1);  // really strong!
 
   // priors for effects of mass on orignation
-  o_b_1 ~ normal(0, 0.5);
+  o_b_1 ~ normal(0, 1);
 
 
   ////
@@ -191,18 +194,19 @@ model {
   to_vector(s_a_z) ~ normal(0, 1);
   s_L_Omega ~ lkj_corr_cholesky(2);  // really strong for no corr!
   s_tau ~ normal(0, 1);
-  to_vector(s_gamma) ~ normal(0, 0.5);  // really strong for no eff!
+  to_vector(s_gamma) ~ normal(0, 1);  // really strong for no eff!
   s_inter[1] ~ normal(0, 1);
   for(ii in 2:(T - 1)) {
-    s_inter[ii] ~ normal(s_inter[ii - 1], 1);
+    s_inter[ii] ~ normal(s_inter[ii - 1], s_timescale);
   }
+  s_timescale ~ normal(0, 1);
 
   // priors for order effect on origination
   s_ordeff ~ normal(0, s_ordscale);
-  s_ordscale ~ normal(0, 0.5);  // really strong for no eff!
+  s_ordscale ~ normal(0, 1);  // really strong for no eff!
 
   // priors for effects of mass on survival
-  s_b_1 ~ normal(0, 0.5);  // really strong for no eff!
+  s_b_1 ~ normal(0, 1);  // really strong for no eff!
 
 
   ////
@@ -216,14 +220,13 @@ model {
   p_timescale ~ normal(0, 1);
 
   // 
-  p_funceff ~ normal(0, p_funcscale);
-  p_funcscale ~ normal(0, 0.5);  // really strong for no eff!
+  //p_funceff ~ normal(0, p_funcscale);
+  //p_funcscale ~ normal(0, 1);  // really strong for no eff!
   p_b_1 ~ normal(1, 1);  // slope mass; guessing positive
 
 
-  for(n in 1:N) {
+  for(n in 1:N)
     target += state_space_lp(sight[n], origin[n, ], stay[n, ], p[n, ]);
-  }
 }
 generated quantities {
   corr_matrix[D] o_Omega;
