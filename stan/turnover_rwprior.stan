@@ -101,7 +101,7 @@ parameters {
   vector<lower=0>[D] o_tau;
 
   matrix[T, D] o_inter;
-  real<lower=0> o_timescale;
+  vector<lower=0>[D] o_timescale;
   matrix[U - 1, D] o_gamma; // effect of group level covariates
 
   //// effect of order
@@ -117,7 +117,7 @@ parameters {
   vector<lower=0>[D] s_tau;
 
   matrix[T - 1, D] s_inter;
-  real<lower=0> s_timescale;
+  vector<lower=0>[D] s_timescale;
   matrix[U - 1, D] s_gamma; // effect of group level covariates
 
   //// effect of order
@@ -174,9 +174,11 @@ model {
   o_L_Omega ~ lkj_corr_cholesky(2);  // really strong!
   o_tau ~ normal(0, 1);
   to_vector(o_gamma) ~ normal(0, 1);  // really strong for no eff!
-  o_inter[1] ~ normal(0, 1);
-  for(ii in 2:T) {
-    o_inter[ii] ~ normal(o_inter[ii - 1], o_timescale);
+  for(d in 1:D) {
+    o_inter[1, d] ~ normal(0, 1);
+    for(ii in 2:T) {
+      o_inter[ii, d] ~ normal(o_inter[ii - 1, d], o_timescale[d]);
+    }
   }
   o_timescale ~ normal(0, 1);
 
@@ -195,9 +197,11 @@ model {
   s_L_Omega ~ lkj_corr_cholesky(2);  // really strong for no corr!
   s_tau ~ normal(0, 1);
   to_vector(s_gamma) ~ normal(0, 1);  // really strong for no eff!
-  s_inter[1] ~ normal(0, 1);
-  for(ii in 2:(T - 1)) {
-    s_inter[ii] ~ normal(s_inter[ii - 1], s_timescale);
+  for(d in 1:D) {
+    s_inter[1, d] ~ normal(0, 1);
+    for(ii in 2:(T - 1)) {
+      s_inter[ii, d] ~ normal(s_inter[ii - 1, d], s_timescale[d]);
+    }
   }
   s_timescale ~ normal(0, 1);
 
