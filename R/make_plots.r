@@ -291,26 +291,26 @@ vis.bdpost <- function(ext2,
   #ext2$p_0  # constant intercept
   #ext2$p_b_1  # mass slope
 
-  # functional group effect
-  ecotrans1 <- ecotrans
-  ecotrans1[, 1] <- mapvalues(ecotrans[, 1], 
-                              from = unique(ecotrans[, 1]), 
-                              to = c('carnivore', 'herbivore', 
-                                     'insectivore', 'omnivore'))
-  ecotrans1 <- apply(ecotrans1, 2, rev)
-  comboname <- apply(ecotrans1, 1, function(x) paste(x, collapse = ' '))
-  fe <- melt(ext2$p_funceff)[, -1]
-  names(fe) <- c('state', 'value')
-  fe$state <- comboname[fe$state]
-  fegg <- ggplot(fe, aes(x = value, y = state))
-  fegg <- fegg + geom_density_ridges(rel_min_height = 0.01, scale = 2)
-  fegg <- fegg + theme_ridges()
-  fegg <- fegg + scale_x_continuous(expand = c(0.01, 0))
-  fegg <- fegg + scale_y_discrete(expand = c(0.01, 0))
-  fegg <- fegg + labs(x = 'Effect on log-odds observation',
-                      y = 'Functional group')
-  ggsave(filename = '../doc/figure/ecotype_observation.png', plot = fegg,
-         width = 6, height = 4)
+  ## functional group effect
+  #ecotrans1 <- ecotrans
+  #ecotrans1[, 1] <- mapvalues(ecotrans[, 1], 
+  #                            from = unique(ecotrans[, 1]), 
+  #                            to = c('carnivore', 'herbivore', 
+  #                                   'insectivore', 'omnivore'))
+  #ecotrans1 <- apply(ecotrans1, 2, rev)
+  #comboname <- apply(ecotrans1, 1, function(x) paste(x, collapse = ' '))
+  #fe <- melt(ext2$p_funceff)[, -1]
+  #names(fe) <- c('state', 'value')
+  #fe$state <- comboname[fe$state]
+  #fegg <- ggplot(fe, aes(x = value, y = state))
+  #fegg <- fegg + geom_density_ridges(rel_min_height = 0.01, scale = 2)
+  #fegg <- fegg + theme_ridges()
+  #fegg <- fegg + scale_x_continuous(expand = c(0.01, 0))
+  #fegg <- fegg + scale_y_discrete(expand = c(0.01, 0))
+  #fegg <- fegg + labs(x = 'Effect on log-odds observation',
+  #                    y = 'Functional group')
+  #ggsave(filename = '../doc/figure/ecotype_observation.png', plot = fegg,
+  #       width = 6, height = 4)
 
   # time effect
   te <- melt(ext2$p_timeeff)[, -1]

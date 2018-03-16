@@ -60,6 +60,32 @@ if(bin == '2My') {
   time.start.stop <- cbind(c(1.8, time.stop[-length(time.stop)]), time.stop)
 }
 
+############
+# full Bayes
+post <- list.files('../data/mcmc_out', 
+                   pattern = 'rwprior_fast_[0-9]', 
+                   full.names = TRUE)
+fit <- read_stan_csv(post)
+check_all_diagnostics(fit)
+ext <- rstan::extract(fit, permuted = TRUE)
+ext2 <- ext
+
+post.pred(ext2, ntax = N, ntime = T, sight.obs = sight, nsim, samp, bd = TRUE)
+
+vis.bdpost(ext2 = ext2, ecotype = ecotype, ecotrans = ecotrans, 
+           mass = mass, cbp.long = cbp.long, 
+           time.start.stop = time.start.stop, ecoprob = ecoprob, 
+           order.cypher = order.cypher)
+
+## estimate standing diversity given posterior
+post.div <- diversity.distribution(sight, ext2, nsim) # 
+
+testing <- FALSE
+source('../R/div_plot.r')  # update this to work as functions, not just source
+
+source('../R/prob_calc.r')  # important posterior probabilities and related
+
+source('../R/cor_plot.r')  # plot and inspect correlation matrix from b+d
 
 
 #############
@@ -92,32 +118,3 @@ if(bin == '2My') {
 #source('../R/prob_calc.r')  # important posterior probabilities and related
 #
 ##source('../R/cor_plot.r')  # plot and inspect correlation matrix from b+d
-
-
-
-############
-# full Bayes
-post <- list.files('../data/mcmc_out', 
-                   pattern = 'rwprior_fast_[0-9]', 
-                   full.names = TRUE)
-fit <- read_stan_csv(post)
-check_all_diagnostics(fit)
-ext <- rstan::extract(fit, permuted = TRUE)
-ext2 <- ext
-
-post.pred(ext2, ntax = N, ntime = T, sight.obs = sight, nsim, samp, bd = TRUE)
-
-vis.bdpost(ext2 = ext2, ecotype = ecotype, ecotrans = ecotrans, 
-           mass = mass, cbp.long = cbp.long, 
-           time.start.stop = time.start.stop, ecoprob = ecoprob, 
-           order.cypher = order.cypher)
-
-## estimate standing diversity given posterior
-post.div <- diversity.distribution(sight, ext2, nsim) # 
-
-testing <- FALSE
-source('../R/div_plot.r')  # update this to work as functions, not just source
-
-source('../R/prob_calc.r')  # important posterior probabilities and related
-
-source('../R/cor_plot.r')  # plot and inspect correlation matrix from b+d
