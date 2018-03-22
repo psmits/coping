@@ -83,39 +83,10 @@ vis.bdpost(ext2 = ext2, ecotype = ecotype, ecotrans = ecotrans,
 ## estimate standing diversity given posterior
 post.div <- diversity.distribution(sight, ext2, nsim) # 
 
-# transform occurrence matrix into list of functional distance matrices
-#   functional distance is based on two categorical variables
-#     diet
-#     locomotion
-#   gower dissimilarity
+# downstream calculations
 
-# columns are time
-# rows are species
 
-# what i do is aggregate by functional group
-# each functional group has a count
-# then as average functional diversity
-# functional diversity of each 
-qs <- seq(0, 4, by = 0.1)
-qq_post <- list()
-for(jj in seq(nsim)) {
-  qq <- list()
-  for(ii in seq(T)) {
-    # time unit
-    tt <- post.div[[1]][, ii]
-    # ecotypes of present species
-    pp <- data.frame(ecotype[tt == 1, ])
-    pp <- pp %>% group_by(X1, X2) %>% tally()
-
-    # distance matrix
-    dd <- daisy(pp[, 1:2], metric = 'gower')
-
-    qq[[ii]] <- purrr::map_dbl(qs, 
-                               function(x) Func2014(dd, pp[, 3], q = x)$FuncD)
-  }
-  qq_post[[jj]] <- qq
-}
-
+source('../R/function_plots.r')
 
 testing <- FALSE
 source('../R/div_plot.r')  # update this to work as functions, not just source
