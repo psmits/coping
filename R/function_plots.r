@@ -13,6 +13,7 @@
 # functional diversity of each 
 # does this even make sense?
 qs <- seq(0, 4, by = 0.1)
+shannon <- which(qs == 1)
 qq_post <- list()
 for(jj in seq(nsim)) {
   qq <- list()
@@ -31,18 +32,20 @@ for(jj in seq(nsim)) {
   tfd <- purrr::map2(oo, mfd, ~ .x$FuncD * .y)
 
   # calculate effective similarity between units
-  lst_cqn <- lst_uqn <- list()
+  lst_beta <- lst_cqn <- lst_uqn <- list()
   for(nn in seq(length(qs))) {
-    mat_cqn <- mat_uqn <- matrix(NA, ncol = T, nrow = T)
+    mat_beta <- mat_cqn <- mat_uqn <- matrix(NA, ncol = T, nrow = T)
     for(ii in seq(T)) {
       for(kk in seq(T)) {
         hol <- Func2014(dd, pp[, c(ii + 2, kk + 2)], q = qs[nn])
         mat_cqn[ii, kk] <- hol[[3]]['FunCqN']
         mat_uqn[ii, kk] <- hol[[3]]['FunUqN']
+        mat_beta[ii, kk] <- hol[[3]]['Beta']
       }
     }
     lst_cqn[[nn]] <- mat_cqn
     lst_uqn[[nn]] <- mat_uqn
+    lst_beta[[nn]] <- mat_beta
   }
   names(fd) <- names(mfd) <- names(tfd) <- names(lst_cqn) <- names(lst_uqn) <- 
     paste0('q', qs)
@@ -50,6 +53,7 @@ for(jj in seq(nsim)) {
   qq_post[[jj]] <- list(fd = fd,
                         mfd = mfd,
                         tfd = tfd,
+                        betadiv = lst_beta,
                         fcqn = lst_cqn,
                         fuqn = lst_uqn)
 }
@@ -82,7 +86,7 @@ funcd <- reduce(list(fd, mfd, tfd), pm)
 names(funcd) <- c('q', 't', 'sim', 'fd', 'mfd', 'tfd')
 
 # plot effective functional diversity
-funcd <- funcd %>%
+funcg <- funcd %>%
   group_by(q, t) %>%
   dplyr::summarize(fd_med = median(fd),
                    fd_low = quantile(fd, 0.25),
@@ -95,12 +99,41 @@ funcd <- funcd %>%
                    tfd_hgh = quantile(tfd, 0.75)) %>%
   ungroup()
 
-funcd$t <- factor(funcd$t, levels = seq(T))
-fdg <- ggplot(funcd, aes(x = q, y = fd_med, group = t))
+funcg$t <- factor(funcg$t, levels = seq(T))
+fdg <- ggplot(funcg, aes(x = q, y = fd_med, group = t))
 fdg <- fdg + geom_ribbon(mapping = aes(ymax = fd_hgh, ymin = fd_low, fill = t),
                          alpha = 0.2)
 fdg <- fdg + geom_line(alpha = 1, mapping = aes(colour = t))
 
+mfdg <- ggplot(funcg, aes(x = q, y = mfd_med, group = t))
+mfdg <- mfdg + geom_ribbon(mapping = aes(ymax = mfd_hgh, ymin = mfd_low, fill = t),
+                           alpha = 0.2)
+mfdg <- mfdg + geom_line(alpha = 1, mapping = aes(colour = t))
+
+tfdg <- ggplot(funcg, aes(x = q, y = tfd_med, group = t))
+tfdg <- tfdg + geom_ribbon(mapping = aes(ymax = tfd_hgh, ymin = tfd_low, fill = t),
+                           alpha = 0.2)
+tfdg <- tfdg + geom_line(alpha = 1, mapping = aes(colour = t))
 
 
+# beta diverstiy
+bd <- cmdscale(qq_post[[1]]$betadiv[[shannon]], k = D - 1, eig = TRUE)
 
+# diff from t to t+1
+shannon_beta <- purrr::map(qq_post, function(x) x$betadiv[[shannon]])
+
+tt <- as.list(1:17)
+tm <- purrr::map(tt, ~ .x + 1)
+tm <- purrr::map2(tt, tm, ~ c(.x, .y))
+
+beta_step <- purrr::map(shannon_beta, function(x) { 
+                          purrr::map_dbl(tm, function(y) {
+                                           x[y[1], y[2]]})})
+beta_step <- reduce(beta_step, rbind)
+colnames(beta_step) <- fct_drop(interaction(1:17, 2:18))
+
+bs <- melt(beta_step)
+bs$Var2 <- as.factor(bs$Var2)
+ggplot(bs, aes(x = Var2, y = value, group = Var2)) + 
+  geom_violin() +
+  geom_jitter(width = .25, height = 0)
