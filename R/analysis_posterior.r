@@ -72,13 +72,16 @@ fit <- read_stan_csv(post)
 #check_all_diagnostics(fit)
 ext <- rstan::extract(fit, permuted = TRUE)
 ext2 <- ext
+## estimate standing diversity given posterior
+post.div <- diversity.distribution(sight, ext2, nsim) # 
 
+# downstream calculations
+source('../R/function_plots.r')
 
+testing <- FALSE
+source('../R/div_plot.r')  # update this to work as functions, not just source
 
-post.pred(ext2, ntax = N, ntime = T, sight.obs = sight, nsim, samp, bd = TRUE)
+source('../R/prob_calc.r')  # important posterior probabilities and related
 
-vis.bdpost(ext2 = ext2, ecotype = ecotype, ecotrans = ecotrans, 
-           mass = mass, cbp.long = cbp.long, 
-           time.start.stop = time.start.stop, ecoprob = ecoprob, 
-           order.cypher = order.cypher)
+source('../R/cor_plot.r')  # plot and inspect correlation matrix from b+d
 

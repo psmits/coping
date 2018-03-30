@@ -48,7 +48,7 @@ Func2014=function (Dis,abun,q)
       else{ FuncD[i]=sum(Dis[I]*(temp[I]/Q[i])^q)^(1/(1-q)); }
     }
     
-    n=sum(abun);
+    gn=sum(abun);
     pop=abun/gn;  
     p=rowSums(pop);gI=which(p>0);p=p[gI];
     gQ=c(t(p)%*%Dis[gI,gI]%*%p);

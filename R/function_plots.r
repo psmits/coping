@@ -134,6 +134,7 @@ colnames(beta_step) <- fct_drop(interaction(1:17, 2:18))
 
 bs <- melt(beta_step)
 bs$Var2 <- as.factor(bs$Var2)
-ggplot(bs, aes(x = Var2, y = value, group = Var2)) + 
-  geom_violin() +
-  geom_jitter(width = .25, height = 0)
+bsg <- ggplot(bs, aes(x = Var2, y = value, group = Var2))
+bsg <- bsg + geom_violin()
+bsg <- bsg + geom_jitter(width = .25, height = 0)
+
